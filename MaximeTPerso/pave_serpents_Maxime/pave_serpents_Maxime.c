@@ -33,26 +33,6 @@ void end_sdl(char ok,                            // fin normale : ok = 0 ; anorm
         if (!ok) {                                       // On quitte si cela ne va pas            
             exit(EXIT_FAILURE);                                                  
         }                                                          
-}                                                        
-                                                
-void draw(SDL_Renderer* renderer) {            // Je pense que vous allez faire moins laid :)
-    SDL_Rect rectangle;                                                
-                                                
-    SDL_SetRenderDrawColor(renderer,                                       
-                    250, 0, 0,                             // mode Red, Green, Blue (tous dans 0..255)
-                    255);                                 // 0 = transparent ; 255 = opaque
-    rectangle.x = 0;                                             // x haut gauche du rectangle
-    rectangle.y = 0;                                                  // y haut gauche du rectangle
-    rectangle.w = 500;                                                // sa largeur (w = width)
-    rectangle.h = 600;                                                // sa hauteur (h = height)
-                                                
-    SDL_RenderFillRect(renderer, &rectangle);                        
-                                                
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);                   
-    SDL_RenderDrawLine(renderer,                             
-        0, 0,                                   // x,y du point de la première extrémité
-        400, 400);                              // x,y seconde extrémité
-    
 }
 
 int main(int argc, char** argv) {
@@ -63,9 +43,8 @@ int main(int argc, char** argv) {
 
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
-
-    SDL_Rect rideau_gauche;
-    SDL_Rect rideau_droite;
+ 
+    SDL_Rect scene, corps_grenouille, tete_grenouille, oeil_gauche, oeil_droit, bouche, rideau_gauche, rideau_droite;
 
     /* Initialisation SDL */
     if (SDL_Init(SDL_INIT_VIDEO) != 0) end_sdl(0, "ERROR SDL INIT", window, renderer);
@@ -82,27 +61,73 @@ int main(int argc, char** argv) {
     for(temps = 0; temps < 500; temps+=25) {
         SDL_RenderClear(renderer);
 
+        /* Scène */
+        SDL_SetRenderDrawColor(renderer, 139, 69, 19, 255);
+
+        scene.x = 0;
+        scene.y = 400;
+        scene.w = 1000;
+        scene.h = 200;
+        SDL_RenderFillRect(renderer, &scene);
+
+        /* Grenouille */
+        SDL_SetRenderDrawColor(renderer, 0, 200, 0, 255);
+
+        corps_grenouille.x = 450;
+        corps_grenouille.y = 200;
+        corps_grenouille.w = 100;
+        corps_grenouille.h = 250;
+        SDL_RenderFillRect(renderer, &corps_grenouille);
+
+        tete_grenouille.x = 400;
+        tete_grenouille.y = 200;
+        tete_grenouille.w = 200;
+        tete_grenouille.h = 100;
+        SDL_RenderFillRect(renderer, &tete_grenouille);
+
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+        oeil_gauche.x = 420;
+        oeil_gauche.y = 220;
+        oeil_gauche.w = 20;
+        oeil_gauche.h = 20;
+        SDL_RenderFillRect(renderer, &oeil_gauche);
+
+        oeil_droit.x = 560;
+        oeil_droit.y = 220;
+        oeil_droit.w = 20;
+        oeil_droit.h = 20;
+        SDL_RenderFillRect(renderer, &oeil_droit);
+
+        bouche.x = 430;
+        bouche.y = 260;
+        bouche.w = 140;
+        bouche.h = 10;
+        SDL_RenderFillRect(renderer, &bouche);
+
+        /* Rideaux */
         SDL_SetRenderDrawColor(renderer, 200, 0, 0, 255);  
 
         rideau_gauche.x = 0;
         rideau_gauche.y = 0;
-        rideau_gauche.w = 500-temps;                                      
+        rideau_gauche.w = 500-temps;
         rideau_gauche.h = 600;
         SDL_RenderFillRect(renderer, &rideau_gauche);
                      
         rideau_droite.x = 500+temps;
         rideau_droite.y = 0;
-        rideau_droite.w = 500-temps;                                      
+        rideau_droite.w = 500-temps;
         rideau_droite.h = 600;
         SDL_RenderFillRect(renderer, &rideau_droite);
 
+        /* Affichage */
         SDL_Delay(200);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); 
         SDL_RenderPresent(renderer);
     }
 
-    SDL_RenderPresent(renderer); // affichage
     SDL_Delay(1000); // Pause exprimée en ms
                           
     /* Fermeture SDL */
