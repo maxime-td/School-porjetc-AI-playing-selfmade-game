@@ -10,7 +10,7 @@ HEADERS = $(wildcard $(DIRCOMM)*.h)
 #liste des fichiers objets
 OBJ = $(SRC:%.c=%)
 
-main: $(SRC) $(HEADERS)
+goutte: $(SRC) $(HEADERS)
 	$(CC) $(SRC) -o $@ $(shell sdl2-config --cflags --libs)
 
 .PHONY: clean reclean
