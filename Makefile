@@ -1,35 +1,23 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g
-LDFLAGS =
+LDFLAGS = $(sdl2-config --cflags --libs)
 
-#repertoire des fichiers d'unitests teZZt.[ch]
-DIRUTEST = ../
-
-#repertoire des fichiers communs : eltPile.[ch], eltsArbre.h pile.[ch]
-DIRCOMM = ../
+DIRCOMM = src/
 
 #liste des fichiers source
-SRC = $(wildcard $(DIRCOMM)*.c *.c) ../Seance1/arbres_construct.c
+SRC = $(wildcard $(DIRCOMM)*.c)
 
-HEADERS = $(wildcard $(DIRCOMM)*.h *.h) 
+HEADERS = $(wildcard $(DIRCOMM)*.h) 
 
 #liste des fichiers objets
 OBJ = $(SRC:%.c=%.o)
 
-arbres_insert_main: $(OBJ) $(HEADERS)
-	$(CC) $(OBJ) -o $@.exe $(LDFLAGS)
+main: $(OBJ) $(HEADERS)
+	$(CC) $(OBJ) -o $@ $(LDFLAGS)
 	
-arbres_insert.o: arbres_insert.c $(HEADERS)
+main.o:$(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
 	
-../Seance1/arbres_construct.o: ../Seance1/arbres_construct.c $(HEADERS)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-pile.o: pile.c pile.h
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(DIRUTEST)teZZt.o: $(DIRUTEST)teZZt.c $(DIRUTEST)teZZt.h
-	$(CC) $(CFLAGS) -c $< -o $@
 
 .PHONY: clean reclean
 
