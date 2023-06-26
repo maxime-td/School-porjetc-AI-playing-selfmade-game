@@ -79,25 +79,31 @@ int main(int argc, char** argv) {
     if (renderer == NULL) end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
 
     /* Dessin */
-    for(temps = 0; temps < 100; temps+=1) {
+    for(temps = 0; temps < 500; temps+=25) {
+        SDL_RenderClear(renderer);
 
-        SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);                     
+        SDL_SetRenderDrawColor(renderer, 200, 0, 0, 255);  
+
         rideau_gauche.x = 0;
         rideau_gauche.y = 0;
-        rideau_gauche.w = 500;                                      
+        rideau_gauche.w = 500-temps;                                      
         rideau_gauche.h = 600;
         SDL_RenderFillRect(renderer, &rideau_gauche);
-
-        SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);                     
-        rideau_droite.x = 500;
+                     
+        rideau_droite.x = 500+temps;
         rideau_droite.y = 0;
-        rideau_droite.w = 500;                                      
+        rideau_droite.w = 500-temps;                                      
         rideau_droite.h = 600;
         SDL_RenderFillRect(renderer, &rideau_droite);
+
+        SDL_Delay(200);
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); 
+        SDL_RenderPresent(renderer);
     }
 
-    SDL_RenderPresent(renderer);                         // affichage
-    SDL_Delay(5000);                                     // Pause exprimée en ms
+    SDL_RenderPresent(renderer); // affichage
+    SDL_Delay(1000); // Pause exprimée en ms
                           
     /* Fermeture SDL */
     end_sdl(1, "Normal ending", window, renderer);
