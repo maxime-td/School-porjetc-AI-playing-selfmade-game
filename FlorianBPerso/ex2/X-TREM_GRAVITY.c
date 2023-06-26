@@ -31,10 +31,10 @@ int main(int argc, char **argv)
 
     /* Création de la fenêtre de gauche */
     window = SDL_CreateWindow(
-        "Déplacements",        // codage en utf8, donc accents possibles
+        "X-TREM GRAVITY",        // codage en utf8, donc accents possibles
         650, 200,              // coin haut gauche en haut gauche de l'écran
         800, 800,              // largeur = 400, hauteur = 300
-        SDL_WINDOW_RESIZABLE); // redimensionnable
+        0); // redimensionnable
     if (window == NULL)
     {
         SDL_Log("Error : SDL window 1 creation - %s\n",
@@ -49,13 +49,6 @@ int main(int argc, char **argv)
 
     while (continuer)
     {
-        SDL_SetRenderDrawColor(renderer, 255, 165, 0, 255);
-        SDL_RenderClear(renderer);
-        SDL_Delay(500);
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &carre);
-        SDL_RenderPresent(renderer);
-
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -64,19 +57,33 @@ int main(int argc, char **argv)
                 continuer = 0;
                 break;
 
-            case SDL_KEYUP:
+            case SDL_KEYDOWN:
                 if (event.key.keysym.sym == SDLK_UP)
-                    y -= 10;
-                if (event.key.keysym.sym == SDLK_RIGHT)
+                    y -= 20;
+                if (event.key.keysym.sym == SDLK_RIGHT && x<700)
                     x += 10;
-                if (event.key.keysym.sym == SDLK_LEFT)
+                if (event.key.keysym.sym == SDLK_LEFT && x>0)
                     x -= 10;
                 break;
+
             default:
-                y+=10;
+                break;
             }
+            break;
         }
-        carre = {x, y, width, heigh};
+        if (y<700)
+            {
+                y+=5;
+                SDL_Delay(18);
+            }
+        carre.x = x;
+        carre.y = y;
+
+        SDL_SetRenderDrawColor(renderer, 255, 165, 0, 255);
+        SDL_RenderClear(renderer);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderFillRect(renderer, &carre);
+        SDL_RenderPresent(renderer);
     }
     SDL_RenderClear(renderer);
     SDL_Delay(20);
