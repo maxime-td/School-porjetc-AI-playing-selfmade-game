@@ -1,7 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g
-
-DIRCOMM = src/
+DIRCOMM = 
 
 #liste des fichiers source
 SRC = $(wildcard $(DIRCOMM)*.c)
@@ -9,9 +8,9 @@ SRC = $(wildcard $(DIRCOMM)*.c)
 HEADERS = $(wildcard $(DIRCOMM)*.h) 
 
 #liste des fichiers objets
-OBJ = $(SRC:%.c=%.o)
+OBJ = $(SRC:%.c=%)
 
-main: $(SRC) $(HEADERS)
+snake: $(SRC) $(HEADERS)
 	$(CC) $(SRC) -o $@ $(shell sdl2-config --cflags --libs)
 
 .PHONY: clean reclean
