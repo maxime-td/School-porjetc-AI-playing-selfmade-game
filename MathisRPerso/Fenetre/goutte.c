@@ -1,10 +1,6 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 
-/************************************/
-/*  exemple de création de fenêtres */
-/************************************/
-
 int main(int argc, char **argv)
 {
     (void)argc;
@@ -41,7 +37,7 @@ int main(int argc, char **argv)
 
     /* Création de la fenêtre de gauche */
     window = SDL_CreateWindow(
-        "Fenêtre à gauche",    // codage en utf8, donc accents possibles
+        "Goutte",    // codage en utf8, donc accents possibles
         width/2-w_window/2, 0,                  // coin haut gauche en haut gauche de l'écran
         w_window, h_window,              // largeur = 400, hauteur = 300
         SDL_WINDOW_BORDERLESS);
@@ -60,19 +56,6 @@ int main(int argc, char **argv)
     }
 
     SDL_GetWindowPosition(window, &x, &y);
-
-    /*while (program_on){                          
-        if (SDL_PollEvent(&event)){                                           
-            switch(event.key.keysym.sym){                       
-                case SDLK_SPACE :                           
-                    program_on = SDL_FALSE;                 
-                    break;
-
-                default:                                  
-                    break;
-            }
-        }
-    }*/
 
     while (w_window > final_width)
     {
@@ -115,7 +98,7 @@ int main(int argc, char **argv)
     }
     
     /* et on referme tout ce qu'on a ouvert en ordre inverse de la création */
-    SDL_DestroyWindow(window); // la fenêtre 1
+    SDL_DestroyWindow(window); // la fenêtre
 
 
 
