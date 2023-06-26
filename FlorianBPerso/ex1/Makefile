@@ -13,6 +13,7 @@ OBJ = $(SRC:%.c=%)
 main: $(SRC) $(HEADERS)
 	$(CC) $(SRC) -o $@ $(shell sdl2-config --cflags --libs)
 
+
 .PHONY: clean reclean
 
 clean:
