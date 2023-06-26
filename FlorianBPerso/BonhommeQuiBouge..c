@@ -174,19 +174,21 @@ int main(int argc, char **argv)
 
   SDL_Delay(3000);
 
-int *x, *y;
-*x=650;
-  while(*x+500 < 1820)
+  int x, y;
+  SDL_GetWindowPosition(Bras, &x, &y);
+  while(x+500 < 1820)
   {
-    SDL_SetWindowPosition(JambeD, *x+10+320, *y);
-    SDL_SetWindowPosition(JambeG, *x+10+70, *y);
-    SDL_SetWindowPosition(Cou, *x+10+200, *y);
-    SDL_SetWindowPosition(Tete, *x+10+170, *y);
-    SDL_SetWindowPosition(Corps, *x+10+100, *y);
-    SDL_SetWindowPosition(Bassin, *x+10+70, *y);
-    SDL_SetWindowPosition(Bras, *x+10, *y);
-
-    SDL_GetWindowPosition(Bras, x, y);
+    SDL_SetWindowPosition(JambeD, x+10+320, y+310);
+    SDL_SetWindowPosition(JambeG, x+10+70, y+310);
+    SDL_SetWindowPosition(Cou, x+10+200, y-280);
+    SDL_SetWindowPosition(Tete, x+10+170, y-330);
+    SDL_SetWindowPosition(Corps, x+10+100, y-90);
+    SDL_SetWindowPosition(Bassin, x+10+70, y+210);
+    SDL_SetWindowPosition(Bras, x+10, y);
+    SDL_GetWindowPosition(Bras, &x, &y);
+    y -= 29;
+    SDL_RenderPresent(RendCorps);
+    SDL_RenderPresent(RendCou);
   }
 
   /* et on referme tout ce qu'on a ouvert en ordre inverse de la création */
