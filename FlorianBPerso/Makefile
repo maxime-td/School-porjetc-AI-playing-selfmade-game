@@ -25,4 +25,4 @@ clean:
 	rm -f $(OBJ) 
 
 reclean:
-	rm -f $(OBJ) arbres_insert_main
+	rm -f $(OBJ) 
