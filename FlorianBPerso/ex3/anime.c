@@ -11,7 +11,7 @@ int main(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    int y = 0, x, i = 0;
+    int y = 0, x, i = 0, vitesseBoing=10, vitesseD=10;
     int width, height, w_window = 400, h_window = 300, final_width = w_window / 2;
     int frame_size = 20;
 
@@ -45,6 +45,8 @@ int main(int argc, char **argv)
     }
     width = dm.w;
     height = dm.h;
+    w_window = dm.w;
+    h_window = dm.h;
 
     /* Création de la fenêtre de gauche */
     window = SDL_CreateWindow(
@@ -91,16 +93,49 @@ int main(int argc, char **argv)
                 case SDL_QUIT:
                     program_on = SDL_FALSE;
                     break;
+                case SDL_KEYDOWN:
+                    if (event.key.keysym.sym == SDLK_UP)
+                        dstrect.y -= vitesseD;
+                    if (event.key.keysym.sym == SDLK_RIGHT && dstrect.x<w_window-dstrect.w)
+                        dstrect.x += vitesseD;
+                    if (event.key.keysym.sym == SDLK_LEFT && dstrect.x>0)
+                        dstrect.x -= vitesseD;
+                    if (event.key.keysym.sym == SDLK_DOWN && dstrect.y<h_window-dstrect.h)
+                        dstrect.y += vitesseD;
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                    if(event.button.button == SDL_BUTTON_LEFT)
+                    {
+                        dstrect.h +=10;
+                        dstrect.w +=10;
+                        if (vitesseBoing>1&&vitesseD>0){vitesseBoing +=1; vitesseD-=1;}
+                    }
+                    if(event.button.button == SDL_BUTTON_RIGHT)
+                    {
+                        dstrect.h -=10;
+                        dstrect.w -=10;
+                        if (vitesseBoing>1){vitesseBoing -=1; vitesseD+=1;}
+                    }
+
+
+
                 default :
                     break;
             }
         }
-
+        
+        if(i%vitesseBoing==0)
+        {
+            srcrect.x = (srcrect.x+frame_size)%(frame_size*4);
+            i=0;
+        }
+        
         SDL_RenderClear(renderer);
-        srcrect.x = (srcrect.x+frame_size)%(frame_size*4);
         SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
         SDL_RenderPresent(renderer);
-        SDL_Delay(200);
+        SDL_Delay(20);
+
+        i++;
     }
 
     SDL_GetWindowPosition(window, &x, &y);
