@@ -12,12 +12,12 @@ int main()
     tabToGraph(tab, 0, n-1);
     printTabCoord(tab, &n);
 
-<<<<<<< HEAD
     makeNewLinks(25, tab, &n);
     printTabCoord(tab, &n);
     int ** TableauDistances = distTab(tab, &n);
     printDistTab(TableauDistances, &n);
-=======
+
+    /*
     int y = 0, x;
     int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
     SDL_bool program_on = SDL_TRUE;
@@ -27,18 +27,18 @@ int main()
     SDL_Renderer* renderer;
 
     SDL_Window *window = NULL;
-
+*/
     
 
-    /* Initialisation de la SDL  + gestion de l'échec possible */
+    /* Initialisation de la SDL  + gestion de l'échec possible 
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
         SDL_Log("Error : SDL initialisation - %s\n",
                 SDL_GetError()); // l'initialisation de la SDL a échoué
         exit(EXIT_FAILURE);
     }
-
-    /* recupere la taille de l'ecran */
+*/
+    /* recupere la taille de l'ecran 
     if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
     {
         SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
@@ -47,8 +47,8 @@ int main()
 
     width = dm.w;
     height = dm.h;
-
-    /* Création de la fenêtre de gauche */
+*/
+    /* Création de la fenêtre de gauche 
     window = SDL_CreateWindow(
         "Goutte",    // codage en utf8, donc accents possibles
         width/2-w_window/2, 0,                  // coin haut gauche en haut gauche de l'écran
@@ -77,7 +77,7 @@ int main()
 
     while (program_on)
     {
-        /* Gestion des événements */
+        /* Gestion des événements 
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -90,7 +90,6 @@ int main()
             }
         }
     }
-
->>>>>>> 78914e47d6e3ac93844679a4b3a85088362af92f
+*/
     return 0;
 }
