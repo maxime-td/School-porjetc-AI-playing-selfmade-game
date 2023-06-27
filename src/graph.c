@@ -52,7 +52,7 @@ sommet_t ** genTabSommets(int * n, int width, int height)
         tab[i]->val = i+65;             //On assigne des valeurs aux sommet, en l'occurence A,B,C...
         for(int j=0; j<*n;j++)
         {
-            tab[i]->voisin[j]=0;    //Tableau des liens initialisé vide
+            tab[i]->voisins[j]=0;    //Tableau des liens initialisé vide
         }
     }
     return tab;
@@ -86,6 +86,7 @@ void printTabCoord(sommet_t ** tab, int * n)
  * @param tab le pointeur sur le tableau des sommets
  * @param n le pointeur sur le ombre de sommets
  */
+/*
 void makeNewLinks(int p, sommet_t ** tab, int * n)
 {
     for(int i=0; i<*n; i++)
@@ -100,7 +101,7 @@ void makeNewLinks(int p, sommet_t ** tab, int * n)
             }   
         }
     }
-}
+} */
 
 /**
  * @brief Calcul la distance entre 2 sommets
@@ -108,12 +109,13 @@ void makeNewLinks(int p, sommet_t ** tab, int * n)
  * @param b pointeur sur un sommet
  * @return La distance
  */
+/*
 int calculDistance(sommet_t * a, sommet_t * b)
 {
     int tmp1 = (a->x-b->x), tmp2 = (a->y-b->y);
     return (int)math.sqrt(tmp1*tmp1+tmp2*tmp2);
 }
-
+*/
 
 /**
  * @brief Créée un tableau de distance entre les points, -1 si non lié, > 0 sinon.
@@ -121,6 +123,7 @@ int calculDistance(sommet_t * a, sommet_t * b)
  * @param n le pointeur sur le ombre de sommets
  * @return Le pointeur sur le tableau 2D des distances.
  */
+/*
 int ** distTab(sommet_t ** tab)
 {
     int ** tabDist = malloc((*n)*sizeof(int *));
@@ -147,10 +150,10 @@ int ** distTab(sommet_t ** tab)
         }
     }
     return distTab;
-}
+}*/
 
 
-
+/**
  * @brief Trace un disque
  * @param renderer Le renderer où tracer le disque
  * @param center_x La coordonnée x du centre du disque
@@ -183,7 +186,7 @@ void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
  */
 void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
 
-    /* Initialisations */
+    // Initialisations
     char tab_deja_trace[n]; //tableau des sommets déjà tracés
     int bool_deja_trace; //Booléeen si un sommet à déjà été tracé ou non. 0 = Faux, 1 = Vrai
     int compteur_deja_trace = 0; //Compteur de sommets déjà tracés
@@ -193,38 +196,38 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
     sommet_t* sommet_courant; //Sommet courant
     sommet_t* voisin_courant; //Voisin courant
 
-    /* Initialisation tableau deja_trace */
+    // Initialisation tableau deja_trace 
     for(i = 0; i < n; i+=1) {
-        deja_trace[i] = NULL;
+        tab_deja_trace[i] = '0';
     }
 
-    /* Parcour */
+    // Parcour
     for(i = 0; i < n; i+=1) {
-        sommet_courant = *tab[i];
-        draw_disk(renderer, sommet_courant.x, sommet_courant.y, rayon); //Traçage du sommet
+        sommet_courant = tab[i];
+        draw_disk(renderer, sommet_courant->x, sommet_courant->y, rayon); //Traçage du sommet
         
-        tab_deja_trace[compteur_deja_trace] = sommet_courant.val; //Ajoute le sommet courant a tab_deja_trace
+        tab_deja_trace[compteur_deja_trace] = sommet_courant->val; //Ajoute le sommet courant a tab_deja_trace
         compteur_deja_trace += 1;
 
         for(j = 0; j < n; j+=1) {
             
-            /* Si j est voisin de i */
-            if(voisins[j] == 1) {
-                voisin_courant = *tab[j];
+            // Si j est voisin de i
+            if(tab[i]->voisins[j] == 1) {
+                voisin_courant = tab[j];
 
-                /* Vérification si déjà tracé ou pas */
+                // Vérification si déjà tracé ou pas
                 bool_deja_trace = 0;
-                while(tab_deja_trace[k] != NULL) {
-                    if(tab_deja_trace[k] == voisin_courant.val)
+                while(tab_deja_trace[k] != '0') {
+                    if(tab_deja_trace[k] == voisin_courant->val)
                         bool_deja_trace = 1;
                     k += 1;
                 }
 
-                /* Si pas déjà tracé, on le trace */
+                // Si pas déjà tracé, on le trace
                 if(bool_deja_trace == 0) {
-                    SDL_RenderDrawLine(renderer, sommet_courant.x, sommet_courant.y, voisin_courant.x, voisin_courant.y); //Traçage du lien
+                    SDL_RenderDrawLine(renderer, sommet_courant->x, sommet_courant->y, voisin_courant->x, voisin_courant->y); //Traçage du lien
 
-                    tab_deja_trace[compteur_deja_trace] = voisin_courant.val; //Ajoute le voisin courant a tab_deja_trace
+                    tab_deja_trace[compteur_deja_trace] = voisin_courant->val; //Ajoute le voisin courant a tab_deja_trace
                     compteur_deja_trace += 1;
                 }
             }
