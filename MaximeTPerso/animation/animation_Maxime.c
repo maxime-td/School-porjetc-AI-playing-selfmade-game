@@ -103,7 +103,11 @@ void play_with_texture_3(SDL_Texture* my_texture, SDL_Window* window, SDL_Render
         source = {0}, // Rectangle définissant la zone de la texture à récupérer
         window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
         destination = {0}; // Rectangle définissant où la zone_source doit être déposée dans le renderer
-                                
+
+    SDL_Texture* my_texture2 = NULL;
+
+    my_texture2 = load_texture_from_image("fond-flammes.jpg", window, renderer);
+
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h); // Récupération des dimensions de la fenêtre
     SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h); // Récupération des dimensions de l'image
                                 
@@ -117,16 +121,19 @@ void play_with_texture_3(SDL_Texture* my_texture, SDL_Window* window, SDL_Render
     float h = window_dimensions.h - destination.h; // hauteur du déplacement à effectuer
 
     for (int i = 0; i < nb_it; ++i) {
-      destination.y = h * (1 - exp(-5.0 * i / nb_it) / 2 *(1 + cos(10.0 * i / nb_it * 2 * M_PI))); // hauteur en fonction du numéro d'image
+        destination.y = h * (1 - exp(-5.0 * i / nb_it) / 2 *(1 + cos(10.0 * i / nb_it * 2 * M_PI))); // hauteur en fonction du numéro d'image
 
-      SDL_RenderClear(renderer); // Effacer l'image précédente
+        SDL_RenderClear(renderer); // Effacer l'image précédente
 
-      SDL_SetTextureAlphaMod(my_texture,(1.0-1.0*i/nb_it)*255); // L'opacité va passer de 255 à 0 au fil de l'animation
-      SDL_RenderCopy(renderer, my_texture, &source, &destination); // Préparation de l'affichage
-      SDL_RenderPresent(renderer); // Affichage de la nouvelle image
-      SDL_Delay(30); // Pause en ms
+        play_with_texture_1(my_texture2, window, renderer);
+
+        SDL_SetTextureAlphaMod(my_texture,(1.0-1.0*i/nb_it)*255); // L'opacité va passer de 255 à 0 au fil de l'animation
+        SDL_RenderCopy(renderer, my_texture, &source, &destination); // Préparation de l'affichage
+        SDL_RenderPresent(renderer); // Affichage de la nouvelle image
+        SDL_Delay(30); // Pause en ms
     }                               
     SDL_RenderClear(renderer); // Effacer la fenêtre une fois le travail terminé
+    SDL_DestroyTexture(my_texture2);
 }
 
 int main(int argc, char** argv) {
@@ -138,7 +145,6 @@ int main(int argc, char** argv) {
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
     SDL_Texture* my_texture = NULL;
-    SDL_Texture* my_texture2 = NULL;
  
     /* Initialisation SDL */
     if (SDL_Init(SDL_INIT_VIDEO) != 0) end_sdl(0, "ERROR SDL INIT", window, renderer);
@@ -164,12 +170,12 @@ int main(int argc, char** argv) {
         SDL_RenderPresent(renderer);
     } */
 
-    my_texture = load_texture_from_image("fond-flammes.jpg", window, renderer);
-    my_texture2 = load_texture_from_image("comcomdile.png", window, renderer);
-    play_with_texture_1(my_texture, window, renderer);
-    play_with_texture_3(my_texture2, window, renderer);
+    
+    my_texture = load_texture_from_image("comcomdile.png", window, renderer);
+    
+    play_with_texture_3(my_texture, window, renderer);
 
-    SDL_Delay(4000); // Pause exprimée en ms
+    SDL_Delay(1000); // Pause exprimée en ms
                           
     /* Fermeture SDL */
     end_sdl(1, "Normal ending", window, renderer);
