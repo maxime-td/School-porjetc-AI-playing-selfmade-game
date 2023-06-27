@@ -30,6 +30,23 @@ sommet_t * tabToGraph(sommet_t ** tab, int n){
 
 
 
+void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
+    // Calculer les coordonnées du rectangle englobant le disque
+    int x = center_x - radius;
+    int y = center_y - radius;
+    int width = radius * 2;
+    int height = radius * 2;
+
+    // Dessiner le disque rempli
+    for (int i = x; i < x + width; i++) {
+        for (int j = y; j < y + height; j++) {
+            // Vérifier si le point (i, j) est à l'intérieur du cercle
+            if ((i - center_x) * (i - center_x) + (j - center_y) * (j - center_y) <= radius * radius) {
+                SDL_RenderDrawPoint(renderer, i, j);
+            }
+        }
+    }
+}
 
 void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
 
@@ -38,6 +55,8 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
     int bool_deja_trace; //Booléeen si un sommet à déjà été tracé ou non. 0 = Faux, 1 = Vrai
     int compteur_deja_trace = 0; //Compteur de sommets déjà tracés
     int i, j, k; //Incréments
+    int rayon = 25; //Rayon des disques des sommets
+
     sommet_t* sommet_courant; //Sommet courant
     sommet_t* voisin_courant; //Voisin courant
 
@@ -49,7 +68,7 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
     /* Parcour */
     for(i = 0; i < n; i+=1) {
         sommet_courant = *tab[i];
-        //[tracer sommet]
+        draw_disk(renderer, sommet_courant.x, sommet_courant.y, rayon); //Traçage du sommet
         
         tab_deja_trace[compteur_deja_trace] = sommet_courant.val; //Ajoute le sommet courant a tab_deja_trace
         compteur_deja_trace += 1;
@@ -67,6 +86,7 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
 
             if(bool_deja_trace == 0) {
                 //[tracer lien]
+                SDL_RenderDrawLine(renderer, sommet_courant.x, sommet_courant.y, voisin_courant.x, voisin_courant.y);
 
                 tab_deja_trace[compteur_deja_trace] = voisin_courant.val; //Ajoute le voisin courant a tab_deja_trace
                 compteur_deja_trace += 1;
