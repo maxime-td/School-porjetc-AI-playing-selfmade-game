@@ -29,6 +29,43 @@ sommet_t * tabToGraph(sommet_t ** tab, int n){
 }
 
 
+/**
+ * @brief Créée un tableau de points avec des coordonnées aléatoires
+ * @param n le pointeur sur le nombre de points à générer
+ * @param width la borne sur l'axe des abscisses
+ * @param height la borne sur l axe des ordonnées
+ * @return un pointeur sur un tableau de sommets
+ */
+
+sommet_t ** genTabSommets(int * n, int width, int height)
+{
+    *n = rand()%(N-3) +4;
+    sommet_t ** tab = malloc((*n)*sizeof(sommet_t *));
+    for(int i=0; i<*n; i++)
+    {
+        tab[i] = malloc(sizeof(sommet_t));
+        tab[i]->x = rand()%(width);
+        tab[i]->y = rand()%(height);
+        tab[i]->val = i+65;
+    }
+    return tab;
+}
+
+/**
+ * @brief Affiche le tableau des coordonnées des points
+ * @param tab le pointeur sur le tableau de points
+ * @param n le pointeur sur le nombre de sommets du tableau
+*/
+void printTabCoord(sommet_t ** tab, int * n)
+{
+    printf("nombre de points: %d\n", *n);
+    for(int i=0; i<(*n); i++)
+    {
+        printf("%c : (%d,%d) - ",tab[i]->val, tab[i]->x, tab[i]->y);
+    }
+    printf("\n");
+
+}
 
 void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
     // Calculer les coordonnées du rectangle englobant le disque
