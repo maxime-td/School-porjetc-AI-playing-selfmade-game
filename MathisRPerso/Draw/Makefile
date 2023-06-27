@@ -11,7 +11,7 @@ HEADERS = $(wildcard $(DIRCOMM)*.h)
 OBJ = $(SRC:%.c=%)
 
 snake: $(SRC) $(HEADERS)
-	$(CC) $(SRC) -o $@ $(shell sdl2-config --cflags --libs)
+	$(CC) $(SRC) -o $@ -lm -lSDL2_ttf $(CFLAGS) $(shell sdl2-config --cflags --libs)
 
 .PHONY: clean reclean
 

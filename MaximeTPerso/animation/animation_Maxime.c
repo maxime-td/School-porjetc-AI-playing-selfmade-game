@@ -67,6 +67,10 @@ void affichage_fond(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *r
 
     /* On veut afficher la texture de façon à ce que l'image occupe la totalité de la fenêtre */
     SDL_RenderCopy(renderer, my_texture, &source, &destination); // Création de l'élément à afficher
+    //SDL_RenderPresent(renderer);
+    //SDL_Delay(2000);
+
+    //SDL_RenderClear(renderer);
 }
 
 void play_with_texture_3(SDL_Texture* my_texture, SDL_Window* window, SDL_Renderer* renderer) {
@@ -75,9 +79,9 @@ void play_with_texture_3(SDL_Texture* my_texture, SDL_Window* window, SDL_Render
         window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
         destination = {0}; // Rectangle définissant où la zone_source doit être déposée dans le renderer
 
-    SDL_Texture* my_texture_fond = NULL;
+    SDL_Texture* my_texture2 = NULL;
 
-    my_texture_fond = load_texture_from_image("fond-flammes.jpg", window, renderer);
+    my_texture2 = load_texture_from_image("fond-flammes.jpg", window, renderer);
 
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h); // Récupération des dimensions de la fenêtre
     SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h); // Récupération des dimensions de l'image
@@ -104,7 +108,7 @@ void play_with_texture_3(SDL_Texture* my_texture, SDL_Window* window, SDL_Render
         SDL_Delay(30); // Pause en ms
     }                               
     SDL_RenderClear(renderer); // Effacer la fenêtre une fois le travail terminé
-    SDL_DestroyTexture(my_texture_fond);
+    SDL_DestroyTexture(my_texture2);
 }
 
 void affichage_personnage(SDL_Texture* my_texture, SDL_Window* window, SDL_Renderer* renderer, int frame, int direction_x, int direction_y) {
@@ -139,15 +143,15 @@ void play_with_texture_6(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2, SDL
     float zoom = 0.2;   
     int offset_x = source.w / nb_images, offset_y = source.h;
     
-    state.x = 0;
-    state.y = 0;
+    state.x = 0 ;                          // La première vignette est en début de ligne
+    state.y = 3 * offset_y;                // On s'intéresse à la 4ème ligne, le bonhomme qui court
     state.w = offset_x;                    // Largeur de la vignette
     state.h = offset_y;                    // Hauteur de la vignette
 
     destination.w = offset_x * zoom;       // Largeur du sprite à l'écran
     destination.h = offset_y * zoom;       // Hauteur du sprite à l'écran
 
-    destination.y = (window_dimensions.h - destination.h - 100) ; // Hauteur de la course
+    destination.y = (window_dimensions.h - destination.h) /2; // La course se fait en milieu d'écran (en vertical)
 
     SDL_RenderClear(renderer); // Effacer l'image précédente avant de dessiner la nouvelle
 
@@ -177,7 +181,7 @@ int main(int argc, char** argv) {
 
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
-    //SDL_Texture* my_texture_stand = NULL;
+    SDL_Texture* my_texture_stand = NULL;
     SDL_Texture* my_texture_marche = NULL;
     SDL_Texture* my_texture_foret = NULL;
     SDL_Texture* my_texture_herbe = NULL;
@@ -245,8 +249,8 @@ int main(int argc, char** argv) {
     }                      
     /* Fermeture SDL */
     end_sdl(1, "Normal ending", window, renderer);
-    //SDL_DestroyTexture(my_texture_stand);
-    SDL_DestroyTexture(my_texture_marche);
+    SDL_DestroyTexture(my_texture_stand);
+    //SDL_DestroyTexture(my_texture_marche);
 
     return EXIT_SUCCESS;
 }

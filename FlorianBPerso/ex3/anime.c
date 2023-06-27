@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 
     int y = 0, x, i = 0;
     int width, height, w_window = 400, h_window = 300, final_width = w_window / 2;
-    int frame_size = 20;
+    int frame_size = 48;
 
     SDL_bool program_on = SDL_TRUE;
     SDL_Event event;
@@ -24,10 +24,10 @@ int main(int argc, char **argv)
     SDL_Renderer
         *renderer = NULL;
     SDL_Surface
-        *surf = IMG_Load("Slime_Boing-5.png");
+        *surf = IMG_Load("Slime_Boing.BMP");
 
     SDL_Texture *texture = NULL;
-    SDL_Rect srcrect = {0, 0, frame_size, frame_size}; // position and size of the part of the image to draw
+    SDL_Rect srcrect = {0, 48, frame_size, frame_size}; // position and size of the part of the image to draw
     SDL_Rect dstrect = {100, 100, 100, 100};            // position and size of the destination on the screen
 
     /* Initialisation de la SDL  + gestion de l'échec possible */
@@ -97,10 +97,10 @@ int main(int argc, char **argv)
         }
 
         SDL_RenderClear(renderer);
-        srcrect.x = (srcrect.x+frame_size)%(frame_size*4);
+        srcrect.x = (srcrect.x+frame_size)%(frame_size*8);
         SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
         SDL_RenderPresent(renderer);
-        SDL_Delay(200);
+        SDL_Delay(300);
     }
 
     SDL_GetWindowPosition(window, &x, &y);
