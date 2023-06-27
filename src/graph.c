@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include "graph.h"
 #include <math.h>
+#include <SDL2/SDL_ttf.h>
 
 /**
  * @brief Convertit un tableau de sommets en un graphe connexe non cyclique.
@@ -191,9 +192,19 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
     int compteur_deja_trace = 0; //Compteur de sommets déjà tracés
     int i, j, k; //Incréments
     int rayon = 10; //Rayon des disques des sommets
+    char nom_sommet;
 
     sommet_t* sommet_courant; //Sommet courant
     sommet_t* voisin_courant; //Voisin courant
+
+    SDL_Surface* text_surface = NULL;
+    SDL_Texture* text_texture = NULL;    
+
+    // Initialisation du texte
+    TTF_Font* font = NULL;
+    font = TTF_OpenFont("arial.ttf", 40);
+    SDL_Color color = {255, 0, 0, 255};
+    printf("initialisation texte ok\n");
 
     // Initialisation tableau deja_trace 
     for(i = 0; i < n; i+=1) {
@@ -205,6 +216,21 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
         printf("i:%d\n", i);
         sommet_courant = tab[i];
         draw_disk(renderer, sommet_courant->x, sommet_courant->y, rayon); //Traçage du sommet
+        printf("dessin du sommet ok\n");
+        nom_sommet = sommet_courant->val; //Ecriture du string
+        printf("modification du string ok\n");
+        text_surface = TTF_RenderText_Solid(font, &nom_sommet, color); //Création du texte dans la surface
+        printf("ajout string dans surface ok\n");
+
+        text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
+        printf("ajout surface dans texture ok\n");
+        SDL_FreeSurface(text_surface);
+        printf("free surface ok\n");
+
+        SDL_Rect pos = {sommet_courant->x, sommet_courant->y, 0, 0};
+        SDL_QueryTexture(text_texture, NULL, NULL, &pos.w, &pos.h);
+        SDL_RenderCopy(renderer, text_texture, NULL, &pos);
+        SDL_DestroyTexture(text_texture);
         
         tab_deja_trace[compteur_deja_trace] = sommet_courant->val; //Ajoute le sommet courant a tab_deja_trace
         compteur_deja_trace += 1;
@@ -234,4 +260,6 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
             }
         }
     }
+
+    TTF_Quit();
 }
