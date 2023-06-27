@@ -11,9 +11,9 @@ int main(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    int y = 0, x, i = 0;
-    int width, height, w_window = 400, h_window = 300, final_width = w_window / 2;
-    int frame_size = 48;
+    int i = 0, vitesseBoing = 10, vitesseD = 20;
+    int width, w_window = 400, h_window = 300;
+    int frame_size = 20;
 
     SDL_bool program_on = SDL_TRUE;
     SDL_Event event;
