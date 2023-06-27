@@ -2,6 +2,7 @@
 #include <time.h>
 #include "graph.h"
 #include "affiche.h"
+#include "fourmi.h"
 
 int main()
 {
@@ -18,7 +19,12 @@ int main()
     int ** TableauDistances = dist_tab(tab, &n);
     print_dist_tab(TableauDistances, &n);
 
+    int n_chemin = 0;
+    int * chemin = fourmi(tab, n, &n_chemin);
+    affichTab(chemin, n_chemin);
+    
     affiche(tab, n);
+
 
     free2DTab((void **)TableauDistances, n);
     free2DTab((void **)tab, n);
