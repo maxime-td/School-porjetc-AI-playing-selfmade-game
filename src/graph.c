@@ -46,6 +46,7 @@ sommet_t ** genTabSommets(int * n, int width, int height)
         tab[i] = malloc(sizeof(sommet_t));
         tab[i]->x = rand()%(width);
         tab[i]->y = rand()%(height);
+        tab[i]->val = i+65;
     }
     return tab;
 }
@@ -60,7 +61,7 @@ void printTabCoord(sommet_t ** tab, int * n)
     printf("nombre de points: %d\n", *n);
     for(int i=0; i<(*n); i++)
     {
-        printf("(%d,%d) - ",tab[i]->x, tab[i]->y);
+        printf("%c : (%d,%d) - ",tab[i]->val, tab[i]->x, tab[i]->y);
     }
     printf("\n");
 
