@@ -145,22 +145,27 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
         tab_deja_trace[compteur_deja_trace] = sommet_courant.val; //Ajoute le sommet courant a tab_deja_trace
         compteur_deja_trace += 1;
 
-        for(j = 0; j < sommet_courant.n_voisins; j+=1) {
-            voisin_courant = sommet_courant.voisins[j];
+        for(j = 0; j < n; j+=1) {
+            
+            /* Si j est voisin de i */
+            if(voisins[j] == 1) {
+                voisin_courant = *tab[j];
 
-            /* Vérification si déjà tracé ou pas */
-            bool_deja_trace = 0;
-            while(deja_trace[k] != NULL) {
-                if(deja_trace[k] == voisin_courant.val)
-                    bool_deja_trace = 1;
-                k += 1;
-            }
+                /* Vérification si déjà tracé ou pas */
+                bool_deja_trace = 0;
+                while(tab_deja_trace[k] != NULL) {
+                    if(tab_deja_trace[k] == voisin_courant.val)
+                        bool_deja_trace = 1;
+                    k += 1;
+                }
 
-            if(bool_deja_trace == 0) {
-                SDL_RenderDrawLine(renderer, sommet_courant.x, sommet_courant.y, voisin_courant.x, voisin_courant.y); //Traçage du lien
+                /* Si pas déjà tracé, on le trace */
+                if(bool_deja_trace == 0) {
+                    SDL_RenderDrawLine(renderer, sommet_courant.x, sommet_courant.y, voisin_courant.x, voisin_courant.y); //Traçage du lien
 
-                tab_deja_trace[compteur_deja_trace] = voisin_courant.val; //Ajoute le voisin courant a tab_deja_trace
-                compteur_deja_trace += 1;
+                    tab_deja_trace[compteur_deja_trace] = voisin_courant.val; //Ajoute le voisin courant a tab_deja_trace
+                    compteur_deja_trace += 1;
+                }
             }
         }
     }
