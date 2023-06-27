@@ -52,7 +52,13 @@ void makeNewLinks(int p, sommet_t ** tab, int * n);
 */
 void printTabCoord(sommet_t ** tab, int * n);
 
-
+/**
+ * @brief Calcul la distance entre 2 sommets
+ * @param a pointeur sur un sommet
+ * @param b pointeur sur un sommet
+ * @return La distance
+ */
+int calculDistance(sommet_t * a, sommet_t * b);
 
 /**
  * Dessine un graphe à l'aide d'un rendu SDL.

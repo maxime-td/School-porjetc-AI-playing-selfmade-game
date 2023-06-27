@@ -3,6 +3,7 @@
 #include <time.h>
 #include <SDL2/SDL.h>
 #include "graph.h"
+#include <math.h>
 
 /**
  * @brief Convertit un tableau de sommets en un graphe connexe non cyclique.
@@ -92,8 +93,56 @@ void makeNewLinks(int p, sommet_t ** tab, int * n)
             }   
         }
     }
-
 }
+
+/**
+ * @brief Calcul la distance entre 2 sommets
+ * @param a pointeur sur un sommet
+ * @param b pointeur sur un sommet
+ * @return La distance
+ */
+int calculDistance(sommet_t * a, sommet_t * b)
+{
+    int tmp1 = (a->x-b->x), tmp2 = (a->y-b->y);
+    return (int)math.sqrt(tmp1*tmp1+tmp2*tmp2);
+}
+
+
+/**
+ * @brief Créée un tableau de distance entre les points, -1 si non lié, > 0 sinon.
+ * @param tab pointeur sur le tableau des sommets
+ * @param n le pointeur sur le ombre de sommets
+ * @return Le pointeur sur le tableau 2D des distances.
+ */
+int ** distTab(sommet_t ** tab)
+{
+    int ** tabDist = malloc((*n)*sizeof(int *));
+    int tmpDist=0;
+    for(int i=0; i<*n; i++)
+    {
+        tabDist[i] = malloc((*n)*sizeof(int));
+        for(int j=0; j<i; j++)  
+        {
+            if(i!=j && tab[i]->voisins[j]==0)
+            {
+                tmpDist = calculDistance(tab[i], tab[j]);
+                tabDist[i][j] = tmpDist;
+                tabDist[j][i] = tmpDist;
+            }
+            else if(i==j)
+            {
+                tabDist[i][i] = 0;
+            }
+            else
+            {
+                tabDist[j][i] = -1;
+            }
+        }
+    }
+    return distTab;
+}
+
+
 
 void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
     char deja_trace[n];
