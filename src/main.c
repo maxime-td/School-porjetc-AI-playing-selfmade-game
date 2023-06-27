@@ -2,6 +2,7 @@
 #include <time.h>
 #include "graph.h"
 #include "affiche.h"
+#include "solOpt.h"
 
 int main()
 {
@@ -20,6 +21,8 @@ int main()
 
     Floyd_Warshall(TableauDistances, n);
     print_dist_tab(TableauDistances, &n);
+
+    printf("Tentative cycle: %d\n", cycle_min_approx(TableauDistances, tab, n));
 
     /*
     int y = 0, x;

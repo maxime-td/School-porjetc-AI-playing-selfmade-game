@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "graph.h"
+#include "solOpt.h"
+
 
 /**
  * @brief Construit la matrice des distances minimales (pour les sommets non reliés, donne la distance du chemin optimal les reliant)
@@ -17,7 +19,7 @@ void Floyd_Warshall(int ** distTab, int n)
             {
                 if (distTab[i][j] == -1)
                 {
-                    distTab[i][j] = 276447231;
+                    distTab[i][j] = M;
                 }
 
                 if (distTab[i][k] != -1 && distTab[k][j] != -1 && distTab[i][k] + distTab[k][j] < distTab[i][j])
@@ -27,4 +29,44 @@ void Floyd_Warshall(int ** distTab, int n)
             }
         }
     }
+}
+
+int cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n)
+{
+    int somme=0, cpt=0;
+    int indAct = rand()%n;
+    int indTmp=0;
+    int distTmp=0;
+    char dep = tabSommets[indAct]->val;
+    char tmp = dep;
+    do
+    {
+        printf("Somet courant: %c\n", tmp);
+        for(int i=0; i<n; i++)
+        {
+            if(i==0 && i!=indAct)
+            {
+                distTmp = distTab[indAct][i];
+                indTmp = i;
+            }
+            if (i!=0 && i!=indAct && distTmp>distTab[indAct][i])
+            {
+                distTmp = distTab[indAct][i];
+                indTmp = i;
+            }
+        }
+        for(int i=0; i<n; i++)
+        {
+            distTab[indAct][i] = M;
+            distTab[i][indAct] = M;
+        }
+        somme += distTmp;
+        indAct = indTmp;
+        tmp = tabSommets[indAct]->val;
+        cpt++;
+        print_dist_tab(distTab, &n);
+    } while (tmp != dep && cpt != n);
+
+    return somme;
+    
 }
