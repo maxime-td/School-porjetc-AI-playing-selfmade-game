@@ -27,6 +27,7 @@ sommet_t * tabToGraph(sommet_t ** tab, int n){
 
 
 
-void drawGraph(SDL_Renderer* renderer, sommet_t** graph) {
-
+void drawGraph(SDL_Renderer* renderer, sommet_t** graph, int n) {
+    char deja_trace[n];
+    
 }
