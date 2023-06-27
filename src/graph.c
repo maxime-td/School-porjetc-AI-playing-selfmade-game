@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include "graph.h"
 
 /**
@@ -186,7 +187,6 @@ void printDistTab(int ** distTab, int * n)
         printf("\n");
     }
     printf("\n");
-    return distTab;
 }
 
 /**
@@ -195,7 +195,7 @@ void printDistTab(int ** distTab, int * n)
  * @param center_x La coordonnée x du centre du disque
  * @param center_y La coordonnée y du centre du disque
  * @param radius Le rayon du disque
-
+*/
 void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
     // Calculer les coordonnées du rectangle englobant le disque
     int x = center_x - radius;
@@ -213,65 +213,67 @@ void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
         }
     }
 }
-*/
+
 
 /**
  * @brief Dessine un graphe à l'aide d'un rendu SDL.
  * @param renderer Le rendu SDL utilisé pour afficher le graphe.
  * @param graph Le pointeur vers le graphe à dessiner.
  * @param n Le nombre de sommets dans le tableau.
- 
+ */
 void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
 
     // Initialisations 
-    char tab_deja_trace[n]; //tableau des sommets déjà tracés
-    int bool_deja_trace; //Booléeen si un sommet à déjà été tracé ou non. 0 = Faux, 1 = Vrai
-    int compteur_deja_trace = 0; //Compteur de sommets déjà tracés
     int i, j, k; //Incréments
     int rayon = 10; //Rayon des disques des sommets
 
     sommet_t* sommet_courant; //Sommet courant
     sommet_t* voisin_courant; //Voisin courant
 
-    // Initialisation tableau deja_trace 
-    for(i = 0; i < n; i+=1) {
-        tab_deja_trace[i] = '0';
+    char Tag[3];
+    TTF_Font* font;
+    SDL_Surface* textSurface;
+    SDL_Texture* textTexture;
+    SDL_Color color = {50, 100, 0, 255};
+
+    SDL_Rect textRect  = {100, 0, 100, 100};
+
+    if (TTF_Init()!= 0)
+    {
+        SDL_Log("Error : SDL initialisation - %s\n",
+                SDL_GetError()); // l'initialisation de la TTF a échoué
+        exit(EXIT_FAILURE);
     }
+
+    font = TTF_OpenFont("arial.ttf", 20);
 
     // Parcour 
     for(i = 0; i < n; i+=1) {
-        //printf("i:%d\n", i);
         sommet_courant = tab[i];
-        draw_disk(renderer, sommet_courant->x, sommet_courant->y, rayon); //Traçage du sommet
-        
-        tab_deja_trace[compteur_deja_trace] = sommet_courant->val; //Ajoute le sommet courant a tab_deja_trace
-        compteur_deja_trace += 1;
-
-        for(j = 0; j < n; j+=1) {
+        for(j = i; j < n; j+=1) {
             k=0;
-            //printf("j:%d\n", j);
             // Si j est voisin de i
             if(tab[i]->voisins[j] == 1) {
                 voisin_courant = tab[j];
-
-                // Vérification si déjà tracé ou pas
-                bool_deja_trace = 0;
-                while(tab_deja_trace[k] != '0') {
-                    if(tab_deja_trace[k] == voisin_courant->val)
-                        bool_deja_trace = 1;
-                    k += 1;
-                }
+        
 
                 // Si pas déjà tracé, on le trace 
-                if(bool_deja_trace == 0) {
-                    SDL_RenderDrawLine(renderer, sommet_courant->x, sommet_courant->y, voisin_courant->x, voisin_courant->y); //Traçage du lien
-
-                    tab_deja_trace[compteur_deja_trace] = voisin_courant->val; //Ajoute le voisin courant a tab_deja_trace
-                    compteur_deja_trace += 1;
-                }
+                SDL_RenderDrawLine(renderer, sommet_courant->x, sommet_courant->y, voisin_courant->x, voisin_courant->y); //Traçage du lien
             }
         }
+        draw_disk(renderer, sommet_courant->x, sommet_courant->y, rayon); //Traçage du sommet
+
+        sprintf(Tag, "%c", tab[i]->val);
+
+        textSurface = TTF_RenderText_Solid(font, Tag, color);
+        textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+        SDL_FreeSurface(textSurface);
+        SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+        textRect.x = sommet_courant->x-textRect.w/2;
+        textRect.y = sommet_courant->y-textRect.h/2;
+
+        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+        SDL_DestroyTexture(textTexture);
     }
 }
-
-*/
