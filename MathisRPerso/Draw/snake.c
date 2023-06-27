@@ -105,6 +105,7 @@ int main(int argc, char **argv)
     speed_y = 0;    
     font = TTF_OpenFont("arial.ttf", 80);
 
+
     /* Boucle principale du jeu */
     while (program_on)
     {
