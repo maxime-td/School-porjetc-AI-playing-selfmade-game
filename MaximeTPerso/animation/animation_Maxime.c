@@ -225,7 +225,7 @@ int main(int argc, char** argv) {
     /* Fermeture SDL */
     end_sdl(1, "Normal ending", window, renderer);
     SDL_DestroyTexture(my_texture_stand);
-    SDL_DestroyTexture(my_texture_marche);
+    //SDL_DestroyTexture(my_texture_marche);
 
     return EXIT_SUCCESS;
 }
