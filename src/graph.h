@@ -4,6 +4,9 @@
 #include <SDL2/SDL.h>
 
 #define N 12 // NOMBRE_MAX_SOMMET 
+#define R 200 //Rayon cercle repartition
+#define W 800
+#define H 800
 
 /**
  * @struct sommet_s
