@@ -1,13 +1,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
-
-/************************************/
-/*  exemple de création de fenêtres */
-/************************************/
+#include <time.h>
 
 int main(int argc, char **argv)
 {
+    srand(time(NULL));
     (void)argc;
     (void)argv;
 
@@ -54,6 +52,9 @@ int main(int argc, char **argv)
     width = dm.w;
     w_window = dm.w;
     h_window = dm.h;
+
+    dstrectCoin.x = rand()%(w_window-frame_sizeCoin);
+    dstrectCoin.y = rand()%(h_window-frame_sizeCoin);
 
     SDL_Rect srcrectFond = {0, 0, 1497, 1500};         // position and size of the part of the image to draw
     SDL_Rect dstrectFond = {0, 0, w_window, h_window}; // position and size of the destination on the screen
