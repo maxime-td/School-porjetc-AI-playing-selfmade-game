@@ -8,7 +8,11 @@
 #include <math.h>
 
 
-
+/**
+ * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
+ * @param tab Le tableau de sommets représentant le graphe.
+ * @param n Le nombre de sommets dans le tableau.
+*/
 void affiche(sommet_t ** tab, int n){
     int y = 0, x;
     int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
