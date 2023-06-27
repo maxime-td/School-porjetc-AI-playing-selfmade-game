@@ -136,7 +136,6 @@ int calculDistance(sommet_t * a, sommet_t * b)
     return tmp1*tmp1+tmp2*tmp2;
 }
 
-
 /**
  * @brief Créée un tableau de distance entre les points, -1 si non lié, > 0 sinon.
  * @param tab pointeur sur le tableau des sommets
@@ -197,7 +196,7 @@ void printDistTab(int ** distTab, int * n)
  * @param center_x La coordonnée x du centre du disque
  * @param center_y La coordonnée y du centre du disque
  * @param radius Le rayon du disque
-
+*/
 void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
     // Calculer les coordonnées du rectangle englobant le disque
     int x = center_x - radius;
@@ -215,7 +214,6 @@ void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
         }
     }
 }
-*/
 
 /**
  * @brief Dessine un graphe à l'aide d'un rendu SDL.
@@ -302,4 +300,3 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
 
     TTF_Quit();
 }
-
