@@ -4,6 +4,9 @@
 #include <SDL2/SDL.h>
 
 #define N 12 // NOMBRE_MAX_SOMMET 
+#define R 300 //Rayon cercle repartition
+#define W 800
+#define H 800
 
 /**
  * @struct sommet_s
@@ -23,7 +26,7 @@ typedef struct sommet_s{
  * @param n Le nombre de sommets dans le tableau.
  * @return Un pointeur vers un sommet du graph
  */
-void tabToGraph(sommet_t ** tab, int n, int start);
+void tab_to_graph(sommet_t ** tab, int n, int start);
 
 
 /**
@@ -33,7 +36,7 @@ void tabToGraph(sommet_t ** tab, int n, int start);
  * @param height la borne sur l axe des ordonnées
  * @return un pointeur sur un tableau de sommets
  */
-sommet_t ** genTabSommets(int * n, int width, int height);
+sommet_t ** gen_tab_sommets(int * n, int width, int height);
 
 
 /**
@@ -42,14 +45,14 @@ sommet_t ** genTabSommets(int * n, int width, int height);
  * @param tab le pointeur sur le tableau des sommets
  * @param n le pointeur sur le ombre de sommets
  */
-void makeNewLinks(int p, sommet_t ** tab, int * n);
+void make_new_links(int p, sommet_t ** tab, int * n);
 
 /**
  * @brief Affiche le tableau des coordonnées des points
  * @param tab le pointeur sur le tableau de points
  * @param n le pointeur sur le nombre de sommets du tableau
 */
-void printTabCoord(sommet_t ** tab, int * n);
+void print_tab_coord(sommet_t ** tab, int * n);
 
 /**
  * @brief Calcul la distance entre 2 sommets
@@ -57,7 +60,7 @@ void printTabCoord(sommet_t ** tab, int * n);
  * @param b pointeur sur un sommet
  * @return La distance
  */
-int calculDistance(sommet_t * a, sommet_t * b);
+int calcul_distance(sommet_t * a, sommet_t * b);
 
 /**
  * @brief Créée un tableau de distance entre les points, -1 si non lié, > 0 sinon.
@@ -65,32 +68,14 @@ int calculDistance(sommet_t * a, sommet_t * b);
  * @param n le pointeur sur le ombre de sommets
  * @return Le pointeur sur le tableau 2D des distances.
  */
-int ** distTab(sommet_t ** tab, int * n);
-
-/**
- * @brief Trace un disque
- * @param renderer Le renderer où tracer le disque
- * @param center_x La coordonnée x du centre du disque
- * @param center_y La coordonnée y du centre du disque
- * @param radius Le rayon du disque
- */
+int ** dist_tab(sommet_t ** tab, int * n);
 
 /**
  * @brief Affiche le tableau des distances
  * @param distTab le tableau des distances
  * @param n le pointeur sur le ombre de sommets
  */
-void printDistTab(int ** distTab, int * n);
+void print_dist_tab(int ** distTab, int * n);
 
-
-void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius);
-
-/**
- * @brief Dessine un graphe à l'aide d'un rendu SDL.
- * @param renderer Le rendu SDL utilisé pour afficher le graphe.
- * @param graph Le pointeur vers le graphe à dessiner.
- * @param n Le nombre de sommets dans le tableau.
- */
-void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n);
 
 #endif /* GRAPH_H_ */

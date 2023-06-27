@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g
 
-DIRCOMM = src/
+DIRCOMM =
 
 #liste des fichiers source
 SRC = $(wildcard $(DIRCOMM)*.c)
@@ -11,8 +11,11 @@ HEADERS = $(wildcard $(DIRCOMM)*.h)
 #liste des fichiers objets
 OBJ = $(SRC:%.c=%.o)
 
-main: $(SRC) $(HEADERS)
-	$(CC) $(SRC) -o $@ -lm -lSDL2_ttf $(shell sdl2-config --cflags --libs)
+main: $(OBJ) $(HEADERS)
+	$(CC) $(OBJ) -o $@ -lm $(shell sdl2-config --cflags --libs)
+	
+main.o:$(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 .PHONY: clean reclean
 

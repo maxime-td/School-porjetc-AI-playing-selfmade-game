@@ -1,16 +1,17 @@
 #include <stdio.h>
 #include <time.h>
 #include "graph.h"
+#include "affiche.h"
 
 int main()
 {
     srand(time(NULL));
     int n=0;
-    sommet_t ** tab = genTabSommets(&n, 800, 800);
-    printTabCoord(tab, &n);
-    printf("--------------------------------------------\n");
-    tabToGraph(tab, 0, n-1);
-    printTabCoord(tab, &n);
+    sommet_t ** tab = gen_tab_sommets(&n, 800, 800);
+    //printTabCoord(tab, &n);
+    //printf("--------------------------------------------\n");
+    tab_to_graph(tab, 0, n-1);
+    //printTabCoord(tab, &n);
 
     makeNewLinks(25, tab, &n);
     printTabCoord(tab, &n);
@@ -23,8 +24,7 @@ int main()
     SDL_bool program_on = SDL_TRUE;
     SDL_Event event;   
 
-    SDL_DisplayMode dm;
-    SDL_Renderer* renderer;
+    affiche(tab, n);
 
     SDL_Window *window = NULL;
 */
