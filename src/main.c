@@ -12,5 +12,9 @@ int main()
     tabToGraph(tab, 0, n-1);
     printTabCoord(tab, &n);
 
+    makeNewLinks(25, tab, &n);
+    printTabCoord(tab, &n);
+    int ** TableauDistances = distTab(tab, &n);
+    printDistTab(TableauDistances, &n);
     return 0;
 }
