@@ -38,6 +38,14 @@ sommet_t ** genTabSommets(int * n, int width, int height);
 
 
 /**
+ * @brief Créée des liasons aléatoires entre les sommets
+ * @param p probabilité de création de liaison pour chaque couple de point.
+ * @param tab le pointeur sur le tableau des sommets
+ * @param n le pointeur sur le ombre de sommets
+ */
+void makeNewLinks(int p, sommet_t ** tab, int * n);
+
+/**
  * @brief Affiche le tableau des coordonnées des points
  * @param tab le pointeur sur le tableau de points
  * @param n le pointeur sur le nombre de sommets du tableau

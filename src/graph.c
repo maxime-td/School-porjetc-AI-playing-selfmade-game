@@ -85,6 +85,29 @@ void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
     }
 }
 
+/**
+ * @brief Créée des liasons aléatoires entre les sommets
+ * @param p probabilité de création de liaison pour chaque couple de point.
+ * @param tab le pointeur sur le tableau des sommets
+ * @param n le pointeur sur le ombre de sommets
+ */
+void makeNewLinks(int p, sommet_t ** tab, int * n)
+{
+    for(int i=0; i<*n; i++)
+    {
+        for(int j=0; j<n*; j++)
+        {
+            if(tab[i]->voisins[j]==0 && rand()%(p)<25)
+            {
+                tab[i]->voisins[j]=1;
+                tab[j]->voisins[i]=1;
+                printf("NEW_LINK: (%c, %c) - ", tab[i]->val, tab[j]->val);
+            }   
+        }
+    }
+
+}
+
 void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
 
     /* Initialisations */
