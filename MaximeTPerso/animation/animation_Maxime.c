@@ -213,15 +213,15 @@ int main(int argc, char** argv) {
     my_texture_stand = load_texture_from_image("comcomdile.png", window, renderer);
     my_texture_marche = load_texture_from_image("comcomdile_marche.png", window, renderer);
     
-    play_with_texture_3(my_texture_stand, window, renderer);
-    //play_with_texture_4(my_texture_marche, window, renderer);
+    //play_with_texture_3(my_texture_stand, window, renderer);
+    play_with_texture_4(my_texture_marche, window, renderer);
 
     SDL_Delay(1000); // Pause exprimée en ms
                           
     /* Fermeture SDL */
     end_sdl(1, "Normal ending", window, renderer);
-    SDL_DestroyTexture(my_texture_stand);
-    //SDL_DestroyTexture(my_texture_marche);
+    //SDL_DestroyTexture(my_texture_stand);
+    SDL_DestroyTexture(my_texture_marche);
 
     return EXIT_SUCCESS;
 }
