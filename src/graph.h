@@ -1,6 +1,8 @@
 #ifndef GRAPH_H_
 #define GRAPH_H_
-#define MAX_VOISIN 16
+#define MAX_VOISIN 32
+
+#include <SDL2/SDL.h>
 
 /**
  * @struct sommet_s
@@ -17,14 +19,17 @@ typedef struct sommet_s{
  * @brief Convertit un tableau de sommets en un graphe.
  * @param tab Le tableau de sommets à convertir.
  * @param n Le nombre de sommets dans le tableau.
- * @return Un pointeur vers le graphe créé.
+ * @return Un pointeur vers un sommet du graph
  */
 sommet_t * tabToGraph(sommet_t ** tab, int n);
 
+
 /**
- * @brief Dessine le graphe sur l'écran.
- * @param graph Le graphe à dessiner.
+ * Dessine un graphe à l'aide d'un rendu SDL.
+ *
+ * @param renderer Le rendu SDL utilisé pour afficher le graphe.
+ * @param graph Le pointeur vers le graphe à dessiner.
  */
-void drawGraph(sommet_t * graph);
+void drawGraph(SDL_Renderer* renderer, sommet_t * graph);
 
 #endif /* GRAPH_H_ */
