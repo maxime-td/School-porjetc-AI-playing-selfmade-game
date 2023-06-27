@@ -67,24 +67,6 @@ void printTabCoord(sommet_t ** tab, int * n)
 
 }
 
-void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
-    // Calculer les coordonnées du rectangle englobant le disque
-    int x = center_x - radius;
-    int y = center_y - radius;
-    int width = radius * 2;
-    int height = radius * 2;
-
-    // Dessiner le disque rempli
-    for (int i = x; i < x + width; i++) {
-        for (int j = y; j < y + height; j++) {
-            // Vérifier si le point (i, j) est à l'intérieur du cercle
-            if ((i - center_x) * (i - center_x) + (j - center_y) * (j - center_y) <= radius * radius) {
-                SDL_RenderDrawPoint(renderer, i, j);
-            }
-        }
-    }
-}
-
 /**
  * @brief Créée des liasons aléatoires entre les sommets
  * @param p probabilité de création de liaison pour chaque couple de point.
@@ -105,9 +87,39 @@ void makeNewLinks(int p, sommet_t ** tab, int * n)
             }   
         }
     }
-
 }
 
+/**
+ * @brief Trace un disque
+ * @param renderer Le renderer où tracer le disque
+ * @param center_x La coordonnée x du centre du disque
+ * @param center_y La coordonnée y du centre du disque
+ * @param radius Le rayon du disque
+ */
+void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
+    // Calculer les coordonnées du rectangle englobant le disque
+    int x = center_x - radius;
+    int y = center_y - radius;
+    int width = radius * 2;
+    int height = radius * 2;
+
+    // Dessiner le disque rempli
+    for (int i = x; i < x + width; i++) {
+        for (int j = y; j < y + height; j++) {
+            // Vérifier si le point (i, j) est à l'intérieur du cercle
+            if ((i - center_x) * (i - center_x) + (j - center_y) * (j - center_y) <= radius * radius) {
+                SDL_RenderDrawPoint(renderer, i, j);
+            }
+        }
+    }
+}
+
+/**
+ * @brief Dessine un graphe à l'aide d'un rendu SDL.
+ * @param renderer Le rendu SDL utilisé pour afficher le graphe.
+ * @param graph Le pointeur vers le graphe à dessiner.
+ * @param n Le nombre de sommets dans le tableau.
+ */
 void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
 
     /* Initialisations */
