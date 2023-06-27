@@ -50,7 +50,7 @@ SDL_Texture* load_texture_from_image(char* file_image_name, SDL_Window *window, 
     if (my_texture == NULL) end_sdl(0, "Echec de la transformation de la surface en texture", window, renderer);
 
     IMG_Quit(); // Si on charge une librairie SDL, il faut penser à la décharger
-    
+
     return my_texture;
 }
 
@@ -77,6 +77,28 @@ void play_with_texture_1(SDL_Texture *my_texture, SDL_Window *window, SDL_Render
     SDL_RenderClear(renderer);
 }
 
+void play_with_texture_2(SDL_Texture* my_texture, SDL_Window* window, SDL_Renderer* renderer) {
+    SDL_Rect 
+        source = {0}, // Rectangle définissant la zone de la texture à récupérer
+        window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+        destination = {0}; // Rectangle définissant où la zone_source doit être déposée dans le renderer
+
+    SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h); // Récupération des dimensions de la fenêtre
+    SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h); // Récupération des dimensions de l'image
+
+    float zoom = 0.5; // Facteur de zoom à appliquer    
+    destination.w = source.w * zoom; // La destination est un zoom de la source
+    destination.h = source.h * zoom; // La destination est un zoom de la source
+    destination.x = (window_dimensions.w - destination.w) /2; // La destination est au milieu de la largeur de la fenêtre
+    destination.y = (window_dimensions.h - destination.h) /2; // La destination est au milieu de la hauteur de la fenêtre
+
+    SDL_RenderCopy(renderer, my_texture, &source, &destination);            
+        SDL_RenderPresent(renderer);             
+        SDL_Delay(1000);                         
+
+        SDL_RenderClear(renderer); // Effacer la fenêtre
+}
+
 int main(int argc, char** argv) {
     (void)argc;
     (void)argv;
@@ -91,7 +113,7 @@ int main(int argc, char** argv) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) end_sdl(0, "ERROR SDL INIT", window, renderer);
 
     /* Création de la fenêtre */
-    window = SDL_CreateWindow("Théâtre", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 600, SDL_WINDOW_OPENGL);
+    window = SDL_CreateWindow("Animation", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 600, SDL_WINDOW_OPENGL);
     if (window == NULL) end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
 
     /* Création du renderer */
@@ -112,7 +134,7 @@ int main(int argc, char** argv) {
     } */
 
     my_texture = load_texture_from_image("comcomdile.png", window, renderer);
-    play_with_texture_1(my_texture, window, renderer);
+    play_with_texture_2(my_texture, window, renderer);
 
     SDL_Delay(4000); // Pause exprimée en ms
                           
