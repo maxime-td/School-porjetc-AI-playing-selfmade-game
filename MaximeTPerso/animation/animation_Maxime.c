@@ -187,7 +187,8 @@ int main(int argc, char** argv) {
 
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
-    SDL_Texture* my_texture = NULL;
+    SDL_Texture* my_texture_stand = NULL;
+    SDL_Texture* my_texture_marche = NULL;
  
     /* Initialisation SDL */
     if (SDL_Init(SDL_INIT_VIDEO) != 0) end_sdl(0, "ERROR SDL INIT", window, renderer);
@@ -212,16 +213,19 @@ int main(int argc, char** argv) {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); 
         SDL_RenderPresent(renderer);
     } */
+
+    my_texture_stand = load_texture_from_image("comcomdile.png", window, renderer);
+    my_texture_marche = load_texture_from_image("comcomdile_marche.png", window, renderer);
     
-    my_texture = load_texture_from_image("comcomdile_marche.png", window, renderer);
-    
-    play_with_texture_4(my_texture, window, renderer);
+    play_with_texture_3(my_texture_stand, window, renderer);
+    //play_with_texture_4(my_texture_marche, window, renderer);
 
     SDL_Delay(1000); // Pause exprimée en ms
                           
     /* Fermeture SDL */
     end_sdl(1, "Normal ending", window, renderer);
-    SDL_DestroyTexture(my_texture);
+    SDL_DestroyTexture(my_texture_stand);
+    SDL_DestroyTexture(my_texture_marche);
 
     return EXIT_SUCCESS;
 }
