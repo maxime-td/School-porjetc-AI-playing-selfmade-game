@@ -20,5 +20,8 @@ int main()
 
     affiche(tab, n);
 
+    free2DTab((void **)TableauDistances, n);
+    free2DTab((void **)tab, n);
+
     return 0;
 }

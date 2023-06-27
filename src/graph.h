@@ -20,6 +20,15 @@ typedef struct sommet_s{
     int y;                       /**< Coordonnée y du sommet */
 }sommet_t;
 
+
+/**
+ * Libère la mémoire allouée pour un tableau à deux dimensions.
+ *
+ * @param tab Le tableau à libérer.
+ * @param n   Le nombre de lignes du tableau.
+ */
+void free2DTab(void ** tab, int n);
+
 /**
  * @brief Convertit un tableau de sommets en un graphe connexe non cyclique.
  * @param tab Le tableau de sommets à convertir.
