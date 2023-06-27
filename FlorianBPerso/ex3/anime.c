@@ -12,7 +12,7 @@ int main(int argc, char **argv)
     (void)argv;
 
     int y = 0, x, i = 0, vitesseBoing = 10, vitesseD = 20;
-    int width, height, w_window = 400, h_window = 300, final_width = w_window / 2;
+    int width, w_window = 400, h_window = 300;
     int frame_size = 20;
 
     SDL_bool program_on = SDL_TRUE;
@@ -24,9 +24,11 @@ int main(int argc, char **argv)
     SDL_Renderer
         *renderer = NULL;
     SDL_Surface
-        *surf = IMG_Load("Slime_Boing-5.png");
+        *surf = IMG_Load("Slime_Boing-5.png"),
+        *fond = IMG_Load("fond_herbe.jpg");
 
     SDL_Texture *texture = NULL;
+    SDL_Texture *textFond = NULL;
     SDL_Rect srcrect = {0, 0, frame_size, frame_size}; // position and size of the part of the image to draw
     SDL_Rect dstrect = {100, 100, 100, 100};           // position and size of the destination on the screen
 
@@ -44,9 +46,11 @@ int main(int argc, char **argv)
         return 1;
     }
     width = dm.w;
-    height = dm.h;
     w_window = dm.w;
     h_window = dm.h;
+
+    SDL_Rect srcrectFond = {0, 0, 1497, 1500};         // position and size of the part of the image to draw
+    SDL_Rect dstrectFond = {0, 0, w_window, h_window}; // position and size of the destination on the screen
 
     /* Création de la fenêtre de gauche */
     window = SDL_CreateWindow(
@@ -69,6 +73,7 @@ int main(int argc, char **argv)
 
     /* Conversion de l'image en un format supporté par SDL */
     texture = SDL_CreateTextureFromSurface(renderer, surf);
+    textFond = SDL_CreateTextureFromSurface(renderer, fond);
     if (texture == NULL)
     {
         SDL_Log("Error: SDL_CreateTextureFromSurface - %s\n", SDL_GetError());
@@ -80,6 +85,8 @@ int main(int argc, char **argv)
     }
 
     /* Dessin de la partie de l'image sur l'écran */
+    SDL_RenderCopy(renderer, textFond, &srcrectFond, &dstrectFond);
+    SDL_RenderPresent(renderer);
     SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
     SDL_RenderPresent(renderer);
 
@@ -140,6 +147,7 @@ int main(int argc, char **argv)
             i = 0;
         }
         SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, textFond, &srcrectFond, &dstrectFond);
         SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
         SDL_RenderPresent(renderer);
         SDL_Delay(20);
@@ -147,60 +155,10 @@ int main(int argc, char **argv)
         i++;
     }
 
-    SDL_GetWindowPosition(window, &x, &y);
-
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(surf);
     SDL_DestroyRenderer(renderer);
-    /* et on referme tout ce qu'on a ouvert en ordre inverse de la création */
-    SDL_DestroyWindow(window); // la fenêtre
-
-    /*
-        while (continuer)
-        {
-            while (SDL_PollEvent(&event))
-            {
-                switch (event.type)
-                {
-                case SDL_QUIT:
-                    continuer = 0;
-                    break;
-
-                case SDL_KEYDOWN:
-                    if (event.key.keysym.sym == SDLK_UP)
-                        y -= 20;
-                    if (event.key.keysym.sym == SDLK_RIGHT && x < 700)
-                        x += 10;
-                    if (event.key.keysym.sym == SDLK_LEFT && x > 0)
-                        x -= 10;
-                    break;
-
-                default:
-                    break;
-                }
-                break;
-            }
-            if (y < 700)
-            {
-                y += 5;
-                SDL_Delay(18);
-            }
-            carre.x = x;
-            carre.y = y;
-
-            SDL_SetRenderDrawColor(renderer, 255, 165, 0, 255);
-            SDL_RenderClear(renderer);
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            SDL_RenderFillRect(renderer, &carre);
-            SDL_RenderPresent(renderer);
-        }
-
-
-        SDL_RenderClear(renderer);
-        SDL_Delay(20);
-        SDL_RenderPresent(renderer);
-    */
-    /* et on referme tout ce qu'on a ouvert en ordre inverse de la création */
+    SDL_DestroyWindow(window);
 
     SDL_Quit(); // la SDL
 
