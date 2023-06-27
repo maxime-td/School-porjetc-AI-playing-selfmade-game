@@ -4,6 +4,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include "graph.h"
+#include <math.h>
+#include <SDL2/SDL_ttf.h>
 
 /**
  * @brief Convertit un tableau de sommets en un graphe connexe non cyclique.
@@ -135,7 +137,6 @@ int calculDistance(sommet_t * a, sommet_t * b)
     return tmp1*tmp1+tmp2*tmp2;
 }
 
-
 /**
  * @brief Créée un tableau de distance entre les points, -1 si non lié, > 0 sinon.
  * @param tab pointeur sur le tableau des sommets
@@ -214,7 +215,6 @@ void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
     }
 }
 
-
 /**
  * @brief Dessine un graphe à l'aide d'un rendu SDL.
  * @param renderer Le rendu SDL utilisé pour afficher le graphe.
@@ -226,6 +226,7 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
     // Initialisations 
     int i, j, k; //Incréments
     int rayon = 10; //Rayon des disques des sommets
+    char nom_sommet;
 
     sommet_t* sommet_courant; //Sommet courant
     sommet_t* voisin_courant; //Voisin courant
