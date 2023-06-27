@@ -45,8 +45,8 @@ sommet_t ** genTabSommets(int * n, int width, int height)
     {
         tab[i] = malloc(sizeof(sommet_t));
         tab[i]->x = rand()%(width);
-        tab[i]->y = rand()%(height);
-        tab[i]->val = i+65;
+        tab[i]->y = rand()%(height);        //On génère les nombre aléatoirement entre des bornes représentants la taille de la fenêtre
+        tab[i]->val = i+65;             //On assigne des valeurs aux sommet, en l'occurence A,B,C...
     }
     return tab;
 }
@@ -78,11 +78,11 @@ void makeNewLinks(int p, sommet_t ** tab, int * n)
 {
     for(int i=0; i<*n; i++)
     {
-        for(int j=0; j<n*; j++)
+        for(int j=0; j<n*; j++)  
         {
-            if(tab[i]->voisins[j]==0 && rand()%(p)<25)
+            if(tab[i]->voisins[j]==0 && rand()%(100)<p) // On regarde pour chaque point son tableau "binaire" de voisins et on tire un random entre 0 et 100
             {
-                tab[i]->voisins[j]=1;
+                tab[i]->voisins[j]=1;          // Si 2 points ne sont pas voisins et qu'on tire un random respectant notre porba souhaitée, on lie les points.
                 tab[j]->voisins[i]=1;
                 printf("NEW_LINK: (%c, %c) - ", tab[i]->val, tab[j]->val);
             }   
