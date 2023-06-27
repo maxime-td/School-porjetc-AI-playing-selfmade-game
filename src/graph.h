@@ -86,3 +86,10 @@ void print_dist_tab(int ** distTab, int * n);
 
 
 #endif /* GRAPH_H_ */
+
+/**
+ * @brief Construit la matrice des distances minimales (pour les sommets non reliés, donne la distance du chemin optimal les reliant)
+ * @param distTab le tableau des distances initiales (sera modifié)
+ * @param n la taille du tableau
+*/
+void Floyd_Warshall(int ** distTab, int n);
