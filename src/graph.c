@@ -167,7 +167,7 @@ void printDistTab(int ** distTab, int * n)
         printf("\n");
     }
     printf("\n");
-    return distTab;
+    //return distTab;
 }
 
 /**
