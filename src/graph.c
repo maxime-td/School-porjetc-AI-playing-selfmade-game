@@ -47,6 +47,10 @@ sommet_t ** genTabSommets(int * n, int width, int height)
         tab[i]->x = rand()%(width);
         tab[i]->y = rand()%(height);        //On génère les nombre aléatoirement entre des bornes représentants la taille de la fenêtre
         tab[i]->val = i+65;             //On assigne des valeurs aux sommet, en l'occurence A,B,C...
+        for(int j=0; j<*n;j++)
+        {
+            tab[i]->voisin[j]=0;    //Tableau des liens initialisé vide
+        }
     }
     return tab;
 }
