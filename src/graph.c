@@ -27,3 +27,10 @@ sommet_t * tabToGraph(sommet_t ** tab, int n){
         return tab[0];
     }
 }
+
+
+
+
+void drawGraph(SDL_Renderer* renderer, sommet_t** graph) {
+
+}
