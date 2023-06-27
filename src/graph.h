@@ -30,6 +30,6 @@ sommet_t * tabToGraph(sommet_t ** tab, int n);
  * @param renderer Le rendu SDL utilisé pour afficher le graphe.
  * @param graph Le pointeur vers le graphe à dessiner.
  */
-void drawGraph(SDL_Renderer* renderer, sommet_t * graph);
+void drawGraph(SDL_Renderer* renderer, sommet_t** graph);
 
 #endif /* GRAPH_H_ */
