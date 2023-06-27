@@ -12,6 +12,12 @@ int main()
     tabToGraph(tab, 0, n-1);
     printTabCoord(tab, &n);
 
+<<<<<<< HEAD
+    makeNewLinks(25, tab, &n);
+    printTabCoord(tab, &n);
+    int ** TableauDistances = distTab(tab, &n);
+    printDistTab(TableauDistances, &n);
+=======
     int y = 0, x;
     int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
     SDL_bool program_on = SDL_TRUE;
@@ -85,5 +91,6 @@ int main()
         }
     }
 
+>>>>>>> 78914e47d6e3ac93844679a4b3a85088362af92f
     return 0;
 }
