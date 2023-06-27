@@ -68,7 +68,7 @@ int calculDistance(sommet_t * a, sommet_t * b);
  * @param n le pointeur sur le ombre de sommets
  * @return Le pointeur sur le tableau 2D des distances.
  */
-int ** distTab(sommet_t ** tab);
+int ** distTab(sommet_t ** tab, int * n);
 
 /**
  * @brief Trace un disque
@@ -77,6 +77,15 @@ int ** distTab(sommet_t ** tab);
  * @param center_y La coordonnée y du centre du disque
  * @param radius Le rayon du disque
  */
+
+/**
+ * @brief Affiche le tableau des distances
+ * @param distTab le tableau des distances
+ * @param n le pointeur sur le ombre de sommets
+ */
+void printDistTab(int ** distTab, int * n);
+
+
 void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius);
 
 /**

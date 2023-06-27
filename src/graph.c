@@ -3,7 +3,6 @@
 #include <time.h>
 #include <SDL2/SDL.h>
 #include "graph.h"
-#include <math.h>
 
 /**
  * @brief Convertit un tableau de sommets en un graphe connexe non cyclique.
@@ -105,14 +104,13 @@ void printTabCoord(sommet_t ** tab, int * n)
  * @param tab le pointeur sur le tableau des sommets
  * @param n le pointeur sur le ombre de sommets
  */
-/*
 void makeNewLinks(int p, sommet_t ** tab, int * n)
 {
     for(int i=0; i<*n; i++)
     {
-        for(int j=0; j<n*; j++)  
+        for(int j=0; j<*n; j++)  
         {
-            if(tab[i]->voisins[j]==0 && rand()%(100)<p) // On regarde pour chaque point son tableau "binaire" de voisins et on tire un random entre 0 et 100
+            if(i!=j && tab[i]->voisins[j]==0 && rand()%(100)<p) // On regarde pour chaque point son tableau "binaire" de voisins et on tire un random entre 0 et 100
             {
                 tab[i]->voisins[j]=1;          // Si 2 points ne sont pas voisins et qu'on tire un random respectant notre porba souhaitée, on lie les points.
                 tab[j]->voisins[i]=1;
@@ -120,7 +118,8 @@ void makeNewLinks(int p, sommet_t ** tab, int * n)
             }   
         }
     }
-} */
+    printf("\n");
+}
 
 /**
  * @brief Calcul la distance entre 2 sommets
@@ -128,13 +127,13 @@ void makeNewLinks(int p, sommet_t ** tab, int * n)
  * @param b pointeur sur un sommet
  * @return La distance
  */
-/*
+
 int calculDistance(sommet_t * a, sommet_t * b)
 {
     int tmp1 = (a->x-b->x), tmp2 = (a->y-b->y);
-    return (int)math.sqrt(tmp1*tmp1+tmp2*tmp2);
+    return tmp1*tmp1+tmp2*tmp2;
 }
-*/
+
 
 /**
  * @brief Créée un tableau de distance entre les points, -1 si non lié, > 0 sinon.
@@ -142,34 +141,53 @@ int calculDistance(sommet_t * a, sommet_t * b)
  * @param n le pointeur sur le ombre de sommets
  * @return Le pointeur sur le tableau 2D des distances.
  */
-/*
-int ** distTab(sommet_t ** tab)
+int ** distTab(sommet_t ** tab, int * n)
 {
     int ** tabDist = malloc((*n)*sizeof(int *));
     int tmpDist=0;
     for(int i=0; i<*n; i++)
     {
         tabDist[i] = malloc((*n)*sizeof(int));
-        for(int j=0; j<i; j++)  
+        for(int j=0; j<=i; j++)  
         {
-            if(i!=j && tab[i]->voisins[j]==0)
+            if(i!=j && tab[i]->voisins[j]==1)
             {
                 tmpDist = calculDistance(tab[i], tab[j]);
                 tabDist[i][j] = tmpDist;
                 tabDist[j][i] = tmpDist;
             }
-            else if(i==j)
+            else if(i!=j)
             {
-                tabDist[i][i] = 0;
+                tabDist[i][j] = -1;
+                tabDist[j][i] = -1;
             }
             else
             {
-                tabDist[j][i] = -1;
+                tabDist[j][i] = 0;
             }
         }
     }
+    return tabDist;
+}
+
+/**
+ * @brief Affiche le tableau des distances
+ * @param distTab le tableau des distances
+ * @param n le pointeur sur le ombre de sommets
+ */
+void printDistTab(int ** distTab, int * n)
+{
+    for(int i=0; i<(*n); i++)
+    {
+        for(int j=0; j<(*n); j++)
+        {
+            printf("distance (%c,%c) : %d -- ", i+65, j+65, distTab[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
     return distTab;
-}*/
+}
 
 /**
  * @brief Trace un disque
@@ -177,7 +195,7 @@ int ** distTab(sommet_t ** tab)
  * @param center_x La coordonnée x du centre du disque
  * @param center_y La coordonnée y du centre du disque
  * @param radius Le rayon du disque
- */
+
 void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
     // Calculer les coordonnées du rectangle englobant le disque
     int x = center_x - radius;
@@ -195,16 +213,17 @@ void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
         }
     }
 }
+*/
 
 /**
  * @brief Dessine un graphe à l'aide d'un rendu SDL.
  * @param renderer Le rendu SDL utilisé pour afficher le graphe.
  * @param graph Le pointeur vers le graphe à dessiner.
  * @param n Le nombre de sommets dans le tableau.
- */
+ 
 void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
 
-    // Initialisations
+    // Initialisations 
     char tab_deja_trace[n]; //tableau des sommets déjà tracés
     int bool_deja_trace; //Booléeen si un sommet à déjà été tracé ou non. 0 = Faux, 1 = Vrai
     int compteur_deja_trace = 0; //Compteur de sommets déjà tracés
@@ -219,7 +238,7 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
         tab_deja_trace[i] = '0';
     }
 
-    // Parcour
+    // Parcour 
     for(i = 0; i < n; i+=1) {
         //printf("i:%d\n", i);
         sommet_courant = tab[i];
@@ -243,7 +262,7 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
                     k += 1;
                 }
 
-                // Si pas déjà tracé, on le trace
+                // Si pas déjà tracé, on le trace 
                 if(bool_deja_trace == 0) {
                     SDL_RenderDrawLine(renderer, sommet_courant->x, sommet_courant->y, voisin_courant->x, voisin_courant->y); //Traçage du lien
 
@@ -254,3 +273,5 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
         }
     }
 }
+
+*/
