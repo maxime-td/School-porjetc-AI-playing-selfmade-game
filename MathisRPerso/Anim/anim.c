@@ -7,8 +7,8 @@ int main(int argc, char **argv)
     (void)argc;
     (void)argv;
     int y = 0, x, i = 0;
-    int width, height, w_window = 400, h_window = 300, final_width = w_window/2;
-    int frame_size = 48;
+    int width, height, w_window = 800, h_window = 400, final_width = w_window/2, n_floor = 9, floo_speed = -5;
+    int frame_size = 16, size_floor = w_window/n_floor;
     SDL_bool program_on = SDL_TRUE;
     SDL_Event event;   
 
@@ -17,10 +17,21 @@ int main(int argc, char **argv)
 
     SDL_Window *window = NULL;
 
-    SDL_Surface* surface = IMG_Load("roucky.png");
+    SDL_Surface* surface = IMG_Load("slime.png");
     SDL_Texture* texture = NULL;
-    SDL_Rect srcrect = {0, 48, frame_size, frame_size}; // position and size of the part of the image to draw
-    SDL_Rect dstrect = {100, 100, 100, 100}; // position and size of the destination on the screen
+    SDL_Rect srcrect = {0, 0, frame_size, frame_size+2}; // position and size of the part of the image to draw
+    SDL_Rect dstrect = {w_window/2-50, 250, 100, 100}; // position and size of the destination on the screen
+
+
+    SDL_Rect fg[n_floor+1];
+
+    for (int i = 0; i < n_floor+1; i++){
+        fg[i].x = i*size_floor;
+        fg[i].y = h_window-size_floor;
+        fg[i].w = size_floor;
+        fg[i].h = size_floor;
+    }
+    
 
     
 
@@ -84,11 +95,24 @@ int main(int argc, char **argv)
             }
         }
 
+        for (int i = 0; i < n_floor+1; i++){
+            fg[i].x += floo_speed;
+        }
+
+        SDL_SetRenderDrawColor(renderer, 0, 150, 200, 255);
         SDL_RenderClear(renderer);
-        srcrect.x = (srcrect.x+frame_size)%(frame_size*8);
+        for (int i = 0; i < n_floor+1; i++){
+            if(fg[i].x < -size_floor){
+                fg[i].x = fg[(i+n_floor)%(n_floor+1)].x+size_floor;
+            }
+            SDL_SetRenderDrawColor(renderer, 0, 255-50*(i%2), 0, 255);
+            SDL_RenderFillRect(renderer, &fg[i]);
+        }
+        srcrect.x = (srcrect.x+frame_size)%(frame_size*18);
         SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
+
         SDL_RenderPresent(renderer);
-        SDL_Delay(300);
+        SDL_Delay(100);
     }
 
     if (window == NULL)
