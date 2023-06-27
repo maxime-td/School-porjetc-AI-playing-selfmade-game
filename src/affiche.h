@@ -18,6 +18,11 @@ void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius);
  */
 void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n);
 
+/**
+ * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
+ * @param tab Le tableau de sommets représentant le graphe.
+ * @param n Le nombre de sommets dans le tableau.
+*/
 void affiche(sommet_t ** tab, int n);
 
 
