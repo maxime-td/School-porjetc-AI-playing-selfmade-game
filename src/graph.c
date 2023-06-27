@@ -108,6 +108,7 @@ void makeNewLinks(int p, sommet_t ** tab, int * n)
  * @param b pointeur sur un sommet
  * @return La distance
  */
+
 int calculDistance(sommet_t * a, sommet_t * b)
 {
     int tmp1 = (a->x-b->x), tmp2 = (a->y-b->y);
@@ -166,6 +167,7 @@ void printDistTab(int ** distTab, int * n)
         printf("\n");
     }
     printf("\n");
+    return distTab;
 }
 
 /**
@@ -207,43 +209,45 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
     int bool_deja_trace; //Booléeen si un sommet à déjà été tracé ou non. 0 = Faux, 1 = Vrai
     int compteur_deja_trace = 0; //Compteur de sommets déjà tracés
     int i, j, k; //Incréments
-    int rayon = 25; //Rayon des disques des sommets
+    int rayon = 10; //Rayon des disques des sommets
 
     sommet_t* sommet_courant; //Sommet courant
     sommet_t* voisin_courant; //Voisin courant
 
     // Initialisation tableau deja_trace 
     for(i = 0; i < n; i+=1) {
-        deja_trace[i] = NULL;
+        tab_deja_trace[i] = '0';
     }
 
     // Parcour 
     for(i = 0; i < n; i+=1) {
-        sommet_courant = *tab[i];
-        draw_disk(renderer, sommet_courant.x, sommet_courant.y, rayon); //Traçage du sommet
+        printf("i:%d\n", i);
+        sommet_courant = tab[i];
+        draw_disk(renderer, sommet_courant->x, sommet_courant->y, rayon); //Traçage du sommet
         
-        tab_deja_trace[compteur_deja_trace] = sommet_courant.val; //Ajoute le sommet courant a tab_deja_trace
+        tab_deja_trace[compteur_deja_trace] = sommet_courant->val; //Ajoute le sommet courant a tab_deja_trace
         compteur_deja_trace += 1;
 
         for(j = 0; j < n; j+=1) {
-            
-            // Si j est voisin de i 
-            if(voisins[j] == 1) {
-                voisin_courant = *tab[j];
+            k=0;
+            printf("j:%d\n", j);
+            // Si j est voisin de i
+            if(tab[i]->voisins[j] == 1) {
+                voisin_courant = tab[j];
 
-                // Vérification si déjà tracé ou pas 
+                // Vérification si déjà tracé ou pas
                 bool_deja_trace = 0;
-                while(tab_deja_trace[k] != NULL) {
-                    if(tab_deja_trace[k] == voisin_courant.val)
+                while(tab_deja_trace[k] != '0') {
+                    if(tab_deja_trace[k] == voisin_courant->val)
                         bool_deja_trace = 1;
                     k += 1;
                 }
 
                 // Si pas déjà tracé, on le trace 
                 if(bool_deja_trace == 0) {
-                    SDL_RenderDrawLine(renderer, sommet_courant.x, sommet_courant.y, voisin_courant.x, voisin_courant.y); //Traçage du lien
+                    SDL_RenderDrawLine(renderer, sommet_courant->x, sommet_courant->y, voisin_courant->x, voisin_courant->y); //Traçage du lien
 
-                    tab_deja_trace[compteur_deja_trace] = voisin_courant.val; //Ajoute le voisin courant a tab_deja_trace
+                    tab_deja_trace[compteur_deja_trace] = voisin_courant->val; //Ajoute le voisin courant a tab_deja_trace
                     compteur_deja_trace += 1;
                 }
             }
