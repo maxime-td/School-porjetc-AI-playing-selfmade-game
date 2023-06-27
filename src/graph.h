@@ -1,6 +1,5 @@
 #ifndef GRAPH_H_
 #define GRAPH_H_
-#define MAX_VOISIN 32
 
 #include <SDL2/SDL.h>
 
@@ -11,7 +10,7 @@
  * Structure représentant un sommet dans un graphe.
  */
 typedef struct sommet_s{
-    struct sommet_s * voisins[MAX_VOISIN];  /**< Tableau des voisins du sommet */
+    int voisins[N];  /**< Tableau des voisins du sommet */
     int n_voisin;                /**< Nombre de voisins du sommet */
     char val;
     int x;                       /**< Coordonnée x du sommet */
@@ -24,7 +23,7 @@ typedef struct sommet_s{
  * @param n Le nombre de sommets dans le tableau.
  * @return Un pointeur vers un sommet du graph
  */
-sommet_t * tabToGraph(sommet_t ** tab, int n);
+void tabToGraph(sommet_t ** tab, int n, int start);
 
 
 /**

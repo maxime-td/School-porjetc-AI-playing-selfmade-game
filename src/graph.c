@@ -10,21 +10,23 @@
  * @param n Le nombre de sommets dans le tableau.
  * @return Un pointeur vers un sommet du graph
  */
-sommet_t * tabToGraph(sommet_t ** tab, int n){
-    if(tab != NULL){
-        srand(time(NULL));
-        int cut = rand()%(n-1);
-        tab[0]->voisins[tab[0]->n_voisin] = tabToGraph(tab+1, cut);
-        tab[1]->voisins[tab[1]->n_voisin] = tab[0];
-        tab[0]->n_voisin++;
-        tab[1]->n_voisin++;
-        if(cut != 0){
-            tab[0]->voisins[tab[0]->n_voisin] = tabToGraph(tab+cut, cut-n);
-            tab[cut]->voisins[tab[cut]->n_voisin] = tab[0];
-            tab[0]->n_voisin++;
-            tab[cut]->n_voisin++;
+void tabToGraph(sommet_t ** tab, int start, int end){
+    if(start < end){
+        int k = rand()%(end-start)+(start+1);
+        tab[start]->voisins[start+1] = 1;
+        tab[start + 1]->voisins[start] = 1;
+        tab[start]->n_voisin++;
+        tab[start + 1]->n_voisin++;
+
+        if(k+1 <= end){
+            tab[start]->voisins[k+1] = 1; 
+            tab[k+1]->voisins[start] = 1;
+            tab[start]->n_voisin++;
+            tab[k+1]->n_voisin++;   
         }
-        return tab[0];
+
+        tabToGraph(tab, start+1, k);
+        tabToGraph(tab, k+1, end);
     }
 }
 
@@ -60,7 +62,13 @@ void printTabCoord(sommet_t ** tab, int * n)
     printf("nombre de points: %d\n", *n);
     for(int i=0; i<(*n); i++)
     {
-        printf("(%d,%d) - ",tab[i]->x, tab[i]->y);
+        printf("(%d,%d) :\n",tab[i]->x, tab[i]->y);
+        for (int j = 0; j < (*n); j++)
+        {
+            printf("%d ", tab[i]->voisins[j]);
+        }
+        printf("\n");
+        
     }
     printf("\n");
 

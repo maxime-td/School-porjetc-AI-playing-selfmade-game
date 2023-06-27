@@ -8,6 +8,9 @@ int main()
     int n=0;
     sommet_t ** tab = genTabSommets(&n, 800, 800);
     printTabCoord(tab, &n);
+    printf("--------------------------------------------\n");
+    tabToGraph(tab, 0, n-1);
+    printTabCoord(tab, &n);
 
     return 0;
 }
