@@ -9,6 +9,7 @@ int main(int argc, char **argv)
     int y = 0, x, i = 0;
     int width, height, w_window = 800, h_window = 400, final_width = w_window/2, n_floor = 9, floo_speed = -5;
     int frame_size = 16, size_floor = w_window/n_floor;
+    int frame = 0;
     SDL_bool program_on = SDL_TRUE;
     SDL_Event event;   
 
@@ -95,24 +96,27 @@ int main(int argc, char **argv)
             }
         }
 
-        for (int i = 0; i < n_floor+1; i++){
-            fg[i].x += floo_speed;
-        }
-
-        SDL_SetRenderDrawColor(renderer, 0, 150, 200, 255);
-        SDL_RenderClear(renderer);
-        for (int i = 0; i < n_floor+1; i++){
-            if(fg[i].x < -size_floor){
-                fg[i].x = fg[(i+n_floor)%(n_floor+1)].x+size_floor;
+        if(frame%10 == 0){
+            for (int i = 0; i < n_floor+1; i++){
+                fg[i].x += floo_speed;
             }
-            SDL_SetRenderDrawColor(renderer, 0, 255-50*(i%2), 0, 255);
-            SDL_RenderFillRect(renderer, &fg[i]);
-        }
-        srcrect.x = (srcrect.x+frame_size)%(frame_size*18);
-        SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
 
-        SDL_RenderPresent(renderer);
-        SDL_Delay(100);
+            SDL_SetRenderDrawColor(renderer, 0, 150, 200, 255);
+            SDL_RenderClear(renderer);
+            for (int i = 0; i < n_floor+1; i++){
+                if(fg[i].x < -size_floor){
+                    fg[i].x = fg[(i+n_floor)%(n_floor+1)].x+size_floor;
+                }
+                SDL_SetRenderDrawColor(renderer, 0, 255-50*(i%2), 0, 255);
+                SDL_RenderFillRect(renderer, &fg[i]);
+            }
+            srcrect.x = (srcrect.x+frame_size)%(frame_size*18);
+            SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
+
+            SDL_RenderPresent(renderer);
+        }
+        SDL_Delay(10);
+        frame++;
     }
 
     if (window == NULL)
