@@ -52,7 +52,7 @@ sommet_t ** genTabSommets(int * n, int width, int height)
         tab[i]->val = i+65;             //On assigne des valeurs aux sommet, en l'occurence A,B,C...
         for(int j=0; j<*n;j++)
         {
-            tab[i]->voisin[j]=0;    //Tableau des liens initialisé vide
+            tab[i]->voisins[j]=0;    //Tableau des liens initialisé vide
         }
     }
     return tab;
@@ -150,7 +150,7 @@ int ** distTab(sommet_t ** tab)
 }
 
 
-
+/**
  * @brief Trace un disque
  * @param renderer Le renderer où tracer le disque
  * @param center_x La coordonnée x du centre du disque
