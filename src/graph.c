@@ -190,7 +190,7 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
     int bool_deja_trace; //Booléeen si un sommet à déjà été tracé ou non. 0 = Faux, 1 = Vrai
     int compteur_deja_trace = 0; //Compteur de sommets déjà tracés
     int i, j, k; //Incréments
-    int rayon = 25; //Rayon des disques des sommets
+    int rayon = 10; //Rayon des disques des sommets
 
     sommet_t* sommet_courant; //Sommet courant
     sommet_t* voisin_courant; //Voisin courant
@@ -202,6 +202,7 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
 
     // Parcour
     for(i = 0; i < n; i+=1) {
+        printf("i:%d\n", i);
         sommet_courant = tab[i];
         draw_disk(renderer, sommet_courant->x, sommet_courant->y, rayon); //Traçage du sommet
         
@@ -209,7 +210,8 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
         compteur_deja_trace += 1;
 
         for(j = 0; j < n; j+=1) {
-            
+            k=0;
+            printf("j:%d\n", j);
             // Si j est voisin de i
             if(tab[i]->voisins[j] == 1) {
                 voisin_courant = tab[j];
