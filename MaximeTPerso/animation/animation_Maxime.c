@@ -107,14 +107,20 @@ void play_with_texture_3(SDL_Texture* my_texture, SDL_Window* window, SDL_Render
     SDL_DestroyTexture(my_texture_fond);
 }
 
-void affichage_personnage(SDL_Texture* my_texture, SDL_Window* window, SDL_Renderer* renderer, int temps, int direction_x, int direction_y) {
+void affichage_personnage(SDL_Texture* my_texture, SDL_Window* window, SDL_Renderer* renderer, int frame, int direction_x, int direction_y) {
     SDL_Rect 
-        source = {1200 * (temps%2), 0, 1200, 1200}, // Rectangle définissant la zone de la texture à récupérer
+        source = {0}, // Rectangle définissant la zone de la texture à récupérer
         window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
         destination = {direction_x, direction_y, 200, 200};
 
-       SDL_RenderCopy(renderer, my_texture, &source, &destination);  
-       SDL_Delay(80);
+    SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
+
+    SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h);
+    source.w = source.w/2
+    source.x = source.w*frame
+
+    SDL_RenderCopy(renderer, my_texture, &source, &destination);  
+    SDL_Delay(80);
 }
 
 void play_with_texture_6(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2, SDL_Texture* my_texture, SDL_Window* window, SDL_Renderer* renderer, int temps, int direction_x, int direction_y) {
@@ -164,7 +170,7 @@ int main(int argc, char** argv) {
     (void)argc;
     (void)argv;
 
-    int direction_x = 50, direction_y = 300, temps = 0;
+    int direction_x = 50, direction_y = 300, frame = 0;
 
     SDL_bool program_on = SDL_TRUE;
     SDL_Event event;
@@ -208,18 +214,22 @@ int main(int argc, char** argv) {
                         case SDLK_z:
                             if(direction_y>0)
                                 direction_y = direction_y-50;
+                                frame+=1;
                             break;
                         case SDLK_q:
                             if(direction_x>0)
-                            direction_x = direction_x-50;
+                                direction_x = direction_x-50;
+                                frame+=1;
                             break;
                         case SDLK_s:
                             if(direction_y<1000)
-                            direction_y = direction_y+50;
+                                direction_y = direction_y+50;
+                                frame+=1;
                             break;
                         case SDLK_d:
                             if(direction_x<1000)
-                            direction_x = direction_x+50;
+                                direction_x = direction_x+50;
+                                frame+=1;
                             break;
                         default:
                             break;
@@ -230,11 +240,8 @@ int main(int argc, char** argv) {
             }
         }
         //play_with_texture_3(my_texture_stand, window, renderer);
-        play_with_texture_6(my_texture_foret, my_texture_herbe, my_texture_marche, window, renderer, temps, direction_x, direction_y);
+        play_with_texture_6(my_texture_foret, my_texture_herbe, my_texture_marche, window, renderer, frame%2, direction_x, direction_y);
 
-        temps+=1;
-        if(temps==500)
-            temps = 0;
     }                      
     /* Fermeture SDL */
     end_sdl(1, "Normal ending", window, renderer);
