@@ -147,6 +147,9 @@ void play_with_texture_4(SDL_Texture* my_texture, SDL_Window* window, SDL_Render
     int nb_images = 2;
     float zoom = 0.2;   
     int offset_x = source.w / nb_images, offset_y = source.h;
+
+    SDL_Texture* my_texture_fond = NULL;
+    my_texture_fond = load_texture_from_image("fond-flammes.jpg", window, renderer);
     
     state.x = 0 ;
     state.y = 0 ;
@@ -166,6 +169,9 @@ void play_with_texture_4(SDL_Texture* my_texture, SDL_Window* window, SDL_Render
                     // celle de début de ligne
 
     SDL_RenderClear(renderer);           // Effacer l'image précédente avant de dessiner la nouvelle
+
+    play_with_texture_1(my_texture_fond, window, renderer);
+
     SDL_RenderCopy(renderer, my_texture, // Préparation de l'affichage
             &state,
             &destination);  
