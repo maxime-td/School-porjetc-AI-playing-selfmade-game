@@ -53,14 +53,22 @@ void makeNewLinks(int p, sommet_t ** tab, int * n);
 void printTabCoord(sommet_t ** tab, int * n);
 
 /**
-<<<<<<< HEAD
  * @brief Calcul la distance entre 2 sommets
  * @param a pointeur sur un sommet
  * @param b pointeur sur un sommet
  * @return La distance
  */
 int calculDistance(sommet_t * a, sommet_t * b);
-=======
+
+/**
+ * @brief Créée un tableau de distance entre les points, -1 si non lié, > 0 sinon.
+ * @param tab pointeur sur le tableau des sommets
+ * @param n le pointeur sur le ombre de sommets
+ * @return Le pointeur sur le tableau 2D des distances.
+ */
+int ** distTab(sommet_t ** tab);
+
+/**
  * @brief Trace un disque
  * @param renderer Le renderer où tracer le disque
  * @param center_x La coordonnée x du centre du disque
@@ -68,7 +76,6 @@ int calculDistance(sommet_t * a, sommet_t * b);
  * @param radius Le rayon du disque
  */
 void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius);
->>>>>>> c5324dc9bee4a75c6207e52a79634b9c00ee5e06
 
 /**
  * @brief Dessine un graphe à l'aide d'un rendu SDL.
