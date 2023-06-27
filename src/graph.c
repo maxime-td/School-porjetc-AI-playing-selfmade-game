@@ -32,6 +32,40 @@ sommet_t * tabToGraph(sommet_t ** tab, int n){
 
 
 void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
-    char deja_trace[n];
 
+    /* Initialisations */
+    char tab_deja_trace[n]; //tableau des sommets déjà tracés
+    int bool_deja_trace; //Booléeen si un sommet à déjà été tracé ou non. 0 = Faux, 1 = Vrai
+    int i, j, k; //Incréments
+    sommet_t* sommet_courant; //Sommet courant
+    sommet_t* voisin_courant; //Voisin courant
+
+    /* Initialisation tableau deja_trace */
+    for(i = 0; i < n; i+=1) {
+        deja_trace[i] = NULL;
+    }
+
+    /* Parcour */
+    for(i = 0; i < n; i+=1) {
+        sommet_courant = *tab[i];
+        //[tracer sommet]
+        //[ajouter sommet_courant a tab_deja_trace]
+        
+        for(j = 0; j < sommet_courant.n_voisins; j+=1) {
+            voisin_courant = sommet_courant.voisins[j];
+
+            /* Vérification si déjà tracé ou pas */
+            bool_deja_trace = 0;
+            while(deja_trace[k] != NULL) {
+                if(deja_trace[k] == voisin_courant.val)
+                    bool_deja_trace = 1;
+                k += 1;
+            }
+
+            if(bool_deja_trace == 0) {
+                //[tracer lien]
+                //[ajouter voisin_courant à tab_deja_trace]
+            }
+        }
+    }
 }
