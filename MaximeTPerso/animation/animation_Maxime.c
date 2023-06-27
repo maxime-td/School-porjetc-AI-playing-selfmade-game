@@ -136,6 +136,49 @@ void play_with_texture_3(SDL_Texture* my_texture, SDL_Window* window, SDL_Render
     SDL_DestroyTexture(my_texture2);
 }
 
+void play_with_texture_4(SDL_Texture* my_texture, SDL_Window* window, SDL_Renderer* renderer) {
+    SDL_Rect
+        source = {0},                    // Rectangle définissant la zone totale de la planche
+        window_dimensions = {0},         // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+        destination = {0},               // Rectangle définissant où la zone_source doit être déposée dans le renderer
+        state = {0};                     // Rectangle de la vignette en cours dans la planche 
+
+    SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h); // Récupération des dimensions de la fenêtre
+    SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h); // Récupération des dimensions de l'image
+
+    /* Mais pourquoi prendre la totalité de l'image, on peut n'en afficher qu'un morceau, et changer de morceau :-) */
+
+    int nb_images = 2;
+    float zoom = 0.2;   
+    int offset_x = source.w / nb_images, offset_y = source.h;
+    
+    state.x = 0 ;                          // La première vignette est en début de ligne
+    state.y = 3 * offset_y;                // On s'intéresse à la 4ème ligne, le bonhomme qui court
+    state.w = offset_x;                    // Largeur de la vignette
+    state.h = offset_y;                    // Hauteur de la vignette
+
+    destination.w = offset_x * zoom;       // Largeur du sprite à l'écran
+    destination.h = offset_y * zoom;       // Hauteur du sprite à l'écran
+
+    destination.y = (window_dimensions.h - destination.h) /2; // La course se fait en milieu d'écran (en vertical)
+
+    int speed = 9;
+    for (int x = 0; x < window_dimensions.w - destination.w; x += speed) {
+    destination.x = x;                   // Position en x pour l'affichage du sprite
+    state.x += offset_x;                 // On passe à la vignette suivante dans l'image
+    state.x %= source.w;                 // La vignette qui suit celle de fin de ligne est
+                    // celle de début de ligne
+
+    SDL_RenderClear(renderer);           // Effacer l'image précédente avant de dessiner la nouvelle
+    SDL_RenderCopy(renderer, my_texture, // Préparation de l'affichage
+            &state,
+            &destination);  
+    SDL_RenderPresent(renderer);         // Affichage
+    SDL_Delay(80);                       // Pause en ms
+    }
+    SDL_RenderClear(renderer);             // Effacer la fenêtre avant de rendre la main
+    }
+
 int main(int argc, char** argv) {
     (void)argc;
     (void)argv;
@@ -169,11 +212,10 @@ int main(int argc, char** argv) {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); 
         SDL_RenderPresent(renderer);
     } */
-
     
-    my_texture = load_texture_from_image("comcomdile.png", window, renderer);
+    my_texture = load_texture_from_image("comcomdile_marche.png", window, renderer);
     
-    play_with_texture_3(my_texture, window, renderer);
+    play_with_texture_4(my_texture, window, renderer);
 
     SDL_Delay(1000); // Pause exprimée en ms
                           
