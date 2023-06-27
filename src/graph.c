@@ -4,6 +4,21 @@
 #include "graph.h"
 #include <math.h>
 
+
+/**
+ * Libère la mémoire allouée pour un tableau à deux dimensions.
+ *
+ * @param tab Le tableau à libérer.
+ * @param n   Le nombre de lignes du tableau.
+ */
+void free2DTab(void ** tab, int n){
+    for (int i = 0; i < n; i++){
+        free(tab[i]);
+    }
+    free(tab);
+}
+
+
 /**
  * @brief Convertit un tableau de sommets en un graphe connexe non cyclique.
  * @param tab Le tableau de sommets à convertir.
@@ -41,8 +56,7 @@ void tab_to_graph(sommet_t ** tab, int start, int end){
 int is_close_to_value_in_tab(sommet_t ** tab, int size, sommet_t * cour, int threshold) {
     for (int i = 0; i < size; i++) 
     { 
-        int diff = sqrt(calcul_distance(tab[i], cour)); 
-        if (diff <= threshold) {
+        if (sqrt(calcul_distance(tab[i], cour)) <= threshold) {
             return 1;
         }
     }

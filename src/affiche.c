@@ -199,6 +199,8 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n) {
         SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
         SDL_DestroyTexture(textTexture);
     }
+
+    free2DTab((void**)distTab, n);
     TTF_CloseFont(font);
     TTF_Quit();
 }

@@ -1,8 +1,6 @@
 #ifndef GRAPH_H_
 #define GRAPH_H_
 
-#include <SDL2/SDL.h>
-
 #define N 12 // NOMBRE_MAX_SOMMET 
 #define R 300 //Rayon cercle repartition
 #define W 800
@@ -19,6 +17,15 @@ typedef struct sommet_s{
     int x;                       /**< Coordonnée x du sommet */
     int y;                       /**< Coordonnée y du sommet */
 }sommet_t;
+
+
+/**
+ * Libère la mémoire allouée pour un tableau à deux dimensions.
+ *
+ * @param tab Le tableau à libérer.
+ * @param n   Le nombre de lignes du tableau.
+ */
+void free2DTab(void ** tab, int n);
 
 /**
  * @brief Convertit un tableau de sommets en un graphe connexe non cyclique.
