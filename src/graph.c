@@ -1,11 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 #include "graph.h"
 #include <math.h>
-#include <SDL2/SDL_ttf.h>
 
 /**
  * @brief Convertit un tableau de sommets en un graphe connexe non cyclique.
@@ -33,17 +30,25 @@ void tabToGraph(sommet_t ** tab, int start, int end){
     }
 }
 
-
-int closeToValueInTab(int * tab, int n, int val, int minDist){
-    int toClose = 0;
-    for (int i = 0; i < n && !toClose; i++){
-        if((abs(tab[i]-val) <= 180 && (abs(tab[i]-val) < minDist)) || (abs(tab[i]-val) > 180 && (360-abs(tab[i]-val) < minDist))){
-            toClose = 1;
+/**
+ * @brief Vérifie si un angle est proche d'un angle déjà présent dans un tableau.
+ * @param angles Le tableau d'angles.
+ * @param size La taille du tableau.
+ * @param angle L'angle à vérifier.
+ * @param threshold La marge d'erreur pour considérer deux angles comme proches.
+ * @return 1 si l'angle est proche d'un angle déjà présent, 0 sinon.
+*/ 
+int closeToValueInTab(sommet_t ** tab, int size, sommet_t * cour, int threshold) {
+    for (int i = 0; i < size; i++) 
+    { 
+        int diff = sqrt(calculDistance(tab[i], cour)); 
+        if (diff <= threshold) {
+            return 1;
         }
     }
-    return toClose;
-}
 
+    return 0;
+}
 
 /**
  * @brief Créée un tableau de points avec des coordonnées aléatoires
@@ -56,23 +61,26 @@ int closeToValueInTab(int * tab, int n, int val, int minDist){
 sommet_t ** genTabSommets(int * n, int width, int height)
 {
     *n = rand()%(N-3) +4;
-    int angles[*n];
+    int first = 1;
+    int angle;
     sommet_t ** tab = malloc((*n)*sizeof(sommet_t *));
     for(int i=0; i<*n; i++)
     {
-        angles[i] = rand()%(360);
-        while (closeToValueInTab(angles, i, angles[i], 20)){
-            angles[i] = rand()%(360);
+        first = 1;
+        tab[i] = malloc(sizeof(sommet_t));
+        while (first || closeToValueInTab(tab, i, tab[i], 50))
+        {
+            first = 0;
+            angle = rand()%(360);
+
+            
+            tab[i]->x = cos(angle)*R+W/2;
+            tab[i]->y = sin(angle)*R+H/2;        //On génère les nombre aléatoirement entre des bornes représentants la taille de la fenêtre
         }
 
-
-        tab[i] = malloc(sizeof(sommet_t));
-        tab[i]->x = cos(angles[i])*R+W/2;
-        tab[i]->y = sin(angles[i])*R+H/2;        //On génère les nombre aléatoirement entre des bornes représentants la taille de la fenêtre
         tab[i]->val = i+'A';             //On assigne des valeurs aux sommet, en l'occurence A,B,C...
 
-        for(int j=0; j<*n;j++)
-        {
+        for(int j=0; j<*n;j++){
             tab[i]->voisins[j]=0;    //Tableau des liens initialisé vide
         }
     }
@@ -117,7 +125,6 @@ void makeNewLinks(int p, sommet_t ** tab, int * n)
             {
                 tab[i]->voisins[j]=1;          // Si 2 points ne sont pas voisins et qu'on tire un random respectant notre porba souhaitée, on lie les points.
                 tab[j]->voisins[i]=1;
-                printf("NEW_LINK: (%c, %c) - ", tab[i]->val, tab[j]->val);
             }   
         }
     }
@@ -188,93 +195,4 @@ void printDistTab(int ** distTab, int * n)
         printf("\n");
     }
     printf("\n");
-}
-
-/**
- * @brief Trace un disque
- * @param renderer Le renderer où tracer le disque
- * @param center_x La coordonnée x du centre du disque
- * @param center_y La coordonnée y du centre du disque
- * @param radius Le rayon du disque
-*/
-void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
-    // Calculer les coordonnées du rectangle englobant le disque
-    int x = center_x - radius;
-    int y = center_y - radius;
-    int width = radius * 2;
-    int height = radius * 2;
-
-    // Dessiner le disque rempli
-    for (int i = x; i < x + width; i++) {
-        for (int j = y; j < y + height; j++) {
-            // Vérifier si le point (i, j) est à l'intérieur du cercle
-            if ((i - center_x) * (i - center_x) + (j - center_y) * (j - center_y) <= radius * radius) {
-                SDL_RenderDrawPoint(renderer, i, j);
-            }
-        }
-    }
-}
-
-/**
- * @brief Dessine un graphe à l'aide d'un rendu SDL.
- * @param renderer Le rendu SDL utilisé pour afficher le graphe.
- * @param graph Le pointeur vers le graphe à dessiner.
- * @param n Le nombre de sommets dans le tableau.
- */
-void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
-
-    // Initialisations 
-    int i, j, k; //Incréments
-    int rayon = 10; //Rayon des disques des sommets
-    char nom_sommet;
-
-    sommet_t* sommet_courant; //Sommet courant
-    sommet_t* voisin_courant; //Voisin courant
-
-    char Tag[3];
-    TTF_Font* font;
-    SDL_Surface* textSurface;
-    SDL_Texture* textTexture;
-    SDL_Color color = {50, 100, 0, 255};
-
-    SDL_Rect textRect  = {100, 0, 100, 100};
-
-    if (TTF_Init()!= 0)
-    {
-        SDL_Log("Error : SDL initialisation - %s\n",
-                SDL_GetError()); // l'initialisation de la TTF a échoué
-        exit(EXIT_FAILURE);
-    }
-
-    font = TTF_OpenFont("arial.ttf", 20);
-
-    // Parcour 
-    for(i = 0; i < n; i+=1) {
-        sommet_courant = tab[i];
-        for(j = i; j < n; j+=1) {
-            k=0;
-            // Si j est voisin de i
-            if(tab[i]->voisins[j] == 1) {
-                voisin_courant = tab[j];
-        
-
-                // Si pas déjà tracé, on le trace 
-                SDL_RenderDrawLine(renderer, sommet_courant->x, sommet_courant->y, voisin_courant->x, voisin_courant->y); //Traçage du lien
-            }
-        }
-        draw_disk(renderer, sommet_courant->x, sommet_courant->y, rayon); //Traçage du sommet
-
-        sprintf(Tag, "%c", tab[i]->val);
-
-        textSurface = TTF_RenderText_Solid(font, Tag, color);
-        textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-
-        SDL_FreeSurface(textSurface);
-        SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
-        textRect.x = sommet_courant->x-textRect.w/2;
-        textRect.y = sommet_courant->y-textRect.h/2;
-
-        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
-        SDL_DestroyTexture(textTexture);
-    }
 }
