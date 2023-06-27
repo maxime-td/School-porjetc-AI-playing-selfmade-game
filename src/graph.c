@@ -39,10 +39,11 @@ sommet_t * tabToGraph(sommet_t ** tab, int n){
 
 sommet_t ** genTabSommets(int * n, int width, int height)
 {
-    *n = rand()%(N-2) +4;
+    *n = rand()%(N-3) +4;
     sommet_t ** tab = malloc((*n)*sizeof(sommet_t *));
-    for(int i=0; i<*n-1; i++)
+    for(int i=0; i<*n; i++)
     {
+        tab[i] = malloc(sizeof(sommet_t));
         tab[i]->x = rand()%(width);
         tab[i]->y = rand()%(height);
     }
@@ -56,10 +57,13 @@ sommet_t ** genTabSommets(int * n, int width, int height)
 */
 void printTabCoord(sommet_t ** tab, int * n)
 {
-    for(int i=0; i<(*n)-1; i++)
+    printf("nombre de points: %d\n", *n);
+    for(int i=0; i<(*n); i++)
     {
         printf("(%d,%d) - ",tab[i]->x, tab[i]->y);
     }
+    printf("\n");
+
 }
 
 
