@@ -104,9 +104,9 @@ void play_with_texture_3(SDL_Texture* my_texture, SDL_Window* window, SDL_Render
         window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
         destination = {0}; // Rectangle définissant où la zone_source doit être déposée dans le renderer
 
-    SDL_Texture* my_texture2 = NULL;
+    SDL_Texture* my_texture_fond = NULL;
 
-    my_texture2 = load_texture_from_image("fond-flammes.jpg", window, renderer);
+    my_texture_fond = load_texture_from_image("fond-flammes.jpg", window, renderer);
 
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h); // Récupération des dimensions de la fenêtre
     SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h); // Récupération des dimensions de l'image
@@ -125,7 +125,7 @@ void play_with_texture_3(SDL_Texture* my_texture, SDL_Window* window, SDL_Render
 
         SDL_RenderClear(renderer); // Effacer l'image précédente
 
-        play_with_texture_1(my_texture2, window, renderer);
+        play_with_texture_1(my_texture_fond, window, renderer);
 
         SDL_SetTextureAlphaMod(my_texture,(1.0-1.0*i/nb_it)*255); // L'opacité va passer de 255 à 0 au fil de l'animation
         SDL_RenderCopy(renderer, my_texture, &source, &destination); // Préparation de l'affichage
@@ -133,7 +133,7 @@ void play_with_texture_3(SDL_Texture* my_texture, SDL_Window* window, SDL_Render
         SDL_Delay(30); // Pause en ms
     }                               
     SDL_RenderClear(renderer); // Effacer la fenêtre une fois le travail terminé
-    SDL_DestroyTexture(my_texture2);
+    SDL_DestroyTexture(my_texture_fond);
 }
 
 void play_with_texture_4(SDL_Texture* my_texture, SDL_Window* window, SDL_Renderer* renderer) {
@@ -152,8 +152,8 @@ void play_with_texture_4(SDL_Texture* my_texture, SDL_Window* window, SDL_Render
     float zoom = 0.2;   
     int offset_x = source.w / nb_images, offset_y = source.h;
     
-    state.x = 0 ;                          // La première vignette est en début de ligne
-    state.y = 3 * offset_y;                // On s'intéresse à la 4ème ligne, le bonhomme qui court
+    state.x = 0 ;
+    state.y = 0 ;
     state.w = offset_x;                    // Largeur de la vignette
     state.h = offset_y;                    // Hauteur de la vignette
 
@@ -187,7 +187,7 @@ int main(int argc, char** argv) {
 
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
-    SDL_Texture* my_texture_stand = NULL;
+    //SDL_Texture* my_texture_stand = NULL;
     SDL_Texture* my_texture_marche = NULL;
  
     /* Initialisation SDL */
