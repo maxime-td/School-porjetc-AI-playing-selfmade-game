@@ -4,6 +4,8 @@
 
 #include <SDL2/SDL.h>
 
+#define N 12 // NOMBRE_MAX_SOMMET 
+
 /**
  * @struct sommet_s
  * Structure représentant un sommet dans un graphe.
