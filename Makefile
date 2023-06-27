@@ -12,11 +12,7 @@ HEADERS = $(wildcard $(DIRCOMM)*.h)
 OBJ = $(SRC:%.c=%.o)
 
 main: $(SRC) $(HEADERS)
-<<<<<<< HEAD
-	$(CC) $(SRC) -o $@ -lSDL2_ttf $(shell sdl2-config --cflags --libs)
-=======
 	$(CC) $(SRC) -o $@ -lSDL2_ttf -lm $(shell sdl2-config --cflags --libs)
->>>>>>> cce7c8075007bd3a24d018cc7e574d919806dcac
 
 .PHONY: clean reclean
 
