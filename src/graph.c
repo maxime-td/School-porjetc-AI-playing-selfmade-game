@@ -32,6 +32,17 @@ void tabToGraph(sommet_t ** tab, int start, int end){
 }
 
 
+int closeToValueInTab(int * tab, int n, int val, int minDist){
+    int toClose = 0;
+    for (int i = 0; i < n && !toClose; i++){
+        if((abs(tab[i]-val) <= 180 && (abs(tab[i]-val) < minDist)) || (abs(tab[i]-val) > 180 && (360-abs(tab[i]-val) < minDist))){
+            toClose = 1;
+        }
+    }
+    return toClose;
+}
+
+
 /**
  * @brief Créée un tableau de points avec des coordonnées aléatoires
  * @param n le pointeur sur le nombre de points à générer
@@ -43,13 +54,21 @@ void tabToGraph(sommet_t ** tab, int start, int end){
 sommet_t ** genTabSommets(int * n, int width, int height)
 {
     *n = rand()%(N-3) +4;
+    int angles[*n];
     sommet_t ** tab = malloc((*n)*sizeof(sommet_t *));
     for(int i=0; i<*n; i++)
     {
+        angles[i] = rand()%(360);
+        while (closeToValueInTab(angles, i, angles[i], 20)){
+            angles[i] = rand()%(360);
+        }
+
+
         tab[i] = malloc(sizeof(sommet_t));
-        tab[i]->x = rand()%(width);
-        tab[i]->y = rand()%(height);        //On génère les nombre aléatoirement entre des bornes représentants la taille de la fenêtre
-        tab[i]->val = i+65;             //On assigne des valeurs aux sommet, en l'occurence A,B,C...
+        tab[i]->x = cos(angles[i])*R+W/2;
+        tab[i]->y = sin(angles[i])*R+H/2;        //On génère les nombre aléatoirement entre des bornes représentants la taille de la fenêtre
+        tab[i]->val = i+'A';             //On assigne des valeurs aux sommet, en l'occurence A,B,C...
+
         for(int j=0; j<*n;j++)
         {
             tab[i]->voisins[j]=0;    //Tableau des liens initialisé vide
@@ -68,7 +87,7 @@ void printTabCoord(sommet_t ** tab, int * n)
     printf("nombre de points: %d\n", *n);
     for(int i=0; i<(*n); i++)
     {
-        printf("(%d,%d) :\n",tab[i]->x, tab[i]->y);
+        printf("%c : (%d,%d) :\n",tab[i]->val ,tab[i]->x, tab[i]->y);
         for (int j = 0; j < (*n); j++)
         {
             printf("%d ", tab[i]->voisins[j]);
@@ -202,7 +221,7 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
 
     // Parcour
     for(i = 0; i < n; i+=1) {
-        printf("i:%d\n", i);
+        //printf("i:%d\n", i);
         sommet_courant = tab[i];
         draw_disk(renderer, sommet_courant->x, sommet_courant->y, rayon); //Traçage du sommet
         
@@ -211,7 +230,7 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
 
         for(j = 0; j < n; j+=1) {
             k=0;
-            printf("j:%d\n", j);
+            //printf("j:%d\n", j);
             // Si j est voisin de i
             if(tab[i]->voisins[j] == 1) {
                 voisin_courant = tab[j];
