@@ -68,7 +68,7 @@ sommet_t ** gen_tab_sommets(int * n, int width, int height)
     {
         first = 1;
         tab[i] = malloc(sizeof(sommet_t));
-        while (first || is_close_to_value_in_tab(tab, i, tab[i], 50))
+        while (first || is_close_to_value_in_tab(tab, i, tab[i], (4*R/(*n))))
         {
             first = 0;
             angle = rand()%(360);
