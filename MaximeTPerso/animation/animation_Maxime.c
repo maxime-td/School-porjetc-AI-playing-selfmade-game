@@ -54,7 +54,6 @@ SDL_Texture* load_texture_from_image(char* file_image_name, SDL_Window *window, 
     return my_texture;
 }
 
-
 void play_with_texture_1(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer) {
     SDL_Rect 
         source = {0}, // Rectangle définissant la zone de la texture à récupérer
@@ -72,9 +71,9 @@ void play_with_texture_1(SDL_Texture *my_texture, SDL_Window *window, SDL_Render
     /* On veut afficher la texture de façon à ce que l'image occupe la totalité de la fenêtre */
     SDL_RenderCopy(renderer, my_texture, &source, &destination); // Création de l'élément à afficher
     SDL_RenderPresent(renderer);
-    SDL_Delay(2000);
+    //SDL_Delay(2000);
 
-    SDL_RenderClear(renderer);
+    //SDL_RenderClear(renderer);
 }
 
 void play_with_texture_2(SDL_Texture* my_texture, SDL_Window* window, SDL_Renderer* renderer) {
@@ -107,7 +106,8 @@ int main(int argc, char** argv) {
 
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
-    SDL_Texture* my_texture = NULL, my_texture2 = NULL;
+    SDL_Texture* my_texture = NULL;
+    SDL_Texture* my_texture2 = NULL;
  
     /* Initialisation SDL */
     if (SDL_Init(SDL_INIT_VIDEO) != 0) end_sdl(0, "ERROR SDL INIT", window, renderer);
@@ -133,7 +133,7 @@ int main(int argc, char** argv) {
         SDL_RenderPresent(renderer);
     } */
 
-    my_texture = load_texture_from_image("fond-flammes.avif", window, renderer);
+    my_texture = load_texture_from_image("fond-flammes.jpg", window, renderer);
     my_texture2 = load_texture_from_image("comcomdile.png", window, renderer);
     play_with_texture_1(my_texture, window, renderer);
     play_with_texture_2(my_texture2, window, renderer);
