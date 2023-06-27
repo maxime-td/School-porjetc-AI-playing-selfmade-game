@@ -49,9 +49,11 @@ SDL_Texture* load_texture_from_image(char* file_image_name, SDL_Window *window, 
     SDL_FreeSurface(my_image); // la SDL_Surface ne sert que comme élément transitoire 
     if (my_texture == NULL) end_sdl(0, "Echec de la transformation de la surface en texture", window, renderer);
 
+    IMG_Quit(); // Si on charge une librairie SDL, il faut penser à la décharger
+    
     return my_texture;
 }
-IMG_Quit(); // Si on charge une librairie SDL, il faut penser à la décharger  
+
 
 void play_with_texture_1(SDL_Texture *my_texture, SDL_Window *window, SDL_Renderer *renderer) {
     SDL_Rect 
@@ -65,26 +67,25 @@ void play_with_texture_1(SDL_Texture *my_texture, SDL_Window *window, SDL_Render
     SDL_QueryTexture(my_texture, NULL, NULL,
              &source.w, &source.h); // Récupération des dimensions de l'image
 
-    destination = window_dimensions; // On fixe les dimensions de l'affichage à  celles de la fenêtre
+    destination = window_dimensions; // On fixe les dimensions de l'affichage à celles de la fenêtre
 
     /* On veut afficher la texture de façon à ce que l'image occupe la totalité de la fenêtre */
-    SDL_RenderCopy(renderer, my_texture,
-           &source,
-           &destination); // Création de l'élément à afficher
-    SDL_RenderPresent(renderer); // Affichage
-    SDL_Delay(2000); // Pause en ms
+    SDL_RenderCopy(renderer, my_texture, &source, &destination); // Création de l'élément à afficher
+    SDL_RenderPresent(renderer);
+    SDL_Delay(2000);
 
-    SDL_RenderClear(renderer); // Effacer la fenêtre
+    SDL_RenderClear(renderer);
 }
 
 int main(int argc, char** argv) {
     (void)argc;
     (void)argv;
 
-    int temps = 0;
+    //int temps = 0;
 
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
+    SDL_Texture* my_texture = NULL;
  
     /* Initialisation SDL */
     if (SDL_Init(SDL_INIT_VIDEO) != 0) end_sdl(0, "ERROR SDL INIT", window, renderer);
@@ -97,20 +98,23 @@ int main(int argc, char** argv) {
     renderer = SDL_CreateRenderer(window, -1,SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == NULL) end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
 
-    /* Dessin */
+    /* Dessin 
     for(temps = 0; temps < 500; temps+=25) {
         SDL_RenderClear(renderer);
 
 
 
-        /* Affichage */
+         
         SDL_Delay(200);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); 
         SDL_RenderPresent(renderer);
-    }
+    } */
 
-    SDL_Delay(1000); // Pause exprimée en ms
+    my_texture = load_texture_from_image("comcomdile.png", window, renderer);
+    play_with_texture_1(my_texture, window, renderer);
+
+    SDL_Delay(4000); // Pause exprimée en ms
                           
     /* Fermeture SDL */
     end_sdl(1, "Normal ending", window, renderer);
