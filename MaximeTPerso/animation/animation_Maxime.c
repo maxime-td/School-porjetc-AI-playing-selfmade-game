@@ -150,6 +150,7 @@ int main(int argc, char** argv) {
                           
     /* Fermeture SDL */
     end_sdl(1, "Normal ending", window, renderer);
-
+    SDL_DestroyTexture(my_texture);
+    
     return EXIT_SUCCESS;
 }
