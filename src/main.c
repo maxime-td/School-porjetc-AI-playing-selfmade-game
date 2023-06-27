@@ -13,7 +13,7 @@ int main()
     tab_to_graph(tab, 0, n-1);
     //printTabCoord(tab, &n);
 
-    make_new_links(5, tab, &n);
+    make_new_links(10, tab, &n);
     //printTabCoord(tab, &n);
     int ** TableauDistances = dist_tab(tab, &n);
     print_dist_tab(TableauDistances, &n);

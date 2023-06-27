@@ -46,7 +46,7 @@ void affiche(sommet_t ** tab, int n){
 
     /* Création de la fenêtre de gauche */
     window = SDL_CreateWindow(
-        "Goutte",    // codage en utf8, donc accents possibles
+        "Graph",    // codage en utf8, donc accents possibles
         width/2-w_window/2, 0,                  // coin haut gauche en haut gauche de l'écran
         w_window, h_window,              // largeur = 400, hauteur = 300
         SDL_WINDOW_RESIZABLE);
@@ -134,12 +134,22 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n) {
     sommet_t* voisin_courant; //Voisin courant
 
     char Tag[3];
+    char Poid[8];
+
     TTF_Font* font;
     SDL_Surface* textSurface;
     SDL_Texture* textTexture;
     SDL_Color color = {150, 250, 0, 255};
 
-    SDL_Rect textRect  = {100, 0, 100, 100};
+    SDL_Surface* textSurfacePoid;
+    SDL_Texture* textTexturePoid;
+    SDL_Color colorPoid = {50, 10, 0, 255};
+
+    SDL_Rect textRect;
+    SDL_Rect poidRect = {0, 0, 30, 30};
+
+    int ** distTab = dist_tab(tab, &n);
+
 
     if (TTF_Init()!= 0)
     {
@@ -159,6 +169,19 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n) {
             if(tab[i]->voisins[j] == 1) {
                 voisin_courant = tab[j];
                 SDL_RenderDrawLine(renderer, sommet_courant->x, sommet_courant->y, voisin_courant->x, voisin_courant->y); //Traçage du lien
+                poidRect.x = (sommet_courant->x + voisin_courant->x)/2 - poidRect.w/2;
+                poidRect.y = (sommet_courant->y + voisin_courant->y)/2 - poidRect.h/2;
+
+                sprintf(Poid, "%d", (int) round(sqrt(distTab[i][j])/100));
+
+                textSurfacePoid = TTF_RenderText_Solid(font, Poid, colorPoid);
+                textTexturePoid = SDL_CreateTextureFromSurface(renderer, textSurfacePoid);
+
+                SDL_FreeSurface(textSurfacePoid);
+                SDL_QueryTexture(textTexturePoid, NULL, NULL, &poidRect.w, &poidRect.h);
+                //SDL_RenderFillRect(renderer, &poidRect);
+                SDL_RenderCopy(renderer, textTexturePoid, NULL, &poidRect);
+                SDL_DestroyTexture(textTexturePoid);
             }
         }
         draw_disk(renderer, sommet_courant->x, sommet_courant->y, rayon); //Traçage du sommet
