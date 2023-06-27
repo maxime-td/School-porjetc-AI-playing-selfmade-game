@@ -13,10 +13,13 @@ int main()
     tab_to_graph(tab, 0, n-1);
     //printTabCoord(tab, &n);
 
-    makeNewLinks(25, tab, &n);
-    printTabCoord(tab, &n);
-    int ** TableauDistances = distTab(tab, &n);
-    printDistTab(TableauDistances, &n);
+    make_new_links(25, tab, &n);
+    print_tab_coord(tab, &n);
+    int ** TableauDistances = dist_tab(tab, &n);
+    print_dist_tab(TableauDistances, &n);
+
+    Floyd_Warshall(TableauDistances, n);
+    print_dist_tab(TableauDistances, &n);
 
     /*
     int y = 0, x;
