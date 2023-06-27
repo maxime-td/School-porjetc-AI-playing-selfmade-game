@@ -122,8 +122,7 @@ void drawGraph(SDL_Renderer* renderer, sommet_t** tab, int n) {
             }
 
             if(bool_deja_trace == 0) {
-                //[tracer lien]
-                SDL_RenderDrawLine(renderer, sommet_courant.x, sommet_courant.y, voisin_courant.x, voisin_courant.y);
+                SDL_RenderDrawLine(renderer, sommet_courant.x, sommet_courant.y, voisin_courant.x, voisin_courant.y); //Traçage du lien
 
                 tab_deja_trace[compteur_deja_trace] = voisin_courant.val; //Ajoute le voisin courant a tab_deja_trace
                 compteur_deja_trace += 1;
