@@ -1,6 +1,10 @@
 #ifndef SOLOPT_H_
 #define SOLOPT_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include "graph.h"
+#include <math.h>
 
 /**
  * @brief Construit la matrice des distances minimales (pour les sommets non reliés, donne la distance du chemin optimal les reliant)
@@ -37,6 +41,13 @@ int ** copie_tab(int ** tab, int n);
  * @return le meilleur tableau decrivant le meilleur chemin pour chaque point de départ 
 */
 int multi_Start_Floyd_Warshall(int ** tabWarshall, int **distTab, int n, sommet_t **tabSommet);
+
+
+void permute(int ** tab, int n);
+
+
+int recuit_simule(int ** tabWarshall, int n);
+
 
 
 

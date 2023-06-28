@@ -2,7 +2,10 @@
 #include <stdlib.h>
 #include <limits.h>
 #include "graph.h"
+#include "fourmi.h"
 #include "OptiFloyd_Warshall.h"
+#include <math.h>
+
 
 /**
  * @brief Construit la matrice des distances minimales (pour les sommets non reliés, donne la distance du chemin optimal les reliant)
@@ -50,65 +53,6 @@ int **copie_tab(int **tab, int n)
     }
     return new;
 }
-
-/**
- * @brief Construit un cycle en selectionnant toujours le point le plus proche par lequel on n'est encore pas passé (distances calculé précédemment par Floyd_Warshall)
- * @param distTab le tableau des distances initiales (sera modifié)
- * @param n la taille du tableau
- * @param tabSommets le tableau des sommets
- * @param indDep l'indice dans tabSommet du point de départ
- * @return un tableau d'entier de taille n+1 décrivant le cycle optimal et sa longueur
-
-int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int indDep)
-{
-    int * retour = malloc((n+1)*sizeof(int));
-
-    int ** copie = copie_tab(distTab, n);
-    int distR=0, cpt=0;
-    int indAct = indDep;
-    int indTmp=0;
-    int distTmp=999999;
-    char dep = tabSommets[indAct]->val;
-    char tmp = dep;
-    do
-    {
-        //printf("CPT : %d\n", cpt);
-        retour[indAct] = cpt;
-        for(int i=0; i<n; i++)
-        {
-            if(i==0 && i==indAct)
-            {
-                distTmp = 999999;
-            }
-            if(i==0 && i!=indAct)
-            {
-                distTmp = copie[indAct][i];
-                indTmp = i;
-            }
-            if (i!=0 && i!=indAct && distTmp>copie[indAct][i])
-            {
-                distTmp = copie[indAct][i];
-                indTmp = i;
-            }
-        }
-
-        //print_dist_tab(copie, &n);
-        for(int i=0; i<n; i++)
-        {
-            copie[indAct][i] = INT_MAX;
-            copie[i][indAct] = INT_MAX;
-        }
-        indAct = indTmp;
-        tmp = tabSommets[indAct]->val;
-        cpt++;
-    } while (tmp != dep && cpt < n+1);
-    free2DTab((void **)copie, n);
-    distR = distTab[indDep][indAct];
-
-
-    return retour;
-}
-*/
 
 /**
  * @brief Construit un cycle en selectionnant toujours le point le plus proche par lequel on n'est encore pas passé (distances calculé précédemment par Floyd_Warshall)
@@ -203,4 +147,61 @@ int multi_Start_Floyd_Warshall(int ** tabWarshall, int **distTab, int n, sommet_
         }
     }
     return min;
+}
+
+void permute(int ** tab, int n)
+{
+    int a=0, b=0;
+    while(a == 0)
+    {
+        a = rand()%n;
+        b = rand()%n;
+    }
+    int tmp = *tab[a];
+    *tab[a] = *tab[b];
+    *tab[b] = tmp;
+}
+
+int calcul_chemin_Floy_Warshall(int ** tabWarshall, int n, int * tab)
+{
+    int chem=0;
+    for(int i=0; i<n-1; i++)
+    {
+        chem += tabWarshall[tab[i]][tab[i+1]];
+    }
+    chem += tabWarshall[tab[0]][tab[n-1]];
+    return chem;
+}
+
+int recuit_simule(int ** tabWarshall, int n)
+{
+    int * tab = malloc(n*sizeof(int));
+    int chem;
+    int ecart;
+    int p;
+    for(int i=0; i<n; i++)
+    {
+        tab[i] = i;
+    }
+    int * tabTemp = tab;
+    chem = calcul_chemin_Floy_Warshall(tabWarshall, n, tab);
+    float T = chem;
+    float alpha = pow(chem, 1/10000);
+    while(T>0.00001)
+    {
+        chem = calcul_chemin_Floy_Warshall(tabWarshall, n, tab);
+        p = rand()%1000;
+        permute(&tabTemp, n);
+        ecart = chem - calcul_chemin_Floy_Warshall(tabWarshall, n, tabTemp);;
+        if(ecart < 0 || p < (int)exp(-ecart/T))
+        {
+            for(int i=0; i<n; i++)
+            {
+                tab[i] = tabTemp[i];
+            }
+        }
+        T = alpha * T;
+    }
+
+    return chem;
 }
