@@ -16,7 +16,7 @@
  * @param nPath Un pointeur vers une variable pour stocker la taille du chemin optimal.
  * @return Un tableau d'entiers représentant le chemin optimal.
  */
-int * colonni_fourmi(sommet_t ** tab, int ** matDist, int n, int dep, int * nPath);
+int * colonni_fourmi(int ** matDist, int n, int dep, int * nPath);
 
 /**
  * Fonction auxiliaire pour l'algorithme des fourmis artificielles.
@@ -27,7 +27,7 @@ int * colonni_fourmi(sommet_t ** tab, int ** matDist, int n, int dep, int * nPat
  * @param dep Le sommet de départ.
  * @return Un tableau d'entiers représentant le chemin trouvé.
  */
-int * fourmi(sommet_t ** tab, int n, int * nPath, int ** probaMat, int dep);
+int * fourmi(int n, int * nPath, int ** probaMat, int dep);
 
 /**
  * Vérifie si toutes les valeur d'un tableau sont à 1.

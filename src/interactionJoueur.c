@@ -9,6 +9,7 @@
 #include "graph.h"
 #include "affiche.h"
 #include "fourmi.h"
+#include "OptiFloyd_Warshall.h"
 
 /**
  * @brief Regarde si le noeud d'index i est dans le chemin. Renvoie 1 si vrai, 0 si faux
@@ -40,6 +41,7 @@ void boucle_jeu(sommet_t** tab, int n) {
     int nb_noeuds_chemin = 0; //Nombre de noeuds dans le chemin
     int r = R_NOEUD; //Rayon des sommets
     int n_s_graphe;
+    int all[n];
 
     int ** distMat = dist_tab(tab, &n);
 
@@ -56,14 +58,17 @@ void boucle_jeu(sommet_t** tab, int n) {
 
     init(tab, n); //Affichage du graphe
     int update = 1;
+    int valid  = 0;
 
     //Boucle de jeu
     while (program_on) {
         //Gestion des événements
         while (SDL_PollEvent(&event))
         {
+            update = 1;
             switch (event.type)
             {
+                
                 //pour fermer la fenetre quand on clique sur la croix
                 case SDL_QUIT:
                     program_on = SDL_FALSE;
@@ -71,38 +76,63 @@ void boucle_jeu(sommet_t** tab, int n) {
                 
                 //Détection des clics
                 case SDL_MOUSEBUTTONDOWN:
-                    update = 1;
-                    if (event.button.button == SDL_BUTTON_LEFT) { //Si on a un clic gauche
-                        
-                        //Pour voir si on clique sur un noeud
-                        for(i = 0; i < n; i+=1) { //On parcour tous les noeuds
-                            //On regarde si le clic est dans un carré autour du noeud
-                            SDL_GetMouseState(&x, &y);
-                            if((x >= (tab[i]->x)-r) && (x <= (tab[i]->x)+r) && (y >= (tab[i]->y)-r) && (y <= (tab[i]->y)+r)) {
-                                if (nb_noeuds_chemin == 0 || tab[i]->voisins[chemin_joueur[nb_noeuds_chemin-1]]){
-                                    chemin_joueur[nb_noeuds_chemin] = i; //On l'ajoute au chemin
-                                    nb_noeuds_chemin += 1;
+                    switch(event.button.button){
+                        case SDL_BUTTON_LEFT: //Si on a un clic gauche
+                            
+                            //Pour voir si on clique sur un noeud
+                            for(i = 0; i < n; i+=1) { //On parcour tous les noeuds
+                                //On regarde si le clic est dans un carré autour du noeud
+                                SDL_GetMouseState(&x, &y);
+                                if((x >= (tab[i]->x)-r) && (x <= (tab[i]->x)+r) && (y >= (tab[i]->y)-r) && (y <= (tab[i]->y)+r)) {
+                                    if (nb_noeuds_chemin == 0 || tab[i]->voisins[chemin_joueur[nb_noeuds_chemin-1]]){
+                                        chemin_joueur[nb_noeuds_chemin] = i; //On l'ajoute au chemin
+                                        nb_noeuds_chemin += 1;
+                                    }
                                 }
                             }
-                        }
-
-                    }
-                    else if (event.button.button == SDL_BUTTON_RIGHT) { //Si on a un clic gauche
+                            break;
                         
-                        //Pour voir si on clique sur un noeud
-                        for(i = 0; i < n; i+=1) { //On parcour tous les noeuds
-                            //On regarde si le clic est dans un carré autour du noeud
-                            SDL_GetMouseState(&x, &y);
-                            if((x >= (tab[i]->x)-r) && (x <= (tab[i]->x)+r) && (y >= (tab[i]->y)-r) && (y <= (tab[i]->y)+r)) {
-                                if (nb_noeuds_chemin != 0 && i == chemin_joueur[nb_noeuds_chemin-1]){
-                                    chemin_joueur[nb_noeuds_chemin-1] = -1;
-                                    nb_noeuds_chemin -= 1;
+                        case SDL_BUTTON_RIGHT: //Si on a un clic droit
+                            
+                            //Pour voir si on clique sur un noeud
+                            for(i = 0; i < n; i+=1) { //On parcour tous les noeuds
+                                //On regarde si le clic est dans un carré autour du noeud
+                                SDL_GetMouseState(&x, &y);
+                                if((x >= (tab[i]->x)-r) && (x <= (tab[i]->x)+r) && (y >= (tab[i]->y)-r) && (y <= (tab[i]->y)+r)) {
+                                    if (nb_noeuds_chemin != 0 && i == chemin_joueur[nb_noeuds_chemin-1]){
+                                        chemin_joueur[nb_noeuds_chemin-1] = -1;
+                                        nb_noeuds_chemin -= 1;
+                                    }
                                 }
                             }
-                        }
+                            break;
 
                     }
                     break;
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym){
+                        case SDLK_SPACE:
+                            nb_noeuds_chemin = 0;
+                            break;
+                        case SDLK_RETURN:
+                            for (int i = 0; i < n; i++){
+                                all[i] = 0;
+                            }
+
+                            for (int i = 0; i < nb_noeuds_chemin; i++){
+                                all[chemin_joueur[i]] = 1;
+                            }
+
+                            if (tout_noeud(all, n)){
+                                valid = 1;
+                                printf("Valid\n");
+                            }
+                             
+                            
+                            break;
+                        default:
+                            break;
+                    }
                 default:
                     break;
             }
@@ -114,7 +144,7 @@ void boucle_jeu(sommet_t** tab, int n) {
             sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
             affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
 
-            draw_path(tab, n, chemin_joueur, nb_noeuds_chemin);
+            draw_path(tab, chemin_joueur, nb_noeuds_chemin);
             draw_int(path_size_round(chemin_joueur, distMat, nb_noeuds_chemin));
 
             render();

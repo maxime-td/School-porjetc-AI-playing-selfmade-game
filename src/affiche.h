@@ -31,7 +31,7 @@ void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius);
  */
 void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid);
 
-void draw_path(sommet_t ** tab, int n, int * path, int nPath);
+void draw_path(sommet_t ** tab, int * path, int nPath);
 
 
 /**

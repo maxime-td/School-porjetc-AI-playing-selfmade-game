@@ -126,7 +126,6 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
     int indAct = indDep;
     int indNext;
 
-    int compteur = 0;
     int DISTANCE=0;
     int minDistVoisin = 0;
 

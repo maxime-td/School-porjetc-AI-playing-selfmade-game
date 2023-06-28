@@ -17,7 +17,7 @@ SDL_Window *window = NULL;
 */
 void init(sommet_t ** tab, int n){
     int y = 0, x;
-    int width, height, w_window = W, h_window = H, final_width = w_window/2;  
+    int width, height, w_window = W, h_window = H;  
 
     SDL_DisplayMode dm;
 
@@ -42,7 +42,7 @@ void init(sommet_t ** tab, int n){
     /* Création de la fenêtre de gauche */
     window = SDL_CreateWindow(
         "Graph",    // codage en utf8, donc accents possibles
-        width/2-w_window/2, 0,                  // coin haut gauche en haut gauche de l'écran
+        width/2-w_window/2, height/2-h_window/2,                  // coin haut gauche en haut gauche de l'écran
         w_window, h_window,              // largeur = 400, hauteur = 300
         SDL_WINDOW_RESIZABLE);
 
@@ -60,7 +60,7 @@ void init(sommet_t ** tab, int n){
 
     SDL_GetWindowPosition(window, &x, &y);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_Delay(100);
+    SDL_Delay(10);
     draw_graph(renderer, tab, n, 1);
     
     SDL_RenderPresent(renderer);
@@ -140,9 +140,8 @@ void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
 void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) {
 
     // Initialisations 
-    int i, j, k; //Incréments
+    int i, j; //Incréments
     int rayon = R_NOEUD; //Rayon des disques des sommets
-    char nom_sommet;
 
     sommet_t* sommet_courant; //Sommet courant
     sommet_t* voisin_courant; //Voisin courant
@@ -178,7 +177,6 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
     for(i = 0; i < n; i+=1) {
         sommet_courant = tab[i];
         for(j = i; j < n; j+=1) {
-            k=0;
             // Si j est voisin de i
             if(tab[i]->voisins[j] == 1) {
                 voisin_courant = tab[j];
@@ -222,7 +220,7 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
     TTF_Quit();
 }
 
-void draw_path(sommet_t ** tab, int n, int * path, int nPath){
+void draw_path(sommet_t ** tab, int * path, int nPath){
     SDL_Rect textRect;
     TTF_Font* font;
     SDL_Surface* textSurface;
@@ -271,14 +269,7 @@ void draw_path(sommet_t ** tab, int n, int * path, int nPath){
  * @param n Le nombre de sommets dans le tableau.
 */
 void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid) {
-    int y = 0, x;
-    int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
-    SDL_bool program_on = SDL_TRUE;  
-
-    SDL_DisplayMode dm;
-
     SDL_SetRenderDrawColor(renderer, r, g , b, a);
-    SDL_Delay(100);
     draw_graph(renderer, tab, n, displayPoid);
 }
 

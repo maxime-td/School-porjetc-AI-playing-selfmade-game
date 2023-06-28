@@ -72,7 +72,7 @@ int is_close_to_value_in_tab(sommet_t ** tab, int size, sommet_t * cour, int thr
  * @return un pointeur sur un tableau de sommets
  */
 
-sommet_t ** gen_tab_sommets(int * n, int width, int height)
+sommet_t ** gen_tab_sommets(int * n)
 {
     *n = rand()%(N-3) +4;
     int first = 1;
@@ -221,8 +221,7 @@ sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n, i
     //Initialisation
     sommet_t ** sous_graphe_chemin = NULL;
 
-    int i, j = 0, k, l; //Incréments
-    int voisins[n]; //Tableau des voisins pour sous graphe
+    int i, j = 0, k; //Incréments
     int noeuds_dans_chemin [n]; //Tableau des noeuds dans le chemin
     int n_noeuds_differents = 0; //Nombre de noeuds uniques dans le chemin
     int conv_tab_to_n_chemin[n];

@@ -10,7 +10,7 @@ int main()
 {
     srand(time(NULL));
     int n = 0;
-    sommet_t **tab = gen_tab_sommets(&n, 800, 800);
+    sommet_t **tab = gen_tab_sommets(&n);
 
     tab_to_graph(tab, 0, n - 1);
 
@@ -36,7 +36,7 @@ int main()
     SDL_Event event;
 */
     int n_chemin = 0;
-    int *path = colonni_fourmi(tab, TableauDistances, n, rand() % n, &n_chemin);
+    int *path = colonni_fourmi(TableauDistances, n, rand() % n, &n_chemin);
 
     affich_tab(path, n_chemin);
     printf("%d : %d\n",n , path_size(path,TableauDistances , n_chemin));

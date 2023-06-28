@@ -44,7 +44,7 @@ void tab_to_graph(sommet_t ** tab, int n, int start);
  * @param height la borne sur l axe des ordonnées
  * @return un pointeur sur un tableau de sommets
  */
-sommet_t ** gen_tab_sommets(int * n, int width, int height);
+sommet_t ** gen_tab_sommets(int * n);
 
 
 /**

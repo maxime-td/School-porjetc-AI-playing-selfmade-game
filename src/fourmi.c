@@ -13,7 +13,7 @@
  * @param nPath Un pointeur vers une variable pour stocker la taille du chemin optimal.
  * @return Un tableau d'entiers représentant le chemin optimal.
  */
-int * colonni_fourmi(sommet_t ** tab, int ** matDist, int n, int dep, int * nPath){
+int * colonni_fourmi(int ** matDist, int n, int dep, int * nPath){
     int nCour, sizeCour;
     int * courPath;
     int nBest, sizeBest = INT_MAX;
@@ -31,7 +31,7 @@ int * colonni_fourmi(sommet_t ** tab, int ** matDist, int n, int dep, int * nPat
     }
 
     for (int i = 0; i < ITERATION*n; i++){
-        courPath = fourmi(tab, n, &nCour, probaMat, dep);
+        courPath = fourmi(n, &nCour, probaMat, dep);
 
         if (courPath != NULL){
             sizeCour = path_size(courPath, matDist, nCour);
@@ -69,7 +69,7 @@ int * colonni_fourmi(sommet_t ** tab, int ** matDist, int n, int dep, int * nPat
  * @param dep Le sommet de départ.
  * @return Un tableau d'entiers représentant le chemin trouvé.
  */
-int * fourmi(sommet_t ** tab, int n, int * nPath, int ** probaMat, int dep){
+int * fourmi(int n, int * nPath, int ** probaMat, int dep){
     int fait[n];
     for (int i = 0; i < n; i++){
         fait[i] = 0;
@@ -80,13 +80,10 @@ int * fourmi(sommet_t ** tab, int n, int * nPath, int ** probaMat, int dep){
     int k;
     int voisin;
     int somme;
-    int pathChoose;
     fait[dep] = 1;
 
     chemin[0] = dep;
     while (dep != chemin[n_noeud-1] || !tout_noeud(fait, n)){
-        pathChoose = 0;
-        
         somme = 0;
         for (int i = 0; i < n; i++){
             somme += probaMat[chemin[n_noeud-1]][i];
