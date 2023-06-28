@@ -43,10 +43,6 @@ int main()
 
     free2DTab((void **)TableauDistances, n);
     free2DTab((void **)tab, n);
-<<<<<<< HEAD
-=======
-    
->>>>>>> e3c93e3839987d1aef7f1db670a79c8ec3390c82
 
     return 0;
 }
