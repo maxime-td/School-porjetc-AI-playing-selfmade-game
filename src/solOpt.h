@@ -16,7 +16,7 @@ void Floyd_Warshall(int ** distTab, int n);
  * @param n la taille du tableau
  * @param tabSommets le tableau des sommets
 */
-int cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n);
+int * cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n);
 
 
 /**

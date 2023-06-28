@@ -61,8 +61,10 @@ int ** copie_tab(int ** tab, int n)
  * @param n la taille du tableau
  * @param tabSommets le tableau des sommets
 */
-int cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n)
+int * cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n)
 {
+    int * retour = malloc((n+1)*sizeof(int));
+
     int ** copie = copie_tab(distTab, n);
     int somme=0, cpt=0;
     int indDep = rand()%n;
@@ -74,6 +76,7 @@ int cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n)
     do
     {
         printf("Sommet courant: %c, Indice Actuel : %d\n", tmp, indAct);
+        retour[indAct] = cpt;
         for(int i=0; i<n; i++)
         {
             if(i==0 && i==indAct)
@@ -106,7 +109,10 @@ int cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n)
 
     } while (tmp != dep && cpt < n-1);
     somme += distTab[indDep][indAct];
+    free2DTab((void **)copie, n);
+    retour[n] = somme;
 
-    return somme;
+    return retour;
     
 }
+
