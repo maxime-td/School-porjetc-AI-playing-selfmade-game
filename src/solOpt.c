@@ -20,7 +20,7 @@ void Floyd_Warshall(int ** distTab, int n)
             {
                 if (distTab[i][j] == -1)
                 {
-                    distTab[i][j] = INT_MAX;
+                    distTab[i][j] = 9999999;
                 }
 
                 if (distTab[i][k] != -1 && distTab[k][j] != -1 && distTab[i][k] + distTab[k][j] < distTab[i][j])
@@ -65,14 +65,15 @@ int cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n)
 {
     int ** copie = copie_tab(distTab, n);
     int somme=0, cpt=0;
-    int indAct = rand()%n;
+    int indDep = rand()%n;
+    int indAct = indDep;
     int indTmp=0;
     int distTmp=0;
     char dep = tabSommets[indAct]->val;
     char tmp = dep;
     do
     {
-        printf("Somet courant: %c\n", tmp);
+        printf("Sommet courant: %c\n", tmp);
         for(int i=0; i<n; i++)
         {
             if(i==0 && i!=indAct)
@@ -95,8 +96,11 @@ int cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n)
         indAct = indTmp;
         tmp = tabSommets[indAct]->val;
         cpt++;
-        print_dist_tab(distTab, &n);
+        printf("Somme actualisée: %d\n", somme);
+        //print_dist_tab(copie, &n);
     } while (tmp != dep && cpt != n);
+    somme += distTab[indDep][indAct];
+
 
     return somme;
     
