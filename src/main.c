@@ -29,12 +29,12 @@ int main()
 
     // free2DTab((void **) tab, n);
     // free2DTab((void **) TableauDistances, n);
-
+/*
     int y = 0, x;
     int width, height, w_window = 800, h_window = 800, final_width = w_window / 2;
     SDL_bool program_on = SDL_TRUE;
     SDL_Event event;
-
+*/
     int n_chemin = 0;
     int *path = colonni_fourmi(tab, TableauDistances, n, rand() % n, &n_chemin);
 
@@ -43,7 +43,7 @@ int main()
 
     init(tab, n);
 
-    // boucle_jeu(tab, n);
+   // boucle_jeu(tab, n);
 
     free2DTab((void **)TableauDistances, n);
     free2DTab((void **)tab, n);
