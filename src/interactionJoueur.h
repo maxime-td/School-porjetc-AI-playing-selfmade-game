@@ -27,6 +27,4 @@ int est_dans_chemin(int i, int* chemin);
 */
 void boucle_jeu(sommet_t** tab, int n);
 
-
-
 #endif

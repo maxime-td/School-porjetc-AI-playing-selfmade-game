@@ -21,13 +21,6 @@
 */
 void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius);
 
-/**
- * @brief Dessine un graphe à l'aide d'un rendu SDL.
- * @param renderer Le rendu SDL utilisé pour afficher le graphe.
- * @param graph Le pointeur vers le graphe à dessiner.
- * @param n Le nombre de sommets dans le tableau.
- */
-void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid);
 
 void draw_path(sommet_t ** tab, int n, int * path, int nPath);
 
@@ -49,6 +42,5 @@ void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid
 void render();
 
 void closeSDL();
-
 
 #endif // AFFICHE_H

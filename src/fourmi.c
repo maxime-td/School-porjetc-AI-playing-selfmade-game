@@ -135,7 +135,8 @@ int tout_noeud(int * tab, int n){
  */
 void affich_tab(int * tab, int n){
     for (int i = 0; i < n; i++){
-        printf("%c - ", tab[i] + 'A');
+
+        printf("%c (%d)- ", tab[i] + 'A', tab[i]);
     }
     printf("\n");
 }
