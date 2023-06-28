@@ -49,7 +49,9 @@ void boucle_jeu(sommet_t** tab, int n) {
 
     int x, y; //Position de la souris au moment du clic
 
-    affiche(tab, n);
+    sommet_t** sous_graphe; //Sous-graphe chemin pour affichage
+
+    init(tab, n);
 
     //Boucle de jeu
     while (program_on) {
@@ -77,7 +79,7 @@ void boucle_jeu(sommet_t** tab, int n) {
                                 nb_noeuds_chemin += 1;
                             }
                         }
-                        affich_tab(chemin_joueur, nb_noeuds_chemin);
+
                     }
                     break;
                 
@@ -85,6 +87,13 @@ void boucle_jeu(sommet_t** tab, int n) {
                     break;
             }
         }
+        affiche(tab, n);
+        affich_tab(chemin_joueur, nb_noeuds_chemin);
+        printf("a\n");
+        sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n);
+        printf("b\n");
+        affiche(sous_graphe, nb_noeuds_chemin);
+        printf("aa\n");
     }
     free(chemin_joueur);
 }
