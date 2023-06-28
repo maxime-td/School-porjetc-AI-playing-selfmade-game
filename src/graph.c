@@ -277,3 +277,12 @@ sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n, i
 }
 
 
+int path_size_round(int * path, int ** distMat, int n){
+    int size = 0;
+
+    for (int i = 0; i < n-1; i++){
+        size += round(distMat[path[i]][path[i+1]]/10);
+    }
+    
+    return size;
+}

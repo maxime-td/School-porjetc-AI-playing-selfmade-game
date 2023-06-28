@@ -41,6 +41,8 @@ void boucle_jeu(sommet_t** tab, int n) {
     int r = R_NOEUD; //Rayon des sommets
     int n_s_graphe;
 
+    int ** distMat = dist_tab(tab, &n);
+
     int * chemin_joueur = (int*) malloc(sizeof(int)*MAX_PATH); //Chemin du joueur
     for(i = 0; i < n; i += 1) //Initialisation du chemin du joueur
         chemin_joueur[i] = -1;
@@ -53,6 +55,7 @@ void boucle_jeu(sommet_t** tab, int n) {
     sommet_t** sous_graphe; //Sous-graphe chemin pour affichage
 
     init(tab, n); //Affichage du graphe
+    int update = 1;
 
     //Boucle de jeu
     while (program_on) {
@@ -68,8 +71,9 @@ void boucle_jeu(sommet_t** tab, int n) {
                 
                 //Détection des clics
                 case SDL_MOUSEBUTTONDOWN:
+                    update = 1;
                     if (event.button.button == SDL_BUTTON_LEFT) { //Si on a un clic gauche
-
+                        
                         //Pour voir si on clique sur un noeud
                         for(i = 0; i < n; i+=1) { //On parcour tous les noeuds
                             //On regarde si le clic est dans un carré autour du noeud
@@ -83,20 +87,40 @@ void boucle_jeu(sommet_t** tab, int n) {
                         }
 
                     }
+                    else if (event.button.button == SDL_BUTTON_RIGHT) { //Si on a un clic gauche
+                        
+                        //Pour voir si on clique sur un noeud
+                        for(i = 0; i < n; i+=1) { //On parcour tous les noeuds
+                            //On regarde si le clic est dans un carré autour du noeud
+                            SDL_GetMouseState(&x, &y);
+                            if((x >= (tab[i]->x)-r) && (x <= (tab[i]->x)+r) && (y >= (tab[i]->y)-r) && (y <= (tab[i]->y)+r)) {
+                                if (nb_noeuds_chemin != 0 && i == chemin_joueur[nb_noeuds_chemin-1]){
+                                    chemin_joueur[nb_noeuds_chemin-1] = -1;
+                                    nb_noeuds_chemin -= 1;
+                                }
+                            }
+                        }
+
+                    }
                     break;
-                
                 default:
                     break;
             }
         }
+        if (update){
+            update = 0;
+            clear_SDL();
+            affiche(tab, n, 0, 0, 0, 255, 1);
+            sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
+            affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
+
+            draw_path(tab, n, chemin_joueur, nb_noeuds_chemin);
+            draw_int(path_size_round(chemin_joueur, distMat, nb_noeuds_chemin));
+
+            render();
+        }
         
-        affiche(tab, n, 0, 0, 0, 255, 1);
-        sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
-        affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
-
-        draw_path(tab, n, chemin_joueur, nb_noeuds_chemin);
-
-        render();
+        
     }
     free(chemin_joueur);
     closeSDL();

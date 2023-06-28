@@ -66,6 +66,46 @@ void init(sommet_t ** tab, int n){
     SDL_RenderPresent(renderer);
 }
 
+void clear_SDL(){
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderClear(renderer);
+}
+
+void draw_int(int n){
+    SDL_Rect textRect;
+    TTF_Font* font;
+    SDL_Surface* textSurface;
+    SDL_Texture* textTexture;
+    SDL_Color color = {50, 150, 0, 255};
+    char Val[10];
+
+    if (TTF_Init()!= 0)
+    {
+        SDL_Log("Error : SDL initialisation - %s\n",
+                SDL_GetError()); // l'initialisation de la TTF a échoué
+        exit(EXIT_FAILURE);
+    }
+
+    font = TTF_OpenFont("arial.ttf", 60);
+
+    sprintf(Val, "%d", n);
+    
+    textSurface = TTF_RenderText_Solid(font, Val, color);
+    textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+    SDL_FreeSurface(textSurface);
+    SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+    textRect.x = W-textRect.w;
+    textRect.y = H-textRect.h;
+
+    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+    SDL_DestroyTexture(textTexture);
+    
+
+    TTF_CloseFont(font);
+    TTF_Quit();
+}
+
 /**
  * @brief Trace un disque
  * @param renderer Le renderer où tracer le disque
@@ -219,7 +259,9 @@ void draw_path(sommet_t ** tab, int n, int * path, int nPath){
         SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
         SDL_DestroyTexture(textTexture);
     }
-    
+
+    TTF_CloseFont(font);
+    TTF_Quit();
 }
 
 
@@ -239,6 +281,8 @@ void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid
     SDL_Delay(100);
     draw_graph(renderer, tab, n, displayPoid);
 }
+
+
 
 void render(){
     SDL_RenderPresent(renderer);
