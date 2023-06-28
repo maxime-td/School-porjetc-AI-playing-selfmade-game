@@ -127,7 +127,7 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
     int indNext;
 
     int compteur = 0;
-    int DISTANCE;
+    int DISTANCE=0;
     int minDistVoisin = 0;
 
     int *tabValide = malloc(n * sizeof(int));
@@ -139,6 +139,7 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
 
     while (nbValide != n)
     {
+        printf("SOMMET: %c\n", vAct);
         minDistVoisin = 999999;
         nbValide += 1;
         tabValide[indAct] = 1;
@@ -169,9 +170,11 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
             break;
         }
         DISTANCE += minDistVoisin;
+        printf("DistTemp: %d\n", DISTANCE);
         indAct = indNext;
         vAct = tabSommets[indAct]->val;
     }
+    printf("distance: %d   --  indDep: %d, indAct: %d,  retour : %d\n",DISTANCE, indDep, indAct, tabWarshall[indDep][indAct]);
     DISTANCE += tabWarshall[indDep][indAct];
     *sol = DISTANCE;
 
@@ -186,6 +189,7 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
  */
 int multi_Start_Floyd_Warshall(int ** tabWarshall, int **distTab, int n, sommet_t **tabSommet)
 {
+    print_dist_tab(tabWarshall, &n);
     int min = 99999999;
     int sol;
     int tmp;
