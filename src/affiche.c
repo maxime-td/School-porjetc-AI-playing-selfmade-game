@@ -68,18 +68,6 @@ void init(sommet_t ** tab, int n){
     
     SDL_RenderPresent(renderer);
 
-    //temporaire
-    //int chemin[2] = {0,2};
-    //int n_chemin = 2;
-    //sommet_t** sous_graphe;
-
-    //SDL_Delay(1000);
-    //SDL_SetRenderDrawColor(renderer, 200, 0, 0, 255);
-    //sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n);
-    //jusque là
-    
-    //draw_graph(renderer, sous_graphe, n_chemin, 0);
-    //SDL_RenderPresent(renderer);
 }
 
 
