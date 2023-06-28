@@ -66,7 +66,7 @@ void affiche(sommet_t ** tab, int n){
     SDL_GetWindowPosition(window, &x, &y);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_Delay(100);
-    draw_graph(renderer, tab, n);
+    draw_graph(renderer, tab, n, 1);
     
     SDL_RenderPresent(renderer);
 
@@ -128,7 +128,7 @@ void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
  * @param graph Le pointeur vers le graphe à dessiner.
  * @param n Le nombre de sommets dans le tableau.
  */
-void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n) {
+void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) {
 
     // Initialisations 
     int i, j, k; //Incréments
@@ -185,7 +185,10 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n) {
                 SDL_FreeSurface(textSurfacePoid);
                 SDL_QueryTexture(textTexturePoid, NULL, NULL, &poidRect.w, &poidRect.h);
                 //SDL_RenderFillRect(renderer, &poidRect);
-                SDL_RenderCopy(renderer, textTexturePoid, NULL, &poidRect);
+                if (displayPoid){
+                    SDL_RenderCopy(renderer, textTexturePoid, NULL, &poidRect);
+                }
+                
                 SDL_DestroyTexture(textTexturePoid);
             }
         }
@@ -274,6 +277,8 @@ void draw_path(SDL_Renderer* renderer, sommet_t** tab, int* chemin, int n) {
                 SDL_QueryTexture(textTexturePoid, NULL, NULL, &poidRect.w, &poidRect.h);
                 //SDL_RenderFillRect(renderer, &poidRect);
                 SDL_RenderCopy(renderer, textTexturePoid, NULL, &poidRect);
+                
+                
                 SDL_DestroyTexture(textTexturePoid);
             }
         }
