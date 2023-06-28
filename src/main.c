@@ -18,6 +18,8 @@ int main()
     print_tab_coord(tab, &n);
 
     int ** TableauDistances = dist_tab(tab, &n);
+    int ** tabWarshall = copie_tab(TableauDistances, n);
+    Floyd_Warshall(tabWarshall, n);
     print_dist_tab(TableauDistances, &n);
 
     // cycle_Floyd_Warshall(tabWarshall, tab, TableauDistances, n, 0, &sol);
