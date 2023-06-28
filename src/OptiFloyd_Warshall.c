@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include "graph.h"
-#include "solOpt.h"
+#include "OptiFloyd_Warshall.h"
 
 
 /**
@@ -76,7 +76,7 @@ int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int in
     char tmp = dep;
     do
     {
-        printf("Sommet courant: %c, Indice Actuel : %d\n", tmp, indAct);
+        //printf("Sommet courant: %c, Indice Actuel : %d\n", tmp, indAct);
         retour[indAct] = cpt;
         for(int i=0; i<n; i++)
         {
@@ -128,11 +128,12 @@ int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int in
 int * multi_Start_Floyd_Warshall(int ** distTab, int n, sommet_t ** tabSommet)
 {
     int * meilleurTab = cycle_Floyd_Warshall(distTab, tabSommet, n, 0);
+    printf("Tentative cycle 0: %d\n", meilleurTab[n]);
     int * tempTab = malloc((n+1)*sizeof(int)); 
     for(int i=1; i<n; i++)
     {
         tempTab = cycle_Floyd_Warshall(distTab, tabSommet, n, i);
-        printf("Tentative cycle: %d\n", tempTab[n]);
+        printf("Tentative cycle %d: %d\n", i, tempTab[n]);
         if(tempTab[n]<meilleurTab[n])
         {
             meilleurTab = tempTab;
