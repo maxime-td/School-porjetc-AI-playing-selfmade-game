@@ -184,7 +184,7 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
                 poidRect.x = (sommet_courant->x + voisin_courant->x)/2 - poidRect.w/2;
                 poidRect.y = (sommet_courant->y + voisin_courant->y)/2 - poidRect.h/2;
 
-                sprintf(Poid, "%d", (int) round(distTab[i][j]/10));
+                sprintf(Poid, "%d", (int) round(distTab[i][j]));
 
                 textSurfacePoid = TTF_RenderText_Solid(font, Poid, colorPoid);
                 textTexturePoid = SDL_CreateTextureFromSurface(renderer, textSurfacePoid);
@@ -271,6 +271,53 @@ void draw_path(sommet_t ** tab, int * path, int nPath){
 void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid) {
     SDL_SetRenderDrawColor(renderer, r, g , b, a);
     draw_graph(renderer, tab, n, displayPoid);
+}
+
+void afficheFin(int score, int bestScore){
+    SDL_Rect textRect;
+    TTF_Font* font;
+    SDL_Surface* textSurface;
+    SDL_Texture* textTexture;
+    SDL_Color color = {50, 150, 0, 255};
+    char Txt1[100];
+    char Txt2[100];
+
+    if (TTF_Init()!= 0)
+    {
+        SDL_Log("Error : SDL initialisation - %s\n",
+                SDL_GetError()); // l'initialisation de la TTF a échoué
+        exit(EXIT_FAILURE);
+    }
+
+    font = TTF_OpenFont("arial.ttf", 40);
+
+    sprintf(Txt1, "Votre score : %d", score);
+    sprintf(Txt2, "Meilleur score possible : %d", bestScore);
+
+    textSurface = TTF_RenderText_Solid(font, Txt1, color);
+    textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+    SDL_FreeSurface(textSurface);
+    SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+    textRect.x = W/2-textRect.w;
+    textRect.y = H/2-textRect.h;
+
+    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+    SDL_DestroyTexture(textTexture);
+
+    textSurface = TTF_RenderText_Solid(font, Txt2, color);
+    textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+    SDL_FreeSurface(textSurface);
+    SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+    textRect.y = (H/2-textRect.h)+50;
+
+    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+    SDL_DestroyTexture(textTexture);
+    
+
+    TTF_CloseFont(font);
+    TTF_Quit();
 }
 
 

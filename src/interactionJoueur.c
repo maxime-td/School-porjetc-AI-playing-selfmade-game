@@ -42,6 +42,9 @@ void boucle_jeu(sommet_t** tab, int n) {
     int r = R_NOEUD; //Rayon des sommets
     int n_s_graphe;
     int all[n];
+    int ** warshallDist;
+
+    int scoreFourmi, scoreFloyd, scoreBest, score;
 
     int ** distMat = dist_tab(tab, &n);
 
@@ -59,6 +62,13 @@ void boucle_jeu(sommet_t** tab, int n) {
     init(tab, n); //Affichage du graphe
     int update = 1;
     int valid  = 0;
+
+    warshallDist = copie_tab(distMat, n);
+    Floyd_Warshall(warshallDist, n);
+    scoreFloyd  = multi_Start_Floyd_Warshall(warshallDist, distMat, n, tab);
+    scoreFourmi = multi_start_fourmi(distMat, n);
+
+    //printf("%d, %d\n", scoreFloyd, scoreFourmi);
 
     //Boucle de jeu
     while (program_on) {
@@ -125,7 +135,6 @@ void boucle_jeu(sommet_t** tab, int n) {
 
                             if (tout_noeud(all, n)){
                                 valid = 1;
-                                printf("Valid\n");
                             }
                              
                             
@@ -140,12 +149,29 @@ void boucle_jeu(sommet_t** tab, int n) {
         if (update){
             update = 0;
             clear_SDL();
-            affiche(tab, n, 0, 0, 0, 255, 1);
-            sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
-            affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
+            if(!valid){
+                affiche(tab, n, 0, 0, 0, 255, 1);
+                sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
+                affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
 
-            draw_path(tab, chemin_joueur, nb_noeuds_chemin);
-            draw_int(path_size_round(chemin_joueur, distMat, nb_noeuds_chemin));
+                draw_path(tab, chemin_joueur, nb_noeuds_chemin);
+                draw_int(path_size_round(chemin_joueur, distMat, nb_noeuds_chemin));
+            }else{
+                score       = path_size(chemin_joueur, distMat, nb_noeuds_chemin);
+
+                scoreBest = scoreFourmi;
+                if (scoreFloyd < scoreFourmi){
+                    scoreBest = scoreFloyd;
+                }
+
+                if (scoreBest > score){
+                    scoreBest = score;
+                }
+                
+                
+
+                afficheFin(score, scoreBest);
+            }
 
             render();
         }

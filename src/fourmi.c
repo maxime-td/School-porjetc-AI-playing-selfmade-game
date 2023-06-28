@@ -4,6 +4,22 @@
 #include "fourmi.h"
 #include "graph.h"
 
+int multi_start_fourmi(int ** matDist, int n){
+    int best = INT_MAX;
+    int cour = 0;
+    int nPath;
+    for (int i = 0; i < n; i++){
+        int * path = colonni_fourmi(matDist, n, i, &nPath);
+        cour = path_size(path, matDist, nPath);
+        //free(path);
+        if(cour < best){
+            //affich_tab(path, nPath);
+            best = cour;
+        }
+    }
+    return best;
+}
+
 /**
  * Recherche le chemin optimal pour le voyageur de commerce en utilisant des fourmis artificielles.
  * @param tab Le tableau des sommets du graphe.

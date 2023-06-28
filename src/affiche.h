@@ -33,6 +33,8 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid);
 
 void draw_path(sommet_t ** tab, int * path, int nPath);
 
+void afficheFin(int score, int bestScore);
+
 
 /**
  * @brief Affiche un graphe à l'aide de la bibliothèque SDL.

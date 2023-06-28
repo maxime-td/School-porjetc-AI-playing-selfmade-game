@@ -7,6 +7,8 @@
 #define MAX_PATH 12*12
 #define ITERATION 100
 
+int multi_start_fourmi(int ** matDist, int n);
+
 /**
  * Recherche le chemin optimal pour le voyageur de commerce en utilisant des fourmis artificielles.
  * @param tab Le tableau des sommets du graphe.

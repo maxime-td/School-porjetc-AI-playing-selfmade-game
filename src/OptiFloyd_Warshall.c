@@ -120,8 +120,8 @@ int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int in
  */
 void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDist, int n, int indDep, int * sol)
 {
-    char vDep = tabSommets[indDep]->val;
-    char vAct = vDep;
+    //char vDep = tabSommets[indDep]->val;
+    //char vAct = vDep;
 
     int indAct = indDep;
     int indNext;
@@ -138,7 +138,7 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
 
     while (nbValide != n)
     {
-        printf("SOMMET: %c\n", vAct);
+        //printf("SOMMET: %c\n", vAct);
         minDistVoisin = 999999;
         nbValide += 1;
         tabValide[indAct] = 1;
@@ -169,11 +169,11 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
             break;
         }
         DISTANCE += minDistVoisin;
-        printf("DistTemp: %d\n", DISTANCE);
+        //printf("DistTemp: %d\n", DISTANCE);
         indAct = indNext;
-        vAct = tabSommets[indAct]->val;
+        //vAct = tabSommets[indAct]->val;
     }
-    printf("distance: %d   --  indDep: %d, indAct: %d,  retour : %d\n",DISTANCE, indDep, indAct, tabWarshall[indDep][indAct]);
+    //printf("distance: %d   --  indDep: %d, indAct: %d,  retour : %d\n",DISTANCE, indDep, indAct, tabWarshall[indDep][indAct]);
     DISTANCE += tabWarshall[indDep][indAct];
     *sol = DISTANCE;
 
@@ -188,7 +188,7 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
  */
 int multi_Start_Floyd_Warshall(int ** tabWarshall, int **distTab, int n, sommet_t **tabSommet)
 {
-    print_dist_tab(tabWarshall, &n);
+    //print_dist_tab(tabWarshall, &n);
     int min = 99999999;
     int sol;
     int tmp;

@@ -56,7 +56,7 @@ void tab_to_graph(sommet_t ** tab, int start, int end){
 int is_close_to_value_in_tab(sommet_t ** tab, int size, sommet_t * cour, int threshold) {
     for (int i = 0; i < size; i++) 
     { 
-        if (calcul_distance(tab[i], cour) <= threshold) {
+        if ((sqrt((cour->y-tab[i]->y)*(cour->y-tab[i]->y)+(cour->x-tab[i]->x)*(cour->x-tab[i]->x))) <= threshold) {
             return 1;
         }
     }
@@ -154,7 +154,7 @@ void make_new_links(int p, sommet_t ** tab, int * n)
 int calcul_distance(sommet_t * a, sommet_t * b)
 {
     int tmp1 = (a->x-b->x), tmp2 = (a->y-b->y);
-    return (int) sqrt(tmp1*tmp1+tmp2*tmp2);
+    return (int) round(sqrt(tmp1*tmp1+tmp2*tmp2)/10);
 }
 
 /**
@@ -280,7 +280,7 @@ int path_size_round(int * path, int ** distMat, int n){
     int size = 0;
 
     for (int i = 0; i < n-1; i++){
-        size += round(distMat[path[i]][path[i+1]]/10);
+        size += distMat[path[i]][path[i+1]];
     }
     
     return size;
