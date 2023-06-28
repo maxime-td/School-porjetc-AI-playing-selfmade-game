@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Projet en C</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="prism.js"></script>
+</head>
+<body>
+    <h1>Projet en C</h1>
+    <p>Voici une illustration de mon projet en C :</p>
+    <div class="code language-c">
+        <pre>
+            void add_feromone(int* path, int ** probaMat, int n, int sizePath){
+                for (int i = 0; i < n-1; i++){
+                    probaMat[path[i]][path[i+1]] -= (int) 100/(sizePath);
+                    if (probaMat[path[i]][path[i+1]] <= 0){
+                        probaMat[path[i]][path[i+1]] = 1;
+                    }
+                }
+            }
+        </pre>
+    </div>
+    <p>Explication du projet :</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc id aliquam tincidunt, nisl nunc tincidunt nunc, id lacinia nunc nunc id nunc. Sed auctor, nunc id aliquam tincidunt, nisl nunc tincidunt nunc, id lacinia nunc nunc id nunc.</p>
+</body>
+</html>

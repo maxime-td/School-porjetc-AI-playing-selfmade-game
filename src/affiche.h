@@ -42,5 +42,12 @@ void draw_path(SDL_Renderer* renderer, sommet_t** tab, int* chemin, int n) ;
 */
 void init(sommet_t ** tab, int n);
 
+/**
+ * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
+ * @param tab Le tableau de sommets représentant le graphe.
+ * @param n Le nombre de sommets dans le tableau.
+*/
+void affiche(sommet_t ** tab, int n);
+
 
 #endif // AFFICHE_H
