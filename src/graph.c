@@ -214,17 +214,18 @@ void print_dist_tab(int ** dist_tab, int * n)
 /**
  * @brief Transforme un chemin en sous-graphe pour le tracé avec draw_graph
  * @param chemin Le chemin
+ * @param n_chemin Le nombre de noeud dans le chemin
  * @param tab Le graphe initial
+ * @param n Le nombre de noeuds dans le graphe initial
 */
 sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n) {
     //Initialisation
     sommet_t ** sous_graphe_chemin = NULL;
 
-    int i, j = 0, k, l;
-    int index_tab;
-    int voisins[n];
-    int noeuds_dans_chemin [n];
-    int n_noeuds_differents = 0;
+    int i, j = 0, k, l; //Incréments
+    int voisins[n]; //Tableau des voisins pour sous graphe
+    int noeuds_dans_chemin [n]; //Tableau des noeuds dans le chemin
+    int n_noeuds_differents = 0; //Nombre de noeuds uniques dans le chemin
 
     //Initialisation noeuds_dans_chemin
     for(i = 0; i < n; i++) {

@@ -86,7 +86,9 @@ void print_dist_tab(int ** distTab, int * n);
 /**
  * @brief Transforme un chemin en sous-graphe pour le tracé avec draw_graph
  * @param chemin Le chemin
+ * @param n_chemin Le nombre de noeud dans le chemin
  * @param tab Le graphe initial
+ * @param n Le nombre de noeuds dans le graphe initial
 */
 sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n);
 
