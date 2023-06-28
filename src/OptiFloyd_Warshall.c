@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include "graph.h"
-#include "solOpt.h"
+#include "OptiFloyd_Warshall.h"
 
 
 /**

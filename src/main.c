@@ -2,7 +2,7 @@
 #include <time.h>
 #include "graph.h"
 #include "affiche.h"
-#include "solOpt.h"
+#include "OptiFloyd_Warshall.h"
 #include "fourmi.h"
 #include "interactionJoueur.h"
 
