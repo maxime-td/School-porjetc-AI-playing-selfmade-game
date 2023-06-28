@@ -68,7 +68,7 @@ int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int in
     int * retour = malloc((n+1)*sizeof(int));
 
     int ** copie = copie_tab(distTab, n);
-    int somme=0, cpt=0;
+    int distR=0, cpt=0;
     int indAct = indDep;
     int indTmp=0;
     int distTmp=999999;
@@ -76,7 +76,7 @@ int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int in
     char tmp = dep;
     do
     {
-        //printf("Sommet courant: %c, Indice Actuel : %d\n", tmp, indAct);
+        //printf("CPT : %d\n", cpt);
         retour[indAct] = cpt;
         for(int i=0; i<n; i++)
         {
@@ -95,8 +95,7 @@ int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int in
                 indTmp = i;
             }
         }
-        if(distTmp >=999999 || distTmp<0){distTmp == 0;}
-        somme += distTmp;
+
         //print_dist_tab(copie, &n);
         for(int i=0; i<n; i++)
         {
@@ -106,12 +105,10 @@ int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int in
         indAct = indTmp;
         tmp = tabSommets[indAct]->val;
         cpt++;
-        //print_dist_tab(copie, &n);
-
-    } while (tmp != dep && cpt < n-1);
-    somme += distTab[indDep][indAct];
+    } while (tmp != dep && cpt < n+1);
     free2DTab((void **)copie, n);
-    retour[n] = somme;
+    distR = distTab[indDep][indAct];
+
 
     return retour;
 }
@@ -139,5 +136,6 @@ int * multi_Start_Floyd_Warshall(int ** distTab, int n, sommet_t ** tabSommet)
             meilleurTab = tempTab;
         }
     }
+    free(tempTab);
     return meilleurTab;
 }
