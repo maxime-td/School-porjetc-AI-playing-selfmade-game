@@ -20,11 +20,11 @@ int main()
     int ** TableauDistances = dist_tab(tab, &n);
     //print_dist_tab(TableauDistances, &n);
 
-    Floyd_Warshall(TableauDistances, n);
+    //Floyd_Warshall(TableauDistances, n);
     //print_dist_tab(TableauDistances, &n);
 
-    int * tempAff = multi_Start_Floyd_Warshall(TableauDistances, n, tab);
-    printf("cycle OPTI: %d\n", tempAff[n]);
+    //int * tempAff = multi_Start_Floyd_Warshall(TableauDistances, n, tab);
+    //printf("cycle OPTI: %d\n", tempAff[n]);
 
 
     
