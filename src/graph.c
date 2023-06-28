@@ -210,3 +210,57 @@ void print_dist_tab(int ** dist_tab, int * n)
     }
     printf("\n");
 }
+
+/**
+ * @brief Transforme un chemin en sous-graphe pour le tracé avec draw_graph
+ * @param chemin Le chemin
+ * @param tab Le graphe initial
+*/
+sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n) {
+    //Initialisation
+    sommet_t ** sous_graphe_chemin = NULL;
+
+    int i, j = 0, k, l;
+    int index_tab;
+    int voisins[n];
+    int noeuds_dans_chemin [n];
+    int n_noeuds_differents = 0;
+
+    //Initialisation noeuds_dans_chemin
+    for(i = 0; i < n; i++) {
+        noeuds_dans_chemin[i] = 0;
+    }
+
+    //On note les noeuds dans le chemin dans noeuds_dans_chemin
+    for(i = 0; i < n_chemin; i++) {
+        noeuds_dans_chemin[chemin[i]] = 1;
+    }
+
+    //On compte le nombre de noeuds différents dans noeuds_dans_chemin
+    for (i = 0; i < n; i++) {
+        n_noeuds_differents += noeuds_dans_chemin[i];
+    }
+
+    sous_graphe_chemin = (sommet_t**)malloc(sizeof(sommet_t*)*n_noeuds_differents); //Allocation sous_graphe_chemin
+
+    for(i = 0; i < n; i++) {
+        if(noeuds_dans_chemin[i]) {
+            sous_graphe_chemin[j] = (sommet_t*)malloc(sizeof(sommet_t));
+            sous_graphe_chemin[j]->val = tab[i]->val;
+            sous_graphe_chemin[j]->x = tab[i]->x;
+            sous_graphe_chemin[j]->y = tab[i]->y;
+            l = 0;
+            for(k = 0; k < n; k++) {
+                if(noeuds_dans_chemin[k]) {
+                    if(tab[i]->voisins[k]) 
+                        sous_graphe_chemin[j]->voisins[l] = 1;
+                    else
+                        sous_graphe_chemin[j]->voisins[l] = 0;
+                    l++;
+                }
+            }
+            j++;
+        }
+    }
+    return sous_graphe_chemin;
+}

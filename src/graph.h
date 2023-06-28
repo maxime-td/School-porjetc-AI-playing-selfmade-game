@@ -18,7 +18,6 @@ typedef struct sommet_s{
     int y;                       /**< Coordonnée y du sommet */
 }sommet_t;
 
-
 /**
  * Libère la mémoire allouée pour un tableau à deux dimensions.
  *
@@ -85,6 +84,10 @@ int ** dist_tab(sommet_t ** tab, int * n);
 void print_dist_tab(int ** distTab, int * n);
 
 /**
- * @brief Transforme 
+ * @brief Transforme un chemin en sous-graphe pour le tracé avec draw_graph
+ * @param chemin Le chemin
+ * @param tab Le graphe initial
 */
+sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n);
+
 #endif /* GRAPH_H_ */

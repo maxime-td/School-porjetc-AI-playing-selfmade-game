@@ -71,10 +71,18 @@ void affiche(sommet_t ** tab, int n){
     
     SDL_RenderPresent(renderer);
 
-    int * chemin;
+    int chemin[2] = {0,2};
+    int n_chemin = 2;
+    sommet_t** sous_graphe;
     SDL_Delay(1000);
     SDL_SetRenderDrawColor(renderer, 200, 0, 0, 255);
-    draw_path(renderer, tab, chemin, n);
+    printf("Coucou`\n");
+    sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n);
+    printf("Coucou==\n");
+
+    //print_tab_coord(sous_graphe, n_chemin);
+
+    draw_graph(renderer, sous_graphe, n_chemin);
     SDL_RenderPresent(renderer);
 /*
     while (program_on)
@@ -217,7 +225,7 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n) {
  * @param graph Le pointeur vers le graphe à dessiner.
  * @param n Le nombre de sommets dans le tableau.
  */
-void draw_path(SDL_Renderer* renderer, sommet_t** tab, int* chemin, int n) {
+void draw_path(SDL_Renderer* renderer, sommet_t** tab, int n,  int* chemin, int n_chemin) {
 
     // Initialisations 
     int i, j, k; //Incréments
@@ -243,6 +251,10 @@ void draw_path(SDL_Renderer* renderer, sommet_t** tab, int* chemin, int n) {
     SDL_Rect poidRect = {0, 0, 30, 30};
 
     int ** distTab = dist_tab(tab, &n);
+
+
+
+    //
 
 
     if (TTF_Init()!= 0)
