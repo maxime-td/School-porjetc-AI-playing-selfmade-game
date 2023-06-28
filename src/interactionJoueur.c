@@ -32,7 +32,7 @@ int est_dans_chemin(int i, int* chemin) {
  * @brief Exécute la boucle de jeu
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
-*/
+
 void boucle_jeu(sommet_t** tab, int n) {
 
     //Initialisation
@@ -96,4 +96,4 @@ void boucle_jeu(sommet_t** tab, int n) {
         printf("aa\n");
     }
     free(chemin_joueur);
-}
+}*/

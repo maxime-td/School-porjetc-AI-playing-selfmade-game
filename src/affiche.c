@@ -67,7 +67,7 @@ void init(sommet_t ** tab, int n){
     draw_graph(renderer, tab, n, 1);
     
     SDL_RenderPresent(renderer);
-
+    SDL_Delay(60000);
     //temporaire
     //int chemin[2] = {0,2};
     //int n_chemin = 2;
