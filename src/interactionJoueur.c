@@ -77,7 +77,7 @@ void boucle_jeu(sommet_t** tab, int n) {
                                 nb_noeuds_chemin += 1;
                             }
                         }
-                        printf("%d\n", nb_noeuds_chemin);
+                        affich_tab(chemin_joueur, nb_noeuds_chemin);
                     }
                     break;
                 
