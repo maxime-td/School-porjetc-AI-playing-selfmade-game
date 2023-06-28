@@ -20,7 +20,7 @@ void Floyd_Warshall(int ** distTab, int n)
             {
                 if (distTab[i][j] == -1)
                 {
-                    distTab[i][j] = INT_MAX;
+                    distTab[i][j] = 9999999;
                 }
 
                 if (distTab[i][k] != -1 && distTab[k][j] != -1 && distTab[i][k] + distTab[k][j] < distTab[i][j])
@@ -32,42 +32,111 @@ void Floyd_Warshall(int ** distTab, int n)
     }
 }
 
-int cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n)
+
+/**
+ * @brief Créé une copie d'un tableau 2D d'entier
+ * @param tab le tableau des entiers à copier
+ * @param n la taille du tableau
+ * @return un tableau 2D d'entiers
+*/
+int ** copie_tab(int ** tab, int n)
 {
+    int ** new = malloc(n*sizeof(int *));
+    for(int i=0; i<n; i++)
+    {
+        new[i] = malloc(n*sizeof(int));
+        for(int j=0; j<n; j++)
+        {
+            new[i][j] = tab [i][j];
+        }
+    }
+    return new;
+}
+
+
+
+/**
+ * @brief Construit un cycle en selectionnant toujours le point le plus proche par lequel on n'est encore pas passé (distances calculé précédemment par Floyd_Warshall)
+ * @param distTab le tableau des distances initiales (sera modifié)
+ * @param n la taille du tableau
+ * @param tabSommets le tableau des sommets
+ * @param indDep l'indice dans tabSommet du point de départ
+ * @return un tableau d'entier de taille n+1 décrivant le cycle optimal et sa longueur
+*/
+int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int indDep)
+{
+    int * retour = malloc((n+1)*sizeof(int));
+
+    int ** copie = copie_tab(distTab, n);
     int somme=0, cpt=0;
-    int indAct = rand()%n;
+    int indAct = indDep;
     int indTmp=0;
-    int distTmp=0;
+    int distTmp=999999;
     char dep = tabSommets[indAct]->val;
     char tmp = dep;
     do
     {
-        printf("Somet courant: %c\n", tmp);
+        printf("Sommet courant: %c, Indice Actuel : %d\n", tmp, indAct);
+        retour[indAct] = cpt;
         for(int i=0; i<n; i++)
         {
+            if(i==0 && i==indAct)
+            {
+                distTmp = 999999;
+            }
             if(i==0 && i!=indAct)
             {
-                distTmp = distTab[indAct][i];
+                distTmp = copie[indAct][i];
                 indTmp = i;
             }
-            if (i!=0 && i!=indAct && distTmp>distTab[indAct][i])
+            if (i!=0 && i!=indAct && distTmp>copie[indAct][i])
             {
-                distTmp = distTab[indAct][i];
+                distTmp = copie[indAct][i];
                 indTmp = i;
             }
         }
+        if(distTmp >=999999 || distTmp<0){distTmp == 0;}
+        somme += distTmp;
+        //print_dist_tab(copie, &n);
         for(int i=0; i<n; i++)
         {
-            distTab[indAct][i] = INT_MAX;
-            distTab[i][indAct] = INT_MAX;
+            copie[indAct][i] = INT_MAX;
+            copie[i][indAct] = INT_MAX;
         }
-        somme += distTmp;
         indAct = indTmp;
         tmp = tabSommets[indAct]->val;
         cpt++;
-        print_dist_tab(distTab, &n);
-    } while (tmp != dep && cpt != n);
+        //print_dist_tab(copie, &n);
 
-    return somme;
-    
+    } while (tmp != dep && cpt < n-1);
+    somme += distTab[indDep][indAct];
+    free2DTab((void **)copie, n);
+    retour[n] = somme;
+
+    return retour;
+}
+
+
+
+/**
+ * @brief Applique l'algo de cyclage ci-dessus sur chaque premier point et sors le plus efficace
+ * @param distTab le tableau des distances initiales (sera modifié)
+ * @param n la taille du tableau
+ * @param tabSommets le tableau des sommets
+ * @return le meilleur tableau decrivant le meilleur chemin pour chaque point de départ 
+*/
+int * multi_Start_Floyd_Warshall(int ** distTab, int n, sommet_t ** tabSommet)
+{
+    int * meilleurTab = cycle_Floyd_Warshall(distTab, tabSommet, n, 0);
+    int * tempTab = malloc((n+1)*sizeof(int)); 
+    for(int i=1; i<n; i++)
+    {
+        tempTab = cycle_Floyd_Warshall(distTab, tabSommet, n, i);
+        printf("Tentative cycle: %d\n", tempTab[n]);
+        if(tempTab[n]<meilleurTab[n])
+        {
+            meilleurTab = tempTab;
+        }
+    }
+    return meilleurTab;
 }

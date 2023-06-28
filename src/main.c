@@ -16,7 +16,7 @@ int main()
     tab_to_graph(tab, 0, n-1);
     //printTabCoord(tab, &n);
 
-    make_new_links(10, tab, &n);
+    make_new_links(8, tab, &n);
     print_tab_coord(tab, &n);
     int ** TableauDistances = dist_tab(tab, &n);
     print_dist_tab(TableauDistances, &n);
@@ -24,7 +24,9 @@ int main()
     Floyd_Warshall(TableauDistances, n);
     print_dist_tab(TableauDistances, &n);
 
-    printf("Tentative cycle: %d\n", cycle_min_approx(TableauDistances, tab, n));
+    int * tempAff = multi_Start_Floyd_Warshall(TableauDistances, n, tab);
+    printf("cycle OPTI: %d\n", tempAff[n]);
+
     
     int y = 0, x;
     int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
@@ -41,7 +43,10 @@ int main()
 
     free2DTab((void **)TableauDistances, n);
     free2DTab((void **)tab, n);
+<<<<<<< HEAD
+=======
     
+>>>>>>> e3c93e3839987d1aef7f1db670a79c8ec3390c82
 
     return 0;
 }
