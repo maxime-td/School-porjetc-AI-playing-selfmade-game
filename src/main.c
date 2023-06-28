@@ -25,7 +25,7 @@ int main()
 
     printf("Tentative cycle: %d\n", cycle_min_approx(TableauDistances, tab, n));
 
-    /*
+    
     int y = 0, x;
     int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
     SDL_bool program_on = SDL_TRUE;
@@ -40,7 +40,6 @@ int main()
 
     free2DTab((void **)TableauDistances, n);
     free2DTab((void **)tab, n);
-    */
 
     return 0;
 }
