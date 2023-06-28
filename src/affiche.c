@@ -265,7 +265,7 @@ void draw_path(SDL_Renderer* renderer, sommet_t** tab, int* chemin, int n) {
                 poidRect.x = (sommet_courant->x + voisin_courant->x)/2 - poidRect.w/2;
                 poidRect.y = (sommet_courant->y + voisin_courant->y)/2 - poidRect.h/2;
 
-                sprintf(Poid, "%d", (int) round(sqrt(distTab[i][j])/100));
+                sprintf(Poid, "%d", (int) round(distTab[i][j])/10);
 
                 textSurfacePoid = TTF_RenderText_Solid(font, Poid, colorPoid);
                 textTexturePoid = SDL_CreateTextureFromSurface(renderer, textSurfacePoid);
