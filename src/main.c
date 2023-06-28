@@ -21,12 +21,17 @@ int main()
     //print_dist_tab(TableauDistances, &n);
 
     Floyd_Warshall(TableauDistances, n);
-    //print_dist_tab(TableauDistances, &n);
-
+    
     int * tempAff = multi_Start_Floyd_Warshall(TableauDistances, n, tab);
-    printf("cycle OPTI: %d\n", tempAff[n]);
+    printf("cycle OPTI: ");
+    affich_tab(tempAff, n);
+    printf("\nTaille selon pathsize: %d\n\n", path_size(tempAff, TableauDistances, n)+tempAff[n]);
+
+    free2DTab((void **) tab, n);
+    free2DTab((void **) TableauDistances, n);
 
 
+/*
     
     int y = 0, x;
     int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
@@ -45,10 +50,7 @@ int main()
 
     free2DTab((void **)TableauDistances, n);
     free2DTab((void **)tab, n);
-<<<<<<< HEAD
-=======
     free(path);
->>>>>>> 0e295022eed15c85bdb6b3141b1c51bddff167b9
-
+*/
     return 0;
 }
