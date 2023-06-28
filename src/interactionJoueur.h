@@ -4,11 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+
 #include "graph.h"
 #include "affiche.h"
-#include <math.h>
+#include "fourmi.h"
 
 /**
  * @brief Regarde si le noeud d'index i est dans le chemin. Renvoie 1 si vrai, 0 si faux

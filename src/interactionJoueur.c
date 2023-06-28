@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+
 #include "graph.h"
 #include "affiche.h"
-#include <math.h>
+#include "fourmi.h"
 
 /**
  * @brief Regarde si le noeud d'index i est dans le chemin. Renvoie 1 si vrai, 0 si faux
@@ -34,7 +37,7 @@ void boucle_jeu(sommet_t** tab, int n) {
 
     //Initialisation
     int i; //Incrément
-    int nb_noeuds_chemin; //Nombre de noeuds dans le chemin
+    int nb_noeuds_chemin = 0; //Nombre de noeuds dans le chemin
     int r = R_NOEUD; //Rayon des sommets
 
     int * chemin_joueur = (int*) malloc(sizeof(int)*MAX_PATH); //Chemin du joueur
@@ -43,6 +46,10 @@ void boucle_jeu(sommet_t** tab, int n) {
 
     SDL_bool program_on = SDL_TRUE; //Booléen de boucle de jeu
     SDL_Event event;
+
+    int x, y; //Position de la souris au moment du clic
+
+    affiche(tab, n);
 
     //Boucle de jeu
     while (program_on) {
@@ -64,11 +71,13 @@ void boucle_jeu(sommet_t** tab, int n) {
                         for(i = 0; i < n; i+=1) { //On parcour tous les noeuds
 
                             //On regarde si le clic est dans un carré autour du noeud
-                            if((event.mouse.x >= (tab[i]->x)-r) && (event.mouse.x <= (tab[i]->x)+r)
-                            && (event.mouse.y >= (tab[i]->y)-r) && (event.mouse.y <= (tab[i]->y)+r)) {
+                            SDL_GetMouseState(&x, &y);
+                            if((x >= (tab[i]->x)-r) && (x <= (tab[i]->x)+r) && (y >= (tab[i]->y)-r) && (y <= (tab[i]->y)+r)) {
                                 chemin_joueur[nb_noeuds_chemin] = i; //On l'ajoute au chemin
+                                nb_noeuds_chemin += 1;
                             }
                         }
+                        printf("%d\n", nb_noeuds_chemin);
                     }
                     break;
                 

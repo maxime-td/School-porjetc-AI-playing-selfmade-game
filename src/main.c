@@ -4,6 +4,7 @@
 #include "affiche.h"
 #include "solOpt.h"
 #include "fourmi.h"
+#include "interactionJoueur.h"
 
 int main()
 {
@@ -24,8 +25,7 @@ int main()
     print_dist_tab(TableauDistances, &n);
 
     printf("Tentative cycle: %d\n", cycle_min_approx(TableauDistances, tab, n));
-
-    /*
+    
     int y = 0, x;
     int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
     SDL_bool program_on = SDL_TRUE;
@@ -35,12 +35,13 @@ int main()
     //int * chemin = fourmi(tab, n, &n_chemin);
     //affichTab(chemin, n_chemin);
     
-    affiche(tab, n);
+    //affiche(tab, n);
 
+    boucle_jeu(tab, n);
 
     free2DTab((void **)TableauDistances, n);
     free2DTab((void **)tab, n);
-    */
+    
 
     return 0;
 }

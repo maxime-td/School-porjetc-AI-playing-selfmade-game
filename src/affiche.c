@@ -70,10 +70,10 @@ void affiche(sommet_t ** tab, int n){
     draw_graph(renderer, tab, n);
     
     SDL_RenderPresent(renderer);
-
+/*
     while (program_on)
     {
-        /* Gestion des événements */
+        // Gestion des événements
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -85,11 +85,11 @@ void affiche(sommet_t ** tab, int n){
                     break;
             }
         }
-    }
+    } 
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    SDL_Quit();
+    SDL_Quit(); */
 }
 
 /**
