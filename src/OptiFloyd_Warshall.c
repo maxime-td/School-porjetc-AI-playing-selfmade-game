@@ -118,7 +118,7 @@ int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int in
  * @param indDep l'indice dans tabSommet du point de départ
  * @return un tableau d'entier de taille n+1 décrivant le cycle optimal et sa longueur
  */
-void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDist, int n, int indDep, int *sol)
+void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDist, int n, int indDep, int * sol)
 {
     char vDep = tabSommets[indDep]->val;
     char vAct = vDep;
@@ -143,12 +143,10 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
         nbValide += 1;
         tabValide[indAct] = 1;
         indNext = -1;
-        printf("Sommet: %c, nombre validés: %d\n", vAct, nbValide);
         for (int i = 0; i < n; i++)
         {
             if (i != indAct && tabDist[indAct][i] > 0 && tabDist[indAct][i] < minDistVoisin && tabValide[i] == 0)
             {
-                printf("AAAAAAAAAAAAAAAAAAAAAA\n");
 
                 indNext = i;
                 minDistVoisin = tabDist[indAct][i];
@@ -160,7 +158,6 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
             {
                 if (j != indAct && tabWarshall[indAct][j] < minDistVoisin && tabValide[j] == 0)
                 {
-                    printf("BBBBBBBBBBBBBBBBBBB\n");
 
                     indNext = j;
                     minDistVoisin = tabWarshall[indAct][j];
@@ -169,17 +166,13 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
         }
         if (indNext == -1)
         {
-            printf("CCCCCCCCCCCCCCCCCCCCCC\n");
             break;
         }
         DISTANCE += minDistVoisin;
-        printf("InNext: %d\n", indNext);
         indAct = indNext;
         vAct = tabSommets[indAct]->val;
     }
-    printf("DDDDDDDDDDDDDDDDDDDDDD\n");
     DISTANCE += tabWarshall[indDep][indAct];
-    printf("EEEEEEEEEEEEEEEEEEEEEEE\n");
     *sol = DISTANCE;
 
 }
@@ -191,22 +184,19 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
  * @param tabSommets le tableau des sommets
  * @return le meilleur tableau decrivant le meilleur chemin pour chaque point de départ
  */
-int *multi_Start_Floyd_Warshall(int **distTab, int n, sommet_t **tabSommet)
+int multi_Start_Floyd_Warshall(int ** tabWarshall, int **distTab, int n, sommet_t **tabSommet)
 {
-    int **AllTab = malloc(n * sizeof(int *));
-    int *meilleurTab = malloc((n + 1) * sizeof(int));
-    for (int i = 0; i < n; i++)
+    int min = 99999999;
+    int sol;
+    int tmp;
+    for(int i=0; i<n; i++)
     {
-        AllTab[i] = malloc(n * sizeof(int));
-    }
-    meilleurTab = AllTab[0];
-    for (int i = 1; i < n; i++)
-    {
-        if (AllTab[i][n] < meilleurTab[n])
+        cycle_Floyd_Warshall(tabWarshall, tabSommet, distTab, n, i, &sol);
+        tmp = sol;
+        if(min>tmp) 
         {
-            meilleurTab = AllTab[0];
+            min = sol;
         }
     }
-    free2DTab((void **)AllTab, n);
-    return meilleurTab;
+    return min;
 }
