@@ -84,7 +84,7 @@ int ** dist_tab(sommet_t ** tab, int * n);
  */
 void print_dist_tab(int ** distTab, int * n);
 
-
+/**
+ * @brief Transforme 
+*/
 #endif /* GRAPH_H_ */
-
-
