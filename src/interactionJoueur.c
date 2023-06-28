@@ -19,7 +19,7 @@ int est_dans_chemin(int i, int* chemin) {
     int j = 0; //Incrément
     int retour = 0; //Initialisé à faux
 
-    while(chemin[j] != NULL) {
+    while(chemin[j] != -1) {
         if(chemin[j] == i)
             retour = 1;
         j += 1;
@@ -42,7 +42,7 @@ void boucle_jeu(sommet_t** tab, int n) {
 
     int * chemin_joueur = (int*) malloc(sizeof(int)*MAX_PATH); //Chemin du joueur
     for(i = 0; i < n; i += 1) //Initialisation du chemin du joueur
-        chemin_joueur[i] = NULL;
+        chemin_joueur[i] = -1;
 
     SDL_bool program_on = SDL_TRUE; //Booléen de boucle de jeu
     SDL_Event event;
