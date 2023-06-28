@@ -127,7 +127,7 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n) {
 
     // Initialisations 
     int i, j, k; //Incréments
-    int rayon = 15; //Rayon des disques des sommets
+    int rayon = R_NOEUD; //Rayon des disques des sommets
     char nom_sommet;
 
     sommet_t* sommet_courant; //Sommet courant

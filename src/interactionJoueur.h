@@ -11,9 +11,19 @@
 #include <math.h>
 
 /**
+ * @brief Regarde si le noeud d'index i est dans le chemin. Renvoie 1 si vrai, 0 si faux
+ * @param i L'index
+ * @param chemin Le tableau du chemin
+*/
+int est_dans_chemin(int i, int* chemin);
+
+/**
  * @brief Exécute la boucle de jeu
  * @param tab Le tableau des sommets
+ * @param n Le nombre de sommets
 */
-void boucle_jeu(sommet_t** tab);
+void boucle_jeu(sommet_t** tab, int n);
+
+
 
 #endif
