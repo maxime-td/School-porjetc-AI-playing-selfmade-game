@@ -23,7 +23,7 @@ int main()
     Floyd_Warshall(TableauDistances, n);
     print_dist_tab(TableauDistances, &n);
 
-    int * tempAff = cycle_min_approx(TableauDistances, tab, n);
+    int * tempAff = cycle_Floyd_Warshall(TableauDistances, tab, n);
     printf("Tentative cycle: %d\n", tempAff[n]);
 
     

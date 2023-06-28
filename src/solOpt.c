@@ -60,14 +60,14 @@ int ** copie_tab(int ** tab, int n)
  * @param distTab le tableau des distances initiales (sera modifié)
  * @param n la taille du tableau
  * @param tabSommets le tableau des sommets
+ * @return un tableau décrivant le chemin optimal pour ce start et sa distance
 */
-int * cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n)
+int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int indDep)
 {
     int * retour = malloc((n+1)*sizeof(int));
 
     int ** copie = copie_tab(distTab, n);
     int somme=0, cpt=0;
-    int indDep = rand()%n;
     int indAct = indDep;
     int indTmp=0;
     int distTmp=999999;
@@ -113,6 +113,23 @@ int * cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n)
     retour[n] = somme;
 
     return retour;
-    
 }
 
+
+
+/**
+ * @brief Applique l'algo de cyclage ci-dessus sur chaque premier point et sors le plus efficace
+ * @param distTab le tableau des distances initiales (sera modifié)
+ * @param n la taille du tableau
+ * @param tabSommets le tableau des sommets
+ * @return le meilleur tableau decrivant le meilleur chemin pour chaque point de départ 
+
+int * multi_Start_Floyd_Warshall(int ** distTab, int n, sommet_t ** tabSommet)
+{
+    int * meilleurTab = cycle_Floyd_Warshall()
+    for(int i=1; i<n; i++)
+    {
+
+    }
+    return meilleurTab;
+}*/
