@@ -22,14 +22,12 @@ int main()
     int ** tabWarshall = copie_tab(TableauDistances, n);
     Floyd_Warshall(tabWarshall, n);
     
-    int * sol;
-    cycle_Floyd_Warshall(tabWarshall, tab, TableauDistances, n, 0, sol);
-    printf("\nTaille : %d\n\n",*sol);
+    int sol;
+    cycle_Floyd_Warshall(tabWarshall, tab, TableauDistances, n, 0, &sol);
+    printf("\nTaille : %d\n\n",sol);
 
     //free2DTab((void **) tab, n);
     //free2DTab((void **) TableauDistances, n);
-
-
 
     
     int y = 0, x;

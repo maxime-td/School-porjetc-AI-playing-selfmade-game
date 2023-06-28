@@ -118,7 +118,7 @@ int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int in
  * @param indDep l'indice dans tabSommet du point de départ
  * @return un tableau d'entier de taille n+1 décrivant le cycle optimal et sa longueur
  */
-void cycle_Floyd_Warshall(int ** tabWarshall, sommet_t **tabSommets, int ** tabDist ,int n, int indDep, int * sol)
+void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDist, int n, int indDep, int *sol)
 {
     char vDep = tabSommets[indDep]->val;
     char vAct = vDep;
@@ -130,45 +130,58 @@ void cycle_Floyd_Warshall(int ** tabWarshall, sommet_t **tabSommets, int ** tabD
     int DISTANCE;
     int minDistVoisin = 0;
 
-    int * tabValide = malloc(n*sizeof(int));
-    for(int k=0; k<n; k++)
+    int *tabValide = malloc(n * sizeof(int));
+    for (int k = 0; k < n; k++)
     {
-        tabValide[k]=0;
+        tabValide[k] = 0;
     }
-    int nbValide=0;
+    int nbValide = 0;
 
     while (nbValide != n)
     {
-        nbValide+=1;
-        tabValide[indAct]=1;
-        indNext=-1;
-        for(int i=0; i<n; i++)
+        minDistVoisin = 999999;
+        nbValide += 1;
+        tabValide[indAct] = 1;
+        indNext = -1;
+        printf("Sommet: %c, nombre validés: %d\n", vAct, nbValide);
+        for (int i = 0; i < n; i++)
         {
-            if(i!=indAct && tabDist[indAct][i]>0 && tabDist[indAct][i]<minDistVoisin && tabValide[i]==0)
+            if (i != indAct && tabDist[indAct][i] > 0 && tabDist[indAct][i] < minDistVoisin && tabValide[i] == 0)
             {
+                printf("AAAAAAAAAAAAAAAAAAAAAA\n");
+
                 indNext = i;
                 minDistVoisin = tabDist[indAct][i];
             }
         }
-        if(indNext==-1)
+        if (indNext == -1)
         {
-            for(int j=0; j<n; j++)
+            for (int j = 0; j < n; j++)
             {
-                if(j!=indAct && tabWarshall[indAct][j]<minDistVoisin && tabValide[j]==0)
+                if (j != indAct && tabWarshall[indAct][j] < minDistVoisin && tabValide[j] == 0)
                 {
+                    printf("BBBBBBBBBBBBBBBBBBB\n");
+
                     indNext = j;
                     minDistVoisin = tabWarshall[indAct][j];
                 }
             }
         }
-        if(indNext==-1)
+        if (indNext == -1)
         {
+            printf("CCCCCCCCCCCCCCCCCCCCCC\n");
             break;
         }
         DISTANCE += minDistVoisin;
+        printf("InNext: %d\n", indNext);
+        indAct = indNext;
+        vAct = tabSommets[indAct]->val;
     }
-    DISTANCE += tabWarshall[vAct][vDep];
+    printf("DDDDDDDDDDDDDDDDDDDDDD\n");
+    DISTANCE += tabWarshall[indDep][indAct];
+    printf("EEEEEEEEEEEEEEEEEEEEEEE\n");
     *sol = DISTANCE;
+
 }
 
 /**
