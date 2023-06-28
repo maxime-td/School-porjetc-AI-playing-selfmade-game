@@ -9,6 +9,9 @@
 #include "graph.h"
 #include "affiche.h"
 #include <math.h>
+
+#define R_NOEUD 15
+
 /**
  * @brief Trace un disque
  * @param renderer Le renderer où tracer le disque

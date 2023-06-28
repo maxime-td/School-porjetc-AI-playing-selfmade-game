@@ -4,6 +4,7 @@
 #include "affiche.h"
 #include "solOpt.h"
 #include "fourmi.h"
+#include "interactionJoueur.h"
 
 int main()
 {
@@ -36,11 +37,16 @@ int main()
     //int * chemin = fourmi(tab, n, &n_chemin);
     //affichTab(chemin, n_chemin);
     
-    affiche(tab, n);
+    //affiche(tab, n);
 
+    boucle_jeu(tab, n);
 
     free2DTab((void **)TableauDistances, n);
     free2DTab((void **)tab, n);
+<<<<<<< HEAD
+=======
+    
+>>>>>>> e3c93e3839987d1aef7f1db670a79c8ec3390c82
 
     return 0;
 }
