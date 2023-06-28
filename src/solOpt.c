@@ -123,13 +123,16 @@ int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int in
  * @param n la taille du tableau
  * @param tabSommets le tableau des sommets
  * @return le meilleur tableau decrivant le meilleur chemin pour chaque point de départ 
-
+*/
 int * multi_Start_Floyd_Warshall(int ** distTab, int n, sommet_t ** tabSommet)
 {
-    int * meilleurTab = cycle_Floyd_Warshall()
+    int * meilleurTab = cycle_Floyd_Warshall(distTab, tabSommet, n, 0);
     for(int i=1; i<n; i++)
     {
-
+        if(*(cycle_Floyd_Warshall(distTab, tabSommet, n, i)+n)<meilleurTab[n])
+        {
+            meilleurTab = cycle_Floyd_Warshall(distTab, tabSommet, n, i);
+        }
     }
     return meilleurTab;
-}*/
+}
