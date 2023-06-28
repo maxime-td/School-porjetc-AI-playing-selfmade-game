@@ -29,12 +29,6 @@ void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius);
  */
 void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid);
 
-void draw_path(SDL_Renderer* renderer, sommet_t** tab, int* chemin, int n);
-
-
-void draw_path(SDL_Renderer* renderer, sommet_t** tab, int* chemin, int n) ;
-
-
 /**
  * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
  * @param tab Le tableau de sommets représentant le graphe.
@@ -48,6 +42,5 @@ void init(sommet_t ** tab, int n);
  * @param n Le nombre de sommets dans le tableau.
 */
 void affiche(sommet_t ** tab, int n);
-
 
 #endif // AFFICHE_H

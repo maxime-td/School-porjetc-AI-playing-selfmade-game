@@ -29,20 +29,18 @@ int main()
 
     free2DTab((void **) tab, n);
     free2DTab((void **) TableauDistances, n);
-
-
-
     
     int y = 0, x;
     int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
-    SDL_bool program_on = SDL_TRUE;
-    SDL_Event event;   
+    //SDL_bool program_on = SDL_TRUE;
+    //SDL_Event event;   
 
     int n_chemin = 0;
+    //printf("%d\n",n);
     int * path = colonni_fourmi(tab, TableauDistances, n, rand()%n, &n_chemin);
 
     affich_tab(path, n_chemin);
-    printf("%d : %d\n",n , path_size(path,TableauDistances , n_chemin));
+    printf("%d : %d\n",n , path_size(path, TableauDistances , n_chemin));
     
     //affiche(tab, n);
 

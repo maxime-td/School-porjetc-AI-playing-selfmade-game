@@ -51,7 +51,7 @@ void boucle_jeu(sommet_t** tab, int n) {
 
     sommet_t** sous_graphe; //Sous-graphe chemin pour affichage
 
-    init(tab, n);
+    init(tab, n); //Affichage du graphe
 
     //Boucle de jeu
     while (program_on) {
