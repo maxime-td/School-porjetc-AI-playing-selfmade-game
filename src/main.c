@@ -31,7 +31,7 @@ int main()
     free2DTab((void **) TableauDistances, n);
 
 
-/*
+
     
     int y = 0, x;
     int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
@@ -51,6 +51,5 @@ int main()
     free2DTab((void **)TableauDistances, n);
     free2DTab((void **)tab, n);
     free(path);
-*/
     return 0;
 }

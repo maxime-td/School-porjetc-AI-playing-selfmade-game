@@ -1,7 +1,7 @@
 #ifndef GRAPH_H_
 #define GRAPH_H_
 
-#define N 17 // NOMBRE_MAX_SOMMET 
+#define N 12 // NOMBRE_MAX_SOMMET 
 #define R 300 //Rayon cercle repartition
 #define W 800
 #define H 800
@@ -17,7 +17,6 @@ typedef struct sommet_s{
     int x;                       /**< Coordonnée x du sommet */
     int y;                       /**< Coordonnée y du sommet */
 }sommet_t;
-
 
 /**
  * Libère la mémoire allouée pour un tableau à deux dimensions.
@@ -85,6 +84,12 @@ int ** dist_tab(sommet_t ** tab, int * n);
 void print_dist_tab(int ** distTab, int * n);
 
 /**
- * @brief Transforme 
+ * @brief Transforme un chemin en sous-graphe pour le tracé avec draw_graph
+ * @param chemin Le chemin
+ * @param n_chemin Le nombre de noeud dans le chemin
+ * @param tab Le graphe initial
+ * @param n Le nombre de noeuds dans le graphe initial
 */
+sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n);
+
 #endif /* GRAPH_H_ */
