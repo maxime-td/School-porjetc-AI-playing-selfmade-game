@@ -19,13 +19,12 @@ int main()
 
     int ** TableauDistances = dist_tab(tab, &n);
     //print_dist_tab(TableauDistances, &n);
-    int ** tabWarshall = copie_tab(TableauDistances);
+    int ** tabWarshall = copie_tab(TableauDistances, n);
     Floyd_Warshall(tabWarshall, n);
     
-    int * tempAff = multi_Start_Floyd_Warshall(TableauDistances, n, tab);
-    printf("cycle OPTI: ");
-    affich_tab(tempAff, n);
-    printf("\nTaille selon pathsize: %d\n\n", path_size(tempAff, TableauDistances, n)+tempAff[n]);
+    int * sol;
+    cycle_Floyd_Warshall(tabWarshall, tab, TableauDistances, n, 0, sol);
+    printf("\nTaille : %d\n\n",*sol);
 
     //free2DTab((void **) tab, n);
     //free2DTab((void **) TableauDistances, n);

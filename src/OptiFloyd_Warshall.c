@@ -118,26 +118,57 @@ int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int in
  * @param indDep l'indice dans tabSommet du point de départ
  * @return un tableau d'entier de taille n+1 décrivant le cycle optimal et sa longueur
  */
-int *cycle_Floyd_Warshall(int ** tabWarshall, sommet_t **tabSommets, int ** tabDist ,int n, int indDep)
+void cycle_Floyd_Warshall(int ** tabWarshall, sommet_t **tabSommets, int ** tabDist ,int n, int indDep, int * sol)
 {
     char vDep = tabSommets[indDep]->val;
-    int indAct = indDep;
     char vAct = vDep;
-    int compteur = 0;
-    int distTemp;
-    int tabOrdre[N*N];
 
-    while (vAct != vDep || compteur < n)
+    int indAct = indDep;
+    int indNext;
+
+    int compteur = 0;
+    int DISTANCE;
+    int minDistVoisin = 0;
+
+    int * tabValide = malloc(n*sizeof(int));
+    for(int k=0; k<n; k++)
     {
-        tabOrdre[compteur]=indAct;
+        tabValide[k]=0;
+    }
+    int nbValide=0;
+
+    while (nbValide != n)
+    {
+        nbValide+=1;
+        tabValide[indAct]=1;
+        indNext=-1;
         for(int i=0; i<n; i++)
         {
-            if(i!=indAct && tabDist[indAct][i]>0)
+            if(i!=indAct && tabDist[indAct][i]>0 && tabDist[indAct][i]<minDistVoisin && tabValide[i]==0)
             {
-                
+                indNext = i;
+                minDistVoisin = tabDist[indAct][i];
             }
         }
+        if(indNext==-1)
+        {
+            for(int j=0; j<n; j++)
+            {
+                if(j!=indAct && tabWarshall[indAct][j]<minDistVoisin && tabValide[j]==0)
+                {
+                    indNext = j;
+                    minDistVoisin = tabWarshall[indAct][j];
+                }
+            }
+        }
+        if(indNext==-1)
+        {
+            break;
+        }
+        DISTANCE += minDistVoisin;
     }
+    DISTANCE += tabWarshall[vAct][vDep];
+    *sol = DISTANCE;
 }
 
 /**
