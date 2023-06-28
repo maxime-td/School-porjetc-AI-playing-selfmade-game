@@ -63,14 +63,18 @@ int **copie_tab(int **tab, int n)
  */
 void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDist, int n, int indDep, int *sol)
 {
-    char vDep = tabSommets[indDep]->val;
-    char vAct = vDep;
+    //char vDep = tabSommets[indDep]->val;
+    //char vAct = vDep;
 
     int indAct = indDep;
     int indNext;
 
+<<<<<<< HEAD
     int compteur = 0;
     int DISTANCE = 0;
+=======
+    int DISTANCE=0;
+>>>>>>> ae268917f9bad2de8d987ae223795b2e7a9d5b39
     int minDistVoisin = 0;
 
     int *tabValide = malloc(n * sizeof(int));
@@ -82,7 +86,11 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
 
     while (nbValide != n)
     {
+<<<<<<< HEAD
         // printf("SOMMET: %c\n", vAct);
+=======
+        //printf("SOMMET: %c\n", vAct);
+>>>>>>> ae268917f9bad2de8d987ae223795b2e7a9d5b39
         minDistVoisin = 999999;
         nbValide += 1;
         tabValide[indAct] = 1;
@@ -113,11 +121,19 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
             break;
         }
         DISTANCE += minDistVoisin;
+<<<<<<< HEAD
         // printf("DistTemp: %d\n", DISTANCE);
+=======
+        //printf("DistTemp: %d\n", DISTANCE);
+>>>>>>> ae268917f9bad2de8d987ae223795b2e7a9d5b39
         indAct = indNext;
-        vAct = tabSommets[indAct]->val;
+        //vAct = tabSommets[indAct]->val;
     }
+<<<<<<< HEAD
     // printf("distance: %d   --  indDep: %d, indAct: %d,  retour : %d\n",DISTANCE, indDep, indAct, tabWarshall[indDep][indAct]);
+=======
+    //printf("distance: %d   --  indDep: %d, indAct: %d,  retour : %d\n",DISTANCE, indDep, indAct, tabWarshall[indDep][indAct]);
+>>>>>>> ae268917f9bad2de8d987ae223795b2e7a9d5b39
     DISTANCE += tabWarshall[indDep][indAct];
     *sol = DISTANCE;
 }
@@ -131,7 +147,7 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
  */
 int multi_Start_Floyd_Warshall(int **tabWarshall, int **distTab, int n, sommet_t **tabSommet)
 {
-    print_dist_tab(tabWarshall, &n);
+    //print_dist_tab(tabWarshall, &n);
     int min = 99999999;
     int sol;
     int tmp;

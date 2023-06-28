@@ -3,6 +3,23 @@
 #include <limits.h>
 #include "fourmi.h"
 #include "graph.h"
+#include "OptiFloyd_Warshall.h"
+
+int multi_start_fourmi(int ** matDist, int n){
+    int best = INT_MAX;
+    int cour = 0;
+    int nPath;
+    for (int i = 0; i < n; i++){
+        int * path = colonni_fourmi(matDist, n, i, &nPath);
+        cour = path_size(path, matDist, nPath);
+        //free(path);
+        if(cour < best){
+            //affich_tab(path, nPath);
+            best = cour;
+        }
+    }
+    return best;
+}
 
 /**
  * Recherche le chemin optimal pour le voyageur de commerce en utilisant des fourmis artificielles.
@@ -13,12 +30,13 @@
  * @param nPath Un pointeur vers une variable pour stocker la taille du chemin optimal.
  * @return Un tableau d'entiers représentant le chemin optimal.
  */
-int * colonni_fourmi(sommet_t ** tab, int ** matDist, int n, int dep, int * nPath){
+int * colonni_fourmi(int ** matDist, int n, int dep, int * nPath){
     int nCour, sizeCour;
     int * courPath;
     int nBest, sizeBest = INT_MAX;
     int * bestPath = NULL;
     int ** probaMat = (int **) malloc(sizeof(int *)*n);
+    int ** probaMatCopy;
 
 
     for (int i = 0; i < n; i++){
@@ -31,27 +49,32 @@ int * colonni_fourmi(sommet_t ** tab, int ** matDist, int n, int dep, int * nPat
     }
 
     for (int i = 0; i < ITERATION*n; i++){
-        courPath = fourmi(tab, n, &nCour, probaMat, dep);
+        
+        probaMatCopy = copie_tab(probaMat, n);
 
-        if (courPath != NULL){
-            sizeCour = path_size(courPath, matDist, nCour);
-            //printf("%d\n", sizeCour);
-            remove_feromone(probaMat, n, 100);
-            
-            add_feromone(courPath, probaMat, n, sizeCour);
+        for (int j = 0; j < ITERATION; j++){
+            courPath = fourmi(n, &nCour, probaMat, dep);
+            if (courPath != NULL){
+                sizeCour = path_size(courPath, matDist, nCour);
+                remove_feromone(probaMatCopy, n, 100);
+                
+                add_feromone(courPath, probaMatCopy, nCour, sizeCour);
 
-            //affich_tab_2D(probaMat, n);
-
-            if (sizeBest > sizeCour){
-                if(bestPath != NULL)
-                    free(bestPath);
-                bestPath = courPath;
-                sizeBest = sizeCour;
-                nBest    = nCour   ;
-            }else{
-                free(courPath);
+                if (sizeBest > sizeCour){
+                    if(bestPath != NULL)
+                        free(bestPath);
+                    bestPath = courPath;
+                    sizeBest = sizeCour;
+                    nBest    = nCour   ;
+                }else{
+                    free(courPath);
+                }
             }
         }
+        
+        free2DTab((void **) probaMat, n);
+        probaMat = probaMatCopy;
+        
     }
     
     *nPath = nBest;
@@ -69,7 +92,7 @@ int * colonni_fourmi(sommet_t ** tab, int ** matDist, int n, int dep, int * nPat
  * @param dep Le sommet de départ.
  * @return Un tableau d'entiers représentant le chemin trouvé.
  */
-int * fourmi(sommet_t ** tab, int n, int * nPath, int ** probaMat, int dep){
+int * fourmi(int n, int * nPath, int ** probaMat, int dep){
     int fait[n];
     for (int i = 0; i < n; i++){
         fait[i] = 0;
@@ -80,13 +103,10 @@ int * fourmi(sommet_t ** tab, int n, int * nPath, int ** probaMat, int dep){
     int k;
     int voisin;
     int somme;
-    int pathChoose;
     fait[dep] = 1;
 
     chemin[0] = dep;
     while (dep != chemin[n_noeud-1] || !tout_noeud(fait, n)){
-        pathChoose = 0;
-        
         somme = 0;
         for (int i = 0; i < n; i++){
             somme += probaMat[chemin[n_noeud-1]][i];
@@ -183,7 +203,7 @@ int path_size(int * path, int ** distMat, int n){
  */
 void add_feromone(int* path, int ** probaMat, int n, int sizePath){
     for (int i = 0; i < n-1; i++){
-        probaMat[path[i]][path[i+1]] -= (int) 100/(sizePath);
+        probaMat[path[i]][path[i+1]] -= (int) 100000.0/(sizePath);
         if (probaMat[path[i]][path[i+1]] <= 0){
             probaMat[path[i]][path[i+1]] = 1;
         }

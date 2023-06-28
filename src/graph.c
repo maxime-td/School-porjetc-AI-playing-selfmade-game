@@ -56,7 +56,7 @@ void tab_to_graph(sommet_t ** tab, int start, int end){
 int is_close_to_value_in_tab(sommet_t ** tab, int size, sommet_t * cour, int threshold) {
     for (int i = 0; i < size; i++) 
     { 
-        if (calcul_distance(tab[i], cour) <= threshold) {
+        if ((sqrt((cour->y-tab[i]->y)*(cour->y-tab[i]->y)+(cour->x-tab[i]->x)*(cour->x-tab[i]->x))) <= threshold) {
             return 1;
         }
     }
@@ -72,7 +72,7 @@ int is_close_to_value_in_tab(sommet_t ** tab, int size, sommet_t * cour, int thr
  * @return un pointeur sur un tableau de sommets
  */
 
-sommet_t ** gen_tab_sommets(int * n, int width, int height)
+sommet_t ** gen_tab_sommets(int * n)
 {
     *n = rand()%(N-3) +4;
     int first = 1;
@@ -154,7 +154,7 @@ void make_new_links(int p, sommet_t ** tab, int * n)
 int calcul_distance(sommet_t * a, sommet_t * b)
 {
     int tmp1 = (a->x-b->x), tmp2 = (a->y-b->y);
-    return (int) sqrt(tmp1*tmp1+tmp2*tmp2);
+    return (int) round(sqrt(tmp1*tmp1+tmp2*tmp2)/10);
 }
 
 /**
@@ -221,8 +221,7 @@ sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n, i
     //Initialisation
     sommet_t ** sous_graphe_chemin = NULL;
 
-    int i, j = 0, k, l; //Incréments
-    int voisins[n]; //Tableau des voisins pour sous graphe
+    int i, j = 0, k; //Incréments
     int noeuds_dans_chemin [n]; //Tableau des noeuds dans le chemin
     int n_noeuds_differents = 0; //Nombre de noeuds uniques dans le chemin
     int conv_tab_to_n_chemin[n];
@@ -277,3 +276,12 @@ sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n, i
 }
 
 
+int path_size_round(int * path, int ** distMat, int n){
+    int size = 0;
+
+    for (int i = 0; i < n-1; i++){
+        size += distMat[path[i]][path[i+1]];
+    }
+    
+    return size;
+}

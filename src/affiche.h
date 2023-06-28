@@ -12,6 +12,8 @@
 
 #define R_NOEUD 15
 
+void clear_SDL();
+
 /**
  * @brief Trace un disque
  * @param renderer Le renderer où tracer le disque
@@ -29,7 +31,9 @@ void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius);
  */
 void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid);
 
-void draw_path(sommet_t ** tab, int n, int * path, int nPath);
+void draw_path(sommet_t ** tab, int * path, int nPath);
+
+void afficheFin(int score, int bestScore);
 
 
 /**
@@ -45,6 +49,8 @@ void init(sommet_t ** tab, int n);
  * @param n Le nombre de sommets dans le tableau.
 */
 void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid);
+
+void draw_int(int n);
 
 void render();
 
