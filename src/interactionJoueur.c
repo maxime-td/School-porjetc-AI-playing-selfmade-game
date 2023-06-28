@@ -86,4 +86,5 @@ void boucle_jeu(sommet_t** tab, int n) {
             }
         }
     }
+    free(chemin_joueur);
 }
