@@ -7,23 +7,21 @@
 #include "affiche.h"
 #include <math.h>
 
+SDL_Renderer* renderer;
+SDL_Window *window = NULL;
+
 /**
  * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
  * @param tab Le tableau de sommets représentant le graphe.
  * @param n Le nombre de sommets dans le tableau.
 */
-void affiche(sommet_t ** tab, int n){
+void init(sommet_t ** tab, int n){
     int y = 0, x;
     int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
     SDL_bool program_on = SDL_TRUE;
     SDL_Event event;   
 
     SDL_DisplayMode dm;
-    SDL_Renderer* renderer;
-
-    SDL_Window *window = NULL;
-
-    
 
     /* Initialisation de la SDL  + gestion de l'échec possible */
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -71,17 +69,17 @@ void affiche(sommet_t ** tab, int n){
     SDL_RenderPresent(renderer);
 
     //temporaire
-    int chemin[2] = {0,2};
-    int n_chemin = 2;
-    sommet_t** sous_graphe;
+    //int chemin[2] = {0,2};
+    //int n_chemin = 2;
+    //sommet_t** sous_graphe;
 
-    SDL_Delay(1000);
-    SDL_SetRenderDrawColor(renderer, 200, 0, 0, 255);
-    sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n);
+    //SDL_Delay(1000);
+    //SDL_SetRenderDrawColor(renderer, 200, 0, 0, 255);
+    //sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n);
     //jusque là
     
-    draw_graph(renderer, sous_graphe, n_chemin, 0);
-    SDL_RenderPresent(renderer);
+    //draw_graph(renderer, sous_graphe, n_chemin, 0);
+    //SDL_RenderPresent(renderer);
 }
 
 
