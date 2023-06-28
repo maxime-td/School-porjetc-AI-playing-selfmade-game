@@ -79,8 +79,6 @@ void boucle_jeu(sommet_t** tab, int n) {
                                     chemin_joueur[nb_noeuds_chemin] = i; //On l'ajoute au chemin
                                     nb_noeuds_chemin += 1;
                                 }
-                                
-                                
                             }
                         }
 
@@ -93,12 +91,10 @@ void boucle_jeu(sommet_t** tab, int n) {
         }
         
         affiche(tab, n, 0, 0, 0, 255, 1);
-        //affich_tab(chemin_joueur, nb_noeuds_chemin);
-        //printf("a\n");
         sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
-        //printf("b\n");
         affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
-        //printf("aa\n");
+
+        draw_path(tab, n, chemin_joueur, nb_noeuds_chemin);
 
         render();
     }

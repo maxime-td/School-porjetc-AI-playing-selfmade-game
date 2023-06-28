@@ -17,7 +17,7 @@ SDL_Window *window = NULL;
 */
 void init(sommet_t ** tab, int n){
     int y = 0, x;
-    int width, height, w_window = 800, h_window = 800, final_width = w_window/2;  
+    int width, height, w_window = W, h_window = H, final_width = w_window/2;  
 
     SDL_DisplayMode dm;
 
@@ -186,6 +186,47 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
     TTF_Quit();
 }
 
+void draw_path(sommet_t ** tab, int n, int * path, int nPath){
+    SDL_Rect textRect;
+    TTF_Font* font;
+    SDL_Surface* textSurface;
+    SDL_Texture* textTexture;
+    SDL_Color color = {50, 150, 0, 255};
+    char Tag[10];
+
+    if (TTF_Init()!= 0)
+    {
+        SDL_Log("Error : SDL initialisation - %s\n",
+                SDL_GetError()); // l'initialisation de la TTF a échoué
+        exit(EXIT_FAILURE);
+    }
+
+    font = TTF_OpenFont("arial.ttf", R_NOEUD+10);
+
+    textRect.y = 0;
+    for (int i = 0; i < nPath ; i++){
+        if (i != nPath-1){
+            sprintf(Tag, "%c - ", tab[path[i]]->val);
+        }else{
+            sprintf(Tag, "%c", tab[path[i]]->val);
+        }
+        
+        textSurface = TTF_RenderText_Solid(font, Tag, color);
+        textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+        SDL_FreeSurface(textSurface);
+        SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+        textRect.x = i*(R_NOEUD-2)*3;
+        textRect.y = ((int)(textRect.x/W))*textRect.h;
+        textRect.x = textRect.x%W;
+
+        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+        SDL_DestroyTexture(textTexture);
+    }
+    
+}
+
+
 /**
  * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
  * @param tab Le tableau de sommets représentant le graphe.
@@ -202,7 +243,6 @@ void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid
     SDL_Delay(100);
     draw_graph(renderer, tab, n, displayPoid);
 }
-
 
 void render(){
     SDL_RenderPresent(renderer);
