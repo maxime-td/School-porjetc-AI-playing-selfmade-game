@@ -90,6 +90,6 @@ void print_dist_tab(int ** distTab, int * n);
  * @param tab Le graphe initial
  * @param n Le nombre de noeuds dans le graphe initial
 */
-sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n);
+sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n, int* n_sous_graph);
 
 #endif /* GRAPH_H_ */

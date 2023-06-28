@@ -47,7 +47,11 @@ void init(sommet_t ** tab, int n);
  * @param tab Le tableau de sommets représentant le graphe.
  * @param n Le nombre de sommets dans le tableau.
 */
-void affiche(sommet_t ** tab, int n);
+void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid);
+
+void render();
+
+void closeSDL();
 
 
 #endif // AFFICHE_H

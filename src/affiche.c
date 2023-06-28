@@ -191,16 +191,25 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
  * @param tab Le tableau de sommets représentant le graphe.
  * @param n Le nombre de sommets dans le tableau.
 */
-void affiche(sommet_t ** tab, int n) {
+void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid) {
     int y = 0, x;
     int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
     SDL_bool program_on = SDL_TRUE;  
 
     SDL_DisplayMode dm;
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, r, g , b, a);
     SDL_Delay(100);
-    draw_graph(renderer, tab, n, 1);
-    
+    draw_graph(renderer, tab, n, displayPoid);
+}
+
+
+void render(){
     SDL_RenderPresent(renderer);
+}
+
+void closeSDL(){
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 }

@@ -84,7 +84,6 @@ sommet_t ** gen_tab_sommets(int * n, int width, int height)
         tab[i] = malloc(sizeof(sommet_t));
         while (first || is_close_to_value_in_tab(tab, i, tab[i], (4*R/(*n))))
         {
-            printf("%c\n", tab[i]->val);
             first = 0;
             angle = rand()%(360);
 
@@ -143,7 +142,6 @@ void make_new_links(int p, sommet_t ** tab, int * n)
             }   
         }
     }
-    printf("\n");
 }
 
 /**
@@ -219,7 +217,7 @@ void print_dist_tab(int ** dist_tab, int * n)
  * @param tab Le graphe initial
  * @param n Le nombre de noeuds dans le graphe initial
 */
-sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n) {
+sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n, int* n_sous_graph) {
     //Initialisation
     sommet_t ** sous_graphe_chemin = NULL;
 
@@ -227,6 +225,7 @@ sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n) {
     int voisins[n]; //Tableau des voisins pour sous graphe
     int noeuds_dans_chemin [n]; //Tableau des noeuds dans le chemin
     int n_noeuds_differents = 0; //Nombre de noeuds uniques dans le chemin
+    int conv_tab_to_n_chemin[n];
 
     //Initialisation noeuds_dans_chemin
     for(i = 0; i < n; i++) {
@@ -242,27 +241,39 @@ sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n) {
     for (i = 0; i < n; i++) {
         n_noeuds_differents += noeuds_dans_chemin[i];
     }
+    
+    j = 0;
+    for (i = 0; i < n; i++){
+        if(noeuds_dans_chemin[i]) {
+            conv_tab_to_n_chemin[i] = j;
+            j++;
+        }
+    }
 
     sous_graphe_chemin = (sommet_t**)malloc(sizeof(sommet_t*)*n_noeuds_differents); //Allocation sous_graphe_chemin
 
+    j = 0;
     for(i = 0; i < n; i++) {
         if(noeuds_dans_chemin[i]) {
             sous_graphe_chemin[j] = (sommet_t*)malloc(sizeof(sommet_t));
             sous_graphe_chemin[j]->val = tab[i]->val;
             sous_graphe_chemin[j]->x = tab[i]->x;
             sous_graphe_chemin[j]->y = tab[i]->y;
-            l = 0;
-            for(k = 0; k < n; k++) {
-                if(noeuds_dans_chemin[k]) {
-                    if(tab[i]->voisins[k]) 
-                        sous_graphe_chemin[j]->voisins[l] = 1;
-                    else
-                        sous_graphe_chemin[j]->voisins[l] = 0;
-                    l++;
-                }
+            for(k = 0; k < n_noeuds_differents; k++) {
+                sous_graphe_chemin[j]->voisins[k] = 0;
             }
             j++;
         }
     }
+    
+    for (int i = 0; i < n_chemin-1; i++){
+        sous_graphe_chemin[conv_tab_to_n_chemin[chemin[i]]]->voisins[conv_tab_to_n_chemin[chemin[i+1]]] = 1;
+        sous_graphe_chemin[conv_tab_to_n_chemin[chemin[i+1]]]->voisins[conv_tab_to_n_chemin[chemin[i]]] = 1;
+    }
+    
+
+    *n_sous_graph = n_noeuds_differents;
     return sous_graphe_chemin;
 }
+
+
