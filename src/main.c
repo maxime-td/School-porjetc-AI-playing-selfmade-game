@@ -39,21 +39,20 @@ int main()
     affich_tab(path, n_chemin);
     printf("%d : %d\n",n , path_size(path,TableauDistances , n_chemin));
 
+    /*
     Floyd_Warshall(TableauDistances, n);
     
     int * tempAff = multi_Start_Floyd_Warshall(TableauDistances, n, tab);
     printf("cycle OPTI: ");
     affich_tab(tempAff, n);
-    printf("\nTaille selon pathsize: %d\n\n", path_size(tempAff, TableauDistances, n)+tempAff[n]);
+    printf("\nTaille selon pathsize: %d\n\n", path_size(tempAff, TableauDistances, n)+tempAff[n]);*/
     
     //affiche(tab, n);
 
-    init(tab, n);
+    boucle_jeu(tab, n);
 
-   // boucle_jeu(tab, n);
-
-    free2DTab((void **)TableauDistances, n);
-    free2DTab((void **)tab, n);
+    //free2DTab((void **)TableauDistances, n);
+    //free2DTab((void **)tab, n);
     free(path);
     return 0;
 }
