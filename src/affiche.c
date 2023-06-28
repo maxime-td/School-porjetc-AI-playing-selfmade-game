@@ -80,7 +80,7 @@ void affiche(sommet_t ** tab, int n){
     sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n);
     //jusque là
     
-    draw_graph(renderer, sous_graphe, n_chemin);
+    draw_graph(renderer, sous_graphe, n_chemin, 0);
     SDL_RenderPresent(renderer);
 }
 
