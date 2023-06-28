@@ -68,14 +68,18 @@ int cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n)
     int indDep = rand()%n;
     int indAct = indDep;
     int indTmp=0;
-    int distTmp=0;
+    int distTmp=999999;
     char dep = tabSommets[indAct]->val;
     char tmp = dep;
     do
     {
-        printf("Sommet courant: %c\n", tmp);
+        printf("Sommet courant: %c, Indice Actuel : %d\n", tmp, indAct);
         for(int i=0; i<n; i++)
         {
+            if(i==0 && i==indAct)
+            {
+                distTmp = 999999;
+            }
             if(i==0 && i!=indAct)
             {
                 distTmp = copie[indAct][i];
@@ -87,20 +91,21 @@ int cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n)
                 indTmp = i;
             }
         }
+        if(distTmp >=999999 || distTmp<0){distTmp == 0;}
+        somme += distTmp;
+        //print_dist_tab(copie, &n);
         for(int i=0; i<n; i++)
         {
             copie[indAct][i] = INT_MAX;
             copie[i][indAct] = INT_MAX;
         }
-        somme += distTmp;
         indAct = indTmp;
         tmp = tabSommets[indAct]->val;
         cpt++;
-        printf("Somme actualisée: %d\n", somme);
         //print_dist_tab(copie, &n);
-    } while (tmp != dep && cpt != n);
-    somme += distTab[indDep][indAct];
 
+    } while (tmp != dep && cpt < n-1);
+    somme += distTab[indDep][indAct];
 
     return somme;
     
