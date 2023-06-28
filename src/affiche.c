@@ -67,6 +67,9 @@ void init(sommet_t ** tab, int n){
     SDL_RenderPresent(renderer);
 }
 
+
+
+
 /**
  * @brief Trace un disque
  * @param renderer Le renderer où tracer le disque
