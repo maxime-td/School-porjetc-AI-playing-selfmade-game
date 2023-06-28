@@ -60,7 +60,8 @@ int ** copie_tab(int ** tab, int n)
  * @param distTab le tableau des distances initiales (sera modifié)
  * @param n la taille du tableau
  * @param tabSommets le tableau des sommets
- * @return un tableau décrivant le chemin optimal pour ce start et sa distance
+ * @param indDep l'indice dans tabSommet du point de départ
+ * @return un tableau d'entier de taille n+1 décrivant le cycle optimal et sa longueur
 */
 int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int indDep)
 {
@@ -127,11 +128,14 @@ int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int in
 int * multi_Start_Floyd_Warshall(int ** distTab, int n, sommet_t ** tabSommet)
 {
     int * meilleurTab = cycle_Floyd_Warshall(distTab, tabSommet, n, 0);
+    int * tempTab = malloc((n+1)*sizeof(int)); 
     for(int i=1; i<n; i++)
     {
-        if(*(cycle_Floyd_Warshall(distTab, tabSommet, n, i)+n)<meilleurTab[n])
+        tempTab = cycle_Floyd_Warshall(distTab, tabSommet, n, i);
+        printf("Tentative cycle: %d\n", tempTab[n]);
+        if(tempTab[n]<meilleurTab[n])
         {
-            meilleurTab = cycle_Floyd_Warshall(distTab, tabSommet, n, i);
+            meilleurTab = tempTab;
         }
     }
     return meilleurTab;

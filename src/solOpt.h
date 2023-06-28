@@ -15,8 +15,10 @@ void Floyd_Warshall(int ** distTab, int n);
  * @param distTab le tableau des distances initiales (sera modifié)
  * @param n la taille du tableau
  * @param tabSommets le tableau des sommets
+ * @param indDep l'indice dans tabSommet du point de départ
+ * @return un tableau d'entier de taille n+1 décrivant le cycle optimal et sa longueur
 */
-int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n);
+int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n, int indDep);
 
 
 /**
@@ -26,6 +28,15 @@ int * cycle_Floyd_Warshall(int ** distTab, sommet_t ** tabSommets, int n);
  * @return un tableau 2D d'entiers
 */
 int ** copie_tab(int ** tab, int n);
+
+/**
+ * @brief Applique l'algo de cyclage ci-dessus sur chaque premier point et sors le plus efficace
+ * @param distTab le tableau des distances initiales (sera modifié)
+ * @param n la taille du tableau
+ * @param tabSommets le tableau des sommets
+ * @return le meilleur tableau decrivant le meilleur chemin pour chaque point de départ 
+*/
+int * multi_Start_Floyd_Warshall(int ** distTab, int n, sommet_t ** tabSommet);
 
 
 
