@@ -17,9 +17,7 @@ SDL_Window *window = NULL;
 */
 void init(sommet_t ** tab, int n){
     int y = 0, x;
-    int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
-    SDL_bool program_on = SDL_TRUE;
-    SDL_Event event;   
+    int width, height, w_window = 800, h_window = 800, final_width = w_window/2;  
 
     SDL_DisplayMode dm;
 
@@ -67,7 +65,6 @@ void init(sommet_t ** tab, int n){
     draw_graph(renderer, tab, n, 1);
     
     SDL_RenderPresent(renderer);
-
 }
 
 
@@ -187,4 +184,23 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
     free2DTab((void**)distTab, n);
     TTF_CloseFont(font);
     TTF_Quit();
+}
+
+/**
+ * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
+ * @param tab Le tableau de sommets représentant le graphe.
+ * @param n Le nombre de sommets dans le tableau.
+*/
+void affiche(sommet_t ** tab, int n) {
+    int y = 0, x;
+    int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
+    SDL_bool program_on = SDL_TRUE;  
+
+    SDL_DisplayMode dm;
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_Delay(100);
+    draw_graph(renderer, tab, n, 1);
+    
+    SDL_RenderPresent(renderer);
 }
