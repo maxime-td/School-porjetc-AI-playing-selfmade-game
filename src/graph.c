@@ -56,7 +56,7 @@ void tab_to_graph(sommet_t ** tab, int start, int end){
 int is_close_to_value_in_tab(sommet_t ** tab, int size, sommet_t * cour, int threshold) {
     for (int i = 0; i < size; i++) 
     { 
-        if (sqrt(calcul_distance(tab[i], cour)) <= threshold) {
+        if (calcul_distance(tab[i], cour) <= threshold) {
             return 1;
         }
     }
@@ -84,6 +84,7 @@ sommet_t ** gen_tab_sommets(int * n, int width, int height)
         tab[i] = malloc(sizeof(sommet_t));
         while (first || is_close_to_value_in_tab(tab, i, tab[i], (4*R/(*n))))
         {
+            printf("%c\n", tab[i]->val);
             first = 0;
             angle = rand()%(360);
 
@@ -155,7 +156,7 @@ void make_new_links(int p, sommet_t ** tab, int * n)
 int calcul_distance(sommet_t * a, sommet_t * b)
 {
     int tmp1 = (a->x-b->x), tmp2 = (a->y-b->y);
-    return tmp1*tmp1+tmp2*tmp2;
+    return (int) sqrt(tmp1*tmp1+tmp2*tmp2);
 }
 
 /**

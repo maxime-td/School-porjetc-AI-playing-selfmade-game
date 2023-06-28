@@ -8,7 +8,7 @@ int * fourmi(sommet_t ** tab, int n, int * n_path, int ** probaMat);
 
 int tout_noeud(int * tab, int n);
 
-void affichTab(int * tab, int n);
+void affich_tab(int * tab, int n);
 
 
 #endif /* FOURMI_H_ */
