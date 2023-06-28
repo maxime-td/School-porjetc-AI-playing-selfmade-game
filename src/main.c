@@ -2,7 +2,7 @@
 #include <time.h>
 #include "graph.h"
 #include "affiche.h"
-#include "solOpt.h"
+#include "OptiFloyd_Warshall.h"
 #include "fourmi.h"
 #include "interactionJoueur.h"
 
@@ -18,7 +18,20 @@ int main()
     print_tab_coord(tab, &n);
 
     int ** TableauDistances = dist_tab(tab, &n);
-    print_dist_tab(TableauDistances, &n);
+    //print_dist_tab(TableauDistances, &n);
+
+    Floyd_Warshall(TableauDistances, n);
+    //print_dist_tab(TableauDistances, &n);
+
+    int * tempAff = multi_Start_Floyd_Warshall(TableauDistances, n, tab);
+    printf("cycle OPTI: %d\n", tempAff[n]);
+
+
+    
+    int y = 0, x;
+    int width, height, w_window = 800, h_window = 800, final_width = w_window/2;
+    SDL_bool program_on = SDL_TRUE;
+    SDL_Event event;   
 
     int n_chemin = 0;
     int * path = colonni_fourmi(tab, TableauDistances, n, rand()%n, &n_chemin);

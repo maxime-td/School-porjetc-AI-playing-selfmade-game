@@ -31,6 +31,10 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid);
 
 void draw_path(SDL_Renderer* renderer, sommet_t** tab, int* chemin, int n);
 
+
+void draw_path(SDL_Renderer* renderer, sommet_t** tab, int* chemin, int n) ;
+
+
 /**
  * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
  * @param tab Le tableau de sommets représentant le graphe.
