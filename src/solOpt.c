@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "graph.h"
 #include "solOpt.h"
 
@@ -19,7 +20,7 @@ void Floyd_Warshall(int ** distTab, int n)
             {
                 if (distTab[i][j] == -1)
                 {
-                    distTab[i][j] = M;
+                    distTab[i][j] = INT_MAX;
                 }
 
                 if (distTab[i][k] != -1 && distTab[k][j] != -1 && distTab[i][k] + distTab[k][j] < distTab[i][j])
@@ -57,8 +58,8 @@ int cycle_min_approx(int ** distTab, sommet_t ** tabSommets, int n)
         }
         for(int i=0; i<n; i++)
         {
-            distTab[indAct][i] = M;
-            distTab[i][indAct] = M;
+            distTab[indAct][i] = INT_MAX;
+            distTab[i][indAct] = INT_MAX;
         }
         somme += distTmp;
         indAct = indTmp;

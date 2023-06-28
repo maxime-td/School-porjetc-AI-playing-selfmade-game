@@ -4,7 +4,7 @@
 #include "graph.h"
 #include <stdio.h>
 
-int * fourmi(sommet_t ** tab, int n, int * n_path);
+int * fourmi(sommet_t ** tab, int n, int * n_path, int ** probaMat);
 
 int tout_noeud(int * tab, int n);
 
