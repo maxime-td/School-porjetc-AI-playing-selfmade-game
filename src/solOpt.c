@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "graph.h"
 
 /**
@@ -17,7 +18,7 @@ void Floyd_Warshall(int ** distTab, int n)
             {
                 if (distTab[i][j] == -1)
                 {
-                    distTab[i][j] = 276447231;
+                    distTab[i][j] = INT_MAX;
                 }
 
                 if (distTab[i][k] != -1 && distTab[k][j] != -1 && distTab[i][k] + distTab[k][j] < distTab[i][j])
