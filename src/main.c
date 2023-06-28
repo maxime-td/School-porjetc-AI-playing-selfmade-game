@@ -11,13 +11,12 @@ int main()
     srand(time(NULL));
     int n=0;
     sommet_t ** tab = gen_tab_sommets(&n, 800, 800);
-    //printTabCoord(tab, &n);
-    //printf("--------------------------------------------\n");
-    tab_to_graph(tab, 0, n-1);
-    //printTabCoord(tab, &n);
 
-    make_new_links(8, tab, &n);
+    tab_to_graph(tab, 0, n-1);
+
+    make_new_links(10, tab, &n);
     print_tab_coord(tab, &n);
+
     int ** TableauDistances = dist_tab(tab, &n);
     //print_dist_tab(TableauDistances, &n);
 
@@ -35,8 +34,10 @@ int main()
     SDL_Event event;   
 
     int n_chemin = 0;
-    //int * chemin = fourmi(tab, n, &n_chemin);
-    //affichTab(chemin, n_chemin);
+    int * path = colonni_fourmi(tab, TableauDistances, n, rand()%n, &n_chemin);
+
+    affich_tab(path, n_chemin);
+    printf("%d : %d\n",n , path_size(path,TableauDistances , n_chemin));
     
     //affiche(tab, n);
 
@@ -44,6 +45,10 @@ int main()
 
     free2DTab((void **)TableauDistances, n);
     free2DTab((void **)tab, n);
+<<<<<<< HEAD
+=======
+    free(path);
+>>>>>>> 0e295022eed15c85bdb6b3141b1c51bddff167b9
 
     return 0;
 }
