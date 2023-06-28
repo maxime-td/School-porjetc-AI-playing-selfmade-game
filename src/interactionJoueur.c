@@ -34,6 +34,7 @@ void boucle_jeu(sommet_t** tab, int n) {
 
     //Initialisation
     int i; //Incrément
+    int nb_noeuds_chemin; //Nombre de noeuds dans le chemin
     int r = R_NOEUD; //Rayon des sommets
 
     int * chemin_joueur = (int*) malloc(sizeof(int)*MAX_PATH); //Chemin du joueur
@@ -60,16 +61,19 @@ void boucle_jeu(sommet_t** tab, int n) {
                     if (event.button.button == SDL_BUTTON_LEFT) { //Si on a un clic gauche
 
                         //Pour voir si on clique sur un noeud
-                        for(i = 0; i < n; i+=1) {
-                            //
+                        for(i = 0; i < n; i+=1) { //On parcour tous les noeuds
+
+                            //On regarde si le clic est dans un carré autour du noeud
                             if((event.mouse.x >= (tab[i]->x)-r) && (event.mouse.x <= (tab[i]->x)+r)
                             && (event.mouse.y >= (tab[i]->y)-r) && (event.mouse.y <= (tab[i]->y)+r)) {
-                                if(!est_dans_chemin(i, chemin_joueur)) //Si le noeud n'est pas déjà dans le chemin
+                                chemin_joueur[nb_noeuds_chemin] = i; //On l'ajoute au chemin
                             }
                         }
                     }
-                    default :
-                        break;
+                    break;
+                
+                default:
+                    break;
             }
         }
     }
