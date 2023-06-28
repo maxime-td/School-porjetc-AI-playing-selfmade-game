@@ -32,13 +32,14 @@ int est_dans_chemin(int i, int* chemin) {
  * @brief Exécute la boucle de jeu
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
-
+*/
 void boucle_jeu(sommet_t** tab, int n) {
 
     //Initialisation
     int i; //Incrément
     int nb_noeuds_chemin = 0; //Nombre de noeuds dans le chemin
     int r = R_NOEUD; //Rayon des sommets
+    int n_s_graphe;
 
     int * chemin_joueur = (int*) malloc(sizeof(int)*MAX_PATH); //Chemin du joueur
     for(i = 0; i < n; i += 1) //Initialisation du chemin du joueur
@@ -71,12 +72,13 @@ void boucle_jeu(sommet_t** tab, int n) {
 
                         //Pour voir si on clique sur un noeud
                         for(i = 0; i < n; i+=1) { //On parcour tous les noeuds
-
                             //On regarde si le clic est dans un carré autour du noeud
                             SDL_GetMouseState(&x, &y);
                             if((x >= (tab[i]->x)-r) && (x <= (tab[i]->x)+r) && (y >= (tab[i]->y)-r) && (y <= (tab[i]->y)+r)) {
-                                chemin_joueur[nb_noeuds_chemin] = i; //On l'ajoute au chemin
-                                nb_noeuds_chemin += 1;
+                                if (nb_noeuds_chemin == 0 || tab[i]->voisins[chemin_joueur[nb_noeuds_chemin-1]]){
+                                    chemin_joueur[nb_noeuds_chemin] = i; //On l'ajoute au chemin
+                                    nb_noeuds_chemin += 1;
+                                }
                             }
                         }
 
@@ -87,13 +89,15 @@ void boucle_jeu(sommet_t** tab, int n) {
                     break;
             }
         }
-        affiche(tab, n);
-        affich_tab(chemin_joueur, nb_noeuds_chemin);
-        printf("a\n");
-        sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n);
-        printf("b\n");
-        affiche(sous_graphe, nb_noeuds_chemin);
-        printf("aa\n");
+        
+        affiche(tab, n, 0, 0, 0, 255, 1);
+        sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
+        affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
+
+        draw_path(tab, n, chemin_joueur, nb_noeuds_chemin);
+
+        render();
     }
     free(chemin_joueur);
-}*/
+    closeSDL();
+}

@@ -17,10 +17,8 @@ int main()
     make_new_links(10, tab, &n);
     print_tab_coord(tab, &n);
 
-    int **TableauDistances = dist_tab(tab, &n);
-    // print_dist_tab(TableauDistances, &n);
-    int **tabWarshall = copie_tab(TableauDistances, n);
-    Floyd_Warshall(tabWarshall, n);
+    int ** TableauDistances = dist_tab(tab, &n);
+    print_dist_tab(TableauDistances, &n);
 
     // cycle_Floyd_Warshall(tabWarshall, tab, TableauDistances, n, 0, &sol);
     int res;
@@ -39,7 +37,16 @@ int main()
     int *path = colonni_fourmi(tab, TableauDistances, n, rand() % n, &n_chemin);
 
     affich_tab(path, n_chemin);
-    printf("%d : %d\n", n, path_size(path, TableauDistances, n_chemin));
+    printf("%d : %d\n",n , path_size(path,TableauDistances , n_chemin));
+
+    Floyd_Warshall(TableauDistances, n);
+    
+    int * tempAff = multi_Start_Floyd_Warshall(TableauDistances, n, tab);
+    printf("cycle OPTI: ");
+    affich_tab(tempAff, n);
+    printf("\nTaille selon pathsize: %d\n\n", path_size(tempAff, TableauDistances, n)+tempAff[n]);
+    
+    //affiche(tab, n);
 
     init(tab, n);
 
