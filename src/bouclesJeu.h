@@ -37,7 +37,7 @@ typedef struct {
  * @param n Le nombre de sommets
  * @return tableau du chemin du joueur
 */
-int * boucle_jeu_graphe(sommet_t** tab, int n, int * nb_noeuds_chemin);
+int * boucle_jeu_graphe(sommet_t** tab, int n, int * nb_noeuds_chemin, int *fin);
 
 /**
  * @brief Exécute la boucle de jeu dans l'espace
@@ -45,7 +45,7 @@ int * boucle_jeu_graphe(sommet_t** tab, int n, int * nb_noeuds_chemin);
  * @param n Le nombre de sommets
  * @param chemin Tableau du chemin choisi par le joueur
 */
-void boucle_jeu_espace(sommet_t** tab, int n, int * chemin);
+void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int *fin);
 
 /**
  * @brief Exécute la boucle de jeu principal
