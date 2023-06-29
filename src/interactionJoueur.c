@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <pthread.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -10,6 +11,17 @@
 #include "affiche.h"
 #include "fourmi.h"
 #include "OptiFloyd_Warshall.h"
+#include "interactionJoueur.h"
+
+void* thread_fourmi(FourmiArgs* args){
+    int result = multi_start_fourmi(args->matDist, args->n);
+    return result;
+}
+
+void* thread_floyd(FloydWarshallArgs* args){
+    int result = multi_Start_Floyd_Warshall(args->tabWarshall, args->tabDist, args->n);
+    return result;
+}
 
 /**
  * @brief Exécute la boucle de jeu
@@ -17,7 +29,7 @@
  * @param n Le nombre de sommets
 */
 void boucle_jeu(sommet_t** tab, int n) {
-
+    pthread_t thread1, thread2;
     //Initialisation
     int i; //Incrément
     int nb_noeuds_chemin = 0; //Nombre de noeuds dans le chemin
@@ -25,6 +37,9 @@ void boucle_jeu(sommet_t** tab, int n) {
     int n_s_graphe;
     int all[n];
     int ** warshallDist;
+    int first = 1;
+    FourmiArgs argsF;
+    FloydWarshallArgs argsFl;
 
     int scoreFourmi, scoreFloyd, scoreBest, score;
 
@@ -43,8 +58,16 @@ void boucle_jeu(sommet_t** tab, int n) {
 
     warshallDist = copie_tab(distMat, n);
     Floyd_Warshall(warshallDist, n);
-    scoreFloyd  = multi_Start_Floyd_Warshall(warshallDist, distMat, n);
-    scoreFourmi = multi_start_fourmi(distMat, n);
+
+    argsFl.n           = n           ;
+    argsFl.tabDist     = distMat     ;
+    argsFl.tabWarshall = warshallDist;
+    pthread_create(&thread2, NULL, (void * (*)(void *))thread_floyd, &argsFl);
+
+    argsF.matDist = distMat;
+    argsF.n       = n      ; 
+    pthread_create(&thread1, NULL, (void * (*)(void *))thread_fourmi, &argsF);
+    //scoreFourmi = multi_start_fourmi(distMat, n);
 
     init(tab, n); //Affichage du graphe
     int update = 1;
@@ -138,6 +161,12 @@ void boucle_jeu(sommet_t** tab, int n) {
             }
 
             else {//Etat de fin de jeu 
+                if (first){
+                    first = 0;
+                    pthread_join(thread1, (void**)&scoreFourmi); 
+                    pthread_join(thread2, (void**)&scoreFloyd );
+                }
+                
                 score = path_size(chemin_joueur, distMat, nb_noeuds_chemin); //Score du joueur
 
                 scoreBest = scoreFourmi;
