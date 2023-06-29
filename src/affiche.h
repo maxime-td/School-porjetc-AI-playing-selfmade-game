@@ -6,6 +6,7 @@
 #include <time.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 #include "graph.h"
 #include <math.h>
 
@@ -80,4 +81,16 @@ void render();
 */
 void closeSDL();
 
+SDL_Texture* load_texture_from_image(char* file_image_name);
+
+/**
+ * @brief C'est un secret
+*/
+void secret1();
+
+void soucoupe_tourne(int frame, SDL_Rect navette);
+
+void affiche_soucoupe(SDL_Texture* texture_soucoupe, int frame, SDL_Rect navette);
+
+void draw_rect(SDL_Rect rect);
 #endif // AFFICHE_H

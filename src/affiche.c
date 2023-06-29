@@ -3,13 +3,14 @@
 #include <time.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 #include "graph.h"
 #include "affiche.h"
 #include <math.h>
 #include "map.h"
 
 SDL_Renderer* renderer;
-SDL_Window *window = NULL;
+SDL_Window* window = NULL;
 
 /**
  * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
@@ -42,10 +43,10 @@ void init(sommet_t ** tab, int n) {
 
     //Création de la fenêtre de gauche
     window = SDL_CreateWindow(
-        "Graph",    // codage en utf8, donc accents possibles
-        width/2-w_window/2, height/2-h_window/2,                  // coin haut gauche en haut gauche de l'écran
-        w_window, h_window,              // largeur = 400, hauteur = 300
-        SDL_WINDOW_RESIZABLE);
+        "Graph", //Nom de la fenètre
+        width/2-w_window/2, height/2-(h_window+100)/2, //Coordonnées de la fenètre
+        w_window, h_window, //Dimensions de la fenètre
+        SDL_WINDOW_RESIZABLE); //Paramètre de la fenètre
 
     renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -116,7 +117,6 @@ void draw_int(int n) {
 
 /**
  * @brief Trace un disque
- * @param renderer Le renderer où tracer le disque
  * @param center_x La coordonnée x du centre du disque
  * @param center_y La coordonnée y du centre du disque
  * @param radius Le rayon du disque
@@ -228,7 +228,6 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
     TTF_Quit();
 }
 
-
 /**
  * @brief Ecrit le chemin parcouru en haut à droite.
  * @param tab Le tableau de sommet.
@@ -289,7 +288,6 @@ void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid
     ast_Partout(renderer, tab, n);
 }
 
-
 /**
  * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
  * @param score Le score à afficher en tant que votre score
@@ -337,7 +335,6 @@ void afficheFin(int score, int bestScore) {
     SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
     SDL_DestroyTexture(textTexture);
     
-
     TTF_CloseFont(font);
     TTF_Quit();
 }
@@ -349,7 +346,6 @@ void render() {
     SDL_RenderPresent(renderer);
 }
 
-
 /**
  * @brief Libere le renderer la fenêtre  et ferme SDL
 */
@@ -357,4 +353,78 @@ void closeSDL() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+}
+
+SDL_Texture* load_texture_from_image(char* file_image_name) {
+    SDL_Surface *my_image = NULL; // Variable de passage
+    SDL_Texture* my_texture = NULL; // La texture
+    my_image = IMG_Load(file_image_name);
+    my_texture = SDL_CreateTextureFromSurface(renderer, my_image); // Chargement de l'image de la surface vers la texture
+    SDL_FreeSurface(my_image); // la SDL_Surface ne sert que comme élément transitoire 
+    IMG_Quit(); // Si on charge une librairie SDL, il faut penser à la décharger
+    return my_texture;
+}
+
+/**
+ * @brief C'est un secret
+*/
+void secret1() {
+    //Initialisation
+    SDL_Texture* texture_secrete = NULL;
+    texture_secrete = load_texture_from_image("images/texture_secrete.png");
+
+    SDL_Rect source = {0}, destination = {50, 50, 200, 200};
+    SDL_QueryTexture(texture_secrete, NULL, NULL, &source.w, &source.h);
+
+    SDL_RenderCopy(renderer, texture_secrete, &source, &destination);
+
+    SDL_DestroyTexture(texture_secrete);
+}
+
+
+
+/* Partie sur l'animation de la soucoupe volante */
+
+void soucoupe_tourne(int frame, SDL_Rect navette) {
+    //Initialisation
+    SDL_Rect
+        source = {0}, //Rectangle définissant la zone totale de la planche
+        destination = {0}; //Rectangle définissant où la zone_source doit être déposée dans le renderer
+
+    SDL_Texture* texture_soucoupe = NULL;
+    texture_soucoupe = load_texture_from_image("images/soucoupeV3.png");
+
+    SDL_QueryTexture(texture_soucoupe, NULL, NULL, &source.w, &source.h); // Récupération des dimensions de l'image
+
+    int nb_images = 4;
+    float zoom = 0.2;
+    int offset_x = source.w / nb_images, offset_y = source.h;
+
+    destination.w = offset_x * zoom; // Largeur du sprite à l'écran
+    destination.h = offset_y * zoom; // Hauteur du sprite à l'écran
+
+    destination.y = (H - destination.h) / 2; //On se place au milieu de l'écran
+
+    affiche_soucoupe(texture_soucoupe, frame, navette);
+
+    SDL_DestroyTexture(texture_soucoupe);
+}
+
+void affiche_soucoupe(SDL_Texture* texture_soucoupe, int frame, SDL_Rect navette) {
+    SDL_Rect 
+        source = {0}, // Rectangle définissant la zone de la texture à récupérer
+        destination = {navette.x, navette.y, 50, 50};
+
+    SDL_QueryTexture(texture_soucoupe, NULL, NULL, &source.w, &source.h);
+    source.w = 32;
+    source.h = 32;
+    source.x = source.w*frame;
+
+    SDL_RenderCopy(renderer, texture_soucoupe, &source, &destination);
+    SDL_Delay(300);
+}
+
+void draw_rect(SDL_Rect rect){
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &rect);
 }

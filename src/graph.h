@@ -1,11 +1,12 @@
 #ifndef GRAPH_H_
 #define GRAPH_H_
 
-#define N  6// NOMBRE_MAX_SOMMET 
+#define N  8// NOMBRE_MAX_SOMMET 
+#define N_MIN  5// NOMBRE_MIN_SOMMET 
 #define R 300 //Rayon cercle repartition
 #define W 800
 #define H 800
-
+ 
 
 /**
  * @struct sommet_s

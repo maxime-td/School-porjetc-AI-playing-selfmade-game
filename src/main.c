@@ -4,7 +4,7 @@
 #include "affiche.h"
 #include "OptiFloyd_Warshall.h"
 #include "fourmi.h"
-#include "interactionJoueur.h"
+#include "bouclesJeu.h"
 
 int main()
 {
@@ -17,5 +17,7 @@ int main()
     make_new_links(10, tab, &n);
 
     boucle_jeu(tab, n);
+
+    free2DTab((void **)tab, n);
     return 0;
 }

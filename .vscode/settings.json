@@ -7,7 +7,11 @@
         "solopt.h": "c",
         "recuit-simule.h": "c",
         "affiche.h": "c",
+<<<<<<< HEAD
         "graph.h": "c"
+=======
+        "bouclesjeu.h": "c"
+>>>>>>> d12749a3cfd3b2835b02ad0b9f032b59fe95b546
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

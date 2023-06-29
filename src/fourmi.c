@@ -5,6 +5,7 @@
 #include "graph.h"
 #include "OptiFloyd_Warshall.h"
 
+
 /**
  * Lance la recherche par fourmi de meilleur chemin depuis tout les sommets du graph et garde le meilleur resultat.
  * @param matDist La matrice des distances entre les sommets.
@@ -65,8 +66,9 @@ int * colonni_fourmi(int ** matDist, int n, int dep, int * nPath){
                 add_feromone(courPath, probaMatCopy, nCour, sizeCour);
 
                 if (sizeBest > sizeCour){
-                    if(bestPath != NULL)
+                    if(bestPath != NULL){
                         free(bestPath);
+                    }
                     bestPath = courPath;
                     sizeBest = sizeCour;
                     nBest    = nCour   ;
@@ -129,6 +131,7 @@ int * fourmi(int n, int * nPath, int ** probaMat, int dep){
         n_noeud++;
 
         if (n_noeud >= MAX_PATH){
+            free(chemin);
             return NULL;
         }
     }

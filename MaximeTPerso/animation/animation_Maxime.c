@@ -100,7 +100,7 @@ void play_with_texture_3(SDL_Texture* my_texture, SDL_Window* window, SDL_Render
 
         SDL_RenderClear(renderer); // Effacer l'image précédente
 
-        affichage_fond(my_texture_fond, window, renderer);
+        affichage_fond(my_texture, window, renderer);
 
         SDL_SetTextureAlphaMod(my_texture,(1.0-1.0*i/nb_it)*255); // L'opacité va passer de 255 à 0 au fil de l'animation
         SDL_RenderCopy(renderer, my_texture, &source, &destination); // Préparation de l'affichage
@@ -120,8 +120,8 @@ void affichage_personnage(SDL_Texture* my_texture, SDL_Window* window, SDL_Rende
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
 
     SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h);
-    source.w = source.w/2
-    source.x = source.w*frame
+    source.w = source.w/2;
+    source.x = source.w*frame;
 
     SDL_RenderCopy(renderer, my_texture, &source, &destination);  
     SDL_Delay(80);
@@ -129,10 +129,10 @@ void affichage_personnage(SDL_Texture* my_texture, SDL_Window* window, SDL_Rende
 
 void play_with_texture_6(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2, SDL_Texture* my_texture, SDL_Window* window, SDL_Renderer* renderer, int temps, int direction_x, int direction_y) {
     SDL_Rect
-        source = {0},                    // Rectangle définissant la zone totale de la planche
-        window_dimensions = {0},         // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
-        destination = {0},               // Rectangle définissant où la zone_source doit être déposée dans le renderer
-        state = {0};                     // Rectangle de la vignette en cours dans la planche 
+        source = {0}, // Rectangle définissant la zone totale de la planche
+        window_dimensions = {0}, // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+        destination = {0}, // Rectangle définissant où la zone_source doit être déposée dans le renderer
+        state = {0}; // Rectangle de la vignette en cours dans la planche 
 
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h); // Récupération des dimensions de la fenêtre
     SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h); // Récupération des dimensions de l'image
@@ -143,10 +143,10 @@ void play_with_texture_6(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2, SDL
     float zoom = 0.2;   
     int offset_x = source.w / nb_images, offset_y = source.h;
     
-    state.x = 0 ;                          // La première vignette est en début de ligne
-    state.y = 3 * offset_y;                // On s'intéresse à la 4ème ligne, le bonhomme qui court
-    state.w = offset_x;                    // Largeur de la vignette
-    state.h = offset_y;                    // Hauteur de la vignette
+    state.x = 0 ; // La première vignette est en début de ligne
+    state.y = 3 * offset_y; // On s'intéresse à la 4ème ligne, le bonhomme qui court
+    state.w = offset_x; // Largeur de la vignette
+    state.h = offset_y; // Hauteur de la vignette
 
     destination.w = offset_x * zoom;       // Largeur du sprite à l'écran
     destination.h = offset_y * zoom;       // Hauteur du sprite à l'écran
@@ -156,10 +156,10 @@ void play_with_texture_6(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2, SDL
     SDL_RenderClear(renderer); // Effacer l'image précédente avant de dessiner la nouvelle
 
     affichage_fond(bg_texture1, window, renderer);
-
+/*
     if ((direction_x != 0) || (direction_y != 0)) {
         
-    }
+    }*/
     affichage_personnage(my_texture, window, renderer, temps, direction_x, direction_y);
 
     affichage_fond(bg_texture2, window, renderer);
@@ -216,24 +216,28 @@ int main(int argc, char** argv) {
                     switch (event.key.keysym.sym)
                     {
                         case SDLK_z:
-                            if(direction_y>0)
+                            if(direction_y>0) {
                                 direction_y = direction_y-50;
                                 frame+=1;
+                            }
                             break;
                         case SDLK_q:
-                            if(direction_x>0)
+                            if(direction_x>0) {
                                 direction_x = direction_x-50;
                                 frame+=1;
+                            }
                             break;
                         case SDLK_s:
-                            if(direction_y<1000)
+                            if(direction_y<1000) {
                                 direction_y = direction_y+50;
                                 frame+=1;
+                            }
                             break;
                         case SDLK_d:
-                            if(direction_x<1000)
+                            if(direction_x<1000) {
                                 direction_x = direction_x+50;
                                 frame+=1;
+                            }
                             break;
                         default:
                             break;
