@@ -114,6 +114,7 @@ void cycle_Floyd_Warshall(int **tabWarshall, int **tabDist, int n, int indDep, i
     }
     DISTANCE += tabWarshall[indDep][indAct];
     *sol = DISTANCE;
+    free(tabValide);
 }
 
 /**

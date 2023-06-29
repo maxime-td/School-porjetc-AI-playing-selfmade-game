@@ -200,7 +200,9 @@ int * boucle_jeu_graphe(sommet_t** tab, int n, int * n_chemin) {
             render();//rendre les differents elements
         }
     }
-
+    free2DTab((void **) sous_graphe, n_s_graphe);
+    free2DTab((void **) warshallDist, n_s_graphe);
+    free2DTab((void **) distMat, n_s_graphe);
     *n_chemin = nb_noeuds_chemin;
     return chemin_joueur;
 }
@@ -413,6 +415,8 @@ void boucle_jeu(sommet_t ** tab, int n){
     int * chemin = boucle_jeu_graphe(tab, n, &n_chemin);
 
     boucle_jeu_espace(tab, n, chemin);
+
+    free(chemin);
 
     closeSDL();//free de tout les elements de SDL
 }

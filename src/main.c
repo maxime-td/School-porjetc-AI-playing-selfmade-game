@@ -17,5 +17,7 @@ int main()
     make_new_links(10, tab, &n);
 
     boucle_jeu(tab, n);
+
+    free2DTab((void **)tab, n);
     return 0;
 }
