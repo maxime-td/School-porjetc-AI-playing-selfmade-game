@@ -13,8 +13,14 @@
 #include "affiche.h"
 #include "fourmi.h"
 
-#define MAX_SPEED 0.3
-#define ACCELERATION 0.0005
+#define MAX_SPEED 2
+#define ACCELERATION 0.005
+
+// Structure pour les arguments de multi_start_fourmi
+typedef struct coordonne_s{
+    int x;
+    int y;
+} coordonne_t;
  
 // Structure pour les arguments de multi_start_fourmi
 typedef struct FourmiArgs_s{
@@ -45,7 +51,7 @@ int * boucle_jeu_graphe(sommet_t** tab, int n, int * nb_noeuds_chemin, int *fin)
  * @param n Le nombre de sommets
  * @param chemin Tableau du chemin choisi par le joueur
 */
-void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int *fin);
+void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin);
 
 /**
  * @brief Exécute la boucle de jeu principal

@@ -18,6 +18,8 @@ void ast_Partout(SDL_Renderer *render, sommet_t ** tab, int n);
 
 float fonction_affine(float a, int x, float b);
 
+int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur);
+
 
 /**
  * @brief Permet de savoir si un objet est dans un chemin ou s'il est en dehors de tous

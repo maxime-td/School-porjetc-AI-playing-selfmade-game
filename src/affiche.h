@@ -81,16 +81,20 @@ void render();
 */
 void closeSDL();
 
-SDL_Texture* load_texture_from_image(char* file_image_name);
+SDL_Texture* load_texture_from_image(SDL_Surface * texture_soucoupe);
 
 /**
  * @brief C'est un secret
 */
 void secret1();
 
-void soucoupe_tourne(int frame, SDL_Rect navette);
+SDL_Texture * create_texture(SDL_Surface * surface);
 
-void affiche_soucoupe(SDL_Texture* texture_soucoupe, int frame, SDL_Rect navette);
+void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y);
 
 void draw_rect(SDL_Rect rect);
+
+void affichAst(sommet_t ** tab, int n);
+
+
 #endif // AFFICHE_H

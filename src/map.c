@@ -40,13 +40,12 @@ void ast_Partout(SDL_Renderer *render, sommet_t ** tab, int n)
             if(isInPath(dstrect.x, dstrect.y, tab, n, 90)==0)
             {SDL_RenderCopyEx(render, texture, &srcrect, &dstrect, angle, NULL, 0);}
             
-                Point p = {3,3};
-                Point p1 = {0,0};
-                Point p2 = {6,0};
-                Point p3 = {0,6};
-                Point p4 = {6,6};
-                Point tP[4] = {p1,p2,p3,p4};
-                printf("AAAAAAAAAAAAAAAAAAAAAAAAA %d\n",isPointInsideRectangle(p, tP));
+                //Point p = {3,3};
+                //Point p1 = {0,0};
+                //Point p2 = {6,0};
+                //Point p3 = {0,6};
+                //Point p4 = {6,6};
+                //Point tP[4] = {p1,p2,p3,p4};
         }
     }
     SDL_RenderPresent(render);
@@ -119,8 +118,6 @@ int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur)
 
                     carre[3].x = pmTab[k].x+(largeur/2);
                     carre[3].y = pmTab[k].y+(largeur/2);
-                    //SDL_Rect  rect = {carre[0].x, carre[0].y, largeur, largeur};
-                   // draw_rect(rect);
                     
                     if(isPointInsideRectangle(P, carre)==1)
                     {
@@ -136,7 +133,6 @@ int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur)
 
 int isPointInsideRectangle(Point p, Point rect[4]) {
     int c=0;
-    printf("rect[0].x = %d -- rect[1].x = %d -- rect[0].y = %d -- rect[1].y = %d",rect[0].x,rect[1].x,rect[0].y,rect[1].y);
     if(rect[0].x<p.x && rect[1].x>p.x && rect[0].y<p.y && rect[3].y>p.y)
     {
         c=1;
