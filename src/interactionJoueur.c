@@ -125,6 +125,8 @@ void boucle_jeu(sommet_t** tab, int n) {
                             nb_noeuds_chemin = 0;
                             break;
                         case SDLK_RETURN:
+                            //nb_noeuds_chemin -= 1; 
+                        
                             for (int i = 0; i < n; i++){
                                 all[i] = 0;
                             }
@@ -149,14 +151,15 @@ void boucle_jeu(sommet_t** tab, int n) {
         if (update){
             update = 0;
             clear_SDL();
-            if(!valid){
+            if(!valid) {
                 affiche(tab, n, 0, 0, 0, 255, 1);
                 sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
                 affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
 
                 draw_path(tab, chemin_joueur, nb_noeuds_chemin);
                 draw_int(path_size_round(chemin_joueur, distMat, nb_noeuds_chemin));
-            }else{
+            }
+            else {
                 score       = path_size(chemin_joueur, distMat, nb_noeuds_chemin);
 
                 scoreBest = scoreFourmi;
