@@ -43,15 +43,21 @@ void ast_Partout(SDL_Renderer *render)
     SDL_FreeSurface(surf);
 }
 
-int coord_sur_chemin(int x, int y, sommet_t **tabSom, int n, int frame_size, int largeur)
+int coord_sur_chemin(int pX, int pY, sommet_t **tabSom, int n, int frame_size, int largeur)
 {
+    int x1, x2, x3, x4, y1, y2, y3, y4;
+    int delta1, delta2;
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
         {
             if(tabSom[i]->voisin[j]==1)
             {
-                
+                x1 = tabSom[i]->x; y1 = tabSom[i]->y - largeur;
+                x2 = tabSom[i]->x + largeur; y2 = tabSom[i]->y;
+                x3 = tabSom[j]->x - largeur; y3 = tabSom[j]->y;
+                x4 = tabSom[j]->x; y4 = tabSom[j]->y + largeur;
+
             }
         }
     }
