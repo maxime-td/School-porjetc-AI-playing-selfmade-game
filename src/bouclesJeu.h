@@ -29,10 +29,16 @@ typedef struct {
 } FloydWarshallArgs;
 
 /**
- * @brief Exécute la boucle de jeu
+ * @brief Exécute la boucle de jeu de graphe
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
 */
 void boucle_jeu_graphe(sommet_t** tab, int n);
 
+/**
+ * @brief Exécute la boucle de jeu dans l'espace
+ * @param tab Le tableau des sommets
+ * @param n Le nombre de sommets
+*/
+void boucle_jeu_espace(sommet_t** tab, int n);
 #endif
