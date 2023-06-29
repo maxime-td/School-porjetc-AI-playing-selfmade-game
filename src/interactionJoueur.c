@@ -102,7 +102,7 @@ void boucle_jeu(sommet_t** tab, int n) {
                             }
                             break;
                         
-                        case SDL_BUTTON_RIGHT: //Si on a un clic droit
+                        case SDL_BUTTON_RIGHT: //Si on a un clic droit on deselectionne un noeud
                             
                             //Pour voir si on clique sur un noeud
                             for(i = 0; i < n; i+=1) { //On parcour tous les noeuds
@@ -110,8 +110,8 @@ void boucle_jeu(sommet_t** tab, int n) {
                                 SDL_GetMouseState(&x, &y);
                                 if((x >= (tab[i]->x)-r) && (x <= (tab[i]->x)+r) && (y >= (tab[i]->y)-r) && (y <= (tab[i]->y)+r)) {
                                     if (nb_noeuds_chemin != 0 && i == chemin_joueur[nb_noeuds_chemin-1]){
-                                        chemin_joueur[nb_noeuds_chemin-1] = -1;
-                                        nb_noeuds_chemin -= 1;
+                                        chemin_joueur[nb_noeuds_chemin-1] = -1; //on met le dernier noeud du tableau à -1 valeur impossible
+                                        nb_noeuds_chemin -= 1; //on retire 1 au nombre de noeud
                                     }
                                 }
                             }
@@ -121,11 +121,11 @@ void boucle_jeu(sommet_t** tab, int n) {
                     break;
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.sym){
-                        case SDLK_SPACE:
+                        case SDLK_SPACE: //Si espace on remet le nombre de noeud à 0
                             nb_noeuds_chemin = 0;
                             break;
-                        case SDLK_RETURN:
-                            //nb_noeuds_chemin -= 1; 
+                        case SDLK_RETURN://Si entrer on verifie que la selection est valide (cycle complet) 
+                                         //Si oui on passe dans l'etat de fin de jeu (valid = 1)  
                         
                             for (int i = 0; i < n; i++){
                                 all[i] = 0;
@@ -150,8 +150,9 @@ void boucle_jeu(sommet_t** tab, int n) {
         }
         if (update){
             update = 0;
-            clear_SDL();
-            if(!valid) {
+            clear_SDL();//Clear la fenêtre (la remetre blanc)
+
+            if(!valid) {//Etat jeu en cour
                 affiche(tab, n, 0, 0, 0, 255, 1);
                 sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
                 affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
@@ -159,11 +160,11 @@ void boucle_jeu(sommet_t** tab, int n) {
                 draw_path(tab, chemin_joueur, nb_noeuds_chemin);
                 draw_int(path_size_round(chemin_joueur, distMat, nb_noeuds_chemin));
             }
-            else {
-                score       = path_size(chemin_joueur, distMat, nb_noeuds_chemin);
+            else {//Etat de fin de jeu 
+                score       = path_size(chemin_joueur, distMat, nb_noeuds_chemin); //Score du joueur
 
                 scoreBest = scoreFourmi;
-                if (scoreFloyd < scoreFourmi){
+                if (scoreFloyd < scoreFourmi){ //recherche quelle est le meilleur score obtenu entre les differents algo et le joueur
                     scoreBest = scoreFloyd;
                 }
 
@@ -173,14 +174,14 @@ void boucle_jeu(sommet_t** tab, int n) {
                 
                 
 
-                afficheFin(score, scoreBest);
+                afficheFin(score, scoreBest);//On affiche l'ecran de fin 
             }
 
-            render();
+            render();//rendre les differents elements
         }
         
         
     }
     free(chemin_joueur);
-    closeSDL();
+    closeSDL();//free de tout les elements de SDL
 }

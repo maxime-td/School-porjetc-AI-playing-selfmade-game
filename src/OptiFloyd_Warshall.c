@@ -69,7 +69,6 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
     int indAct = indDep;
     int indNext;
 
-    int compteur = 0;
     int DISTANCE = 0;
     int minDistVoisin = 0;
 
@@ -119,7 +118,7 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
 }
 
 /**
- * @brief Applique l'algo de cyclage ci-dessus sur chaque premier point et sors le plus efficace
+ * @brief Applique l'algo de cyclage ci-dessus sur chaque premier point et sors le plus efficace 
  * @param distTab le tableau des distances initiales (sera modifié)
  * @param n la taille du tableau
  * @param tabSommets le tableau des sommets
