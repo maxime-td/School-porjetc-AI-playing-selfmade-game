@@ -69,8 +69,6 @@ void boucle_jeu_graphe(sommet_t** tab, int n) {
     argsF.n       = n      ; 
     pthread_create(&thread1, NULL, (void * (*)(void *))thread_fourmi, &argsF);
     //scoreFourmi = multi_start_fourmi(distMat, n);
-
-    init(tab, n); //Affichage du graphe
     int update = 1;
     int valid  = 0;
 
@@ -194,7 +192,6 @@ void boucle_jeu_graphe(sommet_t** tab, int n) {
         }
     }
     free(chemin_joueur);
-    closeSDL();//free de tout les elements de SDL
 }
 
 /**
@@ -203,3 +200,13 @@ void boucle_jeu_graphe(sommet_t** tab, int n) {
  * @param n Le nombre de sommets
 */
 void boucle_jeu_espace(sommet_t** tab, int n);
+
+void boucle_jeu(sommet_t ** tab, int n){
+    init(tab, n); //Affichage du graphe
+    
+    boucle_jeu_graphe(tab, n);
+
+    boucle_jeu_espace(tab, n);
+
+    closeSDL();//free de tout les elements de SDL
+}
