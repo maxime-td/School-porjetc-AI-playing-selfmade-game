@@ -6,6 +6,7 @@
 #include <time.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 #include "graph.h"
 #include "affiche.h"
 #include <math.h>
@@ -80,5 +81,12 @@ void render();
  * @brief Libere le renderer la fenêtre  et ferme SDL
 */
 void closeSDL();
+
+SDL_Texture* load_texture_from_image(char* file_image_name);
+
+/**
+ * @brief C'est un secret
+*/
+void secret1();
 
 #endif // AFFICHE_H
