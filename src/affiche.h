@@ -76,9 +76,7 @@ void render();
 */
 void closeSDL();
 
-/**
- * @brief Affiche le bouton retour
-*/
-void bouton_retour()
+
+void bouton_retour();
 
 #endif // AFFICHE_H

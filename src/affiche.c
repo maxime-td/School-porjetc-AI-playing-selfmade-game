@@ -15,7 +15,7 @@ SDL_Window *window = NULL;
  * @param tab Le tableau de sommets représentant le graphe.
  * @param n Le nombre de sommets dans le tableau.
 */
-void init(sommet_t ** tab, int n){
+void init(sommet_t ** tab, int n) {
     int y = 0, x;
     int width, height, w_window = W, h_window = H;  
 
@@ -76,13 +76,13 @@ void clear_SDL(){
 */
 void bouton_retour() {
     SDL_Rect boutonRetour;
-    boutonRetour.x = 0
-    boutonRetour.y = 0
-    boutonRetour.w = 0
-    boutonRetour.h = 0
+    boutonRetour.x = 0;
+    boutonRetour.y = 0;
+    boutonRetour.w = 0;
+    boutonRetour.h = 0;
 }
 
-void draw_int(int n){
+void draw_int(int n) {
     SDL_Rect textRect;
     TTF_Font* font;
     SDL_Surface* textSurface;
