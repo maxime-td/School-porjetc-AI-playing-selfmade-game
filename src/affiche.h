@@ -89,9 +89,9 @@ SDL_Texture* load_texture_from_image(char* file_image_name);
 */
 void secret1();
 
-void soucoupe_tourne(int frame);
+void soucoupe_tourne(int frame, SDL_Rect navette);
 
-void affiche_soucoupe(SDL_Texture* texture_soucoupe, int frame);
+void affiche_soucoupe(SDL_Texture* texture_soucoupe, int frame, SDL_Rect navette);
 
 void draw_rect(SDL_Rect rect);
 #endif // AFFICHE_H

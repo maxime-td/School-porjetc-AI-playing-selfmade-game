@@ -381,25 +381,21 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
             speedY = 0;
         }
         
-        
         //printf("dx : %f, dy : %f\n", directionX, directionY);
 
-        if (count%10 == 0){
+        if (count%2 == 0){
             clear_SDL(); //Clear la fenêtre (la remetre blanc)
 
             //Animation
-            soucoupe_tourne(frame);
+            soucoupe_tourne(frame, navette);
             frame = (frame + 1)%4;
 
             navette.x = x;
             navette.y = y;
-            draw_rect(navette); 
 
-            render();//rendre les differents elements
+            render(); //rendre les differents elements
         }
         
-        
-
         count++;
     }
 }
