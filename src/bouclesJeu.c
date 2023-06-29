@@ -262,7 +262,9 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
                             break;
                     }
                     break;
+
                 case SDL_KEYUP:
+
                     switch (event.key.keysym.sym){
                         case SDLK_z:
                             keyPressZ = 0;
@@ -283,6 +285,7 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
                         default:
                             break;
                     }
+
                 default:
                     break;
             }
