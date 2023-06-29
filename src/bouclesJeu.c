@@ -71,7 +71,7 @@ int * boucle_jeu_graphe(sommet_t** tab, int n) {
     pthread_create(&thread1, NULL, (void * (*)(void *))thread_fourmi, &argsF);
 
     int update = 1;
-    int valid  = 0;
+    int etat_graphe = 0; //0 = en jeu graphe, 1 = menu de fin, 2 = en jeu espace
 
     //Boucle de jeu
     while (program_on) {
@@ -106,7 +106,7 @@ int * boucle_jeu_graphe(sommet_t** tab, int n) {
                             break;
                         
                         case SDL_BUTTON_RIGHT: //Si on a un clic droit on enlève le dernier noeud
-                            if(!valid) { //Si on est encore en jeu
+                            if(etat_graphe == 0) { //Si on est encore en jeu
                                 if (nb_noeuds_chemin != 0) { //Si on a déjà sélectionné au moins un noeud
                                     chemin_joueur[nb_noeuds_chemin-1] = -1; //on met le dernier noeud du tableau à -1 valeur impossible
                                     nb_noeuds_chemin -= 1; //on retire 1 au nombre de noeud
@@ -120,12 +120,12 @@ int * boucle_jeu_graphe(sommet_t** tab, int n) {
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.sym){
                         case SDLK_SPACE: //Si espace on remet le nombre de noeud à 0
-                            if(!valid)
+                            if(etat_graphe == 0)
                                 nb_noeuds_chemin = 0;
                             break;
                             
                         case SDLK_RETURN://Si entrer on verifie que la selection est valide (cycle complet) 
-                                         //Si oui on passe dans l'etat de fin de jeu (valid = 1)  
+                                         //Si oui on passe dans l'etat de l'écran de fin de jeu (etat_graphe = 1)  
                         
                             for (int i = 0; i < n; i++){
                                 all[i] = 0;
@@ -136,7 +136,7 @@ int * boucle_jeu_graphe(sommet_t** tab, int n) {
                             }
 
                             if (tout_noeud(all, n) && chemin_joueur[nb_noeuds_chemin-1] == chemin_joueur[0]){
-                                valid = 1;
+                                etat_graphe += 1;
                             } 
                             
                             break;
@@ -153,41 +153,48 @@ int * boucle_jeu_graphe(sommet_t** tab, int n) {
             update = 0;
             clear_SDL(); //Clear la fenêtre (la remetre blanc)
 
-            if(!valid) { //Etat jeu en cours
-                affiche(tab, n, 0, 0, 0, 255, 1);
-                sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
-                affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
-                free(sous_graphe);
+            switch(etat_graphe) { 
+                case 0: //etat_graphe = 0, etat jeu en cours
+                    affiche(tab, n, 0, 0, 0, 255, 1);
+                    sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
+                    affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
 
-                draw_path(tab, chemin_joueur, nb_noeuds_chemin);
-                draw_int(path_size(chemin_joueur, distMat, nb_noeuds_chemin));
-            }
+                    draw_path(tab, chemin_joueur, nb_noeuds_chemin);
+                    draw_int(path_size(chemin_joueur, distMat, nb_noeuds_chemin));
 
-            else {//Etat de fin de jeu 
-                if (first){
-                    first = 0;
-                    pthread_join(thread1, NULL); 
-                    pthread_join(thread2, NULL);
-                    scoreFloyd = argsFl.result;
-                    scoreFourmi = argsF.result;
-                }
+                    break;            
+
+                case 1: //etat_graphe = 1, etat écran de fin
+                    if (first) {
+                        first = 0;
+                        pthread_join(thread1, NULL); 
+                        pthread_join(thread2, NULL);
+                        scoreFloyd = argsFl.result;
+                        scoreFourmi = argsF.result;
+                    }
                 
-                score = path_size(chemin_joueur, distMat, nb_noeuds_chemin); //Score du joueur
+                    score = path_size(chemin_joueur, distMat, nb_noeuds_chemin); //Score du joueur
 
-                scoreBest = scoreFourmi;
-                if (scoreFloyd < scoreFourmi) { //recherche quelle est le meilleur score obtenu entre les differents algo et le joueur
-                    scoreBest = scoreFloyd;
-                }
+                    scoreBest = scoreFourmi;
+                    if (scoreFloyd < scoreFourmi) { //recherche quelle est le meilleur score obtenu entre les differents algo et le joueur
+                        scoreBest = scoreFloyd;
+                    }
 
-                if (scoreBest > score) {
-                    scoreBest = score;
-                }
+                    if (scoreBest > score) {
+                        scoreBest = score;
+                    }
                     
-                afficheFin(score, scoreBest); //On affiche l'ecran de fin 
+                    afficheFin(score, scoreBest); //On affiche l'ecran de fin 
 
-                if (scoreBest == score) {
-                    secret1();
-                }
+                    if (scoreBest == score) {
+                        secret1();
+                    }
+
+                    break;
+                
+                default: //etat_graphe = 2
+                    program_on = SDL_FALSE; //On ferme cette boucle
+                    break;
             }
 
             render();//rendre les differents elements
