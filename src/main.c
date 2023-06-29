@@ -23,7 +23,7 @@ int main()
     print_dist_tab(TableauDistances, &n);
 
     int res;
-    res = multi_Start_Floyd_Warshall(tabWarshall, TableauDistances, n, tab);
+    res = multi_Start_Floyd_Warshall(tabWarshall, TableauDistances, n);
     printf("\nTaille Floyd_Warshall VOISIN: %d\n\n", res);
 
     res = recuit_simule(tabWarshall, n);
