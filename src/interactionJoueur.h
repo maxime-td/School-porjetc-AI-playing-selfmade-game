@@ -33,6 +33,6 @@ typedef struct {
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
 */
-void boucle_jeu(sommet_t** tab, int n);
+void boucle_jeu_graphe(sommet_t** tab, int n);
 
 #endif

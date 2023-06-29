@@ -16,6 +16,6 @@ int main()
 
     make_new_links(10, tab, &n);
 
-    boucle_jeu(tab, n);
+    boucle_jeu_graphe(tab, n);
     return 0;
 }
