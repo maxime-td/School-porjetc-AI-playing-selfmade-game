@@ -59,16 +59,14 @@ void boucle_jeu(sommet_t** tab, int n) {
 
     sommet_t** sous_graphe; //Sous-graphe chemin pour affichage
 
-    init(tab, n); //Affichage du graphe
-    int update = 1;
-    int valid  = 0;
-
     warshallDist = copie_tab(distMat, n);
     Floyd_Warshall(warshallDist, n);
     scoreFloyd  = multi_Start_Floyd_Warshall(warshallDist, distMat, n, tab);
     scoreFourmi = multi_start_fourmi(distMat, n);
 
-    //printf("%d, %d\n", scoreFloyd, scoreFourmi);
+    init(tab, n); //Affichage du graphe
+    int update = 1;
+    int valid  = 0;
 
     //Boucle de jeu
     while (program_on) {
@@ -123,7 +121,8 @@ void boucle_jeu(sommet_t** tab, int n) {
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.sym){
                         case SDLK_SPACE: //Si espace on remet le nombre de noeud à 0
-                            nb_noeuds_chemin = 0;
+                            if(!valid)
+                                nb_noeuds_chemin = 0;
                             break;
                         case SDLK_RETURN://Si entrer on verifie que la selection est valide (cycle complet) 
                                          //Si oui on passe dans l'etat de fin de jeu (valid = 1)  
@@ -163,7 +162,7 @@ void boucle_jeu(sommet_t** tab, int n) {
                 draw_int(path_size_round(chemin_joueur, distMat, nb_noeuds_chemin));
             }
             else {//Etat de fin de jeu 
-                score       = path_size(chemin_joueur, distMat, nb_noeuds_chemin); //Score du joueur
+                score = path_size(chemin_joueur, distMat, nb_noeuds_chemin); //Score du joueur
 
                 scoreBest = scoreFourmi;
                 if (scoreFloyd < scoreFourmi){ //recherche quelle est le meilleur score obtenu entre les differents algo et le joueur
