@@ -121,10 +121,9 @@ void cycle_Floyd_Warshall(int **tabWarshall, int **tabDist, int n, int indDep, i
  * @param tabWarshall Tableau des distances de Floy-Warshall
  * @param distTab le tableau des distances initiales (sera modifié)
  * @param n la taille du tableau
- * @param tabSommets le tableau des sommets
  * @return la longueur du chemin optimal
  */
-int multi_Start_Floyd_Warshall(int **tabWarshall, int **distTab, int n, sommet_t **tabSommet)
+int multi_Start_Floyd_Warshall(int **tabWarshall, int **distTab, int n)
 {
     //print_dist_tab(tabWarshall, &n);
     int min = 99999999;

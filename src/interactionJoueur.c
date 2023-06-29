@@ -65,7 +65,7 @@ void boucle_jeu(sommet_t** tab, int n) {
 
     warshallDist = copie_tab(distMat, n);
     Floyd_Warshall(warshallDist, n);
-    scoreFloyd  = multi_Start_Floyd_Warshall(warshallDist, distMat, n, tab);
+    scoreFloyd  = multi_Start_Floyd_Warshall(warshallDist, distMat, n);
     scoreFourmi = multi_start_fourmi(distMat, n);
 
     //printf("%d, %d\n", scoreFloyd, scoreFourmi);

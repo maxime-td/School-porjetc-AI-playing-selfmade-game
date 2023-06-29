@@ -24,7 +24,7 @@ int main()
 
     // cycle_Floyd_Warshall(tabWarshall, tab, TableauDistances, n, 0, &sol);
     int res;
-    res = multi_Start_Floyd_Warshall(tabWarshall, TableauDistances, n, tab);
+    res = multi_Start_Floyd_Warshall(tabWarshall, TableauDistances, n);
     printf("\nTaille Floyd_Warshall VOISIN: %d\n\n", res);
 
     res = recuit_simule(tabWarshall, n);
