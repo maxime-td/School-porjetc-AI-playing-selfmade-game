@@ -14,15 +14,16 @@
 void Floyd_Warshall(int ** distTab, int n);
 
 
+
 /**
- * @brief Construit un cycle en selectionnant toujours le point le plus proche par lequel on n'est encore pas passé (distances calculé précédemment par Floyd_Warshall)
+ * @brief Applique l'algo de cyclage ci-dessus sur chaque premier point et sors le plus efficace
+ * @param tabWarshall Tableau des distances de Floy-Warshall
  * @param distTab le tableau des distances initiales (sera modifié)
  * @param n la taille du tableau
  * @param tabSommets le tableau des sommets
- * @param indDep l'indice dans tabSommet du point de départ
- * @return un tableau d'entier de taille n+1 décrivant le cycle optimal et sa longueur
-*/
-void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDist, int n, int indDep, int *sol);
+ * @return la longueur du chemin optimal
+ */
+void cycle_Floyd_Warshall(int **tabWarshall, int **tabDist, int n, int indDep, int *sol);
 
 
 /**
@@ -37,10 +38,9 @@ int ** copie_tab(int ** tab, int n);
  * @brief Applique l'algo de cyclage ci-dessus sur chaque premier point et sors le plus efficace
  * @param distTab le tableau des distances initiales (sera modifié)
  * @param n la taille du tableau
- * @param tabSommets le tableau des sommets
  * @return le meilleur tableau decrivant le meilleur chemin pour chaque point de départ 
 */
-int multi_Start_Floyd_Warshall(int ** tabWarshall, int **distTab, int n, sommet_t **tabSommet);
+int multi_Start_Floyd_Warshall(int ** tabWarshall, int **distTab, int n);
 
 
 void permute(int ** tab, int n);
