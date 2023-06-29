@@ -123,7 +123,6 @@ int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur)
 
                     carre[3].x = pmTab[k].x+(largeur/2);
                     carre[3].y = pmTab[k].y+(largeur/2);
-                   // draw_rect(rect);
                     
                     if(isPointInsideRectangle(P, carre)==1)
                     {
@@ -135,7 +134,7 @@ int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur)
     }
 
     for (int i = 0; i < n; i++){
-        tmp.x = tabSom[i]->x;
+        tmp.x = tabSom[i]->x;   
         tmp.y = tabSom[i]->y;
         if (distance(tmp, P) < largeur){
             res+=1;

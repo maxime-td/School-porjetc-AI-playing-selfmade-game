@@ -247,6 +247,8 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
     int n_sous_graphe = 0;
     int n_ast = 0;
     float directionY = 0; 
+    float alpha = 0;
+    int etatAlpha = 0;
 
     int keyPressZ = 0;
     int keyPressS = 0;
@@ -271,6 +273,12 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
     SDL_Surface * imageBg = IMG_Load("images/background.png");
     SDL_Texture * textureBg = create_texture(imageBg);
 
+    SDL_Rect  etoile = {0, 0, W, H};
+    SDL_Surface * imageE = IMG_Load("images/etoiles.png");    
+    SDL_Texture * textureE1 = create_texture(imageE);
+    SDL_Texture * textureE2 = create_texture(imageE);
+    SDL_SetTextureAlphaMod(textureE2, 0);
+
     SDL_Rect  planete = {0, 0, 48, 48};
     SDL_Surface * imageP = IMG_Load("images/planetes.png");    
     SDL_Texture * textureP = create_texture(imageP);
@@ -279,7 +287,6 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
         co[i].y = rand()%planeteLigne;
         co[i].x = rand()%planeteColones[co[i].y];
         co[i].y++;
-
     }
     while (program_on)
     {
@@ -464,15 +471,21 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
         //printf("dx : %f, dy : %f\n", directionX, directionY);
 
         if (count%10 == 0){
-            draw_sprite(background, textureBg, 0, 0, 0);
+            draw_sprite(background, textureBg, 0, 0, 0, background.w);
+
+            SDL_SetTextureAlphaMod(textureE2, alpha);
+            SDL_SetTextureAlphaMod(textureE1, 255-alpha);
+
+            draw_sprite(etoile, textureE1, 0, 0, 0, 540);
+            draw_sprite(etoile, textureE2, 0, 1, 0, 540);
 
             for (int i = 0; i < n_sous_graphe; i++){
-                planete.x = sous_graphe[i]->y-24;
-                planete.y = sous_graphe[i]->x-24;
-                draw_sprite(planete, textureP, co[i].x, co[i].y, 0);
+                planete.x = sous_graphe[i]->x-24;
+                planete.y = sous_graphe[i]->y-24;
+                draw_sprite(planete, textureP, co[i].x, co[i].y, 0, 48);
             }
 
-            draw_sprite(navette, texture, frame, 0, 0);
+            draw_sprite(navette, texture, frame, 0, 0, navette.w);
             //Animation
             if (count%100 == 0){
                 
@@ -486,6 +499,19 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
             navette.y = y;
 
             render(); //rendre les differents elements
+
+            if (etatAlpha){
+                alpha--;
+                if (0 == alpha){
+                    etatAlpha = !etatAlpha;
+                } 
+            }else{
+                alpha++;
+                if (255 == alpha){
+                    etatAlpha = !etatAlpha;
+                }
+            }
+            
         }
         
         count++;

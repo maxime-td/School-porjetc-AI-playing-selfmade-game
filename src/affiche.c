@@ -291,7 +291,7 @@ void affichAst(asteroid_t * tab, int n, SDL_Texture * image){
     for (int i = 0; i < n; i++){
         dest.x = tab[i].x;
         dest.y = tab[i].y;
-        draw_sprite(dest, image, tab[i].frame, 0, tab[i].angle);
+        draw_sprite(dest, image, tab[i].frame, 0, tab[i].angle, 48);
     }
 }
 
@@ -387,8 +387,8 @@ SDL_Texture * create_texture(SDL_Surface * surface){
 
 /* Partie sur l'animation de la soucoupe volante */
 
-void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int angle){
-    SDL_Rect srcrect = {destination.w*x, destination.h*y, destination.w, destination.h};
+void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int angle, int size){
+    SDL_Rect srcrect = {size*x, size*y, size, size};
     SDL_RenderCopyEx(renderer, texture, &srcrect, &destination, angle, NULL, 0);
 }
 
