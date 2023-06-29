@@ -17,7 +17,7 @@ main: $(SRC) $(HEADERS)
 .PHONY: clean reclean
 
 clean:
-	rm -f $(OBJ) 
+	rm -f main
 
 reclean:
-	rm -f $(OBJ)
+	rm -f main

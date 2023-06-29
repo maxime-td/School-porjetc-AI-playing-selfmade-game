@@ -162,6 +162,8 @@ int * boucle_jeu_graphe(sommet_t** tab, int n, int * n_chemin) {
                     draw_path(tab, chemin_joueur, nb_noeuds_chemin);
                     draw_int(path_size(chemin_joueur, distMat, nb_noeuds_chemin));
 
+                    free2DTab((void **) sous_graphe, n_s_graphe);
+
                     break;            
 
                 case 1: //etat_graphe = 1, etat écran de fin
@@ -200,7 +202,6 @@ int * boucle_jeu_graphe(sommet_t** tab, int n, int * n_chemin) {
             render();//rendre les differents elements
         }
     }
-    free2DTab((void **) sous_graphe, n_s_graphe);
     free2DTab((void **) warshallDist, n_s_graphe);
     free2DTab((void **) distMat, n_s_graphe);
     *n_chemin = nb_noeuds_chemin;
@@ -389,7 +390,7 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
             clear_SDL(); //Clear la fenêtre (la remetre blanc)
 
             //Animation
-            soucoupe_tourne(frame, navette);
+            //soucoupe_tourne(frame, navette);
             frame = (frame + 1)%4;
 
             navette.x = x;
