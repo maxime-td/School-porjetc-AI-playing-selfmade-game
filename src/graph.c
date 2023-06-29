@@ -74,7 +74,7 @@ int is_close_to_value_in_tab(sommet_t ** tab, int size, sommet_t * cour, int thr
 
 sommet_t ** gen_tab_sommets(int * n)
 {
-    *n = rand()%(N-3) +4;
+    *n = rand()%(N-(N_MIN-1)) + N_MIN;
     int first = 1;
     int angle;
     sommet_t ** tab = malloc((*n)*sizeof(sommet_t *));
