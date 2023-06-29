@@ -7,7 +7,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include "graph.h"
-#include "affiche.h"
 #include <math.h>
 
 #define R_NOEUD 15
