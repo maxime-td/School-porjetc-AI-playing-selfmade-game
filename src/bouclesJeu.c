@@ -13,6 +13,7 @@
 #include "fourmi.h"
 #include "OptiFloyd_Warshall.h"
 #include "bouclesJeu.h"
+#include "map.h"
 
 void *thread_fourmi(FourmiArgs *args)
 {
@@ -244,6 +245,7 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
     float directionX = 0;
     int frame = 0;
     int n_sous_graphe = 0;
+    int n_ast = 0;
     float directionY = 0; 
 
     int keyPressZ = 0;
@@ -253,6 +255,8 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
 
     coordonne_t co[n_chemin];
     sommet_t ** sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n, &n_sous_graphe);
+
+    asteroid_t * asteroid = ast_Partout(sous_graphe, n_sous_graphe, &n_ast);
 
     int planeteLigne   = 10;
     int planeteColones[10] = {8, 14, 16, 4, 12, 8, 12, 12, 16, 8}; 
@@ -276,7 +280,6 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
         co[i].x = rand()%planeteColones[co[i].y];
         co[i].y++;
 
-        //printf("x : %d, y : %d\n", co[i].x, co[i].y);
     }
     while (program_on)
     {
@@ -461,15 +464,15 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
         //printf("dx : %f, dy : %f\n", directionX, directionY);
 
         if (count%10 == 0){
-            draw_sprite(background, textureBg, 0, 0);
+            draw_sprite(background, textureBg, 0, 0, 0);
 
             for (int i = 0; i < n_sous_graphe; i++){
                 planete.x = sous_graphe[i]->y-24;
                 planete.y = sous_graphe[i]->x-24;
-                draw_sprite(planete, textureP, co[i].x, co[i].y);
+                draw_sprite(planete, textureP, co[i].x, co[i].y, 0);
             }
 
-            draw_sprite(navette, texture, frame, 0);
+            draw_sprite(navette, texture, frame, 0, 0);
             //Animation
             if (count%100 == 0){
                 
@@ -477,7 +480,7 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
                 frame = (frame + 1)%4;
             }
 
-            affichAst(sous_graphe, n_sous_graphe);
+            affichAst(asteroid, n_ast, textureP);
 
             navette.x = x;
             navette.y = y;
@@ -489,6 +492,7 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
         SDL_Delay(1);
     }
 
+    free(asteroid);
     IMG_Quit(); // Si on charge une librairie SDL, il faut penser à la décharger
 }
 
@@ -503,11 +507,14 @@ void boucle_jeu(sommet_t **tab, int n)
 
     int n_chemin;
     int fin=0;
+
     int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
 
-    boucle_jeu_espace(tab, n, chemin, n_chemin);
+    if(!fin)
+        boucle_jeu_espace(tab, n, chemin, n_chemin);
 
-    free(chemin);
+    if(chemin != NULL)
+        free(chemin);
 
     closeSDL(); // free de tout les elements de SDL
 }

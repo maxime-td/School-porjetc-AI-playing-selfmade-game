@@ -8,6 +8,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 #include "graph.h"
+#include "map.h"
 #include <math.h>
 
 #define R_NOEUD 15
@@ -90,11 +91,11 @@ void secret1();
 
 SDL_Texture * create_texture(SDL_Surface * surface);
 
-void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y);
+void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int angle);
 
 void draw_rect(SDL_Rect rect);
 
-void affichAst(sommet_t ** tab, int n);
+void affichAst(asteroid_t * tab, int n, SDL_Texture * image);
 
 
 #endif // AFFICHE_H
