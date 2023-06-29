@@ -6,7 +6,8 @@
         "cmath": "c",
         "solopt.h": "c",
         "recuit-simule.h": "c",
-        "affiche.h": "c"
+        "affiche.h": "c",
+        "graph.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

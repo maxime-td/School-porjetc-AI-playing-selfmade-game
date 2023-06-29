@@ -23,7 +23,7 @@ void clear_SDL();
  * @param center_y La coordonnée y du centre du disque.
  * @param radius Le rayon du disque.
 */
-void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius);
+void draw_disk(int center_x, int center_y, int radius);
 
 /**
  * @brief Dessine un graphe à l'aide d'un rendu SDL.
