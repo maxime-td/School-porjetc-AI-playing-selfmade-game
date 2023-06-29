@@ -5,7 +5,7 @@
 #define R 300 //Rayon cercle repartition
 #define W 800
 #define H 800
-
+ 
 
 /**
  * @struct sommet_s
