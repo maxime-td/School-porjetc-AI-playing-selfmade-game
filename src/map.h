@@ -31,6 +31,8 @@ float fonction_affine(float a, int x, float b);
 */
 int coord_sur_chemin(int pX, int pY, sommet_t **tabSom, int n, int frame_size, int largeur);
 
+int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur);
+
 
 void calculateLineCoefficients(int x1, int y1, int x2, int y2, float *a, float *b);
 

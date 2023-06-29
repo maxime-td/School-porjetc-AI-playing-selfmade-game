@@ -94,8 +94,6 @@ void remp_tabPm(Point p1, Point p2, Point * tab)
 int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur)
 {
     int res=0;
-    int dist;
-    int nbCarre;
     Point P = {pX,pY};
     Point carre[4];
     Point pmTab[9];
@@ -107,7 +105,6 @@ int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur)
             {
                 Point p1 = {tabSom[i]->x,tabSom[i]->y};
                 Point p2 = {tabSom[j]->x,tabSom[j]->y};
-                nbCarre = (int)(dist/10);
                 remp_tabPm(p1, p2, pmTab);
                 for(int k=0; k<9; k++)
                 {
@@ -122,7 +119,7 @@ int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur)
 
                     carre[3].x = pmTab[k].x+(largeur/2);
                     carre[3].y = pmTab[k].y+(largeur/2);
-                    SDL_Rect  rect = {carre[0].x, carre[0].y, largeur, largeur};
+                    //SDL_Rect  rect = {carre[0].x, carre[0].y, largeur, largeur};
                    // draw_rect(rect);
                     
                     if(isPointInsideRectangle(P, carre)==1)

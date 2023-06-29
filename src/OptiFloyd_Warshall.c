@@ -199,10 +199,10 @@ int recuit_simule(int **tabWarshall, int n)
     int *tabTemp = tab;
     chem = calcul_chemin_Floy_Warshall(tabWarshall, n, tab);
     float T = chem;
-    float alpha = 0.9999;
+    float alpha = powf(sqrt(T), 0.001);
     int cpt=0;
     
-    while (T > 0.0001)
+    while (T > 0.001)
     {
         cpt++;
         chem = calcul_chemin_Floy_Warshall(tabWarshall, n, tab);

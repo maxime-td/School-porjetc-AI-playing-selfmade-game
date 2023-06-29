@@ -59,7 +59,6 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
     int x, y; // Position de la souris au moment du clic
 
     sommet_t **sous_graphe; // Sous-graphe chemin pour affichage
-, int *fin
     pthread_create(&thread2, NULL, (void *(*)(void *))thread_floyd, &argsFl);
 
     argsF.matDist = distMat;
@@ -70,7 +69,7 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
     int etat_graphe = 0; // 0 = en jeu graphe, 1 = menu de fin, 2 = en jeu espace
 
     // Boucle de jeu
-    if (fin != 1)
+    if (*fin != 1)
     {
         while (program_on)
         {
@@ -248,7 +247,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int *fin)
     int keyPressZ = 0, keyPressS = 0, keyPressD = 0, keyPressQ = 0;
 
     // Boucle de jeu
-    if (fin != 1)
+    if (*fin != 1)
     {
         while (program_on)
         {
