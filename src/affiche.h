@@ -12,32 +12,46 @@
 
 #define R_NOEUD 15
 
+/**
+ * @brief Clear le fond en blanc
+*/
 void clear_SDL();
 
 /**
- * @brief Trace un disque
- * @param renderer Le renderer où tracer le disque
- * @param center_x La coordonnée x du centre du disque
- * @param center_y La coordonnée y du centre du disque
- * @param radius Le rayon du disque
+ * @brief Trace un disque.
+ * @param renderer Le renderer où tracer le disque.
+ * @param center_x La coordonnée x du centre du disque.
+ * @param center_y La coordonnée y du centre du disque.
+ * @param radius Le rayon du disque.
 */
 void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius);
 
 /**
  * @brief Dessine un graphe à l'aide d'un rendu SDL.
  * @param renderer Le rendu SDL utilisé pour afficher le graphe.
- * @param graph Le pointeur vers le graphe à dessiner.
+ * @param tab Le tableau de sommets représentant le graphe.
  * @param n Le nombre de sommets dans le tableau.
+ * @param displayPoid
  */
 void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid);
 
+/**
+ * @brief Ecrit le chemin parcouru en haut à droite.
+ * @param tab Le tableau de sommet.
+ * @param path Le tableau du chemin (les index des noeuds).
+ * @param nPath La taille du tableau path
+ */
 void draw_path(sommet_t ** tab, int * path, int nPath);
-
-void afficheFin(int score, int bestScore);
-
 
 /**
  * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
+ * @param score Le score à afficher en tant que votre score
+ * @param bestScore Le score à afficher en tant que meilleur score 
+*/
+void afficheFin(int score, int bestScore);
+
+/**
+ * @brief Affiche le graphe initial à l'aide de la bibliothèque SDL.
  * @param tab Le tableau de sommets représentant le graphe.
  * @param n Le nombre de sommets dans le tableau.
 */
@@ -50,10 +64,24 @@ void init(sommet_t ** tab, int n);
 */
 void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid);
 
+/**
+ * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
+ * @param score Le score à afficher en tant que votre score
+ * @param bestScore Le score à afficher en tant que meilleur score 
+*/
 void draw_int(int n);
 
+/**
+ * @brief Affiche le rendue du renderer
+*/
 void render();
 
+/**
+ * @brief Libere le renderer la fenêtre  et ferme SDL
+*/
 void closeSDL();
+
+
+void bouton_retour();
 
 #endif // AFFICHE_H
