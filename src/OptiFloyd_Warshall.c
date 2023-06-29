@@ -141,6 +141,11 @@ int multi_Start_Floyd_Warshall(int **tabWarshall, int **distTab, int n)
     return min;
 }
 
+/**
+ * @brief permute deux entier dans un tableau 
+ * @param tab le pointeur sur le tableau d'entier dont deux indices vont etre échangé
+ * @param n nombre de sommets du graph (et dimension du tableau des distances)
+*/
 void permute(int **tab, int n)
 {
     int a = 0, b = 0;
@@ -178,6 +183,7 @@ int calcul_chemin_Floy_Warshall(int **tabWarshall, int n, int *tab)
  * @brief applique la méthode du recuit simulé 
  * @param tabWarshall Tableau des distance de Floyd-Warshall
  * @param n nombre de sommets du graph (et dimension du tableau des distances)
+ * @return taille chemin optimal trouvé
 */
 int recuit_simule(int **tabWarshall, int n)
 {
