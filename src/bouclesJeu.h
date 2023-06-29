@@ -43,7 +43,7 @@ typedef struct {
  * @param n Le nombre de sommets
  * @return tableau du chemin du joueur
 */
-int * boucle_jeu_graphe(sommet_t** tab, int n, int * nb_noeuds_chemin);
+int * boucle_jeu_graphe(sommet_t** tab, int n, int * nb_noeuds_chemin, int *fin);
 
 /**
  * @brief Exécute la boucle de jeu dans l'espace
