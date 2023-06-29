@@ -142,7 +142,7 @@ void boucle_jeu(sommet_t** tab, int n) {
                 affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
 
                 draw_path(tab, chemin_joueur, nb_noeuds_chemin);
-                draw_int(path_size_round(chemin_joueur, distMat, nb_noeuds_chemin));
+                draw_int(path_size(chemin_joueur, distMat, nb_noeuds_chemin));
             }
 
             else {//Etat de fin de jeu 

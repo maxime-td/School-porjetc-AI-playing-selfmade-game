@@ -5,6 +5,12 @@
 #include "graph.h"
 #include "OptiFloyd_Warshall.h"
 
+/**
+ * Lance la recherche par fourmi de meilleur chemin depuis tout les sommets du graph et garde le meilleur resultat.
+ * @param matDist La matrice des distances entre les sommets.
+ * @param n Le nombre de sommets dans le graphe.
+ * @return Un entier representant la distance minimal trouvé.
+ */
 int multi_start_fourmi(int ** matDist, int n){
     int best = INT_MAX;
     int cour = 0;
@@ -22,7 +28,6 @@ int multi_start_fourmi(int ** matDist, int n){
 
 /**
  * Recherche le chemin optimal pour le voyageur de commerce en utilisant des fourmis artificielles.
- * @param tab Le tableau des sommets du graphe.
  * @param matDist La matrice des distances entre les sommets.
  * @param n Le nombre de sommets dans le graphe.
  * @param dep Le sommet de départ.
@@ -84,7 +89,6 @@ int * colonni_fourmi(int ** matDist, int n, int dep, int * nPath){
 
 /**
  * Fonction auxiliaire pour l'algorithme des fourmis artificielles.
- * @param tab Le tableau des sommets du graphe.
  * @param n Le nombre de sommets dans le graphe.
  * @param nPath Un pointeur vers une variable pour stocker la taille du chemin trouvé.
  * @param probaMat La matrice des probabilités de transition entre les sommets.
@@ -122,11 +126,9 @@ int * fourmi(int n, int * nPath, int ** probaMat, int dep){
 
         fait[k] = 1;
         chemin[n_noeud] = k;
-        //printf("++++\n");
         n_noeud++;
 
         if (n_noeud >= MAX_PATH){
-            //printf("Bruh\n");
             return NULL;
         }
     }
