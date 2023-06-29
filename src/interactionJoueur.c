@@ -12,24 +12,6 @@
 #include "OptiFloyd_Warshall.h"
 
 /**
- * @brief Regarde si le noeud d'index i est dans le chemin. Renvoie 1 si vrai, 0 si faux
- * @param i L'index
- * @param chemin Le tableau du chemin
-*/
-int est_dans_chemin(int i, int* chemin) {
-    int j = 0; //Incrément
-    int retour = 0; //Initialisé à faux
-
-    while(chemin[j] != -1) {
-        if(chemin[j] == i)
-            retour = 1;
-        j += 1;
-    }
-
-    return retour;
-}
-
-/**
  * @brief Exécute la boucle de jeu
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
@@ -67,8 +49,6 @@ void boucle_jeu(sommet_t** tab, int n) {
     Floyd_Warshall(warshallDist, n);
     scoreFloyd  = multi_Start_Floyd_Warshall(warshallDist, distMat, n, tab);
     scoreFourmi = multi_start_fourmi(distMat, n);
-
-    //printf("%d, %d\n", scoreFloyd, scoreFourmi);
 
     //Boucle de jeu
     while (program_on) {
@@ -119,7 +99,7 @@ void boucle_jeu(sommet_t** tab, int n) {
 
                     }
                     break;
-                    
+
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.sym){
                         case SDLK_SPACE:
@@ -138,8 +118,7 @@ void boucle_jeu(sommet_t** tab, int n) {
 
                             if (tout_noeud(all, n)){
                                 valid = 1;
-                            }
-                             
+                            } 
                             
                             break;
 
