@@ -10,10 +10,17 @@ typedef struct {
     int y;
 } Point;
 
+typedef struct asteroid_s{
+    int x;
+    int y;
+    int frame;
+    int angle;
+} asteroid_t;
+
 int isPointInsideRectangle(Point p, Point rect[4]);
 
 
-void ast_Partout(SDL_Renderer *render, sommet_t ** tab, int n);
+asteroid_t* ast_Partout(sommet_t ** tab, int n, int *nAst);
 
 
 float fonction_affine(float a, int x, float b);

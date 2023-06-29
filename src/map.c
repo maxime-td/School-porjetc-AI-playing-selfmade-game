@@ -1,58 +1,62 @@
 #include <stdio.h>
+#include "fourmi.h"
 #include "graph.h"
 #include "affiche.h"
 #include "map.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-void ast_Partout(SDL_Renderer *render, sommet_t ** tab, int n)
+asteroid_t * ast_Partout(/*SDL_Renderer *render,*/ sommet_t ** tab, int n, int * nAst)
 {
     int frame_size = 48;
-    SDL_Surface
+    /*SDL_Surface
         *surf = IMG_Load("./images/planetes.png");
 
-    SDL_Texture *texture = NULL;
+    SDL_Texture *texture = NULL;*/
 
     int alea = 0;
     int angle = 0;
     int ecart = (rand() % 50)-25;
+    asteroid_t * tabAst = (asteroid_t *) malloc(sizeof(asteroid_t) * H*W);
+    int a = 0;
 
     SDL_Rect srcrect = {0, 0, frame_size, frame_size}; // position and size of the part of the image to draw
     SDL_Rect dstrect = {100, 100, 42, 42};             // position and size of the destination on the screen
 
-    texture = SDL_CreateTextureFromSurface(render, surf);
+    //texture = SDL_CreateTextureFromSurface(render, surf);
 
     for (int i = 0; i < W; i += 21 + ecart)
     {
-     ecart = (rand() % 50)-25;
+        ecart = (rand() % 50)-25;
         dstrect.x = i;
         for (int j = 0; j < H; j += 21 + ecart)
         {
-             ecart = (rand() % 50)-25;
+            ecart = (rand() % 50)-25;
             dstrect.y = j;
-            alea = (rand() % 16) * 48;
-            //printf("%d\n", alea);
+            alea = (rand() % 16);
             srcrect.x = alea;
             angle = rand() % 360;
             //coord_sur_chemin(dstrect.x, dstrect.y, tab, n, frame_size, 80);
             
             
-            if(isInPath(dstrect.x, dstrect.y, tab, n, 90)==0)
-            {SDL_RenderCopyEx(render, texture, &srcrect, &dstrect, angle, NULL, 0);}
-            
-                //Point p = {3,3};
-                //Point p1 = {0,0};
-                //Point p2 = {6,0};
-                //Point p3 = {0,6};
-                //Point p4 = {6,6};
-                //Point tP[4] = {p1,p2,p3,p4};
+            if(isInPath(dstrect.x, dstrect.y, tab, n, 90)==0){
+                tabAst[a].x = dstrect.x;
+                tabAst[a].y = dstrect.y;
+                tabAst[a].frame = srcrect.x;
+                tabAst[a].angle = angle;
+                a++;
+                //SDL_RenderCopyEx(render, texture, &srcrect, &dstrect, angle, NULL, 0);
+            }
         }
     }
-    SDL_RenderPresent(render);
+    //SDL_RenderPresent(render);
 
     // SDL_Delay(3000);
-    SDL_DestroyTexture(texture);
-    SDL_FreeSurface(surf);
+    //SDL_DestroyTexture(texture);
+    //SDL_FreeSurface(surf);
+    *nAst = a;
+
+    return tabAst;
 }
 
 float fonction_affine(float a, int x, float b)
@@ -94,6 +98,7 @@ int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur)
 {
     int res=0;
     Point P = {pX,pY};
+    Point tmp;
     Point carre[4];
     Point pmTab[9];
     for (int i = 0; i < n; i++)
@@ -127,6 +132,17 @@ int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur)
             }
         }
     }
+
+    for (int i = 0; i < n; i++){
+        tmp.x = tabSom[i]->x;
+        tmp.y = tabSom[i]->y;
+        if (distance(tmp, P) < largeur){
+            res+=1;
+        }
+        
+    }
+    
+
     return res;
 }
 

@@ -7,7 +7,7 @@
 #include "graph.h"
 #include "affiche.h"
 #include <math.h>
-#include "map.h"
+
 
 SDL_Renderer* renderer;
 SDL_Window* window = NULL;
@@ -286,8 +286,13 @@ void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid
     draw_graph(renderer, tab, n, displayPoid);
 }
 
-void affichAst(sommet_t ** tab, int n){
-    ast_Partout(renderer, tab, n);
+void affichAst(asteroid_t * tab, int n, SDL_Texture * image){
+    SDL_Rect dest = {0, 0, 48, 48};
+    for (int i = 0; i < n; i++){
+        dest.x = tab[i].x;
+        dest.y = tab[i].y;
+        draw_sprite(dest, image, tab[i].frame, 0, tab[i].angle);
+    }
 }
 
 /**
@@ -382,10 +387,9 @@ SDL_Texture * create_texture(SDL_Surface * surface){
 
 /* Partie sur l'animation de la soucoupe volante */
 
-void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y){
-    //printf("x : %d - y : %d\n", destination.w*x, destination.h*y);
+void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int angle){
     SDL_Rect srcrect = {destination.w*x, destination.h*y, destination.w, destination.h};
-    SDL_RenderCopy(renderer, texture, &srcrect, &destination);
+    SDL_RenderCopyEx(renderer, texture, &srcrect, &destination, angle, NULL, 0);
 }
 
 void draw_rect(SDL_Rect rect){

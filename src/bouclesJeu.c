@@ -13,6 +13,7 @@
 #include "fourmi.h"
 #include "OptiFloyd_Warshall.h"
 #include "bouclesJeu.h"
+#include "map.h"
 
 void *thread_fourmi(FourmiArgs *args)
 {
@@ -247,7 +248,12 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
     float directionX = 0;
     int frame = 0;
     int n_sous_graphe = 0;
+<<<<<<< HEAD
     float directionY = 0;
+=======
+    int n_ast = 0;
+    float directionY = 0; 
+>>>>>>> c81c528bb422d8b781eb94359593c3e6ae51e81a
 
     int keyPressZ = 0;
     int keyPressS = 0;
@@ -257,8 +263,15 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
     coordonne_t co[n_chemin];
     sommet_t **sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n, &n_sous_graphe);
 
+<<<<<<< HEAD
     int planeteLigne = 10;
     int planeteColones[10] = {8, 14, 16, 4, 12, 8, 12, 12, 16, 8};
+=======
+    asteroid_t * asteroid = ast_Partout(sous_graphe, n_sous_graphe, &n_ast);
+
+    int planeteLigne   = 10;
+    int planeteColones[10] = {8, 14, 16, 4, 12, 8, 12, 12, 16, 8}; 
+>>>>>>> c81c528bb422d8b781eb94359593c3e6ae51e81a
 
     SDL_bool program_on = SDL_TRUE; // Booléen de boucle de jeu
     SDL_Event event;
@@ -280,7 +293,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
         co[i].x = rand() % planeteColones[co[i].y];
         co[i].y++;
 
+<<<<<<< HEAD
         // printf("x : %d, y : %d\n", co[i].x, co[i].y);
+=======
+>>>>>>> c81c528bb422d8b781eb94359593c3e6ae51e81a
     }
     // Boucle de jeu
     if (*fin != 1)
@@ -425,26 +441,66 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
                 }
             }
 
-            if (speedX < -MAX_SPEED / 2)
-            {
-                speedX = -MAX_SPEED / 2;
-            }
-            else if (speedX > MAX_SPEED / 2)
-            {
-                speedX = MAX_SPEED / 2;
+        if (speedX < -MAX_SPEED / 2)
+        {
+            speedX = -MAX_SPEED / 2;
+        }
+        else if (speedX > MAX_SPEED / 2)
+        {
+            speedX = MAX_SPEED / 2;
+        }
+
+        if (speedY < -MAX_SPEED / 2)
+        {
+            speedY = -MAX_SPEED / 2;
+        }
+        else if (speedY > MAX_SPEED / 2)
+        {
+            speedY = MAX_SPEED / 2;
+        }
+
+        x += speedX;
+        y += speedY;
+        
+        if (x < 0){
+            x = 0;
+            speedX = 0;
+            speedY = 0;
+        }else if (x > W-navette.w){
+            x = W-navette.w;
+            speedX = 0;
+            speedY = 0;
+        }
+        if (y < 0){
+            y = 0;
+            speedX = 0;
+            speedY = 0;
+        }else if (y > H-navette.h){
+            y = H-navette.h;
+            speedX = 0;
+            speedY = 0;
+        }
+        
+        //printf("dx : %f, dy : %f\n", directionX, directionY);
+
+        if (count%10 == 0){
+            draw_sprite(background, textureBg, 0, 0, 0);
+
+            for (int i = 0; i < n_sous_graphe; i++){
+                planete.x = sous_graphe[i]->y-24;
+                planete.y = sous_graphe[i]->x-24;
+                draw_sprite(planete, textureP, co[i].x, co[i].y, 0);
             }
 
-            if (speedY < -MAX_SPEED / 2)
-            {
-                speedY = -MAX_SPEED / 2;
-            }
-            else if (speedY > MAX_SPEED / 2)
-            {
-                speedY = MAX_SPEED / 2;
+            draw_sprite(navette, texture, frame, 0, 0);
+            //Animation
+            if (count%100 == 0){
+                
+                //draw_rect(navette);
+                frame = (frame + 1)%4;
             }
 
-            x += speedX;
-            y += speedY;
+            affichAst(asteroid, n_ast, textureP);
 
             if (x < 0)
             {
@@ -506,6 +562,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
         }
     }
 
+    free(asteroid);
     IMG_Quit(); // Si on charge une librairie SDL, il faut penser à la décharger
 }
 
@@ -519,12 +576,19 @@ void boucle_jeu(sommet_t **tab, int n)
     init(tab, n); // Affichage du graphe
 
     int n_chemin;
+<<<<<<< HEAD
     int fin = 0;
+=======
+    int fin=0;
+
+>>>>>>> c81c528bb422d8b781eb94359593c3e6ae51e81a
     int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
 
-    boucle_jeu_espace(tab, n, chemin, n_chemin);
+    if(!fin)
+        boucle_jeu_espace(tab, n, chemin, n_chemin);
 
-    free(chemin);
+    if(chemin != NULL)
+        free(chemin);
 
     closeSDL(); // free de tout les elements de SDL
 }
