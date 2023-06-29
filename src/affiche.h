@@ -12,6 +12,9 @@
 
 #define R_NOEUD 15
 
+/**
+ * @brief Clear le fond en blanc
+*/
 void clear_SDL();
 
 /**
@@ -33,18 +36,18 @@ void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius);
 void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid);
 
 /**
- * @brief Dessine un chemin à l'aide d'un rendu SDL.
- * @param tab Le tableau de sommets représentant le graphe.
- * @param path Le chemin à tracer.
- * @param nPath Le nombre de sommets dans le chemin.
+ * @brief Ecrit le chemin parcouru en haut à droite.
+ * @param tab Le tableau de sommet.
+ * @param path Le tableau du chemin (les index des noeuds).
+ * @param nPath La taille du tableau path
  */
 void draw_path(sommet_t ** tab, int * path, int nPath);
 
 /**
- * @brief 
- * @param score
- * @param bestScore
- */
+ * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
+ * @param score Le score à afficher en tant que votre score
+ * @param bestScore Le score à afficher en tant que meilleur score 
+*/
 void afficheFin(int score, int bestScore);
 
 /**
@@ -62,17 +65,19 @@ void init(sommet_t ** tab, int n);
 void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid);
 
 /**
- * @brief
+ * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
+ * @param score Le score à afficher en tant que votre score
+ * @param bestScore Le score à afficher en tant que meilleur score 
 */
 void draw_int(int n);
 
 /**
- * @brief
+ * @brief Affiche le rendue du renderer
 */
 void render();
 
 /**
- * @brief
+ * @brief Libere le renderer la fenêtre  et ferme SDL
 */
 void closeSDL();
 
