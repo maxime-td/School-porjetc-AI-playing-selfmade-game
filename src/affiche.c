@@ -379,9 +379,10 @@ void secret1() {
 }
 
 
+
 /* Partie sur l'animation de la soucoupe volante */
 
-void soucoupe_tourne(int frame) {
+void soucoupe_tourne(int frame, SDL_Rect navette) {
     //Initialisation
     SDL_Rect
         source = {0}, //Rectangle définissant la zone totale de la planche
@@ -393,24 +394,23 @@ void soucoupe_tourne(int frame) {
     SDL_QueryTexture(texture_soucoupe, NULL, NULL, &source.w, &source.h); // Récupération des dimensions de l'image
 
     int nb_images = 4;
-    float zoom = 2;
+    float zoom = 0.2;
     int offset_x = source.w / nb_images, offset_y = source.h;
-    //int offset_x = 32, offset_y = 32;
 
     destination.w = offset_x * zoom; // Largeur du sprite à l'écran
     destination.h = offset_y * zoom; // Hauteur du sprite à l'écran
 
     destination.y = (H - destination.h) / 2; //On se place au milieu de l'écran
 
-    affiche_soucoupe(texture_soucoupe, frame);
+    affiche_soucoupe(texture_soucoupe, frame, navette);
 
     SDL_DestroyTexture(texture_soucoupe);
 }
 
-void affiche_soucoupe(SDL_Texture* texture_soucoupe, int frame) {
+void affiche_soucoupe(SDL_Texture* texture_soucoupe, int frame, SDL_Rect navette) {
     SDL_Rect 
         source = {0}, // Rectangle définissant la zone de la texture à récupérer
-        destination = {0, 0, 200, 200};
+        destination = {navette.x, navette.y, 50, 50};
 
     SDL_QueryTexture(texture_soucoupe, NULL, NULL, &source.w, &source.h);
     source.w = 32;
