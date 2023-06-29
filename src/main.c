@@ -15,15 +15,8 @@ int main()
     tab_to_graph(tab, 0, n - 1);
 
     make_new_links(10, tab, &n);
-    int ** distTab = dist_tab(tab, &n);
-    int ** tabWarshall = copie_tab(distTab, n);
-    Floyd_Warshall(tabWarshall, n);
 
-    printf("Warshall voisin: %d\n", multi_Start_Floyd_Warshall(tabWarshall, distTab, n));
-    printf("recuit simulé : %d\n", recuit_simule(tabWarshall, n));
-
-
-    //boucle_jeu(tab, n);
+    boucle_jeu(tab, n);
 
     free2DTab((void **)tab, n);
     return 0;
