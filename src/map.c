@@ -18,15 +18,15 @@ void ast_Partout(SDL_Renderer *render, sommet_t ** tab, int n)
     int ecart = (rand() % 20) - 10;
 
     SDL_Rect srcrect = {0, 0, frame_size, frame_size}; // position and size of the part of the image to draw
-    SDL_Rect dstrect = {100, 100, 54, 54};             // position and size of the destination on the screen
+    SDL_Rect dstrect = {100, 100, 15, 15};             // position and size of the destination on the screen
 
     texture = SDL_CreateTextureFromSurface(render, surf);
 
-    for (int i = 0; i < W; i += frame_size + ecart)
+    for (int i = 0; i < W; i += 15 + ecart)
     {
         ecart = (rand() % 20) - 10;
         dstrect.x = i;
-        for (int j = 0; j < H; j += frame_size + ecart)
+        for (int j = 0; j < H; j += 15 + ecart)
         {
             ecart = (rand() % 20) - 10;
             dstrect.y = j;
@@ -39,14 +39,14 @@ void ast_Partout(SDL_Renderer *render, sommet_t ** tab, int n)
             
             if(isInPath(dstrect.x, dstrect.y, tab, n, 120)==0)
             {SDL_RenderCopyEx(render, texture, &srcrect, &dstrect, angle, NULL, 0);}
-            /*
+            
                 Point p = {3,3};
                 Point p1 = {0,0};
-                Point p2 = {0,6};
-                Point p3 = {6,6};
-                Point p4 = {6,0};
+                Point p2 = {6,0};
+                Point p3 = {0,6};
+                Point p4 = {6,6};
                 Point tP[4] = {p1,p2,p3,p4};
-                printf("AAAAAAAAAAAAAAAAAAAAAAAAA %d\n",isPointInsideRectangle(p, tP));*/
+                printf("AAAAAAAAAAAAAAAAAAAAAAAAA %d\n",isPointInsideRectangle(p, tP));
         }
     }
     SDL_RenderPresent(render);
@@ -70,24 +70,24 @@ float distance(Point p1, Point p2) {
 
 void remp_tabPm(Point p1, Point p2, Point * tab)
 {
-    tab[0].x = (p1.x+p2.x)/2;
-    tab[0].y = (p1.y+p2.y)/2;
-    tab[1].x = ((p1.x+tab[0].x)/2);
-    tab[1].y = ((p1.y+tab[0].y)/2);
-    tab[2].x = ((p1.x+tab[1].x)/2);
-    tab[2].y = ((p1.y+tab[1].y)/2);
-    tab[3].x = ((p1.x+tab[2].x)/2);
-    tab[3].y = ((p1.y+tab[2].y)/2);
-    tab[4].x = ((p1.x+tab[3].x)/2);
-    tab[4].y = ((p1.y+tab[3].y)/2);
-    tab[5].x = (tab[0].x+p2.x)/2;
-    tab[5].y = (tab[0].y+p2.y)/2;
-    tab[6].x = (tab[5].x+p2.x)/2;
-    tab[6].y = (tab[5].y+p2.y)/2;
-    tab[7].x = (tab[6].x+p2.x)/2;
-    tab[7].y = (tab[6].y+p2.y)/2;
-    tab[8].x = (tab[7].x+p2.x)/2;
-    tab[8].y = (tab[7].y+p2.y)/2;
+    tab[0].x = (p1.x+p2.x)/2-12;
+    tab[0].y = (p1.y+p2.y)/2-12;
+    tab[1].x = ((p1.x+tab[0].x)/2)-12;
+    tab[1].y = ((p1.y+tab[0].y)/2)-12;
+    tab[2].x = ((p1.x+tab[1].x)/2)-12;
+    tab[2].y = ((p1.y+tab[1].y)/2)-12;
+    tab[3].x = ((p1.x+tab[2].x)/2)-12;
+    tab[3].y = ((p1.y+tab[2].y)/2)-12;
+    tab[4].x = ((p1.x+tab[3].x)/2)-12;
+    tab[4].y = ((p1.y+tab[3].y)/2)-12;
+    tab[5].x = (tab[0].x+p2.x)/2-12;
+    tab[5].y = (tab[0].y+p2.y)/2-12;
+    tab[6].x = (tab[5].x+p2.x)/2-12;
+    tab[6].y = (tab[5].y+p2.y)/2-12;
+    tab[7].x = (tab[6].x+p2.x)/2-12;
+    tab[7].y = (tab[6].y+p2.y)/2-12;
+    tab[8].x = (tab[7].x+p2.x)/2-12;
+    tab[8].y = (tab[7].y+p2.y)/2-12;
 }
 
 int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur)
@@ -121,15 +121,18 @@ int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur)
 
                     carre[3].x = pmTab[k].x+(largeur/2);
                     carre[3].y = pmTab[k].y+(largeur/2);
+                    SDL_Rect  rect = {carre[0].x, carre[0].y, largeur, largeur};
+                   // draw_rect(rect);
                     
-                    if(isPointInsideRectangle(P, carre)!=0)
+                    if(isPointInsideRectangle(P, carre)==1)
                     {
-                        res=1;
+                        res+=1;
                     }
                 }
             }
         }
     }
+    return res;
 }
 
 
@@ -234,11 +237,11 @@ int coord_sur_chemin(int pX, int pY, sommet_t **tabSom, int n, int frame_size, i
 
 
 int isPointInsideRectangle(Point p, Point rect[4]) {
-    int i, j, c = 0;
-    for (i = 0, j = 3; i < 4; j = i++) {
-        if (((rect[i].y > p.y) != (rect[j].y > p.y)) &&
-            (p.x < (rect[j].x - rect[i].x) * (p.y - rect[i].y) / (rect[j].y - rect[i].y) + rect[i].x))
-            c = !c;
+    int c=0;
+    printf("rect[0].x = %d -- rect[1].x = %d -- rect[0].y = %d -- rect[1].y = %d",rect[0].x,rect[1].x,rect[0].y,rect[1].y);
+    if(rect[0].x<p.x && rect[1].x>p.x && rect[0].y<p.y && rect[3].y>p.y)
+    {
+        c=1;
     }
     return c;
 }

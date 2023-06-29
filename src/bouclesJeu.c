@@ -157,7 +157,7 @@ int * boucle_jeu_graphe(sommet_t** tab, int n, int * n_chemin) {
                 case 0: //etat_graphe = 0, etat jeu en cours
                     affiche(tab, n, 0, 0, 0, 255, 1);
                     sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
-                    affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
+                   // affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
 
                     draw_path(tab, chemin_joueur, nb_noeuds_chemin);
                     draw_int(path_size(chemin_joueur, distMat, nb_noeuds_chemin));
