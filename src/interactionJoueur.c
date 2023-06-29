@@ -82,19 +82,11 @@ void boucle_jeu(sommet_t** tab, int n) {
                             }
                             break;
                         
-                        case SDL_BUTTON_RIGHT: //Si on a un clic droit on deselectionne un noeud
-                            
-                            //Pour voir si on clique sur un noeud
-                            for(i = 0; i < n; i+=1) { //On parcour tous les noeuds
-                                //On regarde si le clic est dans un carré autour du noeud
-                                SDL_GetMouseState(&x, &y);
-                                if((x >= (tab[i]->x)-r) && (x <= (tab[i]->x)+r) && (y >= (tab[i]->y)-r) && (y <= (tab[i]->y)+r)) {
-                                    if (nb_noeuds_chemin != 0 && i == chemin_joueur[nb_noeuds_chemin-1]){
-                                        chemin_joueur[nb_noeuds_chemin-1] = -1; //on met le dernier noeud du tableau à -1 valeur impossible
-                                        nb_noeuds_chemin -= 1; //on retire 1 au nombre de noeud
-                                    }
-                                }
-                            }
+                        case SDL_BUTTON_RIGHT: //Si on a un clic droit on enlève le dernier noeud
+                            if(!valid) { //Si on est encore en jeu
+                                chemin_joueur[nb_noeuds_chemin-1] = -1; //on met le dernier noeud du tableau à -1 valeur impossible
+                                nb_noeuds_chemin -= 1; //on retire 1 au nombre de noeud     
+                            }       
                             break;
 
                     }
