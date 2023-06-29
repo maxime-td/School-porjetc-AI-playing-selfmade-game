@@ -69,6 +69,9 @@ void init(sommet_t ** tab, int n) {
     SDL_RenderPresent(renderer);
 }
 
+/**
+ * @brief Clear le fond en blanc
+*/
 void clear_SDL(){
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
@@ -88,6 +91,10 @@ void bouton_retour() {
     SDL_RenderFillRect(renderer, &boutonRetour);
 }
 
+/**
+ * @brief Ecrit l'entier passer en paramètre en bas à droite de l'ecran.
+ * @param n L'entier à ecrires.
+ */
 void draw_int(int n) {
     SDL_Rect textRect;
     TTF_Font* font;
@@ -237,6 +244,13 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
     TTF_Quit();
 }
 
+
+/**
+ * @brief Ecrit le chemin parcouru en haut à droite.
+ * @param tab Le tableau de sommet.
+ * @param path Le tableau du chemin (les index des noeuds).
+ * @param nPath La taille du tableau path
+ */
 void draw_path(sommet_t ** tab, int * path, int nPath) {
     SDL_Rect textRect;
     TTF_Font* font;
@@ -289,6 +303,12 @@ void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid
     draw_graph(renderer, tab, n, displayPoid);
 }
 
+
+/**
+ * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
+ * @param score Le score à afficher en tant que votre score
+ * @param bestScore Le score à afficher en tant que meilleur score 
+*/
 void afficheFin(int score, int bestScore) {
     SDL_Rect textRect;
     TTF_Font* font;
@@ -336,10 +356,17 @@ void afficheFin(int score, int bestScore) {
     TTF_Quit();
 }
 
+/**
+ * @brief Affiche le rendue du renderer
+*/
 void render() {
     SDL_RenderPresent(renderer);
 }
 
+
+/**
+ * @brief Libere le renderer la fenêtre  et ferme SDL
+*/
 void closeSDL() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
