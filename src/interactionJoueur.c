@@ -153,7 +153,7 @@ void boucle_jeu(sommet_t** tab, int n) {
             update = 0;
             clear_SDL(); //Clear la fenêtre (la remetre blanc)
 
-            if(!valid) {//Etat jeu en cours
+            if(!valid) { //Etat jeu en cours
                 affiche(tab, n, 0, 0, 0, 255, 1);
                 sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
                 affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
@@ -172,15 +172,19 @@ void boucle_jeu(sommet_t** tab, int n) {
                 score = path_size(chemin_joueur, distMat, nb_noeuds_chemin); //Score du joueur
 
                 scoreBest = scoreFourmi;
-                if (scoreFloyd < scoreFourmi){ //recherche quelle est le meilleur score obtenu entre les differents algo et le joueur
+                if (scoreFloyd < scoreFourmi) { //recherche quelle est le meilleur score obtenu entre les differents algo et le joueur
                     scoreBest = scoreFloyd;
                 }
 
-                if (scoreBest > score){
+                if (scoreBest > score) {
                     scoreBest = score;
                 }
+                    
+                afficheFin(score, scoreBest); //On affiche l'ecran de fin 
 
-                afficheFin(score, scoreBest);//On affiche l'ecran de fin 
+                if (scoreBest == score) {
+                    secret1();
+                }
             }
 
             render();//rendre les differents elements
