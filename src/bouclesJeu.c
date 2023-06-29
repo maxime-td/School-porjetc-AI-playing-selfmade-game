@@ -136,7 +136,7 @@ void boucle_jeu_graphe(sommet_t** tab, int n) {
                                 all[chemin_joueur[i]] = 1;
                             }
 
-                            if (tout_noeud(all, n)){
+                            if (tout_noeud(all, n) && chemin_joueur[nb_noeuds_chemin-1] == chemin_joueur[0]){
                                 valid = 1;
                             } 
                             
