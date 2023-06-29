@@ -60,7 +60,6 @@ void init(sommet_t ** tab, int n) {
 
     SDL_GetWindowPosition(window, &x, &y);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_Delay(10);
     draw_graph(renderer, tab, n, 1);
     
     SDL_RenderPresent(renderer);
