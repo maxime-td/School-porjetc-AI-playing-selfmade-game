@@ -5,6 +5,7 @@
 #include <pthread.h>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
 #include "graph.h"
@@ -214,7 +215,7 @@ int * boucle_jeu_graphe(sommet_t** tab, int n, int * n_chemin) {
  * @param n Le nombre de sommets
  * @param chemin Tableau du chemin choisi par le joueur
 */
-void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
+void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
     int count = 0;
     float speedX = 0;
     float speedY = 0;
@@ -222,10 +223,37 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
     float y = tab[chemin[0]]->y;
     float directionX = 0;
     int frame = 0;
+    int n_sous_graphe = 0;
     float directionY = 0; 
+
+    
+    sommet_t ** sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n, &n_sous_graphe);
+    coordonne_t co[n_sous_graphe];
+
+    int planeteLigne   = 10;
+    int planeteColones[10] = {8, 14, 16, 4, 12, 8, 12, 12, 16, 8}; 
+
     SDL_bool program_on = SDL_TRUE; //Booléen de boucle de jeu
     SDL_Event event;
-    SDL_Rect  navette = {x, y, 20, 20};
+    SDL_Rect  navette = {x, y, 32, 32};
+    SDL_Surface * image = IMG_Load("images/soucoupeV3.png");
+    SDL_Texture * texture = create_texture(image);
+
+    SDL_Rect  background = {0, 0, W, H};
+    SDL_Surface * imageBg = IMG_Load("images/background.png");
+    SDL_Texture * textureBg = create_texture(imageBg);
+
+    SDL_Rect  planete = {0, 0, 48, 48};
+    SDL_Surface * imageP = IMG_Load("images/planetes.png");    
+    SDL_Texture * textureP = create_texture(imageP);
+
+    for (int i = 0; i < n_sous_graphe; i++){
+        co[i].y = rand()%planeteLigne;
+        co[i].x = rand()%planeteColones[co[i].y];
+        co[i].y++;
+
+        //printf("x : %d, y : %d\n", co[i].x, co[i].y);
+    }
 
     int keyPressZ = 0, keyPressS = 0, keyPressD = 0, keyPressQ = 0;
 
@@ -386,12 +414,22 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
         
         //printf("dx : %f, dy : %f\n", directionX, directionY);
 
-        if (count%2 == 0){
-            clear_SDL(); //Clear la fenêtre (la remetre blanc)
+        if (count%10 == 0){
+            draw_sprite(background, textureBg, 0, 0);
 
+            for (int i = 0; i < n_sous_graphe; i++){
+                planete.x = sous_graphe[i]->y-24;
+                planete.y = sous_graphe[i]->x-24;
+                draw_sprite(planete, textureP, co[i].x, co[i].y);
+            }
+
+            draw_sprite(navette, texture, frame, 0);
             //Animation
-            //soucoupe_tourne(frame, navette);
-            frame = (frame + 1)%4;
+            if (count%100 == 0){
+                
+                //draw_rect(navette);
+                frame = (frame + 1)%4;
+            }
 
             navette.x = x;
             navette.y = y;
@@ -400,7 +438,10 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
         }
         
         count++;
+        SDL_Delay(1);
     }
+
+    IMG_Quit(); // Si on charge une librairie SDL, il faut penser à la décharger
 }
 
 /**
@@ -414,7 +455,7 @@ void boucle_jeu(sommet_t ** tab, int n){
     int n_chemin;
     int * chemin = boucle_jeu_graphe(tab, n, &n_chemin);
 
-    boucle_jeu_espace(tab, n, chemin);
+    boucle_jeu_espace(tab, n, chemin, n_chemin);
 
     free(chemin);
 
