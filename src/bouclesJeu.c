@@ -11,7 +11,7 @@
 #include "affiche.h"
 #include "fourmi.h"
 #include "OptiFloyd_Warshall.h"
-#include "interactionJoueur.h"
+#include "bouclesJeu.h"
 
 void* thread_fourmi(FourmiArgs* args){
     args->result = multi_start_fourmi(args->matDist, args->n);

@@ -4,7 +4,7 @@
 #include "affiche.h"
 #include "OptiFloyd_Warshall.h"
 #include "fourmi.h"
-#include "interactionJoueur.h"
+#include "bouclesJeu.h"
 
 int main()
 {
