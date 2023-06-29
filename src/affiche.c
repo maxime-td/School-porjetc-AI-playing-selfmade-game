@@ -62,9 +62,6 @@ void init(sommet_t ** tab, int n) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_Delay(10);
     draw_graph(renderer, tab, n, 1);
-
-    SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
-    bouton_retour();
     
     SDL_RenderPresent(renderer);
 }
@@ -72,20 +69,6 @@ void init(sommet_t ** tab, int n) {
 void clear_SDL(){
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
-}
-
-/**
- * @brief Affiche le bouton retour
-*/
-void bouton_retour() {
-    SDL_Rect boutonRetour; //Initialisation du rectangle du bouton
-
-    boutonRetour.w = 200; //Largeur
-    boutonRetour.h = 80; //Hauteur
-    boutonRetour.x = 0; //Position x
-    boutonRetour.y = H - boutonRetour.h - 50; //Position y
-
-    SDL_RenderFillRect(renderer, &boutonRetour);
 }
 
 void draw_int(int n) {
