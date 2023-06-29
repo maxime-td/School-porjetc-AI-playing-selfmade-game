@@ -55,21 +55,19 @@ int **copie_tab(int **tab, int n)
 
 /**
  * @brief Construit un cycle en selectionnant toujours le point le plus proche par lequel on n'est encore pas passé (distances calculé précédemment par Floyd_Warshall)
- * @param distTab le tableau des distances initiales (sera modifié)
+ * @param tabWarshall Tableau des distances de Floy-Warshall
+ * @param distTab le tableau des distances initiales 
  * @param n la taille du tableau
- * @param tabSommets le tableau des sommets
  * @param indDep l'indice dans tabSommet du point de départ
+ * @param sol l'adresse d'un entier qui prend la valeur de la solution de ce cycle
  * @return un tableau d'entier de taille n+1 décrivant le cycle optimal et sa longueur
  */
-void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDist, int n, int indDep, int *sol)
+void cycle_Floyd_Warshall(int **tabWarshall, int **tabDist, int n, int indDep, int *sol)
 {
-    //char vDep = tabSommets[indDep]->val;
-    //char vAct = vDep;
 
     int indAct = indDep;
     int indNext;
 
-    int compteur = 0;
     int DISTANCE = 0;
     int minDistVoisin = 0;
 
@@ -134,7 +132,7 @@ int multi_Start_Floyd_Warshall(int **tabWarshall, int **distTab, int n, sommet_t
     int tmp;
     for (int i = 0; i < n; i++)
     {
-        cycle_Floyd_Warshall(tabWarshall, tabSommet, distTab, n, i, &sol);
+        cycle_Floyd_Warshall(tabWarshall, distTab, n, i, &sol);
         tmp = sol;
         if (min > tmp)
         {
