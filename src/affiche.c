@@ -116,12 +116,11 @@ void draw_int(int n) {
 
 /**
  * @brief Trace un disque
- * @param renderer Le renderer où tracer le disque
  * @param center_x La coordonnée x du centre du disque
  * @param center_y La coordonnée y du centre du disque
  * @param radius Le rayon du disque
 */
-void draw_disk(SDL_Renderer* renderer, int center_x, int center_y, int radius) {
+void draw_disk(int center_x, int center_y, int radius) {
     // Calculer les coordonnées du rectangle englobant le disque
     int x = center_x - radius;
     int y = center_y - radius;
@@ -207,7 +206,7 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
                 SDL_DestroyTexture(textTexturePoid);
             }
         }
-        draw_disk(renderer, sommet_courant->x, sommet_courant->y, rayon); //Traçage du sommet
+        draw_disk(sommet_courant->x, sommet_courant->y, rayon); //Traçage du sommet
 
         sprintf(Tag, "%c", tab[i]->val);
 
@@ -420,4 +419,9 @@ void affiche_soucoupe(SDL_Texture* texture_soucoupe, int frame) {
 
     SDL_RenderCopy(renderer, texture_soucoupe, &source, &destination);
     SDL_Delay(300);
+}
+
+void draw_rect(SDL_Rect rect){
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &rect);
 }

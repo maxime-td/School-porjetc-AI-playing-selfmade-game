@@ -30,7 +30,7 @@ void* thread_floyd(FloydWarshallArgs* args){
  * @param n Le nombre de sommets
  * @return tableau du chemin du joueur
 */
-int * boucle_jeu_graphe(sommet_t** tab, int n) {
+int * boucle_jeu_graphe(sommet_t** tab, int n, int * n_chemin) {
     pthread_t thread1, thread2;
     //Initialisation
     int i; //Incrément
@@ -200,6 +200,8 @@ int * boucle_jeu_graphe(sommet_t** tab, int n) {
             render();//rendre les differents elements
         }
     }
+
+    *n_chemin = nb_noeuds_chemin;
     return chemin_joueur;
 }
 
@@ -213,13 +215,14 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
     int count = 0;
     float speedX = 0;
     float speedY = 0;
-    float pastDirX = 0;
-    float pastDirY = 0;
+    float x = tab[chemin[0]]->x;
+    float y = tab[chemin[0]]->y;
     float directionX = 0;
     int frame = 0;
     float directionY = 0; 
     SDL_bool program_on = SDL_TRUE; //Booléen de boucle de jeu
     SDL_Event event;
+    SDL_Rect  navette = {x, y, 20, 20};
 
     int keyPressZ = 0, keyPressS = 0, keyPressD = 0, keyPressQ = 0;
 
@@ -241,42 +244,18 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
                     switch (event.key.keysym.sym){
                         case SDLK_z:
                             keyPressZ = 1;
-                            directionY = -0.5;
-                            if (directionX == 0){
-                                directionY = -1;
-                            }else if(fabs(directionX) == 1){
-                                directionX *= 0.5;
-                            }
                             break;
 
                         case SDLK_s:
                             keyPressS = 1;
-                            directionY = 0.5;
-                            if (directionX == 0){
-                                directionY = 1;
-                            }else if(fabs(directionX) == 1){
-                                directionX *= 0.5;
-                            }
                             break;
 
                         case SDLK_q:
                             keyPressQ = 1;
-                            directionX = -0.5;
-                            if (directionY == 0){
-                                directionX = -1;
-                            }else if(fabs(directionY) == 1){
-                                directionY *= 0.5;
-                            }
                             break;
 
                         case SDLK_d:
                             keyPressD = 1;
-                            directionX = 0.5;
-                            if (directionY == 0){
-                                directionX = 1;
-                            }else if(fabs(directionY) == 1){
-                                directionY *= 0.5;
-                            }
                             break;
 
                         default:
@@ -318,6 +297,11 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
         if (keyPressS){
             directionY += 0.5;
         }
+
+        if(!keyPressZ && !keyPressS){
+            directionY = 0;
+        }
+
         if (keyPressQ){
             directionX += -0.5;
         }
@@ -325,14 +309,74 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
             directionX += 0.5;
         }
 
+        if(!keyPressD && !keyPressQ){
+            directionX = 0;
+        }
+
         if (fabs(directionX) + fabs(directionY) == 0.5){
             directionX *= 2;
             directionY *= 2;
         }
         
-        speedX += directionX;
-        speedY += directionY;
+        speedX += directionX*ACCELERATION;
+        speedY += directionY*ACCELERATION;
+
+        if(directionX == 0 && speedX != 0){
+            if (speedX < 0){
+                speedX += ACCELERATION/4;
+            }else{
+                speedX -= ACCELERATION/4;
+            }   
+
+            if(speedX < ACCELERATION  && speedX > -ACCELERATION){
+                speedX = 0;
+            }
+        }
+
+        if(directionY == 0 && speedY != 0){
+            if (speedY < 0){
+                speedY += ACCELERATION/4;
+            }else{
+                speedY -= ACCELERATION/4;
+            }  
+            if(speedY < ACCELERATION  && speedY > -ACCELERATION){
+                speedY = 0;
+            } 
+        }
         
+        if (speedX < -MAX_SPEED/2){
+            speedX = -MAX_SPEED/2;
+        }else if(speedX > MAX_SPEED/2){
+            speedX = MAX_SPEED/2;
+        }
+
+        if (speedY < -MAX_SPEED/2){
+            speedY = -MAX_SPEED/2;
+        }else if(speedY > MAX_SPEED/2){
+            speedY = MAX_SPEED/2;
+        }
+
+        x += speedX;
+        y += speedY;
+        
+        if (x < 0){
+            x = 0;
+            speedX = 0;
+            speedY = 0;
+        }else if (x > W-navette.w){
+            x = W-navette.w;
+            speedX = 0;
+            speedY = 0;
+        }
+        if (y < 0){
+            y = 0;
+            speedX = 0;
+            speedY = 0;
+        }else if (y > H-navette.h){
+            y = H-navette.h;
+            speedX = 0;
+            speedY = 0;
+        }
         
         
         //printf("dx : %f, dy : %f\n", directionX, directionY);
@@ -343,10 +387,12 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
             //Animation
             soucoupe_tourne(frame);
             frame = (frame + 1)%4;
-            render();//rendre les differents elements
 
-            pastDirX = directionX;
-            pastDirY = directionY;
+            navette.x = x;
+            navette.y = y;
+            draw_rect(navette); 
+
+            render();//rendre les differents elements
         }
         
         
@@ -363,7 +409,8 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
 void boucle_jeu(sommet_t ** tab, int n){
     init(tab, n); //Affichage du graphe
     
-    int * chemin = boucle_jeu_graphe(tab, n);
+    int n_chemin;
+    int * chemin = boucle_jeu_graphe(tab, n, &n_chemin);
 
     boucle_jeu_espace(tab, n, chemin);
 
