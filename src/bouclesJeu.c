@@ -243,12 +243,18 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
     float x = tab[chemin[0]]->x;
     float y = tab[chemin[0]]->y;
     float directionX = 0;
+    int planeteVisite[n];
     int frame = 0;
+    int frameFlag = 0;
     int n_sous_graphe = 0;
     int n_ast = 0;
+    int seconde = 0;
     float directionY = 0; 
     float alpha = 0;
     int etatAlpha = 0;
+
+    Point p1;
+    Point p2;
 
     int keyPressZ = 0;
     int keyPressS = 0;
@@ -265,9 +271,14 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
 
     SDL_bool program_on = SDL_TRUE; //Booléen de boucle de jeu
     SDL_Event event;
+    
     SDL_Rect  navette = {x, y, 32, 32};
     SDL_Surface * image = IMG_Load("images/soucoupeV3.png");
     SDL_Texture * texture = create_texture(image);
+
+    SDL_Rect  flag = {0, 0, 48, 48};
+    SDL_Surface * imageF = IMG_Load("images/flag.png");
+    SDL_Texture * textureF = create_texture(imageF);
 
     SDL_Rect  background = {0, 0, W, H};
     SDL_Surface * imageBg = IMG_Load("images/background.png");
@@ -288,6 +299,12 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
         co[i].x = rand()%planeteColones[co[i].y];
         co[i].y++;
     }
+
+    for (int i = 0; i < n; i++){
+        planeteVisite[i] = 0;
+    }
+    
+
     while (program_on)
     {
         // Gestion des événements
@@ -448,7 +465,27 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
 
         x += speedX;
         y += speedY;
+
+        for (int i = 0; i < n; i++){
+            p1.x = tab[i]->x;
+            p1.y = tab[i]->y;
+            p2.x = x+16;
+            p2.y = y+16;
+            if (distance(p1, p2) < 16+24){
+                planeteVisite[i] = 1;
+            }
+            
+        }
         
+
+        while (!isInPath(x, y, tab, n, PATH_SIZE-10) && !isInPath(x-32, y-32, tab, n, PATH_SIZE-10))
+        {
+            x -= speedX*2;
+            y -= speedY*2;
+            speedX = 0;
+            speedY = 0;
+        }
+
         if (x < 0){
             x = 0;
             speedX = 0;
@@ -467,6 +504,7 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
             speedX = 0;
             speedY = 0;
         }
+
         
         //printf("dx : %f, dy : %f\n", directionX, directionY);
 
@@ -485,18 +523,37 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
                 draw_sprite(planete, textureP, co[i].x, co[i].y, 0, 48);
             }
 
+            for (int i = 0; i < n; i++){
+                if (planeteVisite[i]){
+                    flag.x = tab[i]->x-12;
+                    flag.y = tab[i]->y-48;
+                    if (i == chemin[0]){
+                        draw_sprite(flag, textureF, frameFlag, 1, 0, 60);
+                    }else{
+                        draw_sprite(flag, textureF, frameFlag, 0, 0, 60);
+                    }
+                    
+                }
+                
+            }
+            
+
             draw_sprite(navette, texture, frame, 0, 0, navette.w);
             //Animation
             if (count%100 == 0){
                 
                 //draw_rect(navette);
                 frame = (frame + 1)%4;
+                frameFlag = (frameFlag + 1)%5;
             }
+
 
             affichAst(asteroid, n_ast, textureP);
 
             navette.x = x;
             navette.y = y;
+
+            draw_time(seconde);
 
             render(); //rendre les differents elements
 
@@ -514,6 +571,11 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
             
         }
         
+        if (count%333 == 0){
+            seconde++;
+        }
+        
+
         count++;
         SDL_Delay(1);
     }
