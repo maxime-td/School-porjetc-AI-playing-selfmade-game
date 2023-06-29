@@ -13,6 +13,19 @@
 #include "affiche.h"
 #include "fourmi.h"
 
+// Structure pour les arguments de multi_start_fourmi
+typedef struct FourmiArgs_s{
+    int** matDist;
+    int n;
+} FourmiArgs;
+
+// Structure pour les arguments de cycle_Floyd_Warshall
+typedef struct {
+    int** tabWarshall;
+    int** tabDist;
+    int n;
+} FloydWarshallArgs;
+
 /**
  * @brief Exécute la boucle de jeu
  * @param tab Le tableau des sommets
