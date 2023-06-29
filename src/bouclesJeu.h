@@ -42,5 +42,10 @@ void boucle_jeu_graphe(sommet_t** tab, int n);
 */
 void boucle_jeu_espace(sommet_t** tab, int n);
 
+/**
+ * @brief Exécute la boucle principale du programme
+ * @param tab Le tableau des sommets
+ * @param n Le nombre de sommets
+*/
 void boucle_jeu(sommet_t ** tab, int n);
 #endif
