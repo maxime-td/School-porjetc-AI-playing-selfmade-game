@@ -13,6 +13,8 @@
 #include "affiche.h"
 #include "fourmi.h"
 
+#define MAX_SPEED 10
+
 // Structure pour les arguments de multi_start_fourmi
 typedef struct FourmiArgs_s{
     int** matDist;
@@ -29,16 +31,25 @@ typedef struct {
 } FloydWarshallArgs;
 
 /**
- * @brief Exécute la boucle de jeu de graphe
+ * @brief Exécute la boucle de jeu  de graphe
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
+ * @return tableau du chemin du joueur
 */
-void boucle_jeu_graphe(sommet_t** tab, int n);
+int * boucle_jeu_graphe(sommet_t** tab, int n);
 
 /**
  * @brief Exécute la boucle de jeu dans l'espace
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
+ * @param chemin Tableau du chemin choisi par le joueur
 */
-void boucle_jeu_espace(sommet_t** tab, int n);
+void boucle_jeu_espace(sommet_t** tab, int n, int * chemin);
+
+/**
+ * @brief Exécute la boucle de jeu principal
+ * @param tab Le tableau des sommets
+ * @param n Le nombre de sommets
+*/
+void boucle_jeu(sommet_t ** tab, int n);
 #endif

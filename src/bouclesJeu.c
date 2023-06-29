@@ -28,8 +28,9 @@ void* thread_floyd(FloydWarshallArgs* args){
  * @brief Exécute la boucle de jeu  de graphe
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
+ * @return tableau du chemin du joueur
 */
-void boucle_jeu_graphe(sommet_t** tab, int n) {
+int * boucle_jeu_graphe(sommet_t** tab, int n) {
     pthread_t thread1, thread2;
     //Initialisation
     int i; //Incrément
@@ -68,7 +69,7 @@ void boucle_jeu_graphe(sommet_t** tab, int n) {
     argsF.matDist = distMat;
     argsF.n       = n      ; 
     pthread_create(&thread1, NULL, (void * (*)(void *))thread_fourmi, &argsF);
-    //scoreFourmi = multi_start_fourmi(distMat, n);
+
     int update = 1;
     int valid  = 0;
 
@@ -156,6 +157,7 @@ void boucle_jeu_graphe(sommet_t** tab, int n) {
                 affiche(tab, n, 0, 0, 0, 255, 1);
                 sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
                 affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
+                free(sous_graphe);
 
                 draw_path(tab, chemin_joueur, nb_noeuds_chemin);
                 draw_int(path_size(chemin_joueur, distMat, nb_noeuds_chemin));
@@ -191,22 +193,172 @@ void boucle_jeu_graphe(sommet_t** tab, int n) {
             render();//rendre les differents elements
         }
     }
-    free(chemin_joueur);
+    return chemin_joueur;
 }
 
 /**
  * @brief Exécute la boucle de jeu dans l'espace
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
+ * @param chemin Tableau du chemin choisi par le joueur
 */
-void boucle_jeu_espace(sommet_t** tab, int n);
+void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
+    int count = 0;
+    float speedX = 0;
+    float speedY = 0;
+    float pastDirX = 0;
+    float pastDirY = 0;
+    float directionX = 0;
+    float directionY = 0; 
+    SDL_bool program_on = SDL_TRUE; //Booléen de boucle de jeu
+    SDL_Event event;
 
+    int keyPressZ = 0, keyPressS = 0, keyPressD = 0, keyPressQ = 0;
+
+    //Boucle de jeu
+    while (program_on) {
+        //Gestion des événements
+        while (SDL_PollEvent(&event))
+        {
+            switch (event.type)
+            {
+                
+                //pour fermer la fenetre quand on clique sur la croix
+                case SDL_QUIT:
+                    program_on = SDL_FALSE;
+                    break;
+                
+                case SDL_KEYDOWN:
+
+                    switch (event.key.keysym.sym){
+                        case SDLK_z:
+                            keyPressZ = 1;
+                            directionY = -0.5;
+                            if (directionX == 0){
+                                directionY = -1;
+                            }else if(fabs(directionX) == 1){
+                                directionX *= 0.5;
+                            }
+                            break;
+
+                        case SDLK_s:
+                            keyPressS = 1;
+                            directionY = 0.5;
+                            if (directionX == 0){
+                                directionY = 1;
+                            }else if(fabs(directionX) == 1){
+                                directionX *= 0.5;
+                            }
+                            break;
+
+                        case SDLK_q:
+                            keyPressQ = 1;
+                            directionX = -0.5;
+                            if (directionY == 0){
+                                directionX = -1;
+                            }else if(fabs(directionY) == 1){
+                                directionY *= 0.5;
+                            }
+                            break;
+
+                        case SDLK_d:
+                            keyPressD = 1;
+                            directionX = 0.5;
+                            if (directionY == 0){
+                                directionX = 1;
+                            }else if(fabs(directionY) == 1){
+                                directionY *= 0.5;
+                            }
+                            break;
+
+
+                        default:
+                            break;
+                    }
+                    break;
+                case SDL_KEYUP:
+                    switch (event.key.keysym.sym){
+                        case SDLK_z:
+                            keyPressZ = 0;
+                            break;
+
+                        case SDLK_s:
+                            keyPressS = 0;
+                            break;
+
+                        case SDLK_q:
+                            keyPressQ = 0;
+                            break;
+
+                        case SDLK_d:
+                            keyPressD = 0;
+                            break;
+
+
+                        default:
+                            break;
+                    }
+                default:
+                    break;
+            }
+            break;
+        }
+
+        directionX = 0;
+        directionY = 0;
+        if (keyPressZ){
+            directionY += -0.5;
+        }
+        if (keyPressS){
+            directionY += 0.5;
+        }
+        if (keyPressQ){
+            directionX += -0.5;
+        }
+        if (keyPressD){
+            directionX += 0.5;
+        }
+
+        if (fabs(directionX) + fabs(directionY) == 0.5){
+            directionX *= 2;
+            directionY *= 2;
+        }
+        
+        speedX += directionX;
+        speedY += directionY;
+        
+        
+        
+        printf("dx : %f, dy : %f\n", directionX, directionY);
+
+        if (count%10 == 0){
+            clear_SDL(); //Clear la fenêtre (la remetre blanc)
+
+            //Animation
+
+            render();//rendre les differents elements
+
+            pastDirX = directionX;
+            pastDirY = directionY;
+        }
+        
+        
+
+        count++;
+    }
+}
+
+/**
+ * @brief Exécute la boucle de jeu principal
+ * @param tab Le tableau des sommets
+ * @param n Le nombre de sommets
+*/
 void boucle_jeu(sommet_t ** tab, int n){
     init(tab, n); //Affichage du graphe
     
-    boucle_jeu_graphe(tab, n);
+    int * chemin = boucle_jeu_graphe(tab, n);
 
-    boucle_jeu_espace(tab, n);
+    boucle_jeu_espace(tab, n, chemin);
 
     closeSDL();//free de tout les elements de SDL
 }
