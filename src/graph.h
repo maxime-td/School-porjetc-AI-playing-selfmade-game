@@ -7,7 +7,6 @@
 #define H 800
 
 
-int path_size_round(int * path, int ** distMat, int n); 
 /**
  * @struct sommet_s
  * Structure représentant un sommet dans un graphe.

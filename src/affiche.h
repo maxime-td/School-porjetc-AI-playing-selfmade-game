@@ -81,7 +81,4 @@ void render();
 */
 void closeSDL();
 
-
-void bouton_retour();
-
 #endif // AFFICHE_H

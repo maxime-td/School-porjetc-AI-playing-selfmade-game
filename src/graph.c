@@ -274,14 +274,3 @@ sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n, i
     *n_sous_graph = n_noeuds_differents;
     return sous_graphe_chemin;
 }
-
-
-int path_size_round(int * path, int ** distMat, int n){
-    int size = 0;
-
-    for (int i = 0; i < n-1; i++){
-        size += distMat[path[i]][path[i+1]];
-    }
-    
-    return size;
-}
