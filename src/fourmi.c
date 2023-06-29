@@ -12,9 +12,8 @@ int multi_start_fourmi(int ** matDist, int n){
     for (int i = 0; i < n; i++){
         int * path = colonni_fourmi(matDist, n, i, &nPath);
         cour = path_size(path, matDist, nPath);
-        //free(path);
+        free(path);
         if(cour < best){
-            //affich_tab(path, nPath);
             best = cour;
         }
     }
