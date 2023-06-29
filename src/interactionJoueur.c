@@ -14,13 +14,14 @@
 #include "interactionJoueur.h"
 
 void* thread_fourmi(FourmiArgs* args){
-    int result = multi_start_fourmi(args->matDist, args->n);
-    return result;
+    args->result = multi_start_fourmi(args->matDist, args->n);
+    return NULL;
 }
 
+
 void* thread_floyd(FloydWarshallArgs* args){
-    int result = multi_Start_Floyd_Warshall(args->tabWarshall, args->tabDist, args->n);
-    return result;
+    args->result = multi_Start_Floyd_Warshall(args->tabWarshall, args->tabDist, args->n);
+    return NULL;
 }
 
 /**
@@ -165,8 +166,10 @@ void boucle_jeu(sommet_t** tab, int n) {
             else {//Etat de fin de jeu 
                 if (first){
                     first = 0;
-                    pthread_join(thread1, (void**)&scoreFourmi); 
-                    pthread_join(thread2, (void**)&scoreFloyd );
+                    pthread_join(thread1, NULL); 
+                    pthread_join(thread2, NULL);
+                    scoreFloyd = argsFl.result;
+                    scoreFourmi = argsF.result;
                 }
                 
                 score = path_size(chemin_joueur, distMat, nb_noeuds_chemin); //Score du joueur

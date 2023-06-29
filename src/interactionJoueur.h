@@ -17,6 +17,7 @@
 typedef struct FourmiArgs_s{
     int** matDist;
     int n;
+    int result;
 } FourmiArgs;
 
 // Structure pour les arguments de cycle_Floyd_Warshall
@@ -24,6 +25,7 @@ typedef struct {
     int** tabWarshall;
     int** tabDist;
     int n;
+    int result;
 } FloydWarshallArgs;
 
 /**
