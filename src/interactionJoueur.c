@@ -105,6 +105,7 @@ void boucle_jeu(sommet_t** tab, int n) {
                         case SDLK_SPACE: //Si espace on remet le nombre de noeud à 0
                             nb_noeuds_chemin = 0;
                             break;
+                            
                         case SDLK_RETURN://Si entrer on verifie que la selection est valide (cycle complet) 
                                          //Si oui on passe dans l'etat de fin de jeu (valid = 1)  
                         
@@ -129,11 +130,12 @@ void boucle_jeu(sommet_t** tab, int n) {
                     break;
             }
         }
-        if (update){
-            update = 0;
-            clear_SDL();//Clear la fenêtre (la remetre blanc)
 
-            if(!valid) {//Etat jeu en cour
+        if (update) {
+            update = 0;
+            clear_SDL(); //Clear la fenêtre (la remetre blanc)
+
+            if(!valid) {//Etat jeu en cours
                 affiche(tab, n, 0, 0, 0, 255, 1);
                 sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
                 affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
@@ -141,6 +143,7 @@ void boucle_jeu(sommet_t** tab, int n) {
                 draw_path(tab, chemin_joueur, nb_noeuds_chemin);
                 draw_int(path_size_round(chemin_joueur, distMat, nb_noeuds_chemin));
             }
+
             else {//Etat de fin de jeu 
                 score       = path_size(chemin_joueur, distMat, nb_noeuds_chemin); //Score du joueur
 
@@ -152,8 +155,6 @@ void boucle_jeu(sommet_t** tab, int n) {
                 if (scoreBest > score){
                     scoreBest = score;
                 }
-                
-                
 
                 afficheFin(score, scoreBest);//On affiche l'ecran de fin 
             }
