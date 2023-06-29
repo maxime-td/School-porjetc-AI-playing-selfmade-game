@@ -57,7 +57,8 @@ int coord_sur_chemin(int pX, int pY, sommet_t **tabSom, int n, int frame_size, i
                 x2 = tabSom[i]->x + largeur; y2 = tabSom[i]->y;
                 x3 = tabSom[j]->x - largeur; y3 = tabSom[j]->y;
                 x4 = tabSom[j]->x; y4 = tabSom[j]->y + largeur;
-
+                delta1 = (y3-y1)/(x3-x1);
+                delta2 = (y4-y2)/(x4-x2);
             }
         }
     }
