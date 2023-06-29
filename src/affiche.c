@@ -21,7 +21,7 @@ void init(sommet_t ** tab, int n){
 
     SDL_DisplayMode dm;
 
-    /* Initialisation de la SDL  + gestion de l'échec possible */
+    //Initialisation de la SDL  + gestion de l'échec possible
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
         SDL_Log("Error : SDL initialisation - %s\n",
@@ -29,7 +29,7 @@ void init(sommet_t ** tab, int n){
         exit(EXIT_FAILURE);
     }
 
-    /* recupere la taille de l'ecran */
+    //Récupère la taille de l'ecran
     if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
     {
         SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
@@ -39,7 +39,7 @@ void init(sommet_t ** tab, int n){
     width = dm.w;
     height = dm.h;
 
-    /* Création de la fenêtre de gauche */
+    //Création de la fenêtre de gauche
     window = SDL_CreateWindow(
         "Graph",    // codage en utf8, donc accents possibles
         width/2-w_window/2, height/2-h_window/2,                  // coin haut gauche en haut gauche de l'écran
@@ -69,6 +69,17 @@ void init(sommet_t ** tab, int n){
 void clear_SDL(){
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
+}
+
+/**
+ * @brief Affiche le bouton retour
+*/
+void bouton_retour() {
+    SDL_Rect boutonRetour;
+    boutonRetour.x = 0
+    boutonRetour.y = 0
+    boutonRetour.w = 0
+    boutonRetour.h = 0
 }
 
 void draw_int(int n){
@@ -220,7 +231,7 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
     TTF_Quit();
 }
 
-void draw_path(sommet_t ** tab, int * path, int nPath){
+void draw_path(sommet_t ** tab, int * path, int nPath) {
     SDL_Rect textRect;
     TTF_Font* font;
     SDL_Surface* textSurface;
@@ -273,7 +284,7 @@ void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid
     draw_graph(renderer, tab, n, displayPoid);
 }
 
-void afficheFin(int score, int bestScore){
+void afficheFin(int score, int bestScore) {
     SDL_Rect textRect;
     TTF_Font* font;
     SDL_Surface* textSurface;
@@ -320,13 +331,11 @@ void afficheFin(int score, int bestScore){
     TTF_Quit();
 }
 
-
-
-void render(){
+void render() {
     SDL_RenderPresent(renderer);
 }
 
-void closeSDL(){
+void closeSDL() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
