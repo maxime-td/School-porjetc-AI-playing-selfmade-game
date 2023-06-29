@@ -120,10 +120,11 @@ void cycle_Floyd_Warshall(int **tabWarshall, sommet_t **tabSommets, int **tabDis
 
 /**
  * @brief Applique l'algo de cyclage ci-dessus sur chaque premier point et sors le plus efficace
+ * @param tabWarshall Tableau des distances de Floy-Warshall
  * @param distTab le tableau des distances initiales (sera modifié)
  * @param n la taille du tableau
  * @param tabSommets le tableau des sommets
- * @return le meilleur tableau decrivant le meilleur chemin pour chaque point de départ
+ * @return la longueur du chemin optimal
  */
 int multi_Start_Floyd_Warshall(int **tabWarshall, int **distTab, int n, sommet_t **tabSommet)
 {
