@@ -141,6 +141,11 @@ int multi_Start_Floyd_Warshall(int **tabWarshall, int **distTab, int n)
     return min;
 }
 
+/**
+ * @brief permute deux entier dans un tableau 
+ * @param tab le pointeur sur le tableau d'entier dont deux indices vont etre échangé
+ * @param n nombre de sommets du graph (et dimension du tableau des distances)
+*/
 void permute(int **tab, int n)
 {
     int a = 0, b = 0;
@@ -149,14 +154,20 @@ void permute(int **tab, int n)
         a = rand() % (n - 1);
         b = rand() % (n - 1);
     }
-    // affich_tab(*tab, n);
 
     int tmp = (*tab)[a];
     (*tab)[a] = (*tab)[b];
     (*tab)[b] = tmp;
-    // affich_tab(*tab, n);
 }
 
+
+/**
+ * @brief calcul la taille d'un chemin passer en parametre avec la méthode de Floyd-Warshall
+ * @param tabWarshall Tableau des distance de Floyd-Warshall
+ * @param n nombre de sommets du graph (et dimension du tableau des distances)
+ * @param tab le tableau d'entier d'ordre d'apparition des sommets (tab[0] = 1er sommet du cycle)
+ * @return la taille du chemin
+*/
 int calcul_chemin_Floy_Warshall(int **tabWarshall, int n, int *tab)
 {
     int chem = 0;
@@ -168,6 +179,12 @@ int calcul_chemin_Floy_Warshall(int **tabWarshall, int n, int *tab)
     return chem;
 }
 
+/**
+ * @brief applique la méthode du recuit simulé 
+ * @param tabWarshall Tableau des distance de Floyd-Warshall
+ * @param n nombre de sommets du graph (et dimension du tableau des distances)
+ * @return taille chemin optimal trouvé
+*/
 int recuit_simule(int **tabWarshall, int n)
 {
     int *tab = malloc(n * sizeof(int));
