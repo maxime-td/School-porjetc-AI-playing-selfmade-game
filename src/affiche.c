@@ -9,7 +9,7 @@
 #include <math.h>
 
 SDL_Renderer* renderer;
-SDL_Window *window = NULL;
+SDL_Window* window = NULL;
 
 /**
  * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
@@ -377,4 +377,47 @@ void secret1() {
     SDL_RenderCopy(renderer, texture_secrete, &source, &destination);
 
     SDL_DestroyTexture(texture_secrete);
+}
+
+
+/* Partie sur l'animation de la soucoupe volante */
+
+void soucoupe_tourne(int frame) {
+    //Initialisation
+    SDL_Rect
+        source = {0}, //Rectangle définissant la zone totale de la planche
+        destination = {0}; //Rectangle définissant où la zone_source doit être déposée dans le renderer
+
+    SDL_Texture* texture_soucoupe = NULL;
+    texture_soucoupe = load_texture_from_image("images/soucoupeV3.png");
+
+    SDL_QueryTexture(texture_soucoupe, NULL, NULL, &source.w, &source.h); // Récupération des dimensions de l'image
+
+    int nb_images = 4;
+    float zoom = 2;
+    int offset_x = source.w / nb_images, offset_y = source.h;
+    //int offset_x = 32, offset_y = 32;
+
+    destination.w = offset_x * zoom; // Largeur du sprite à l'écran
+    destination.h = offset_y * zoom; // Hauteur du sprite à l'écran
+
+    destination.y = (H - destination.h) / 2; //On se place au milieu de l'écran
+
+    affiche_soucoupe(texture_soucoupe, frame);
+
+    SDL_DestroyTexture(texture_soucoupe);
+}
+
+void affiche_soucoupe(SDL_Texture* texture_soucoupe, int frame) {
+    SDL_Rect 
+        source = {0}, // Rectangle définissant la zone de la texture à récupérer
+        destination = {0, 0, 200, 200};
+
+    SDL_QueryTexture(texture_soucoupe, NULL, NULL, &source.w, &source.h);
+    source.w = 32;
+    source.h = 32;
+    source.x = source.w*frame;
+
+    SDL_RenderCopy(renderer, texture_soucoupe, &source, &destination);
+    SDL_Delay(300);
 }

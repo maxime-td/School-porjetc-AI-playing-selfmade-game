@@ -216,6 +216,7 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
     float pastDirX = 0;
     float pastDirY = 0;
     float directionX = 0;
+    int frame = 0;
     float directionY = 0; 
     SDL_bool program_on = SDL_TRUE; //Booléen de boucle de jeu
     SDL_Event event;
@@ -278,7 +279,6 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
                             }
                             break;
 
-
                         default:
                             break;
                     }
@@ -300,7 +300,6 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
                         case SDLK_d:
                             keyPressD = 0;
                             break;
-
 
                         default:
                             break;
@@ -336,13 +335,14 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin){
         
         
         
-        printf("dx : %f, dy : %f\n", directionX, directionY);
+        //printf("dx : %f, dy : %f\n", directionX, directionY);
 
         if (count%10 == 0){
             clear_SDL(); //Clear la fenêtre (la remetre blanc)
 
             //Animation
-
+            soucoupe_tourne(frame);
+            frame = (frame + 1)%4;
             render();//rendre les differents elements
 
             pastDirX = directionX;
