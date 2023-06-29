@@ -119,6 +119,7 @@ void boucle_jeu(sommet_t** tab, int n) {
 
                     }
                     break;
+                    
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.sym){
                         case SDLK_SPACE: //Si espace on remet le nombre de noeud à 0
@@ -141,6 +142,7 @@ void boucle_jeu(sommet_t** tab, int n) {
                              
                             
                             break;
+
                         default:
                             break;
                     }
@@ -179,8 +181,6 @@ void boucle_jeu(sommet_t** tab, int n) {
 
             render();//rendre les differents elements
         }
-        
-        
     }
     free(chemin_joueur);
     closeSDL();//free de tout les elements de SDL

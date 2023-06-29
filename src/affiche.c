@@ -62,9 +62,6 @@ void init(sommet_t ** tab, int n) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_Delay(10);
     draw_graph(renderer, tab, n, 1);
-
-    SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
-    bouton_retour();
     
     SDL_RenderPresent(renderer);
 }
@@ -78,23 +75,10 @@ void clear_SDL(){
 }
 
 /**
- * @brief Affiche le bouton retour
+ * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
+ * @param score Le score à afficher en tant que votre score
+ * @param bestScore Le score à afficher en tant que meilleur score 
 */
-void bouton_retour() {
-    SDL_Rect boutonRetour; //Initialisation du rectangle du bouton
-
-    boutonRetour.w = 200; //Largeur
-    boutonRetour.h = 80; //Hauteur
-    boutonRetour.x = 0; //Position x
-    boutonRetour.y = H - boutonRetour.h - 50; //Position y
-
-    SDL_RenderFillRect(renderer, &boutonRetour);
-}
-
-/**
- * @brief Ecrit l'entier passer en paramètre en bas à droite de l'ecran.
- * @param n L'entier à ecrires.
- */
 void draw_int(int n) {
     SDL_Rect textRect;
     TTF_Font* font;
