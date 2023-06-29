@@ -94,5 +94,7 @@ void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y);
 
 void draw_rect(SDL_Rect rect);
 
+void affichAst(sommet_t ** tab, int n);
+
 
 #endif // AFFICHE_H

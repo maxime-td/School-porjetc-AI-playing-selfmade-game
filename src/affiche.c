@@ -284,7 +284,9 @@ void draw_path(sommet_t ** tab, int * path, int nPath) {
 void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid) {
     SDL_SetRenderDrawColor(renderer, r, g , b, a);
     draw_graph(renderer, tab, n, displayPoid);
+}
 
+void affichAst(sommet_t ** tab, int n){
     ast_Partout(renderer, tab, n);
 }
 
