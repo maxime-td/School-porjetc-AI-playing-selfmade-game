@@ -84,8 +84,10 @@ void boucle_jeu(sommet_t** tab, int n) {
                         
                         case SDL_BUTTON_RIGHT: //Si on a un clic droit on enlève le dernier noeud
                             if(!valid) { //Si on est encore en jeu
-                                chemin_joueur[nb_noeuds_chemin-1] = -1; //on met le dernier noeud du tableau à -1 valeur impossible
-                                nb_noeuds_chemin -= 1; //on retire 1 au nombre de noeud     
+                                if (nb_noeuds_chemin != 0) { //Si on a déjà sélectionné au moins un noeud
+                                    chemin_joueur[nb_noeuds_chemin-1] = -1; //on met le dernier noeud du tableau à -1 valeur impossible
+                                    nb_noeuds_chemin -= 1; //on retire 1 au nombre de noeud
+                                }
                             }       
                             break;
 
