@@ -249,6 +249,8 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
 void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close)
 {
     int count = 0;
+    float speedX = 0;
+    float speedY = 0;
     float x = tab[chemin[0]]->x;
     float y = tab[chemin[0]]->y;
     float directionX = 0;
@@ -263,8 +265,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     int fin = 0;
     int seconde = 0;
 
-    int tmpSpeedX = 0;
-    int tmpSpeedY = 0;
+    float tmpSpeedX = 0;
+    float tmpSpeedY = 0;
 
     timerArgs argsT;
     pthread_t thread;
@@ -509,11 +511,14 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 }
             }
         }
+        
+        tmpSpeedX = speedX;
+        tmpSpeedY = speedY;
 
-        if (!isInPath(x, y, tab, n, PATH_SIZE) || !isInPath(x-32, y-32, tab, n, PATH_SIZE))
+        while (!isInPath(x, y, tab, n, PATH_SIZE-10) && !isInPath(x-32, y-32, tab, n, PATH_SIZE-10))
         {
-            x -= speedX*2;
-            y -= speedY*2;
+            x -= tmpSpeedX*2;
+            y -= tmpSpeedY*2;
             speedX = 0;
             speedY = 0;
         }
