@@ -257,6 +257,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     int planeteVisite[n];
     int frame = 0;
     int frameFlag = 0;
+    int frameEF = 0;
     int n_sous_graphe = 0;
     int n_ast = 0;
     float directionY = 0; 
@@ -318,6 +319,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     SDL_Rect planete = {0, 0, 48, 48};
     SDL_Surface *imageP = IMG_Load("images/planetes.png");
     SDL_Texture *textureP = create_texture(imageP);
+
+    SDL_Rect etoileFilante = {rand()%W, rand()%H, 26, 26};
+    SDL_Surface *imageEF = IMG_Load("images/Comet.png");
+    SDL_Texture *textureEF = create_texture(imageEF);
 
     for (int i = 0; i < n_sous_graphe; i++)
     {
@@ -548,6 +553,15 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
         
 
         if (count%10 == 0){
+            if (count%50 == 0){
+                    frameEF = (frameEF + 1)%8;
+                    if (frameEF == 0){
+                        etoileFilante.x = rand()%W;
+                        etoileFilante.y = rand()%H;
+                    }
+            }
+            
+            
             draw_sprite(background, textureBg, 1, 0, 0, 540);
 
             SDL_SetTextureAlphaMod(textureE2, alpha);
@@ -555,6 +569,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
             draw_sprite(etoile, textureE1, 0, 0, 0, 540);
             draw_sprite(etoile, textureE2, 0, 1, 0, 540);
+
+            draw_sprite(etoileFilante, textureEF, frameEF, 0, 0, 26);
+
+            
 
             if (!fin){
                 for (int i = 0; i < n_sous_graphe; i++){
