@@ -48,10 +48,11 @@ int * colonni_fourmi(int ** matDist, int n, int dep, int * nPath){
         probaMat[i] = calloc(n, sizeof(int));
         for (int j = 0; j < n; j++){
             if(matDist[i][j] > 0){
-                probaMat[i][j] = 1;
+                probaMat[i][j] = 10000/matDist[i][j];
             } 
         }
     }
+
 
     for (int i = 0; i < ITERATION*n; i++){
         
@@ -207,7 +208,7 @@ int path_size(int * path, int ** distMat, int n){
  */
 void add_feromone(int* path, int ** probaMat, int n, int sizePath){
     for (int i = 0; i < n-1; i++){
-        probaMat[path[i]][path[i+1]] -= (int) 100000.0/(sizePath);
+        probaMat[path[i]][path[i+1]] += (int) 100000.0/(sizePath);
         if (probaMat[path[i]][path[i+1]] <= 0){
             probaMat[path[i]][path[i+1]] = 1;
         }
@@ -224,7 +225,7 @@ void remove_feromone(int ** probaMat, int n, int facteur){
     for (int i = 0; i < n; i++){
         for (int j = 0; j < n; j++){
             if (probaMat[i][j] != 0){
-                probaMat[i][j] += facteur;
+                probaMat[i][j] -= facteur;
             } 
         }
     }

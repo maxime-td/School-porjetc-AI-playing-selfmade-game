@@ -13,8 +13,8 @@
 #include "affiche.h"
 #include "fourmi.h"
 
-#define MAX_SPEED 5
-#define ACCELERATION 0.005
+#define MAX_SPEED 0.001
+#define ACCELERATION 0.0000000025
 
 // Structure pour les arguments de multi_start_fourmi
 typedef struct coordonne_s{
@@ -42,6 +42,39 @@ typedef struct {
     int * fin;
     int time;
 } timerArgs;
+
+typedef struct afficheArgs_s{
+    int * count;
+    int frame;
+    int frameEF;
+    int frameFlag;
+    SDL_Rect etoile;
+    SDL_Rect etoileFilante;
+    SDL_Rect background;
+    SDL_Rect navette;
+    SDL_Rect planete;
+    SDL_Rect flag;
+    asteroid_t * asteroid;
+    SDL_Texture * texture;
+    SDL_Texture * textureBg;
+    SDL_Texture * textureE1;
+    SDL_Texture * textureE2;
+    SDL_Texture * textureEF;
+    SDL_Texture * textureP;
+    SDL_Texture * textureF;
+    int * fin;
+    int * planeteVisite;
+    sommet_t ** sous_graphe;
+    sommet_t ** tab;
+    int n_sous_graphe;
+    int n;
+    int n_ast;
+    SDL_bool * program_on;
+    int * chemin;
+    coordonne_t * co;
+    float * x;
+    float * y;
+}afficheArgs;
 
 /**
  * @brief Exécute la boucle de jeu  de graphe
