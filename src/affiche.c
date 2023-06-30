@@ -7,6 +7,7 @@
 #include "graph.h"
 #include "affiche.h"
 #include <math.h>
+#include <string.h>
 
 
 SDL_Renderer* renderer;
@@ -383,6 +384,40 @@ void afficheFin(int score, int bestScore) {
     SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
     SDL_DestroyTexture(textTexture);
     
+    TTF_CloseFont(font);
+    TTF_Quit();
+}
+
+void afficheFinEspace(int time) {
+    SDL_Rect textRect;
+    TTF_Font* font;
+    SDL_Surface* textSurface;
+    SDL_Texture* textTexture;
+    SDL_Color color = {200, 200, 200, 255};
+    char Txt1[100];
+
+    if (TTF_Init()!= 0)
+    {
+        SDL_Log("Error : SDL initialisation - %s\n",
+                SDL_GetError()); // l'initialisation de la TTF a échoué
+        exit(EXIT_FAILURE);
+    }
+
+    font = TTF_OpenFont("arial.ttf", 40);
+
+    sprintf(Txt1, "Votre Temps : %d", time);
+
+    textSurface = TTF_RenderText_Solid(font, Txt1, color);
+    textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+    SDL_FreeSurface(textSurface);
+    SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+    textRect.x = W/2-textRect.w/2;
+    textRect.y = H/2-textRect.h/2;
+
+    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+    SDL_DestroyTexture(textTexture);
+
     TTF_CloseFont(font);
     TTF_Quit();
 }

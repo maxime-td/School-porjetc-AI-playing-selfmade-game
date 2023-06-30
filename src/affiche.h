@@ -84,6 +84,8 @@ void closeSDL();
 
 SDL_Texture* load_texture_from_image(SDL_Surface * texture_soucoupe);
 
+void afficheFinEspace(int time);
+
 /**
  * @brief C'est un secret
 */

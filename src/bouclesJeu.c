@@ -255,6 +255,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
     float directionY = 0; 
     float alpha = 0;
     int etatAlpha = 0;
+    int fin = 0;
+
+    clock_t start;
+
 
     Point p1;
     Point p2;
@@ -310,6 +314,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
         planeteVisite[i] = 0;
     }
     
+    start = clock();
 
     while (program_on)
     {
@@ -479,8 +484,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
             p2.y = y+16;
             if (distance(p1, p2) < 16+24){
                 planeteVisite[i] = 1;
+                if (tout_noeud(planeteVisite, n) && i == chemin[0]){
+                    fin = 1;
+                }
             }
-            
         }
         
 
@@ -510,9 +517,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
             speedX = 0;
             speedY = 0;
         }
-
         
-        //printf("dx : %f, dy : %f\n", directionX, directionY);
 
         if (count%10 == 0){
             draw_sprite(background, textureBg, 0, 0, 0, background.w);
@@ -523,60 +528,65 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
             draw_sprite(etoile, textureE1, 0, 0, 0, 540);
             draw_sprite(etoile, textureE2, 0, 1, 0, 540);
 
-            for (int i = 0; i < n_sous_graphe; i++){
-                planete.x = sous_graphe[i]->x-24;
-                planete.y = sous_graphe[i]->y-24;
-                draw_sprite(planete, textureP, co[i].x, co[i].y, 0, 48);
-            }
+            if (!fin){
+                for (int i = 0; i < n_sous_graphe; i++){
+                    planete.x = sous_graphe[i]->x-24;
+                    planete.y = sous_graphe[i]->y-24;
+                    draw_sprite(planete, textureP, co[i].x, co[i].y, 0, 48);
+                }
 
-            for (int i = 0; i < n; i++){
-                if (planeteVisite[i]){
-                    flag.x = tab[i]->x-12;
-                    flag.y = tab[i]->y-48;
-                    if (i == chemin[0]){
-                        draw_sprite(flag, textureF, frameFlag, 1, 0, 60);
-                    }else{
-                        draw_sprite(flag, textureF, frameFlag, 0, 0, 60);
+                for (int i = 0; i < n; i++){
+                    if (planeteVisite[i]){
+                        flag.x = tab[i]->x-12;
+                        flag.y = tab[i]->y-48;
+                        if (i == chemin[0]){
+                            draw_sprite(flag, textureF, frameFlag, 1, 0, 60);
+                        }else{
+                            draw_sprite(flag, textureF, frameFlag, 0, 0, 60);
+                        }
+                        
                     }
                     
                 }
                 
+
+                draw_sprite(navette, texture, frame, 0, 0, navette.w);
+                if (count%100 == 0){
+                    
+                    //draw_rect(navette);
+                    frame = (frame + 1)%4;
+                    frameFlag = (frameFlag + 1)%5;
+                }
+
+
+                affichAst(asteroid, n_ast, textureP);
+
+                navette.x = x;
+                navette.y = y;
+
+                draw_time(seconde);
+            }else{
+                afficheFinEspace(seconde);
             }
-            
-
-            draw_sprite(navette, texture, frame, 0, 0, navette.w);
-            //Animation
-            if (count%100 == 0){
-                
-                //draw_rect(navette);
-                frame = (frame + 1)%4;
-                frameFlag = (frameFlag + 1)%5;
-            }
-
-
-            affichAst(asteroid, n_ast, textureP);
-
-            navette.x = x;
-            navette.y = y;
 
             render(); //rendre les differents elements
 
             if (etatAlpha){
-                alpha--;
-                if (0 == alpha){
+                alpha-=2;
+                if (0 >= alpha){
                     etatAlpha = !etatAlpha;
                 } 
             }else{
-                alpha++;
-                if (255 == alpha){
+                alpha+=2;
+                if (255 <= alpha){
                     etatAlpha = !etatAlpha;
                 }
             }
             
         }
         
-        if (count%333 == 0){
-            seconde++;
+        if (!fin){
+            seconde = 0.95*(clock() - start)/150000; 
         }
         
 
