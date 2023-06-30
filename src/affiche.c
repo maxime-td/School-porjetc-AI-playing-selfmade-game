@@ -44,7 +44,7 @@ void init(sommet_t ** tab, int n) {
 
     //Création de la fenêtre de gauche
     window = SDL_CreateWindow(
-        "Graph", //Nom de la fenètre
+        "The travelling Spaceman", //Nom de la fenètre
         width/2-w_window/2, height/2-(h_window+100)/2, //Coordonnées de la fenètre
         w_window, h_window, //Dimensions de la fenètre
         SDL_WINDOW_RESIZABLE); //Paramètre de la fenètre
