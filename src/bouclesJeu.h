@@ -13,7 +13,7 @@
 #include "affiche.h"
 #include "fourmi.h"
 
-#define MAX_SPEED 2
+#define MAX_SPEED 5
 #define ACCELERATION 0.005
 
 // Structure pour les arguments de multi_start_fourmi
@@ -57,12 +57,12 @@ int * boucle_jeu_graphe(sommet_t** tab, int n, int * nb_noeuds_chemin, int *fin)
  * @param n Le nombre de sommets
  * @param chemin Tableau du chemin choisi par le joueur
 */
-void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin);
+void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin, int* close);
 
 /**
  * @brief Exécute la boucle de jeu principal
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
 */
-void boucle_jeu(sommet_t ** tab, int n);
+void boucle_jeu();
 #endif
