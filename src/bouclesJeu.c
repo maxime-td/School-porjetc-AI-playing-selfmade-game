@@ -246,14 +246,21 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
     float x = tab[chemin[0]]->x;
     float y = tab[chemin[0]]->y;
     float directionX = 0;
+    int planeteVisite[n];
     int frame = 0;
+    int frameFlag = 0;
     int n_sous_graphe = 0;
 <<<<<<< HEAD
     float directionY = 0;
 =======
     int n_ast = 0;
+    int seconde = 0;
     float directionY = 0; 
->>>>>>> c81c528bb422d8b781eb94359593c3e6ae51e81a
+    float alpha = 0;
+    int etatAlpha = 0;
+
+    Point p1;
+    Point p2;
 
     int keyPressZ = 0;
     int keyPressS = 0;
@@ -275,13 +282,24 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
 
     SDL_bool program_on = SDL_TRUE; // Booléen de boucle de jeu
     SDL_Event event;
-    SDL_Rect navette = {x, y, 32, 32};
-    SDL_Surface *image = IMG_Load("images/soucoupeV3.png");
-    SDL_Texture *texture = create_texture(image);
+    
+    SDL_Rect  navette = {x, y, 32, 32};
+    SDL_Surface * image = IMG_Load("images/soucoupeV3.png");
+    SDL_Texture * texture = create_texture(image);
 
-    SDL_Rect background = {0, 0, W, H};
-    SDL_Surface *imageBg = IMG_Load("images/background.png");
-    SDL_Texture *textureBg = create_texture(imageBg);
+    SDL_Rect  flag = {0, 0, 48, 48};
+    SDL_Surface * imageF = IMG_Load("images/flag.png");
+    SDL_Texture * textureF = create_texture(imageF);
+
+    SDL_Rect  background = {0, 0, W, H};
+    SDL_Surface * imageBg = IMG_Load("images/background.png");
+    SDL_Texture * textureBg = create_texture(imageBg);
+
+    SDL_Rect  etoile = {0, 0, W, H};
+    SDL_Surface * imageE = IMG_Load("images/etoiles.png");    
+    SDL_Texture * textureE1 = create_texture(imageE);
+    SDL_Texture * textureE2 = create_texture(imageE);
+    SDL_SetTextureAlphaMod(textureE2, 0);
 
     SDL_Rect planete = {0, 0, 48, 48};
     SDL_Surface *imageP = IMG_Load("images/planetes.png");
@@ -292,22 +310,20 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
         co[i].y = rand() % planeteLigne;
         co[i].x = rand() % planeteColones[co[i].y];
         co[i].y++;
-
-<<<<<<< HEAD
-        // printf("x : %d, y : %d\n", co[i].x, co[i].y);
-=======
->>>>>>> c81c528bb422d8b781eb94359593c3e6ae51e81a
     }
-    // Boucle de jeu
-    if (*fin != 1)
+
+    for (int i = 0; i < n; i++){
+        planeteVisite[i] = 0;
+    }
+    
+
+    while (program_on)
     {
-        while (program_on)
+        // Gestion des événements
+        while (SDL_PollEvent(&event))
         {
-            // Gestion des événements
-            while (SDL_PollEvent(&event))
+            switch (event.type)
             {
-                switch (event.type)
-                {
 
                 // pour fermer la fenetre quand on clique sur la croix
                 case SDL_QUIT:
@@ -461,7 +477,27 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
 
         x += speedX;
         y += speedY;
+
+        for (int i = 0; i < n; i++){
+            p1.x = tab[i]->x;
+            p1.y = tab[i]->y;
+            p2.x = x+16;
+            p2.y = y+16;
+            if (distance(p1, p2) < 16+24){
+                planeteVisite[i] = 1;
+            }
+            
+        }
         
+
+        while (!isInPath(x, y, tab, n, PATH_SIZE-10) && !isInPath(x-32, y-32, tab, n, PATH_SIZE-10))
+        {
+            x -= speedX*2;
+            y -= speedY*2;
+            speedX = 0;
+            speedY = 0;
+        }
+
         if (x < 0){
             x = 0;
             speedX = 0;
@@ -480,25 +516,49 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
             speedX = 0;
             speedY = 0;
         }
+
         
         //printf("dx : %f, dy : %f\n", directionX, directionY);
 
         if (count%10 == 0){
-            draw_sprite(background, textureBg, 0, 0, 0);
+            draw_sprite(background, textureBg, 0, 0, 0, background.w);
+
+            SDL_SetTextureAlphaMod(textureE2, alpha);
+            SDL_SetTextureAlphaMod(textureE1, 255-alpha);
+
+            draw_sprite(etoile, textureE1, 0, 0, 0, 540);
+            draw_sprite(etoile, textureE2, 0, 1, 0, 540);
 
             for (int i = 0; i < n_sous_graphe; i++){
-                planete.x = sous_graphe[i]->y-24;
-                planete.y = sous_graphe[i]->x-24;
-                draw_sprite(planete, textureP, co[i].x, co[i].y, 0);
+                planete.x = sous_graphe[i]->x-24;
+                planete.y = sous_graphe[i]->y-24;
+                draw_sprite(planete, textureP, co[i].x, co[i].y, 0, 48);
             }
 
-            draw_sprite(navette, texture, frame, 0, 0);
+            for (int i = 0; i < n; i++){
+                if (planeteVisite[i]){
+                    flag.x = tab[i]->x-12;
+                    flag.y = tab[i]->y-48;
+                    if (i == chemin[0]){
+                        draw_sprite(flag, textureF, frameFlag, 1, 0, 60);
+                    }else{
+                        draw_sprite(flag, textureF, frameFlag, 0, 0, 60);
+                    }
+                    
+                }
+                
+            }
+            
+
+            draw_sprite(navette, texture, frame, 0, 0, navette.w);
             //Animation
             if (count%100 == 0){
                 
                 //draw_rect(navette);
                 frame = (frame + 1)%4;
+                frameFlag = (frameFlag + 1)%5;
             }
+
 
             affichAst(asteroid, n_ast, textureP);
 
@@ -551,15 +611,32 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
 
                 affichAst(sous_graphe, n_sous_graphe);
 
-                navette.x = x;
-                navette.y = y;
+            navette.x = x;
+            navette.y = y;
 
-                render(); // rendre les differents elements
+            render(); //rendre les differents elements
+
+            if (etatAlpha){
+                alpha--;
+                if (0 == alpha){
+                    etatAlpha = !etatAlpha;
+                } 
+            }else{
+                alpha++;
+                if (255 == alpha){
+                    etatAlpha = !etatAlpha;
+                }
             }
-
-            count++;
-            SDL_Delay(1);
+            
         }
+        
+        if (count%333 == 0){
+            seconde++;
+        }
+        
+
+        count++;
+        SDL_Delay(1);
     }
 
     free(asteroid);

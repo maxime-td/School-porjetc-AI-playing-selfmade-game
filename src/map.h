@@ -1,6 +1,8 @@
 #ifndef MAP_H
 #define MAP_H
 
+#define PATH_SIZE 90
+
 #include "graph.h"
 #include <SDL2/SDL.h>
 #include "affiche.h"
@@ -44,5 +46,7 @@ int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur);
 
 
 void calculateLineCoefficients(int x1, int y1, int x2, int y2, float *a, float *b);
+
+float distance(Point p1, Point p2);
 
 #endif

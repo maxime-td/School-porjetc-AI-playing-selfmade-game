@@ -91,7 +91,8 @@ void secret1();
 
 SDL_Texture * create_texture(SDL_Surface * surface);
 
-void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int angle);
+void draw_time(int n);
+void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int angle, int size);
 
 void draw_rect(SDL_Rect rect);
 

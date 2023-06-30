@@ -9,10 +9,6 @@
 asteroid_t * ast_Partout(/*SDL_Renderer *render,*/ sommet_t ** tab, int n, int * nAst)
 {
     int frame_size = 48;
-    /*SDL_Surface
-        *surf = IMG_Load("./images/planetes.png");
-
-    SDL_Texture *texture = NULL;*/
 
     int alea = 0;
     int angle = 0;
@@ -22,8 +18,6 @@ asteroid_t * ast_Partout(/*SDL_Renderer *render,*/ sommet_t ** tab, int n, int *
 
     SDL_Rect srcrect = {0, 0, frame_size, frame_size}; // position and size of the part of the image to draw
     SDL_Rect dstrect = {100, 100, 42, 42};             // position and size of the destination on the screen
-
-    //texture = SDL_CreateTextureFromSurface(render, surf);
 
     for (int i = 0; i < W; i += 21 + ecart)
     {
@@ -36,24 +30,17 @@ asteroid_t * ast_Partout(/*SDL_Renderer *render,*/ sommet_t ** tab, int n, int *
             alea = (rand() % 16);
             srcrect.x = alea;
             angle = rand() % 360;
-            //coord_sur_chemin(dstrect.x, dstrect.y, tab, n, frame_size, 80);
             
             
-            if(isInPath(dstrect.x, dstrect.y, tab, n, 90)==0){
+            if(isInPath(dstrect.x, dstrect.y, tab, n, PATH_SIZE)==0){
                 tabAst[a].x = dstrect.x;
                 tabAst[a].y = dstrect.y;
                 tabAst[a].frame = srcrect.x;
                 tabAst[a].angle = angle;
                 a++;
-                //SDL_RenderCopyEx(render, texture, &srcrect, &dstrect, angle, NULL, 0);
             }
         }
     }
-    //SDL_RenderPresent(render);
-
-    // SDL_Delay(3000);
-    //SDL_DestroyTexture(texture);
-    //SDL_FreeSurface(surf);
     *nAst = a;
 
     return tabAst;
@@ -134,7 +121,7 @@ int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur)
     }
 
     for (int i = 0; i < n; i++){
-        tmp.x = tabSom[i]->x;
+        tmp.x = tabSom[i]->x;   
         tmp.y = tabSom[i]->y;
         if (distance(tmp, P) < largeur){
             res+=1;
