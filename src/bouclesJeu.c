@@ -246,11 +246,9 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
  * @param n Le nombre de sommets
  * @param chemin Tableau du chemin choisi par le joueur
  */
-void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
+void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close)
 {
     int count = 0;
-    float speedX = 0;
-    float speedY = 0;
     float x = tab[chemin[0]]->x;
     float y = tab[chemin[0]]->y;
     float directionX = 0;
@@ -264,6 +262,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
     int etatAlpha = 0;
     int fin = 0;
     int seconde = 0;
+
+    int tmpSpeedX = 0;
+    int tmpSpeedY = 0;
 
     timerArgs argsT;
     pthread_t thread;
@@ -339,6 +340,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
                 // pour fermer la fenetre quand on clique sur la croix
                 case SDL_QUIT:
                     program_on = SDL_FALSE;
+                    fin = 1;
+                    (*close) = 1;
                     break;
 
                 case SDL_KEYDOWN:
@@ -359,6 +362,11 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
 
                     case SDLK_d:
                         keyPressD = 1;
+                        break;
+
+                    case SDLK_RETURN:
+                        if (fin)
+                            program_on = SDL_FALSE;
                         break;
 
                     default:
@@ -501,9 +509,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
                 }
             }
         }
-        
 
-        while (!isInPath(x, y, tab, n, PATH_SIZE-10) && !isInPath(x-32, y-32, tab, n, PATH_SIZE-10))
+        if (!isInPath(x, y, tab, n, PATH_SIZE) || !isInPath(x-32, y-32, tab, n, PATH_SIZE))
         {
             x -= speedX*2;
             y -= speedY*2;
@@ -606,6 +613,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
         SDL_Delay(1);
     }
 
+    pthread_join(thread, NULL);
     free(asteroid);
     IMG_Quit(); // Si on charge une librairie SDL, il faut penser à la décharger
 }
@@ -615,20 +623,36 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
  */
-void boucle_jeu(sommet_t **tab, int n)
+void boucle_jeu()
 {
+    int n = 0;
+    sommet_t **tab = NULL;
+
     init(tab, n); // Affichage du graphe
 
     int n_chemin;
     int fin=0;
 
-    int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
+    while (!fin){
+        tab = gen_tab_sommets(&n);
 
-    if(!fin)
-        boucle_jeu_espace(tab, n, chemin, n_chemin);
+        tab_to_graph(tab, 0, n - 1);
 
-    if(chemin != NULL)
-        free(chemin);
+        make_new_links(10*5/n, tab, &n);
+
+        int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
+
+        if(!fin)
+            boucle_jeu_espace(tab, n, chemin, n_chemin, &fin);
+
+        if(chemin != NULL)
+            free(chemin);
+
+        free2DTab((void **)tab, n);
+    }
+    
+    
+    
 
     closeSDL(); // free de tout les elements de SDL
 }
