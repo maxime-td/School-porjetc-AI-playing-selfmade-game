@@ -536,7 +536,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
         
 
         if (count%10 == 0){
-            draw_sprite(background, textureBg, 0, 0, 0, background.w);
+            draw_sprite(background, textureBg, 1, 0, 0, 540);
 
             SDL_SetTextureAlphaMod(textureE2, alpha);
             SDL_SetTextureAlphaMod(textureE1, 255-alpha);
