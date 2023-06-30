@@ -244,15 +244,34 @@
                         <div class="row">
                             <div class="col-md-12 left-align">
                                 <h2 class="dark-text">Problème du voyageur de commerce<hr></h2>
+                                <p>Rappel: le problème du voyageur de commerce consiste à trouver le chemin le plus court pour passer par tout les sommets d'un graphe et revenir au point de départ.</p>
                             </div>
                             <!-- end col -->
                         </div>
                         <!-- end row -->
                         
-                        <h4>BOISSET Florian</h4>
-                        <p>Jeu du slime
+                        <h3><FONT size="6pt"> I. Création du graphe: </FONT></h3>
+
+                        <h4>Génération des sommets:</h4>
+                        <p> - (Florian) Tirage du nombre de sommets aléatoire avec des bornes. <br>
+                            - (Mathis) Tirage d'angles aléatoire pour chaque sommet. Vérification que l'angle n'est pas trop proche d'un autre. (Version 1 "non en cercle" Florian)<br>
                         </p>
-                        <img src="images/florian/flo-anim.gif" />
+
+                        <h4>Création du Graphe</h4>
+                        <p> - (Mathis) Fonction tab_to_graph : à la façon d'un "diviser pour reigner": découpe le tableau de sommets générés précédement et assigne les voisins.<br>
+                            - (Florian) Fonction make_new_links : Pour chaque couple de point, on ajoute une connexion avec une probabilité prédéfinie (10% en l'occurence).<br>
+                            - (Maxime, corrigé par Mathis) Affichage du graphe avec SDL.<br>
+                        </p>
+
+                        <h3><FONT size="6pt"> II. Calcul des cycles non hamiltonnien: </FONT></h3>
+                        <h4>(Mathis) Méthode des fourmis</h4>
+                        <p> L'algorithme des Fourmis utilise une fourmilière pour simuler le comportement des fourmis et des phéromones pour trouver le meilleur chemin pour le voyageur de commerce. Chaque jour, les fourmis de la fourmilière se déplacent sur toutes les zones et reviennent à la fourmilière. Les phéromones sont déposées sur les chemins que les fourmis parcourent, et elles sont prises en compte pour les fourmis du lendemain qui suivront les chemins avec le plus de phéromones. Les phéromones s'évaporent à la fin de chaque jour, ce qui signifie que les chemins les plus longs auront moins de phéromones.  . </p>
+                        <h4>(Florian) Recuit Simulé</h4>
+                        <p> On prend une solution initiale, on la modifie aléatoirement. Soit elle est meilleure et on l'accepte, soit elle est moins bonne et on l'accepte avec une probabilité décroissante au long du processus.</p>
+                        <h4>(Florian) Recherche locale multistart</h4>
+                        <p>Pour chaque point, on applique l'algorithme suivant: on va sur le voisin le plus proche non encore visité. Si tout les voisins ont été visités, on cherche le plus proche au sens de Floyd-Warshall non déjà visité. On incrémente la taille du chemin à chaque changement de sommet. Finalement, on ajoute la distance de Floyd-Warshall reliant le dernier sommet au 1er pour simuler le retour. On garde la meilleure solution proposée par les différents point de départ.</p>
+                        
+                        <h3><FONT size="6pt"> III. Interraction Joueur: </FONT></h3>
 
                     </section>
                     <!-- end section -->
@@ -261,11 +280,24 @@
 
                         <div class="row">
                             <div class="col-md-12 left-align">
-                                <h2 class="dark-text">Premier chef d'œuvre<hr></h2>
+                                <h2 class="dark-text">Premier chef d'œuvre : <br>The travelling Spaceman<hr></h2>
                             </div>
                             <!-- end col -->
                         </div>
                         <!-- end row -->
+                        <h3><FONT size="6pt"> Objectif: </FONT></h3>
+                        <p> Créer un petit jeu d'arcade basé sur les graphes précédements réalisés.<br>
+                            Une soucoupe volante dans l'espace doit se déplacer de planètes en planètes au milieu d'un champ d'astéroides. Des chemins se tracent ainsi devant elle. Elle devra visiter toutes les planètes le plus viite possible!
+                        </p>
+
+                        <h3><FONT size="6pt"> Florian: </FONT></h3>
+                        <p>- Génération du champ d'astéroïdes<br>-Génération des espaces libres (chemins)</p>
+
+                        <h3><FONT size="6pt"> Mathis: </FONT></h3>
+
+                        <h3><FONT size="6pt"> Maxime: </FONT></h3>
+
+
 
                     </section>
                     <!-- end section -->
