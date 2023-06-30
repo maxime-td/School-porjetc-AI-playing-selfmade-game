@@ -250,9 +250,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
     int frame = 0;
     int frameFlag = 0;
     int n_sous_graphe = 0;
-<<<<<<< HEAD
-    float directionY = 0;
-=======
     int n_ast = 0;
     int seconde = 0;
     float directionY = 0; 
@@ -270,15 +267,12 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
     coordonne_t co[n_chemin];
     sommet_t **sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n, &n_sous_graphe);
 
-<<<<<<< HEAD
-    int planeteLigne = 10;
-    int planeteColones[10] = {8, 14, 16, 4, 12, 8, 12, 12, 16, 8};
-=======
+
     asteroid_t * asteroid = ast_Partout(sous_graphe, n_sous_graphe, &n_ast);
 
     int planeteLigne   = 10;
     int planeteColones[10] = {8, 14, 16, 4, 12, 8, 12, 12, 16, 8}; 
->>>>>>> c81c528bb422d8b781eb94359593c3e6ae51e81a
+
 
     SDL_bool program_on = SDL_TRUE; // Booléen de boucle de jeu
     SDL_Event event;
@@ -383,79 +377,79 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
                     break;
                 }
                 break;
-            }
+        }
 
-            directionX = 0;
+        directionX = 0;
+        directionY = 0;
+        if (keyPressZ)
+        {
+            directionY += -0.5;
+        }
+        if (keyPressS)
+        {
+            directionY += 0.5;
+        }
+
+        if (!keyPressZ && !keyPressS)
+        {
             directionY = 0;
-            if (keyPressZ)
+        }
+
+        if (keyPressQ)
+        {
+            directionX += -0.5;
+        }
+        if (keyPressD)
+        {
+            directionX += 0.5;
+        }
+
+        if (!keyPressD && !keyPressQ)
+        {
+            directionX = 0;
+        }
+
+        if (fabs(directionX) + fabs(directionY) == 0.5)
+        {
+            directionX *= 2;
+            directionY *= 2;
+        }
+
+        speedX += directionX * ACCELERATION;
+        speedY += directionY * ACCELERATION;
+
+        if (directionX == 0 && speedX != 0)
+        {
+            if (speedX < 0)
             {
-                directionY += -0.5;
+                speedX += ACCELERATION / 4;
             }
-            if (keyPressS)
+            else
             {
-                directionY += 0.5;
+                speedX -= ACCELERATION / 4;
             }
 
-            if (!keyPressZ && !keyPressS)
+            if (speedX < ACCELERATION && speedX > -ACCELERATION)
             {
-                directionY = 0;
+                speedX = 0;
             }
+        }
 
-            if (keyPressQ)
+        if (directionY == 0 && speedY != 0)
+        {
+            if (speedY < 0)
             {
-                directionX += -0.5;
+                speedY += ACCELERATION / 4;
             }
-            if (keyPressD)
+            else
             {
-                directionX += 0.5;
+                speedY -= ACCELERATION / 4;
             }
-
-            if (!keyPressD && !keyPressQ)
+            if (speedY < ACCELERATION && speedY > -ACCELERATION)
             {
-                directionX = 0;
+                speedY = 0;
             }
-
-            if (fabs(directionX) + fabs(directionY) == 0.5)
-            {
-                directionX *= 2;
-                directionY *= 2;
-            }
-
-            speedX += directionX * ACCELERATION;
-            speedY += directionY * ACCELERATION;
-
-            if (directionX == 0 && speedX != 0)
-            {
-                if (speedX < 0)
-                {
-                    speedX += ACCELERATION / 4;
-                }
-                else
-                {
-                    speedX -= ACCELERATION / 4;
-                }
-
-                if (speedX < ACCELERATION && speedX > -ACCELERATION)
-                {
-                    speedX = 0;
-                }
-            }
-
-            if (directionY == 0 && speedY != 0)
-            {
-                if (speedY < 0)
-                {
-                    speedY += ACCELERATION / 4;
-                }
-                else
-                {
-                    speedY -= ACCELERATION / 4;
-                }
-                if (speedY < ACCELERATION && speedY > -ACCELERATION)
-                {
-                    speedY = 0;
-                }
-            }
+        }
 
         if (speedX < -MAX_SPEED / 2)
         {
@@ -562,55 +556,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
 
             affichAst(asteroid, n_ast, textureP);
 
-            if (x < 0)
-            {
-                x = 0;
-                speedX = 0;
-                speedY = 0;
-            }
-            else if (x > W - navette.w)
-            {
-                x = W - navette.w;
-                speedX = 0;
-                speedY = 0;
-            }
-            if (y < 0)
-            {
-                y = 0;
-                speedX = 0;
-                speedY = 0;
-            }
-            else if (y > H - navette.h)
-            {
-                y = H - navette.h;
-                speedX = 0;
-                speedY = 0;
-            }
-
-            // printf("dx : %f, dy : %f\n", directionX, directionY);
-
-            if (count % 10 == 0)
-            {
-                draw_sprite(background, textureBg, 0, 0);
-
-                for (int i = 0; i < n_sous_graphe; i++)
-                {
-                    planete.x = sous_graphe[i]->y - 24;
-                    planete.y = sous_graphe[i]->x - 24;
-                    draw_sprite(planete, textureP, co[i].x, co[i].y);
-                }
-
-                draw_sprite(navette, texture, frame, 0);
-                // Animation
-                if (count % 100 == 0)
-                {
-
-                    // draw_rect(navette);
-                    frame = (frame + 1) % 4;
-                }
-
-                affichAst(sous_graphe, n_sous_graphe);
-
             navette.x = x;
             navette.y = y;
 
@@ -653,12 +598,8 @@ void boucle_jeu(sommet_t **tab, int n)
     init(tab, n); // Affichage du graphe
 
     int n_chemin;
-<<<<<<< HEAD
-    int fin = 0;
-=======
     int fin=0;
 
->>>>>>> c81c528bb422d8b781eb94359593c3e6ae51e81a
     int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
 
     if(!fin)
