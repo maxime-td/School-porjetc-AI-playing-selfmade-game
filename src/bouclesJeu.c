@@ -234,8 +234,8 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
         }
     }
 
-    free2DTab((void **)warshallDist, n_s_graphe);
-    free2DTab((void **)distMat, n_s_graphe);
+    free2DTab((void **)warshallDist, n);
+    free2DTab((void **)distMat, n);
     *n_chemin = nb_noeuds_chemin;
     return chemin_joueur;
 }
@@ -618,6 +618,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
         SDL_Delay(1);
     }
 
+    free2DTab((void**)sous_graphe, n_sous_graphe);
     pthread_join(thread, NULL);
     free(asteroid);
     IMG_Quit(); // Si on charge une librairie SDL, il faut penser à la décharger
