@@ -27,6 +27,14 @@ void *thread_floyd(FloydWarshallArgs *args)
     return NULL;
 }
 
+void *timer(timerArgs* timer){
+    while(!(*timer->fin)){
+        SDL_Delay(1000);
+        (timer->time)++;
+    }
+    return NULL;
+}
+
 /**
  * @brief Exécute la boucle de jeu  de graphe
  * @param tab Le tableau des sommets
@@ -251,13 +259,14 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
     int frameFlag = 0;
     int n_sous_graphe = 0;
     int n_ast = 0;
-    int seconde = 0;
     float directionY = 0; 
     float alpha = 0;
     int etatAlpha = 0;
     int fin = 0;
+    int seconde = 0;
 
-    clock_t start;
+    timerArgs argsT;
+    pthread_t thread;
 
 
     Point p1;
@@ -267,6 +276,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
     int keyPressS = 0;
     int keyPressQ = 0;
     int keyPressD = 0;
+
+    argsT.time = 0;
+    argsT.fin = &fin;
+    pthread_create(&thread, NULL, (void *(*)(void *))timer, &argsT);
 
     coordonne_t co[n_chemin];
     sommet_t **sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n, &n_sous_graphe);
@@ -313,8 +326,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
     for (int i = 0; i < n; i++){
         planeteVisite[i] = 0;
     }
-    
-    start = clock();
+
 
     while (program_on)
     {
@@ -517,6 +529,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
             speedX = 0;
             speedY = 0;
         }
+
+        if (fin && seconde == 0){
+            seconde = argsT.time;
+        }
         
 
         if (count%10 == 0){
@@ -564,7 +580,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
                 navette.x = x;
                 navette.y = y;
 
-                draw_time(seconde);
+                draw_time(argsT.time);
             }else{
                 afficheFinEspace(seconde);
             }
@@ -572,21 +588,17 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
             render(); //rendre les differents elements
 
             if (etatAlpha){
-                alpha-=2;
+                alpha--;
                 if (0 >= alpha){
                     etatAlpha = !etatAlpha;
                 } 
             }else{
-                alpha+=2;
+                alpha++;
                 if (255 <= alpha){
                     etatAlpha = !etatAlpha;
                 }
             }
             
-        }
-        
-        if (!fin){
-            seconde = (clock() - start)/CLOCKS_PER_SEC;
         }
         
 

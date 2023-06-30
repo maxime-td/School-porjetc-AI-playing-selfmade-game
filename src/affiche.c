@@ -405,7 +405,7 @@ void afficheFinEspace(int time) {
 
     font = TTF_OpenFont("arial.ttf", 40);
 
-    sprintf(Txt1, "Votre Temps : %d", time);
+    sprintf(Txt1, "Votre Temps : %d s", time);
 
     textSurface = TTF_RenderText_Solid(font, Txt1, color);
     textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);

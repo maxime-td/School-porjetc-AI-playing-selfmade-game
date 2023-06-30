@@ -37,6 +37,12 @@ typedef struct {
     int result;
 } FloydWarshallArgs;
 
+// Structure pour les arguments de cycle_Floyd_Warshall
+typedef struct {
+    int * fin;
+    int time;
+} timerArgs;
+
 /**
  * @brief Exécute la boucle de jeu  de graphe
  * @param tab Le tableau des sommets
