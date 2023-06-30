@@ -14,7 +14,7 @@ int main()
 
     tab_to_graph(tab, 0, n - 1);
 
-    make_new_links(10, tab, &n);
+    make_new_links(10*5/n, tab, &n);
 
     boucle_jeu(tab, n);
 
