@@ -586,7 +586,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
         }
         
         if (!fin){
-            seconde = 0.95*(clock() - start)/150000; 
+            seconde = (clock() - start)/CLOCKS_PER_SEC;
         }
         
 
