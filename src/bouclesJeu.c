@@ -64,7 +64,6 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
 
     sommet_t **sous_graphe; // Sous-graphe chemin pour affichage
 
-
     argsFl.n = n;
     argsFl.tabDist = distMat;
     argsFl.tabWarshall = warshallDist;
@@ -78,149 +77,152 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
     int etat_graphe = 0; // 0 = en jeu graphe, 1 = menu de fin, 2 = en jeu espace
 
     // Boucle de jeu
-    while (program_on)
+    if (*fin != 1)
     {
-        // Gestion des événements
-        while (SDL_PollEvent(&event))
+        while (program_on)
         {
-            update = 1;
-            switch (event.type)
+            // Gestion des événements
+            while (SDL_PollEvent(&event))
             {
-
-            // pour fermer la fenetre quand on clique sur la croix
-            case SDL_QUIT:
-                *fin = 1;
-                program_on = SDL_FALSE;
-                break;
-
-            // Détection des clics
-            case SDL_MOUSEBUTTONDOWN:
-                switch (event.button.button)
+                update = 1;
+                switch (event.type)
                 {
-                case SDL_BUTTON_LEFT: // Si on a un clic gauche
 
-                    // Pour voir si on clique sur un noeud
-                    for (i = 0; i < n; i += 1)
-                    { // On parcour tous les noeuds
-                        // On regarde si le clic est dans un carré autour du noeud
-                        SDL_GetMouseState(&x, &y);
-                        if ((x >= (tab[i]->x) - r) && (x <= (tab[i]->x) + r) && (y >= (tab[i]->y) - r) && (y <= (tab[i]->y) + r))
-                        {
-                            if (nb_noeuds_chemin == 0 || tab[i]->voisins[chemin_joueur[nb_noeuds_chemin - 1]])
+                // pour fermer la fenetre quand on clique sur la croix
+                case SDL_QUIT:
+                    *fin = 1;
+                    program_on = SDL_FALSE;
+                    break;
+
+                // Détection des clics
+                case SDL_MOUSEBUTTONDOWN:
+                    switch (event.button.button)
+                    {
+                    case SDL_BUTTON_LEFT: // Si on a un clic gauche
+
+                        // Pour voir si on clique sur un noeud
+                        for (i = 0; i < n; i += 1)
+                        { // On parcour tous les noeuds
+                            // On regarde si le clic est dans un carré autour du noeud
+                            SDL_GetMouseState(&x, &y);
+                            if ((x >= (tab[i]->x) - r) && (x <= (tab[i]->x) + r) && (y >= (tab[i]->y) - r) && (y <= (tab[i]->y) + r))
                             {
-                                chemin_joueur[nb_noeuds_chemin] = i; // On l'ajoute au chemin
-                                nb_noeuds_chemin += 1;
+                                if (nb_noeuds_chemin == 0 || tab[i]->voisins[chemin_joueur[nb_noeuds_chemin - 1]])
+                                {
+                                    chemin_joueur[nb_noeuds_chemin] = i; // On l'ajoute au chemin
+                                    nb_noeuds_chemin += 1;
+                                }
                             }
                         }
-                    }
-                    break;
+                        break;
 
-                case SDL_BUTTON_RIGHT: // Si on a un clic droit on enlève le dernier noeud
-                    if (etat_graphe == 0)
-                    { // Si on est encore en jeu
-                        if (nb_noeuds_chemin != 0)
-                        {                                             // Si on a déjà sélectionné au moins un noeud
-                            chemin_joueur[nb_noeuds_chemin - 1] = -1; // on met le dernier noeud du tableau à -1 valeur impossible
-                            nb_noeuds_chemin -= 1;                    // on retire 1 au nombre de noeud
+                    case SDL_BUTTON_RIGHT: // Si on a un clic droit on enlève le dernier noeud
+                        if (etat_graphe == 0)
+                        { // Si on est encore en jeu
+                            if (nb_noeuds_chemin != 0)
+                            {                                             // Si on a déjà sélectionné au moins un noeud
+                                chemin_joueur[nb_noeuds_chemin - 1] = -1; // on met le dernier noeud du tableau à -1 valeur impossible
+                                nb_noeuds_chemin -= 1;                    // on retire 1 au nombre de noeud
+                            }
                         }
+                        break;
                     }
                     break;
-                }
-                break;
 
-            case SDL_KEYDOWN:
-                switch (event.key.keysym.sym)
-                {
-                case SDLK_SPACE: // Si espace on remet le nombre de noeud à 0
-                    if (etat_graphe == 0)
-                        nb_noeuds_chemin = 0;
-                    break;
-
-                case SDLK_RETURN: // Si entrer on verifie que la selection est valide (cycle complet)
-                                    // Si oui on passe dans l'etat de l'écran de fin de jeu (etat_graphe = 1)
-
-                    for (int i = 0; i < n; i++)
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym)
                     {
-                        all[i] = 0;
+                    case SDLK_SPACE: // Si espace on remet le nombre de noeud à 0
+                        if (etat_graphe == 0)
+                            nb_noeuds_chemin = 0;
+                        break;
+
+                    case SDLK_RETURN: // Si entrer on verifie que la selection est valide (cycle complet)
+                                      // Si oui on passe dans l'etat de l'écran de fin de jeu (etat_graphe = 1)
+
+                        for (int i = 0; i < n; i++)
+                        {
+                            all[i] = 0;
+                        }
+
+                        for (int i = 0; i < nb_noeuds_chemin; i++)
+                        {
+                            all[chemin_joueur[i]] = 1;
+                        }
+
+                        if (tout_noeud(all, n) && chemin_joueur[nb_noeuds_chemin - 1] == chemin_joueur[0])
+                        {
+                            etat_graphe += 1;
+                        }
+
+                        break;
+
+                    default:
+                        break;
                     }
-
-                    for (int i = 0; i < nb_noeuds_chemin; i++)
-                    {
-                        all[chemin_joueur[i]] = 1;
-                    }
-
-                    if (tout_noeud(all, n) && chemin_joueur[nb_noeuds_chemin - 1] == chemin_joueur[0])
-                    {
-                        etat_graphe += 1;
-                    }
-
-                    break;
-
                 default:
                     break;
                 }
-            default:
-                break;
             }
-        }
 
-        if (update)
-        {
-            update = 0;
-            clear_SDL(); // Clear la fenêtre (la remetre blanc)
-
-            switch (etat_graphe)
+            if (update)
             {
-            case 0: // etat_graphe = 0, etat jeu en cours
-                affiche(tab, n, 0, 0, 0, 255, 1);
-                sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
-                affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
+                update = 0;
+                clear_SDL(); // Clear la fenêtre (la remetre blanc)
 
-                draw_path(tab, chemin_joueur, nb_noeuds_chemin);
-                draw_int(path_size(chemin_joueur, distMat, nb_noeuds_chemin));
-
-                free2DTab((void **)sous_graphe, n_s_graphe);
-
-                break;
-
-            case 1: // etat_graphe = 1, etat écran de fin
-                if (first)
+                switch (etat_graphe)
                 {
-                    first = 0;
-                    pthread_join(thread1, NULL);
-                    pthread_join(thread2, NULL);
-                    scoreFloyd = argsFl.result;
-                    scoreFourmi = argsF.result;
+                case 0: // etat_graphe = 0, etat jeu en cours
+                    affiche(tab, n, 0, 0, 0, 255, 1);
+                    sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
+                    affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
+
+                    draw_path(tab, chemin_joueur, nb_noeuds_chemin);
+                    draw_int(path_size(chemin_joueur, distMat, nb_noeuds_chemin));
+
+                    free2DTab((void **)sous_graphe, n_s_graphe);
+
+                    break;
+
+                case 1: // etat_graphe = 1, etat écran de fin
+                    if (first)
+                    {
+                        first = 0;
+                        pthread_join(thread1, NULL);
+                        pthread_join(thread2, NULL);
+                        scoreFloyd = argsFl.result;
+                        scoreFourmi = argsF.result;
+                    }
+
+                    score = path_size(chemin_joueur, distMat, nb_noeuds_chemin); // Score du joueur
+
+                    scoreBest = scoreFourmi;
+                    if (scoreFloyd < scoreFourmi)
+                    { // recherche quelle est le meilleur score obtenu entre les differents algo et le joueur
+                        scoreBest = scoreFloyd;
+                    }
+
+                    if (scoreBest > score)
+                    {
+                        scoreBest = score;
+                    }
+
+                    afficheFin(score, scoreBest); // On affiche l'ecran de fin
+
+                    if (scoreBest == score)
+                    {
+                        secret1();
+                    }
+
+                    break;
+
+                default:                    // etat_graphe = 2
+                    program_on = SDL_FALSE; // On ferme cette boucle
+                    break;
                 }
 
-                score = path_size(chemin_joueur, distMat, nb_noeuds_chemin); // Score du joueur
-
-                scoreBest = scoreFourmi;
-                if (scoreFloyd < scoreFourmi)
-                { // recherche quelle est le meilleur score obtenu entre les differents algo et le joueur
-                    scoreBest = scoreFloyd;
-                }
-
-                if (scoreBest > score)
-                {
-                    scoreBest = score;
-                }
-
-                afficheFin(score, scoreBest); // On affiche l'ecran de fin
-
-                if (scoreBest == score)
-                {
-                    secret1();
-                }
-
-                break;
-
-            default:                    // etat_graphe = 2
-                program_on = SDL_FALSE; // On ferme cette boucle
-                break;
+                render(); // rendre les differents elements
             }
-
-            render(); // rendre les differents elements
         }
     }
 
@@ -235,8 +237,9 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
  * @param chemin Tableau du chemin choisi par le joueur
-*/
-void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
+ */
+void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
+{
     int count = 0;
     float speedX = 0;
     float speedY = 0;
@@ -262,14 +265,16 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
     int keyPressD = 0;
 
     coordonne_t co[n_chemin];
-    sommet_t ** sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n, &n_sous_graphe);
+    sommet_t **sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n, &n_sous_graphe);
+
 
     asteroid_t * asteroid = ast_Partout(sous_graphe, n_sous_graphe, &n_ast);
 
     int planeteLigne   = 10;
     int planeteColones[10] = {8, 14, 16, 4, 12, 8, 12, 12, 16, 8}; 
 
-    SDL_bool program_on = SDL_TRUE; //Booléen de boucle de jeu
+
+    SDL_bool program_on = SDL_TRUE; // Booléen de boucle de jeu
     SDL_Event event;
     
     SDL_Rect  navette = {x, y, 32, 32};
@@ -290,13 +295,14 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
     SDL_Texture * textureE2 = create_texture(imageE);
     SDL_SetTextureAlphaMod(textureE2, 0);
 
-    SDL_Rect  planete = {0, 0, 48, 48};
-    SDL_Surface * imageP = IMG_Load("images/planetes.png");    
-    SDL_Texture * textureP = create_texture(imageP);
+    SDL_Rect planete = {0, 0, 48, 48};
+    SDL_Surface *imageP = IMG_Load("images/planetes.png");
+    SDL_Texture *textureP = create_texture(imageP);
 
-    for (int i = 0; i < n_sous_graphe; i++){
-        co[i].y = rand()%planeteLigne;
-        co[i].x = rand()%planeteColones[co[i].y];
+    for (int i = 0; i < n_sous_graphe; i++)
+    {
+        co[i].y = rand() % planeteLigne;
+        co[i].x = rand() % planeteColones[co[i].y];
         co[i].y++;
     }
 
@@ -347,103 +353,103 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
 
                     switch (event.key.keysym.sym)
                     {
-                        case SDLK_z:
-                            keyPressZ = 0;
-                            break;
+                    case SDLK_z:
+                        keyPressZ = 0;
+                        break;
 
-                        case SDLK_s:
-                            keyPressS = 0;
-                            break;
+                    case SDLK_s:
+                        keyPressS = 0;
+                        break;
 
-                        case SDLK_q:
-                            keyPressQ = 0;
-                            break;
+                    case SDLK_q:
+                        keyPressQ = 0;
+                        break;
 
-                        case SDLK_d:
-                            keyPressD = 0;
-                            break;
+                    case SDLK_d:
+                        keyPressD = 0;
+                        break;
 
-                        default:
-                            break;
+                    default:
+                        break;
                     }
 
                 default:
                     break;
                 }
                 break;
-            }
+        }
 
-            directionX = 0;
+        directionX = 0;
+        directionY = 0;
+        if (keyPressZ)
+        {
+            directionY += -0.5;
+        }
+        if (keyPressS)
+        {
+            directionY += 0.5;
+        }
+
+        if (!keyPressZ && !keyPressS)
+        {
             directionY = 0;
-            if (keyPressZ)
+        }
+
+        if (keyPressQ)
+        {
+            directionX += -0.5;
+        }
+        if (keyPressD)
+        {
+            directionX += 0.5;
+        }
+
+        if (!keyPressD && !keyPressQ)
+        {
+            directionX = 0;
+        }
+
+        if (fabs(directionX) + fabs(directionY) == 0.5)
+        {
+            directionX *= 2;
+            directionY *= 2;
+        }
+
+        speedX += directionX * ACCELERATION;
+        speedY += directionY * ACCELERATION;
+
+        if (directionX == 0 && speedX != 0)
+        {
+            if (speedX < 0)
             {
-                directionY += -0.5;
+                speedX += ACCELERATION / 4;
             }
-            if (keyPressS)
+            else
             {
-                directionY += 0.5;
+                speedX -= ACCELERATION / 4;
             }
 
-            if (!keyPressZ && !keyPressS)
+            if (speedX < ACCELERATION && speedX > -ACCELERATION)
             {
-                directionY = 0;
+                speedX = 0;
             }
+        }
 
-            if (keyPressQ)
+        if (directionY == 0 && speedY != 0)
+        {
+            if (speedY < 0)
             {
-                directionX += -0.5;
+                speedY += ACCELERATION / 4;
             }
-            if (keyPressD)
+            else
             {
-                directionX += 0.5;
+                speedY -= ACCELERATION / 4;
             }
-
-            if (!keyPressD && !keyPressQ)
+            if (speedY < ACCELERATION && speedY > -ACCELERATION)
             {
-                directionX = 0;
+                speedY = 0;
             }
-
-            if (fabs(directionX) + fabs(directionY) == 0.5)
-            {
-                directionX *= 2;
-                directionY *= 2;
-            }
-
-            speedX += directionX * ACCELERATION;
-            speedY += directionY * ACCELERATION;
-
-            if (directionX == 0 && speedX != 0)
-            {
-                if (speedX < 0)
-                {
-                    speedX += ACCELERATION / 4;
-                }
-                else
-                {
-                    speedX -= ACCELERATION / 4;
-                }
-
-                if (speedX < ACCELERATION && speedX > -ACCELERATION)
-                {
-                    speedX = 0;
-                }
-            }
-
-            if (directionY == 0 && speedY != 0)
-            {
-                if (speedY < 0)
-                {
-                    speedY += ACCELERATION / 4;
-                }
-                else
-                {
-                    speedY -= ACCELERATION / 4;
-                }
-                if (speedY < ACCELERATION && speedY > -ACCELERATION)
-                {
-                    speedY = 0;
-                }
-            }
+        }
 
         if (speedX < -MAX_SPEED / 2)
         {
@@ -552,8 +558,6 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin){
 
             navette.x = x;
             navette.y = y;
-
-            draw_time(seconde);
 
             render(); //rendre les differents elements
 
