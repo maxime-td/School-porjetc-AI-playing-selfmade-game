@@ -234,8 +234,8 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
         }
     }
 
-    free2DTab((void **)warshallDist, n_s_graphe);
-    free2DTab((void **)distMat, n_s_graphe);
+    free2DTab((void **)warshallDist, n);
+    free2DTab((void **)distMat, n);
     *n_chemin = nb_noeuds_chemin;
     return chemin_joueur;
 }
@@ -246,7 +246,7 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
  * @param n Le nombre de sommets
  * @param chemin Tableau du chemin choisi par le joueur
  */
-void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
+void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close)
 {
     int count = 0;
     float speedX = 0;
@@ -257,6 +257,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
     int planeteVisite[n];
     int frame = 0;
     int frameFlag = 0;
+    int frameEF = 0;
     int n_sous_graphe = 0;
     int n_ast = 0;
     float directionY = 0; 
@@ -264,6 +265,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
     int etatAlpha = 0;
     int fin = 0;
     int seconde = 0;
+
+    float tmpSpeedX = 0;
+    float tmpSpeedY = 0;
 
     timerArgs argsT;
     pthread_t thread;
@@ -316,6 +320,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
     SDL_Surface *imageP = IMG_Load("images/planetes.png");
     SDL_Texture *textureP = create_texture(imageP);
 
+    SDL_Rect etoileFilante = {rand()%W, rand()%H, 26, 26};
+    SDL_Surface *imageEF = IMG_Load("images/Comet.png");
+    SDL_Texture *textureEF = create_texture(imageEF);
+
     for (int i = 0; i < n_sous_graphe; i++)
     {
         co[i].y = rand() % planeteLigne;
@@ -339,6 +347,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
                 // pour fermer la fenetre quand on clique sur la croix
                 case SDL_QUIT:
                     program_on = SDL_FALSE;
+                    fin = 1;
+                    (*close) = 1;
                     break;
 
                 case SDL_KEYDOWN:
@@ -359,6 +369,11 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
 
                     case SDLK_d:
                         keyPressD = 1;
+                        break;
+
+                    case SDLK_RETURN:
+                        if (fin)
+                            program_on = SDL_FALSE;
                         break;
 
                     default:
@@ -502,11 +517,13 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
             }
         }
         
+        tmpSpeedX = speedX;
+        tmpSpeedY = speedY;
 
         while (!isInPath(x, y, tab, n, PATH_SIZE-10) && !isInPath(x-32, y-32, tab, n, PATH_SIZE-10))
         {
-            x -= speedX*2;
-            y -= speedY*2;
+            x -= tmpSpeedX*2;
+            y -= tmpSpeedY*2;
             speedX = 0;
             speedY = 0;
         }
@@ -536,6 +553,15 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
         
 
         if (count%10 == 0){
+            if (count%50 == 0){
+                    frameEF = (frameEF + 1)%8;
+                    if (frameEF == 0){
+                        etoileFilante.x = rand()%W;
+                        etoileFilante.y = rand()%H;
+                    }
+            }
+            
+            
             draw_sprite(background, textureBg, 1, 0, 0, 540);
 
             SDL_SetTextureAlphaMod(textureE2, alpha);
@@ -543,6 +569,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
 
             draw_sprite(etoile, textureE1, 0, 0, 0, 540);
             draw_sprite(etoile, textureE2, 0, 1, 0, 540);
+
+            draw_sprite(etoileFilante, textureEF, frameEF, 0, 0, 26);
+
+            
 
             if (!fin){
                 for (int i = 0; i < n_sous_graphe; i++){
@@ -606,6 +636,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
         SDL_Delay(1);
     }
 
+    free2DTab((void**)sous_graphe, n_sous_graphe);
+    pthread_join(thread, NULL);
     free(asteroid);
     IMG_Quit(); // Si on charge une librairie SDL, il faut penser à la décharger
 }
@@ -615,20 +647,36 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin)
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
  */
-void boucle_jeu(sommet_t **tab, int n)
+void boucle_jeu()
 {
+    int n = 0;
+    sommet_t **tab = NULL;
+
     init(tab, n); // Affichage du graphe
 
     int n_chemin;
     int fin=0;
 
-    int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
+    while (!fin){
+        tab = gen_tab_sommets(&n);
 
-    if(!fin)
-        boucle_jeu_espace(tab, n, chemin, n_chemin);
+        tab_to_graph(tab, 0, n - 1);
 
-    if(chemin != NULL)
-        free(chemin);
+        make_new_links(10*5/n, tab, &n);
+
+        int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
+
+        if(!fin)
+            boucle_jeu_espace(tab, n, chemin, n_chemin, &fin);
+
+        if(chemin != NULL)
+            free(chemin);
+
+        free2DTab((void **)tab, n);
+    }
+    
+    
+    
 
     closeSDL(); // free de tout les elements de SDL
 }

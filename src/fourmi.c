@@ -38,7 +38,7 @@ int multi_start_fourmi(int ** matDist, int n){
 int * colonni_fourmi(int ** matDist, int n, int dep, int * nPath){
     int nCour, sizeCour;
     int * courPath;
-    int nBest, sizeBest = INT_MAX;
+    int nBest = 0, sizeBest = INT_MAX;
     int * bestPath = NULL;
     int ** probaMat = (int **) malloc(sizeof(int *)*n);
     int ** probaMatCopy;

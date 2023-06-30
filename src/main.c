@@ -9,15 +9,7 @@
 int main()
 {
     srand(time(NULL));
-    int n = 0;
-    sommet_t **tab = gen_tab_sommets(&n);
 
-    tab_to_graph(tab, 0, n - 1);
-
-    make_new_links(10*5/n, tab, &n);
-
-    boucle_jeu(tab, n);
-
-    free2DTab((void **)tab, n);
+    boucle_jeu();
     return 0;
 }
