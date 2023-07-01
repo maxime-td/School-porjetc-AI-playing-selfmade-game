@@ -28,7 +28,7 @@ void *thread_floyd(FloydWarshallArgs *args)
 }
 
 void *timer(timerArgs* timer){
-    while(!(*timer->fin)){
+    while((*timer->fin)){
         SDL_Delay(10);
         (timer->time)++;
     }
@@ -39,11 +39,18 @@ void *timer(timerArgs* timer){
 void * afficheJeu(afficheArgs * argsAff){
     int alpha = 0;
     int etatAlpha = 1;
+    int first = 1;
+
+    int seconde = 0;
     
     while (*(argsAff->program_on))
-    {
-
-        if (*(argsAff->count)%2 == 0 || *(argsAff->fin)){
+    {   
+        if (*(argsAff->fin) && first){
+            first = 0;
+            seconde = *(argsAff->count)/100;
+        }
+        
+        if (*(argsAff->count)%2 == 0){
             if (*(argsAff->count)%10 == 0){
                 argsAff->frameEF = (argsAff->frameEF + 1)%8;
                 if (argsAff->frameEF == 0){
@@ -52,7 +59,6 @@ void * afficheJeu(afficheArgs * argsAff){
                 }
             }
             
-            //printf("%d\n", *(argsAff->count));
             draw_sprite(argsAff->background, argsAff->textureBg, 1, 0, 0, 540);
 
             SDL_SetTextureAlphaMod(argsAff->textureE2, alpha);
@@ -88,8 +94,6 @@ void * afficheJeu(afficheArgs * argsAff){
 
                 draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);
                 if (*(argsAff->count)%20 == 0){
-                    
-                    //draw_rect(navette);
                     argsAff->frame = (argsAff->frame + 1)%4;
                     argsAff->frameFlag = (argsAff->frameFlag + 1)%5;
                 }
@@ -99,12 +103,11 @@ void * afficheJeu(afficheArgs * argsAff){
                 argsAff->navette.x = *(argsAff->x);
                 argsAff->navette.y = *(argsAff->y);
 
-                //printf("%f, %f\n", *(argsAff->x), *(argsAff->y));
 
                 draw_time(*(argsAff->count)/100);
                 
             }else{
-                afficheFinEspace(*(argsAff->count)/100);
+                afficheFinEspace(seconde);
             }
 
             render(); //rendre les differents elements
@@ -340,7 +343,6 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
  */
 void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close)
 {
-    int count = 0;
     float speedX = 0;
     float speedY = 0;
     float x = tab[chemin[0]]->x;
@@ -373,10 +375,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     int keyPressQ = 0;
     int keyPressD = 0;
 
-    argsT.time = 0;
-    argsT.fin = &fin;
-    pthread_create(&thread, NULL, (void *(*)(void *))timer, &argsT);
-
     coordonne_t co[n_chemin];
     sommet_t **sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n, &n_sous_graphe);
 
@@ -389,32 +387,42 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
     SDL_bool program_on = SDL_TRUE; // Booléen de boucle de jeu
     SDL_Event event;
+
+    argsT.time = 0;
+    argsT.fin = &(program_on);
+    pthread_create(&thread, NULL, (void *(*)(void *))timer, &argsT);
     
     SDL_Rect  navette = {x, y, 32, 32};
     SDL_Surface * image = IMG_Load("images/soucoupeV3.png");
     SDL_Texture * texture = create_texture(image);
+    IMG_Quit();
 
     SDL_Rect  flag = {0, 0, 48, 48};
     SDL_Surface * imageF = IMG_Load("images/flag.png");
     SDL_Texture * textureF = create_texture(imageF);
+    IMG_Quit();
 
     SDL_Rect  background = {0, 0, W, H};
     SDL_Surface * imageBg = IMG_Load("images/background.png");
     SDL_Texture * textureBg = create_texture(imageBg);
+    IMG_Quit();
 
     SDL_Rect  etoile = {0, 0, W, H};
     SDL_Surface * imageE = IMG_Load("images/etoiles.png");    
     SDL_Texture * textureE1 = create_texture(imageE);
     SDL_Texture * textureE2 = create_texture(imageE);
     SDL_SetTextureAlphaMod(textureE2, 0);
+    IMG_Quit();
 
     SDL_Rect planete = {0, 0, 48, 48};
     SDL_Surface *imageP = IMG_Load("images/planetes.png");
     SDL_Texture *textureP = create_texture(imageP);
+    IMG_Quit();
 
     SDL_Rect etoileFilante = {rand()%W, rand()%H, 26, 26};
     SDL_Surface *imageEF = IMG_Load("images/Comet.png");
     SDL_Texture *textureEF = create_texture(imageEF);
+    IMG_Quit();
 
     afficheArgs affArgs;
     affArgs.asteroid = asteroid;
@@ -598,11 +606,11 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
         {
             if (speedY < 0)
             {
-                speedY += ACCELERATION * 0.5;
+                speedY += ACCELERATION * 0.25;
             }
             else
             {
-                speedY -= ACCELERATION * 0.5;
+                speedY -= ACCELERATION * 0.25;
             }
             if (speedY < ACCELERATION && speedY > -ACCELERATION)
             {
@@ -678,18 +686,12 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             seconde = argsT.time;
         }
         
-
-        
-        
-
-        count++;
     }
 
     free2DTab((void**)sous_graphe, n_sous_graphe);
     pthread_join(thread,  NULL);
     pthread_join(thread2, NULL);
     free(asteroid);
-    IMG_Quit(); // Si on charge une librairie SDL, il faut penser à la décharger
 }
 
 /**
@@ -702,7 +704,7 @@ void boucle_jeu()
     int n = 0;
     sommet_t **tab = NULL;
 
-    init(tab, n); // Affichage du graphe
+    init(); // Affichage du graphe
 
     int n_chemin;
     int fin=0;
@@ -725,8 +727,5 @@ void boucle_jeu()
         free2DTab((void **)tab, n);
     }
     
-    
-    
-
     closeSDL(); // free de tout les elements de SDL
 }

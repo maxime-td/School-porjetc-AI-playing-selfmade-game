@@ -13,8 +13,8 @@
 #include "affiche.h"
 #include "fourmi.h"
 
-#define MAX_SPEED 0.001
-#define ACCELERATION 0.0000000025
+#define MAX_SPEED 0.005
+#define ACCELERATION 0.00000000125
 
 // Structure pour les arguments de multi_start_fourmi
 typedef struct coordonne_s{
@@ -39,7 +39,7 @@ typedef struct {
 
 // Structure pour les arguments de cycle_Floyd_Warshall
 typedef struct {
-    int * fin;
+    SDL_bool * fin;
     int time;
 } timerArgs;
 

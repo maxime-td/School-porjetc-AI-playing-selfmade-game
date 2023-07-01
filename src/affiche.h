@@ -56,7 +56,7 @@ void afficheFin(int score, int bestScore);
  * @param tab Le tableau de sommets représentant le graphe.
  * @param n Le nombre de sommets dans le tableau.
 */
-void init(sommet_t ** tab, int n);
+void init();
 
 /**
  * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
