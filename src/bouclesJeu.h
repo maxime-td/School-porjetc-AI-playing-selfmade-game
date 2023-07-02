@@ -106,9 +106,10 @@ void boucle_jeu_sans_graph();
  * @param p Position à comparer
  * @param tab Le tableau de sommet
  * @param n Le nombre de sommet
+ * @param planeteVisit Les index des planete déjà faite
  * @return index du sommet le plus proche
  */
-int closest_point(Point p, sommet_t ** tab, int n);
+int closest_point(Point p, sommet_t ** tab, int n, int * planeteVisit);
 
 /**
  * @brief Donne la position relative du point 2 par rapport au point 1 
@@ -117,5 +118,16 @@ int closest_point(Point p, sommet_t ** tab, int n);
  * @return position : 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
  */
 int position_relative(Point p1, Point p2);
+
+/**
+ * @brief Donne la position du mur le plus proche par rapport au point donner
+ * @param p Point donner
+ * @param tab Tableau des sommet
+ * @param n Le nombre de sommet
+ * @param depth plus depth grand plus on va chercher des mur loins
+ * @param precision plus elle est grande moins il y a de chance de loupé un mur mais la verification serra plus longue
+ * @return position : -1 si pas de mur trouver 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
+ */
+int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision);
 
 #endif

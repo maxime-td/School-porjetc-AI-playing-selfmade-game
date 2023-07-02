@@ -654,7 +654,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
         tmpSpeedX = speedX;
         tmpSpeedY = speedY;
 
-        while (!isInPath(x, y, tab, n, PATH_SIZE-10) && !isInPath(x-32, y-32, tab, n, PATH_SIZE-10))
+        while (!isInPath(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath(x-32, y-32, sous_graphe, n, PATH_SIZE-10))
         {
             x -= tmpSpeedX*2;
             y -= tmpSpeedY*2;
@@ -732,20 +732,23 @@ void boucle_jeu()
  * @param p Position à comparer
  * @param tab Le tableau de sommet
  * @param n Le nombre de sommet
+ * @param planeteVisit Les index des planete déjà faite
  * @return index du sommet le plus proche
  */
-int closest_point(Point p, sommet_t ** tab, int n){
+int closest_point(Point p, sommet_t ** tab, int n, int * planeteVisit){
     int res = 0;
     int bestDist = INT_MAX;
     int dist;
     Point p2;
     for (int i = 0; i < n; i++){
-        p2.x = tab[i]->x;
-        p2.y = tab[i]->y;
-        dist = distance(p, p2);
-        if (dist < bestDist){
-            bestDist = dist;
-            res = i;
+        if(!planeteVisit[i]){
+            p2.x = tab[i]->x;
+            p2.y = tab[i]->y;
+            dist = distance(p, p2);
+            if (dist < bestDist){
+                bestDist = dist;
+                res = i;
+            }
         }
     }
     return res;
@@ -773,6 +776,74 @@ int position_relative(Point p1, Point p2){
     } 
 }
 
+
+/**
+ * @brief Donne la position du mur le plus proche par rapport au point donner
+ * @param p Point donner
+ * @param tab Tableau des sommet
+ * @param n Le nombre de sommet
+ * @param depth plus depth grand plus on va chercher des mur loins
+ * @param precision plus elle est grande moins il y a de chance de loupé un mur mais la verification serra plus longue
+ * @return position : -1 si pas de mur trouver 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
+ */
+int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
+    Point direction[4];
+    direction[0].x = -precision;
+    direction[0].y = -precision;
+    direction[1].x =  precision;
+    direction[1].y = -precision;
+    direction[2].x = -precision;
+    direction[2].y =  precision;
+    direction[3].x =  precision;
+    direction[3].y =  precision;
+
+    int closest = -1;
+    int bestDist = depth;
+
+    for (int i = 0; i < 4; i++){
+        for (int j = 1; j < bestDist; j++)
+        {
+            if (isInPath(p.x + direction[i].x*j, p.y + direction[i].y*j, tab, n, PATH_SIZE-10)){
+                bestDist = j;
+                closest = i;
+            }
+        }
+    }
+    return closest;
+}
+
+
+/**
+ * @brief Cherche si il y a un mur entre les deux points
+ * @param p1 Point 1
+ * @param p2 Point 2
+ * @param tab Tableau des sommet
+ * @param n Le nombre de sommet
+ * @param precision plus elle est grande moins il y a de chance de loupé un mur mais la verification serra plus longue
+ * @return 0 si pas de mur 1 sinon
+ */
+int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision){
+    Point direction[4];
+    direction[0].x = -1;
+    direction[0].y = -1;
+    direction[1].x =  1;
+    direction[1].y = -1;
+    direction[2].x = -1;
+    direction[2].y =  1;
+    direction[3].x =  1;
+    direction[3].y =  1;
+
+    int dir_noeud = position_relative(p1, p2);
+    int dist = distance(p1, p2);
+
+    for (int i = 0; i < dist; i+=precisions)
+    {
+        if (isInPath(p1.x + direction[dir_noeud].x*i, p1.y + direction[dir_noeud].y*i, tab, n, PATH_SIZE-10)){
+            return 1;
+        }
+    }
+    return 0;
+}
 
 
 
