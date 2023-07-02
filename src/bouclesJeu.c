@@ -355,8 +355,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     int n_sous_graphe = 0;
     int n_ast = 0;
     float directionY = 0; 
-    //float alpha = 0;
-    //int etatAlpha = 0;
     int fin = 0;
     int seconde = 0;
 
