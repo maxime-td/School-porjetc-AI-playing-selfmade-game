@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <limits.h>
 #include <pthread.h>
 
 #include <SDL2/SDL.h>
@@ -694,8 +695,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
 /**
  * @brief Exécute la boucle de jeu principal
- * @param tab Le tableau des sommets
- * @param n Le nombre de sommets
  */
 void boucle_jeu()
 {
@@ -728,6 +727,58 @@ void boucle_jeu()
     closeSDL(); // free de tout les elements de SDL
 }
 
+/**
+ * @brief Trouve l'index du sommet qui a la plus courte distance avec le point p
+ * @param p Position à comparer
+ * @param tab Le tableau de sommet
+ * @param n Le nombre de sommet
+ * @return index du sommet le plus proche
+ */
+int closest_point(Point p, sommet_t ** tab, int n){
+    int res = 0;
+    int bestDist = INT_MAX;
+    int dist;
+    Point p2;
+    for (int i = 0; i < n; i++){
+        p2.x = tab[i]->x;
+        p2.y = tab[i]->y;
+        dist = distance(p, p2);
+        if (dist < bestDist){
+            bestDist = dist;
+            res = i;
+        }
+    }
+    return res;
+}
+
+/**
+ * @brief Donne la position relative du point 2 par rapport au point 1 
+ * @param p1 Point 1
+ * @param p2 Point 2
+ * @return position : 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
+ */
+int position_relative(Point p1, Point p2){
+    if (p1.x > p2.x){
+        if (p1.y > p2.y){
+            return 0;
+        }else{
+            return 1;
+        }        
+    }else{
+        if (p1.y > p2.y){
+            return 2;
+        }else{
+            return 3;
+        }
+    } 
+}
+
+
+
+
+/**
+ * @brief Exécute la boucle de jeu principal sans la première partie
+ */
 void boucle_jeu_sans_graph()
 {
     int n = 0;
