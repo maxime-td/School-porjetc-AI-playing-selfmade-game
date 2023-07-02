@@ -373,7 +373,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     int keyPressQ = 0;
     int keyPressD = 0;
 
-    coordonne_t co[n_chemin];
+    coordonne_t co[n];
     sommet_t **sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n, &n_sous_graphe);
 
 
@@ -727,3 +727,38 @@ void boucle_jeu()
     
     closeSDL(); // free de tout les elements de SDL
 }
+
+void boucle_jeu_sans_graph()
+{
+    int n = 0;
+    sommet_t **tab = NULL;
+
+    init(); // Affichage du graphe
+
+    int n_chemin;
+    int fin=0;
+    int ** matDist;
+    int *chemin;
+
+    while (!fin){
+        tab = gen_tab_sommets(&n);
+
+        tab_to_graph(tab, 0, n - 1);
+
+        make_new_links(10*5/n, tab, &n);
+
+        matDist = dist_tab(tab, &n);
+        chemin = colonni_fourmi(matDist, n, rand()%n, &n_chemin);
+
+        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin);
+
+        if(chemin != NULL)
+            free(chemin);
+
+        free2DTab((void **)matDist, n);
+        free2DTab((void **)tab, n);
+    }
+    
+    closeSDL(); // free de tout les elements de SDL
+}
+

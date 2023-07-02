@@ -98,4 +98,6 @@ void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin, int* c
  * @param n Le nombre de sommets
 */
 void boucle_jeu();
+
+void boucle_jeu_sans_graph();
 #endif

@@ -40,18 +40,8 @@ int * colonni_fourmi(int ** matDist, int n, int dep, int * nPath){
     int * courPath;
     int nBest = 0, sizeBest = INT_MAX;
     int * bestPath = NULL;
-    int ** probaMat = (int **) malloc(sizeof(int *)*n);
     int ** probaMatCopy;
-
-
-    for (int i = 0; i < n; i++){
-        probaMat[i] = calloc(n, sizeof(int));
-        for (int j = 0; j < n; j++){
-            if(matDist[i][j] > 0){
-                probaMat[i][j] = 10000/matDist[i][j];
-            } 
-        }
-    }
+    int ** probaMat = getProbaMat(matDist, n);
 
 
     for (int i = 0; i < ITERATION*n; i++){
@@ -88,6 +78,22 @@ int * colonni_fourmi(int ** matDist, int n, int dep, int * nPath){
     
     free2DTab((void **) probaMat, n);
     return bestPath;
+}
+
+
+int ** getProbaMat(int ** matDist, int n){
+    int ** probaMat = (int **) malloc(sizeof(int *)*n);
+    
+    for (int i = 0; i < n; i++){
+        probaMat[i] = calloc(n, sizeof(int));
+        for (int j = 0; j < n; j++){
+            if(matDist[i][j] > 0){
+                probaMat[i][j] = 10000/matDist[i][j];
+            } 
+        }
+    }
+
+    return probaMat;
 }
 
 /**
