@@ -780,11 +780,11 @@ int position_relative(Point p1, Point p2){
 
 
 /**
- * @brief Donne la position du mur le plus proche par rapport au point donner
- * @param p Point donner
- * @param tab Tableau des sommet
+ * @brief Donne la position du mur le plus proche par rapport au point donné
+ * @param p Point donné
+ * @param tab Tableau des sommets
  * @param n Le nombre de sommet
- * @param depth plus depth grand plus on va chercher des mur loins
+ * @param depth plus depth est grand plus on va chercher des murs loins
  * @param precision plus elle est grande moins il y a de chance de loupé un mur mais la verification serra plus longue
  * @return position : -1 si pas de mur trouver 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
  */
