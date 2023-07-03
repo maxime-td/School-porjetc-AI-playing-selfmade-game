@@ -93,8 +93,9 @@ void * afficheJeu(afficheArgs * argsAff){
                     
                 }
 
-                draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);
                 draw_sprite(argsAff->trouNoir, argsAff->textureTN, argsAff->frameTN, 0, 0, argsAff->trouNoir.w);
+                draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);
+                
                 if (*(argsAff->count)%20 == 0){
                     argsAff->frame = (argsAff->frame + 1)%4;
                     argsAff->frameTN = (argsAff->frameTN + 1)%4;
@@ -360,7 +361,11 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     int n_ast = 0;
     float directionY = 0; 
     int fin = 0;
+    int nb_planet = 0;
     int seconde = 0;
+    int k;
+    int poid;
+    int selectPoid;
 
     float tmpSpeedX = 0;
     float tmpSpeedY = 0;
@@ -379,6 +384,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     int posClosestW;
     int isWall;
     int selectRule;
+    int * validRule = (int *) malloc(sizeof(int)*n_ia);
 
     int keyPressZ = 0;
     int keyPressS = 0;
@@ -485,7 +491,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
         planeteVisite[i] = 0;
     }
 
-    while (program_on)
+    while (program_on && (!ia || argsT.time/100 <= TIME_MAX_IA))
     {
         // Gestion des événements
         while (SDL_PollEvent(&event))
@@ -564,7 +570,11 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             posNav.x = x;
             posNav.y = y;
 
-            closestP    = closest_point(posNav, tab, n, planeteVisite);
+            if (!tout_noeud(planeteVisite, n)){
+                closestP = closest_point(posNav, tab, n, planeteVisite);
+            }else{
+                closestP = chemin[0];   
+            }
 
             posPlan.x   = tab[closestP]->x;
             posPlan.y   = tab[closestP]->y;
@@ -576,21 +586,44 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
             selectRule = -1;
 
-            for (int i = 0; i < n_ia && selectRule == -1; i++){
+            for (int i = 0; i < n_ia; i++){
+                validRule[i] = -1;
+            }
+            
+            k = 0;
+
+            for (int i = 0; i < n_ia; i++){
                 if (tabIA[i][0] == -1 || tabIA[i][0] == posClosestP){
                     if (tabIA[i][1] == -1 || tabIA[i][1] == posClosestW){
                         if (tabIA[i][2] == -1 || tabIA[i][2] == isWall){
-                            selectRule = i;
+                            validRule[k] = i;
+                            k++;
                         }
                     }
                 } 
+            }
+
+            poid = 0;
+
+            for (int i = 0; i < k; i++){
+                poid += tabIA[validRule[i]][N_RULE+2];
+            }
+
+            selectPoid = rand()%poid;
+            selectRule = -1;
+
+            poid = 0;
+            for (int i = 0; i < k && selectRule == -1; i++){
+                poid += tabIA[validRule[i]][N_RULE+2];
+                if (poid > selectPoid){
+                    selectRule = validRule[i];
+                }
             }
 
             keyPressZ = (tabIA[selectRule][3] == 1);
             keyPressS = (tabIA[selectRule][3] == -1);
             keyPressD = (tabIA[selectRule][4] == -1);
             keyPressQ = (tabIA[selectRule][4] == 1);
-            
         }
         
 
@@ -733,20 +766,32 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             }
 
             if (fin && seconde == 0){
-                seconde = argsT.time;
+                seconde = argsT.time/100;
             }
-            
         }
     }
+    
+    program_on = SDL_FALSE;
+    pthread_join(thread,  NULL);
 
-    *result = seconde;
+
+    seconde = argsT.time/100;   
+    for (int i = 0; i < n; i++){
+        nb_planet += planeteVisite[i];
+    }
+
+    posPlan.x = tab[chemin[0]]->x;
+    posPlan.y = tab[chemin[0]]->y;
+
+    *result = calcul_score(seconde, nb_planet, distance(posNav, posPlan));
 
     free2DTab((void**)sous_graphe, n_sous_graphe);
-    pthread_join(thread,  NULL);
+    
     if (affiche){
         pthread_join(thread2, NULL);
     }
     
+    free(validRule);
     free(asteroid);
 }
 
@@ -782,6 +827,24 @@ void boucle_jeu()
     }
     
     closeSDL(); // free de tout les elements de SDL
+}
+
+
+
+/**
+ * @brief Calcul le score de l'ia
+ * @param seconde Temps que l'ia à mit pour finir
+ * @param nbPlanete Le nombre de planete que l'ia a visité 
+ * @param distDep La distance au point de depart
+ * @return Le score trouvé
+ */
+int calcul_score(int seconde, int nbPlanete, int distDep){
+    int score = 0;
+    score += (TIME_MAX_IA - seconde)*5;
+    score += (TIME_MAX_IA - seconde > 0)*500;
+    score += nbPlanete*5;
+    score += distDep/20;
+    return score;   
 }
 
 /**
@@ -905,7 +968,7 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
  * @return La règle générée (avec les 2 dernier paramètre representant l'input)
  */
 int * generate_rule(){
-    int * rule = (int *) malloc(sizeof(int)*(N_RULE+2));
+    int * rule = (int *) malloc(sizeof(int)*(N_RULE+3));
 
     //Etat du jeu
     rule[0] = (rand()%5)-1;
@@ -915,6 +978,7 @@ int * generate_rule(){
     //Input du bot en fonction de l'etat
     rule[3] = (rand()%3)-1;
     rule[4] = (rand()%3)-1;
+    rule[5] = (rand()%10)+1;
 
     return rule;
 }
@@ -926,17 +990,35 @@ int ** generate_tab_rules(int n){
         tab_rules[i] = generate_rule();
     }
 
-    tab_rules[n-1] = (int *) malloc(sizeof(int)*(N_RULE+2));
+    tab_rules[n-1] = (int *) malloc(sizeof(int)*(N_RULE+3));
 
     tab_rules[n-1][0] = -1;
     tab_rules[n-1][1] = -1;
     tab_rules[n-1][2] = -1;
     tab_rules[n-1][3] = (rand()%3)-1;
     tab_rules[n-1][4] = (rand()%3)-1;
+    tab_rules[n-1][5] = 1;
     
     return tab_rules;
 }
 
+
+int ** get_rule_from_file(char * name, int * n){
+    int code;
+    FILE * file = fopen(name, "r");
+    code = fscanf(file, "%d\n", n);
+    int ** tab = (int**) malloc(sizeof(int*)*(*n));
+    for (int i = 0; i < *n; i++){
+        tab[i] = (int*) malloc(sizeof(int)*(N_RULE+3));
+        for (int j = 0; j < (N_RULE+3); j++){
+            code = fscanf(file, "%d\n", &tab[i][j]);
+        }
+        code = fscanf(file, "\n");
+    }
+    code = fclose(file);
+
+    return tab;
+}
 
 
 /**
@@ -955,13 +1037,11 @@ void boucle_jeu_sans_graph()
     int *chemin;
     int ** rules;
     int n_rules = 10;
+    int res;
 
     while (!fin){
         tab = gen_tab_sommets(&n);
-        rules = generate_tab_rules(n_rules);        
-
-
-        //affich_tab_2D(rules, n_rules);
+        rules = get_rule_from_file("testRule.txt" ,&n_rules);        
 
         tab_to_graph(tab, 0, n - 1);
 
@@ -970,7 +1050,7 @@ void boucle_jeu_sans_graph()
         matDist = dist_tab(tab, &n);
         chemin = colonni_fourmi(matDist, n, rand()%n, &n_chemin);
 
-        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 0, rules, n_rules, NULL, 1);
+        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 1, rules, n_rules, &res, 1);
 
         if(chemin != NULL)
             free(chemin);
@@ -982,3 +1062,5 @@ void boucle_jeu_sans_graph()
     
     closeSDL(); // free de tout les elements de SDL
 }
+
+
