@@ -103,5 +103,7 @@ void draw_rect(SDL_Rect rect);
 
 void affichAst(asteroid_t * tab, int n, SDL_Texture * image);
 
+void draw_Line(Point point1, Point point2);
+
 
 #endif // AFFICHE_H

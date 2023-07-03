@@ -31,7 +31,7 @@ asteroid_t *ast_Partout(/*SDL_Renderer *render,*/ sommet_t **tab, int n, int *nA
             srcrect.x = alea;
             angle = rand() % 360;
 
-            if (isInPath_line(dstrect.x, dstrect.y, tab, n, PATH_SIZE) == 0)
+            if (isInPath_line(dstrect.x, dstrect.y, tab, n, PATH_SIZE, 1) == 0)
             {
                 tabAst[a].x = dstrect.x;
                 tabAst[a].y = dstrect.y;
@@ -132,7 +132,7 @@ int isInPath_carres(int pX, int pY, sommet_t **tabSom, int n, int largeur)
     return res;
 }
 
-int isInPath_line(int pX, int pY, sommet_t **tabSom, int n, int largeur)
+int isInPath_line(int pX, int pY, sommet_t **tabSom, int n, int largeur, int test)
 {
     int res = 0;
     Point tmp;
@@ -156,8 +156,17 @@ int isInPath_line(int pX, int pY, sommet_t **tabSom, int n, int largeur)
                 calculateLineCoefficients(Angle2.x, Angle2.y, Angle3.x, Angle3.y, &a2, &b2);
                 calculateLineCoefficients(Angle1.x, Angle1.y, Angle4.x, Angle4.y, &a3, &b3);
                 calculateLineCoefficients(Angle3.x, Angle3.y, Angle4.x, Angle4.y, &a4, &b4);
+                
+                if(test == 1)
+                {
+                draw_Line(Angle1, Angle2);
+                draw_Line(Angle1, Angle4);
+                draw_Line(Angle3, Angle4);
+                draw_Line(Angle2, Angle3);
+                }
 
-                if(fonction_affine(a1, pX, b1)<pY && fonction_affine(a2, pX, b2)<pY && fonction_affine(a3, pX, b3)>pY && fonction_affine(a4, pX, b4)>pY)
+
+                if(fonction_affine(a1, pX, b1)>pY && fonction_affine(a2, pX, b2)<pY && fonction_affine(a3, pX, b3)>pY && fonction_affine(a4, pX, b4)>pY)
                 {
                     res +=1;
                 }

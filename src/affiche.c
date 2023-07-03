@@ -438,3 +438,8 @@ void draw_rect(SDL_Rect rect){
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(renderer, &rect);
 }
+
+void draw_Line(Point point1, Point point2)
+{
+    SDL_RenderDrawLine(renderer, point1.x, point1.y, point2.x, point2.y);
+}
