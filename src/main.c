@@ -10,6 +10,20 @@ int main()
 {
     srand(time(NULL));
 
-    boucle_jeu();
+    int n = 0;
+    sommet_t **tab = NULL;
+
+    tab = gen_tab_sommets(&n);
+    tab_to_graph(tab, 0, n - 1);
+    make_new_links(10*5/n, tab, &n);
+    init(tab, n);
+
+
+    int **warshallDist;
+    int **distMat = dist_tab(tab, &n);
+    warshallDist = copie_tab(distMat, n);
+
+    printf("%d",recuit_simule(warshallDist, n, tab));
+    //boucle_jeu();
     return 0;
 }

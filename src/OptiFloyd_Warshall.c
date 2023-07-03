@@ -5,6 +5,7 @@
 #include "fourmi.h"
 #include "OptiFloyd_Warshall.h"
 #include <math.h>
+#include "affiche.h"
 
 /**
  * @brief Construit la matrice des distances minimales (pour les sommets non reliés, donne la distance du chemin optimal les reliant)
@@ -186,7 +187,7 @@ int calcul_chemin_Floy_Warshall(int **tabWarshall, int n, int *tab)
  * @param n nombre de sommets du graph (et dimension du tableau des distances)
  * @return taille chemin optimal trouvé
 */
-int recuit_simule(int **tabWarshall, int n)
+int recuit_simule(int **tabWarshall, int n, sommet_t ** tabSom)
 {
     int *tab = malloc(n * sizeof(int));
     int chem;
@@ -199,11 +200,14 @@ int recuit_simule(int **tabWarshall, int n)
     int *tabTemp = tab;
     chem = calcul_chemin_Floy_Warshall(tabWarshall, n, tab);
     float T = chem;
-    float alpha = powf(sqrt(0.0001/(T*50)), 100);
+    float alpha = powf(sqrt(0.0001/(T*200)), 100);
+    printf("Alpha = %f\n", alpha);
     int cpt=0;
-    
+
     while (T > 0.0001)
     {
+        printf("T = %f\n", T);
+        affiche_Chem(tab, tabSom, n);
         cpt++;
         chem = calcul_chemin_Floy_Warshall(tabWarshall, n, tab);
         p = rand() % 1000;
@@ -220,6 +224,6 @@ int recuit_simule(int **tabWarshall, int n)
         }
         T = alpha * T;
     }
-
+    closeSDL();
     return chem;
 }

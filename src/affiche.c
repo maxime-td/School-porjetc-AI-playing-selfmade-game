@@ -13,6 +13,18 @@
 SDL_Renderer* renderer;
 SDL_Window* window = NULL;
 
+void affiche_Chem(int * tab, sommet_t ** tabSom, int n)
+{
+    for(int i=0; i<n-1; i++)
+    {
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_RenderDrawLine(renderer, tabSom[tab[i]]->x, tabSom[tab[i]]->y, tabSom[tab[i+1]]->x, tabSom[tab[i+1]]->y); //Traçage du lien
+            SDL_RenderPresent(renderer);
+
+    }
+}
+
+
 /**
  * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
  * @param tab Le tableau de sommets représentant le graphe.
