@@ -58,7 +58,7 @@ typedef struct afficheArgs_s{
     SDL_Rect navette;
     SDL_Rect planete;
     SDL_Rect flag;
-    SDL_Rect trouNoir;
+    SDL_Rect affTrouNoir;
     asteroid_t * asteroid;
     SDL_Texture * texture;
     SDL_Texture * textureBg;

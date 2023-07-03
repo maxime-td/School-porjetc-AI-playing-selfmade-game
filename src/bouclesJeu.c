@@ -90,7 +90,7 @@ void * afficheJeu(afficheArgs * argsAff){
                     
                 }
 
-                draw_sprite(argsAff->trouNoir, argsAff->textureTN, argsAff->frameTN, 0, 0, 48);
+                draw_sprite(argsAff->affTrouNoir, argsAff->textureTN, argsAff->frameTN, 0, 0, 48);
                 draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);
                 
                 if (*(argsAff->count)%20 == 0){
@@ -478,7 +478,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     affArgs.background = background;
     affArgs.navette = navette;
     affArgs.flag = flag;
-    affArgs.trouNoir = trouNoir;
+    affArgs.affTrouNoir = trouNoir;
     affArgs.n_ast = n_ast;
     affArgs.x = &x;
     affArgs.y = &y;
@@ -757,9 +757,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             //Partie vérif trou noir
             joueur.x = x-navette.w/2;
             joueur.y = y-navette.y/2;
-            pTN.x = trouNoir.x;
-            pTN.y = trouNoir.y;
-            if(distance(joueur, pTN)<(rayonTN))
+            pTN.x = trouNoir.x-trouNoir.w/2;
+            pTN.y = trouNoir.y-trouNoir.h/4;
+            if(distance(joueur, pTN)<=((float)rayonTN))
             {
                 affArgs.type_fin = 1;
                 fin = 1;
@@ -1029,7 +1029,7 @@ int ** get_rule_from_file(char * name, int * n){
     int code;
     FILE * file = fopen(name, "r");
     code = fscanf(file, "%d\n", n);
-    printf("%d\n", *n);
+    //printf("%d\n", *n);
     int ** tab = (int**) malloc(sizeof(int*)*(*n));
     for (int i = 0; i < *n; i++){
         tab[i] = (int*) malloc(sizeof(int)*(N_RULE+3));
@@ -1064,7 +1064,7 @@ void boucle_jeu_sans_graph()
     int res;
 
     while (!fin){
-        tab = gen_tab_sommets(&n);
+        tab = gen_tab_sommets_rand(&n);
 
         rules = get_rule_from_file("testRule.txt", &n_rules);     
 
