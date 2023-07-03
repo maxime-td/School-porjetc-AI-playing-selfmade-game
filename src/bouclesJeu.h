@@ -51,6 +51,7 @@ typedef struct afficheArgs_s{
     int frameEF;
     int frameFlag;
     int frameTN;
+    int type_fin;
     SDL_Rect etoile;
     SDL_Rect etoileFilante;
     SDL_Rect background;
@@ -154,5 +155,7 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
  * @return Le score trouvé
  */
 int calcul_score(int seconde, int nbPlanete, int distDep);
+
+void * afficheJeu(afficheArgs * argsAff);
 
 #endif
