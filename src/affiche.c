@@ -345,8 +345,8 @@ void afficheFin(int score, int bestScore) {
     TTF_CloseFont(font);
 }
 
-void affiche_fin_espace(int time, int type) {
-    if(type)
+void affiche_fin_espace(int time, int type_fin) {
+    if(type_fin)
     {
         SDL_Rect textRect;
         TTF_Font* font;

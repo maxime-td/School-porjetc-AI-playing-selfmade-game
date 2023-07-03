@@ -18,7 +18,7 @@
 #define ACCELERATION_TROU 0.000000020
 
 #define N_RULE 3
-#define TIME_MAX_IA 10
+#define TIME_MAX_IA 40
 
 // Structure pour les arguments de multi_start_fourmi
 typedef struct coordonne_s{
@@ -53,13 +53,14 @@ typedef struct afficheArgs_s{
     int frameEF;
     int frameFlag;
     int frameTN;
+    int type_fin;
     SDL_Rect etoile;
     SDL_Rect etoileFilante;
     SDL_Rect background;
     SDL_Rect navette;
     SDL_Rect planete;
     SDL_Rect flag;
-    SDL_Rect trouNoir;
+    SDL_Rect affTrouNoir;
     asteroid_t * asteroid;
     SDL_Texture * texture;
     SDL_Texture * textureBg;
@@ -161,5 +162,6 @@ int calcul_score(int seconde, int nbPlanete, int distDep);
 void directionTN(float * directionX, float * directionY, int xTN, int yTN);
 
 void speedTN(float directionXTN, float directionYTN, float * speedXTN, float * speedYTN, float * xTN, float * yTN, SDL_Rect * trouNoir);
+void * afficheJeu(afficheArgs * argsAff);
 
 #endif
