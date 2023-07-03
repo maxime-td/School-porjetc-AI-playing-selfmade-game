@@ -90,7 +90,7 @@ void * afficheJeu(afficheArgs * argsAff){
                     }
                     
                 }
-
+                
                 draw_sprite(argsAff->trouNoir, argsAff->textureTN, argsAff->frameTN, 0, 0, argsAff->trouNoir.w);
                 draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);
                 
@@ -352,9 +352,15 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 {
     float speedX = 0;
     float speedY = 0;
+    float speedXTN = 0, speedYTN = 0;
+
     float x = tab[chemin[0]]->x;
     float y = tab[chemin[0]]->y;
+    float xTN = W/2, yTN = H/2;
     float directionX = 0;
+    float directionY = 0; 
+    float directionXTN = 0, directionYTN = 0; 
+
     int planeteVisite[n];
     int frame = 0;
     int frameFlag = 0;
@@ -362,7 +368,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     int frameTN = 0;
     int n_sous_graphe = 0;
     int n_ast = 0;
-    float directionY = 0; 
     int fin = 0;
     int nb_planet = 0;
     int seconde = 0;
@@ -666,7 +671,11 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             directionX *= 2;
             directionY *= 2;
         }
-        
+
+        directionXTN = 0;
+        directionYTN = 0;
+        directionTN(&directionXTN, &directionYTN);
+ 
         if (argsT.time%2 == 0){
             speedX += directionX * ACCELERATION;
             speedY += directionY * ACCELERATION;
@@ -772,6 +781,13 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 seconde = argsT.time/100;
             }
         }
+        printf("AAAAAAAAAAAA     xTN : %f  --  yTN : %f\n", xTN, yTN);
+        speedTN(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir);
+        printf("BBBBBBBBBBBB     xTN : %f  --  yTN : %f\n", xTN, yTN);
+
+        trouNoir.x = (int)xTN;
+        trouNoir.y = (int)yTN;
+        printf("CCCCCCCCCCCCC     trouNoir.x : %d  --  trouNoir.y : %d\n", trouNoir.x, trouNoir.y);
     }
     
     program_on = SDL_FALSE;
@@ -822,8 +838,6 @@ void boucle_jeu()
 
         if(!fin)
             boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 0, NULL, 0, NULL, 1);
-
-        boucle_jeu_sans_graph();
 
         if(chemin != NULL)
            free(chemin);
@@ -1055,7 +1069,7 @@ void boucle_jeu_sans_graph()
         matDist = dist_tab(tab, &n);
         chemin = colonni_fourmi(matDist, n, rand()%n, &n_chemin);
 
-        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 1, rules, n_rules, &res, 1);
+        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 0, rules, n_rules, &res, 1);
 
         if(chemin != NULL)
             free(chemin);
@@ -1069,3 +1083,129 @@ void boucle_jeu_sans_graph()
 }
 
 
+void directionTN(float * directionX, float * directionY)
+{
+    int tirage = rand()%6;
+
+        switch(tirage)
+        {
+            case 0:
+                *directionY += -0.5;
+                break;
+        
+            case 1:
+                *directionY += 0.5;
+                break;
+
+            case 2:
+                *directionY = 0;
+                break;
+
+            case 3:        
+                *directionX += -0.5;
+                break;
+
+            case 4:
+                *directionX += 0.5;
+                break;
+        
+
+            case 5:
+                *directionX = 0;
+                break;
+
+            default: 
+                break;
+        }
+
+        if ((*directionX) + (*directionY) == 0.5)
+        {
+            *directionX *= 2;
+            *directionY *= 2;
+        }
+}
+
+
+void speedTN(float directionXTN, float directionYTN, float * speedXTN, float * speedYTN, float * xTN, float * yTN, SDL_Rect * trouNoir)
+{
+
+    *speedXTN += directionXTN * ACCELERATION_TROU;
+    *speedYTN += directionYTN * ACCELERATION_TROU;
+
+                                printf("SPEED : x = %.2f,  y = %.2f\n", *speedXTN, *speedYTN);
+
+
+    if (directionXTN == 0 && speedXTN != 0)
+    {
+        if (*speedXTN < 0)
+        {
+            *speedXTN += ACCELERATION_TROU * 0.25;
+        }
+        else
+        {
+           *speedXTN -= ACCELERATION_TROU * 0.25;
+        }
+
+        if (*speedXTN < ACCELERATION_TROU && *speedXTN > -ACCELERATION_TROU)
+        {
+            *speedXTN = 0;
+        }
+    }
+
+    if (directionYTN == 0 && *speedYTN != 0)
+    {
+        if (*speedYTN < 0)
+        {
+            *speedYTN += ACCELERATION_TROU * 0.25;
+        }
+        else
+        {
+            *speedYTN -= ACCELERATION_TROU * 0.25;
+        }
+        if (*speedYTN < ACCELERATION_TROU && *speedYTN > -ACCELERATION_TROU)
+        {
+            *speedYTN = 0;
+        }
+    }
+
+    if (*speedXTN < -MAX_SPEED / 2)
+    {
+        *speedXTN = -MAX_SPEED / 2;
+    }
+    else if (*speedXTN > MAX_SPEED / 2)
+    {
+        *speedXTN = MAX_SPEED / 2;
+    }
+
+    if (*speedYTN < -MAX_SPEED / 2)
+    {
+        *speedYTN = -MAX_SPEED / 2;
+    }
+    else if (*speedYTN > MAX_SPEED / 2)
+    {
+        *speedYTN = MAX_SPEED / 2;
+    }
+
+    *xTN += *speedXTN;
+    *yTN += *speedYTN;
+
+    if (*xTN < 0){
+        *xTN = 0;
+        *speedXTN = 0;
+        *speedYTN = 0;
+    }else if (*xTN > W-trouNoir->w){
+        *xTN = W-trouNoir->w;
+        *speedXTN = 0;
+        *speedYTN = 0;
+    }
+    if (*yTN < 0){
+        *yTN = 0;
+        *speedXTN = 0;
+        *speedYTN = 0;
+    }else if (*yTN > H-trouNoir->h){
+        *yTN = H-trouNoir->h;
+        *speedXTN = 0;
+        *speedYTN = 0;
+    }
+
+}
