@@ -567,64 +567,66 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             break;
         }
         if(ia){
+            if(rand()%1000 == 0){
+                posNav.x = x;
+                posNav.y = y;
 
-            posNav.x = x;
-            posNav.y = y;
-
-            if (!tout_noeud(planeteVisite, n)){
-                closestP = closest_point(posNav, tab, n, planeteVisite);
-            }else{
-                closestP = chemin[0];   
-            }
-
-            posPlan.x   = tab[closestP]->x;
-            posPlan.y   = tab[closestP]->y;
-            posClosestP = position_relative(posNav, posPlan);
-
-            posClosestW = mur_proche(posNav, tab, n, 8, 8);
-
-            isWall = is_mur_in_between(posNav, posPlan, sous_graphe, n, 4);
-
-            selectRule = -1;
-
-            for (int i = 0; i < n_ia; i++){
-                validRule[i] = -1;
-            }
-            
-            k = 0;
-
-            for (int i = 0; i < n_ia; i++){
-                if (tabIA[i][0] == -1 || tabIA[i][0] == posClosestP){
-                    if (tabIA[i][1] == -1 || tabIA[i][1] == posClosestW){
-                        if (tabIA[i][2] == -1 || tabIA[i][2] == isWall){
-                            validRule[k] = i;
-                            k++;
-                        }
-                    }
-                } 
-            }
-
-            poid = 0;
-
-            for (int i = 0; i < k; i++){
-                poid += tabIA[validRule[i]][N_RULE+2];
-            }
-
-            selectPoid = rand()%poid;
-            selectRule = -1;
-
-            poid = 0;
-            for (int i = 0; i < k && selectRule == -1; i++){
-                poid += tabIA[validRule[i]][N_RULE+2];
-                if (poid > selectPoid){
-                    selectRule = validRule[i];
+                if (!tout_noeud(planeteVisite, n)){
+                    closestP = closest_point(posNav, tab, n, planeteVisite);
+                }else{
+                    closestP = chemin[0];   
                 }
-            }
 
-            keyPressZ = (tabIA[selectRule][3] == 1);
-            keyPressS = (tabIA[selectRule][3] == -1);
-            keyPressD = (tabIA[selectRule][4] == -1);
-            keyPressQ = (tabIA[selectRule][4] == 1);
+                posPlan.x   = tab[closestP]->x;
+                posPlan.y   = tab[closestP]->y;
+                posClosestP = position_relative(posNav, posPlan);
+
+                posClosestW = mur_proche(posNav, tab, n, 8, 8);
+
+                isWall = is_mur_in_between(posNav, posPlan, sous_graphe, n, 4);
+
+                selectRule = -1;
+
+                for (int i = 0; i < n_ia; i++){
+                    validRule[i] = -1;
+                }
+                
+                k = 0;
+
+                for (int i = 0; i < n_ia; i++){
+                    if (tabIA[i][0] == -1 || tabIA[i][0] == posClosestP){
+                        if (tabIA[i][1] == -1 || tabIA[i][1] == posClosestW){
+                            if (tabIA[i][2] == -1 || tabIA[i][2] == isWall){
+                                validRule[k] = i;
+                                k++;
+                            }
+                        }
+                    } 
+                }
+
+                poid = 0;
+
+                for (int i = 0; i < k; i++){
+                    poid += tabIA[validRule[i]][N_RULE+2];
+                }
+
+                selectPoid = rand()%poid;
+                selectRule = -1;
+
+                poid = 0;
+                for (int i = 0; i < k && selectRule == -1; i++){
+                    poid += tabIA[validRule[i]][N_RULE+2];
+                    if (poid > selectPoid){
+                        selectRule = validRule[i];
+                    }
+                }
+                //printf("rule : %d\nInput : %d, %d\n", selectRule, tabIA[selectRule][3], tabIA[selectRule][4]);
+
+                keyPressZ = (tabIA[selectRule][3] == 1);
+                keyPressS = (tabIA[selectRule][3] == -1);
+                keyPressD = (tabIA[selectRule][4] == -1);
+                keyPressQ = (tabIA[selectRule][4] == 1);
+            }
         }
         
 
@@ -957,7 +959,7 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
 
     for (int i = 0; i < dist; i+=precision)
     {
-        if (isInPath(p1.x + direction[dir_noeud].x*i, p1.y + direction[dir_noeud].y*i, tab, n, PATH_SIZE-10)){
+        if (!isInPath(p1.x + direction[dir_noeud].x*i, p1.y + direction[dir_noeud].y*i, tab, n, PATH_SIZE-10)){
             return 1;
         }
     }
@@ -1008,6 +1010,7 @@ int ** get_rule_from_file(char * name, int * n){
     int code;
     FILE * file = fopen(name, "r");
     code = fscanf(file, "%d\n", n);
+    printf("%d\n", *n);
     int ** tab = (int**) malloc(sizeof(int*)*(*n));
     for (int i = 0; i < *n; i++){
         tab[i] = (int*) malloc(sizeof(int)*(N_RULE+3));
@@ -1017,6 +1020,7 @@ int ** get_rule_from_file(char * name, int * n){
         code = fscanf(file, "\n");
     }
     code = fclose(file);
+    code += 1;
 
     return tab;
 }
@@ -1042,7 +1046,8 @@ void boucle_jeu_sans_graph()
 
     while (!fin){
         tab = gen_tab_sommets(&n);
-        rules = get_rule_from_file("testRule.txt" ,&n_rules);        
+
+        rules = get_rule_from_file("testRule.txt", &n_rules);     
 
         tab_to_graph(tab, 0, n - 1);
 
@@ -1058,7 +1063,7 @@ void boucle_jeu_sans_graph()
 
         free2DTab((void **)matDist, n);
         free2DTab((void **)tab, n);
-        free2DTab((void **)rules, n);
+        free2DTab((void **)rules, n_rules);
     }
     
     closeSDL(); // free de tout les elements de SDL
