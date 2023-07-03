@@ -94,7 +94,7 @@ void * afficheJeu(afficheArgs * argsAff){
                 }
 
                 draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);
-                draw_sprite(argsAff->trouNoir, argsAff->textureTN, argsAff->frameTN, 0, 0, 32);
+                draw_sprite(argsAff->trouNoir, argsAff->textureTN, argsAff->frameTN, 0, 0, argsAff->trouNoir.w);
                 if (*(argsAff->count)%20 == 0){
                     argsAff->frame = (argsAff->frame + 1)%4;
                     argsAff->frameTN = (argsAff->frameTN + 1)%4;
@@ -434,7 +434,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     IMG_Quit();
 
     SDL_Rect trouNoir = {300, 200, 48, 48};
-    SDL_Surface * imageTN = IMG_Load("images/soucoupeV3.png");
+    SDL_Surface * imageTN = IMG_Load("images/trou_noir.png");
     SDL_Texture * textureTN = create_texture(imageTN);
     IMG_Quit();
 
