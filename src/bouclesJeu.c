@@ -94,8 +94,10 @@ void * afficheJeu(afficheArgs * argsAff){
                 }
 
                 draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);
+                draw_sprite(argsAff->trouNoir, argsAff->textureTN, argsAff->frameTN, 0, 0, 32);
                 if (*(argsAff->count)%20 == 0){
                     argsAff->frame = (argsAff->frame + 1)%4;
+                    argsAff->frameTN = (argsAff->frameTN + 1)%4;
                     argsAff->frameFlag = (argsAff->frameFlag + 1)%5;
                 }
 
@@ -104,10 +106,11 @@ void * afficheJeu(afficheArgs * argsAff){
                 argsAff->navette.x = *(argsAff->x);
                 argsAff->navette.y = *(argsAff->y);
 
-
                 draw_time(*(argsAff->count)/100);
                 
-            }else{
+            }
+
+            else{
                 afficheFinEspace(seconde);
             }
 
@@ -353,6 +356,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     int frame = 0;
     int frameFlag = 0;
     int frameEF = 0;
+    int frameTN = 0;
     int n_sous_graphe = 0;
     int n_ast = 0;
     float directionY = 0; 
@@ -388,22 +392,22 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     argsT.fin = &(program_on);
     pthread_create(&thread, NULL, (void *(*)(void *))timer, &argsT);
     
-    SDL_Rect  navette = {x, y, 32, 32};
+    SDL_Rect navette = {x, y, 32, 32};
     SDL_Surface * image = IMG_Load("images/soucoupeV3.png");
     SDL_Texture * texture = create_texture(image);
     IMG_Quit();
 
-    SDL_Rect  flag = {0, 0, 48, 48};
+    SDL_Rect flag = {0, 0, 48, 48};
     SDL_Surface * imageF = IMG_Load("images/flag.png");
     SDL_Texture * textureF = create_texture(imageF);
     IMG_Quit();
 
-    SDL_Rect  background = {0, 0, W, H};
+    SDL_Rect background = {0, 0, W, H};
     SDL_Surface * imageBg = IMG_Load("images/background.png");
     SDL_Texture * textureBg = create_texture(imageBg);
     IMG_Quit();
 
-    SDL_Rect  etoile = {0, 0, W, H};
+    SDL_Rect etoile = {0, 0, W, H};
     SDL_Surface * imageE = IMG_Load("images/etoiles.png");    
     SDL_Texture * textureE1 = create_texture(imageE);
     SDL_Texture * textureE2 = create_texture(imageE);
@@ -420,6 +424,11 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     SDL_Texture *textureEF = create_texture(imageEF);
     IMG_Quit();
 
+    SDL_Rect trouNoir = {300, 200, 48, 48};
+    SDL_Surface * imageTN = IMG_Load("images/soucoupeV3.png");
+    SDL_Texture * textureTN = create_texture(imageTN);
+    IMG_Quit();
+
     afficheArgs affArgs;
     affArgs.asteroid = asteroid;
     affArgs.count = &argsT.time;
@@ -428,6 +437,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     affArgs.frame = frame;
     affArgs.frameFlag = frameFlag;
     affArgs.frameEF = frameEF;
+    affArgs.frameTN = frameTN;
     affArgs.n = n;
     affArgs.n_sous_graphe = n_sous_graphe;
     affArgs.planeteVisite = planeteVisite;
@@ -440,6 +450,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     affArgs.textureEF = textureEF;
     affArgs.textureF = textureF;
     affArgs.textureP = textureP;
+    affArgs.textureTN = textureTN;
     affArgs.chemin = chemin;
     affArgs.co = co;
     affArgs.etoileFilante = etoileFilante;
@@ -448,6 +459,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     affArgs.background = background;
     affArgs.navette = navette;
     affArgs.flag = flag;
+    affArgs.trouNoir = trouNoir;
     affArgs.n_ast = n_ast;
     affArgs.x = &x;
     affArgs.y = &y;
