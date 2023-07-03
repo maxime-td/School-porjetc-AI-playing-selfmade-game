@@ -786,7 +786,7 @@ int position_relative(Point p1, Point p2){
  * @param n Le nombre de sommet
  * @param depth Le nombre de pats qui seront fait
  * @param precision La taille d'un pats
- * @return position : -1 si pas de mur trouver 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
+ * @return position : 4 si pas de mur trouver 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
  */
 int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
     Point direction[4];
@@ -799,7 +799,7 @@ int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
     direction[3].x =  precision;
     direction[3].y =  precision;
 
-    int closest = -1;
+    int closest = 4;
     int bestDist = depth;
 
     for (int i = 0; i < 4; i++){
@@ -845,6 +845,43 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
         }
     }
     return 0;
+}
+
+/**
+ * @brief Génere une regle au hasard
+ * @return La règle générée (avec les 2 dernier paramètre representant l'input)
+ */
+int * generate_rule(){
+    int * rule = (int *) malloc(sizeof(int)*(N_RULE+2));
+
+    //Etat du jeu
+    rule[0] = (rand()%5)-1;
+    rule[1] = (rand()%6)-1;
+    rule[2] = (rand()%3)-1;
+
+    //Input du bot en fonction de l'etat
+    rule[3] = (rand()%3)-1;
+    rule[4] = (rand()%3)-1;
+
+    return rule;
+}
+
+int ** generate_tab_rules(int n){
+    int ** tab_rules = (int **) malloc(sizeof(int*)*n);
+
+    for (int i = 0; i < n-1; i++){
+        tab_rules[i] = generate_rule();
+    }
+
+    tab_rules[n-1] = (int *) malloc(sizeof(int)*(N_RULE+2));
+
+    tab_rules[n-1][0] = -1;
+    tab_rules[n-1][1] = -1;
+    tab_rules[n-1][2] = -1;
+    tab_rules[n-1][3] = (rand()%3)-1;
+    tab_rules[n-1][4] = (rand()%3)-1;
+    
+    return tab_rules;
 }
 
 

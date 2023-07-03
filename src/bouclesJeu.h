@@ -15,6 +15,7 @@
 
 #define MAX_SPEED 0.003
 #define ACCELERATION 0.000000025
+#define N_RULE 3
 
 // Structure pour les arguments de multi_start_fourmi
 typedef struct coordonne_s{
