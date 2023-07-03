@@ -111,7 +111,7 @@ void * afficheJeu(afficheArgs * argsAff){
             }
 
             else{
-                afficheFinEspace(seconde);
+                affiche_fin_espace(seconde, 0);
             }
 
             render(); //rendre les differents elements
@@ -999,7 +999,7 @@ void boucle_jeu_sans_graph()
         matDist = dist_tab(tab, &n);
         chemin = colonni_fourmi(matDist, n, rand()%n, &n_chemin);
 
-        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 1, rules, n_rules, NULL, 1);
+        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 0, rules, n_rules, NULL, 1);
 
         if(chemin != NULL)
             free(chemin);
@@ -1011,4 +1011,3 @@ void boucle_jeu_sans_graph()
     
     closeSDL(); // free de tout les elements de SDL
 }
-

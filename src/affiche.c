@@ -334,30 +334,59 @@ void afficheFin(int score, int bestScore) {
     TTF_CloseFont(font);
 }
 
-void afficheFinEspace(int time) {
-    SDL_Rect textRect;
-    TTF_Font* font;
-    SDL_Surface* textSurface;
-    SDL_Texture* textTexture;
-    SDL_Color color = {200, 200, 200, 255};
-    char Txt1[100];
+void affiche_fin_espace(int time, int type) {
+    if(type)
+    {
+        SDL_Rect textRect;
+        TTF_Font* font;
+        SDL_Surface* textSurface;
+        SDL_Texture* textTexture;
+        SDL_Color color = {200, 200, 200, 255};
+        char Txt1[100];
 
-    font = TTF_OpenFont("arial.ttf", 40);
+        font = TTF_OpenFont("arial.ttf", 40);
 
-    sprintf(Txt1, "Votre temps : %d s", time);
+        sprintf(Txt1, "Vous etes mort");
 
-    textSurface = TTF_RenderText_Solid(font, Txt1, color);
-    textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+        textSurface = TTF_RenderText_Solid(font, Txt1, color);
+        textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
 
-    SDL_FreeSurface(textSurface);
-    SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
-    textRect.x = W/2-textRect.w/2;
-    textRect.y = H/2-textRect.h/2;
+        SDL_FreeSurface(textSurface);
+        SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+        textRect.x = W/2-textRect.w/2;
+        textRect.y = H/2-textRect.h/2;
 
-    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
-    SDL_DestroyTexture(textTexture);
+        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+        SDL_DestroyTexture(textTexture);
 
-    TTF_CloseFont(font);
+        TTF_CloseFont(font);
+    }
+    else
+    {
+        SDL_Rect textRect;
+        TTF_Font* font;
+        SDL_Surface* textSurface;
+        SDL_Texture* textTexture;
+        SDL_Color color = {200, 200, 200, 255};
+        char Txt1[100];
+
+        font = TTF_OpenFont("arial.ttf", 40);
+
+        sprintf(Txt1, "Votre temps : %d s", time);
+
+        textSurface = TTF_RenderText_Solid(font, Txt1, color);
+        textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+        SDL_FreeSurface(textSurface);
+        SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+        textRect.x = W/2-textRect.w/2;
+        textRect.y = H/2-textRect.h/2;
+
+        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+        SDL_DestroyTexture(textTexture);
+
+        TTF_CloseFont(font);
+    }
 }
 
 /**
@@ -399,7 +428,6 @@ void secret1() {
 SDL_Texture * create_texture(SDL_Surface * surface){
     return SDL_CreateTextureFromSurface(renderer, surface);
 }
-
 
 //Partie sur l'animation de la soucoupe volante
 
