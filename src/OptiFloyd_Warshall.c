@@ -5,6 +5,7 @@
 #include "fourmi.h"
 #include "OptiFloyd_Warshall.h"
 #include <math.h>
+#include "affiche.h"
 
 /**
  * @brief Construit la matrice des distances minimales (pour les sommets non reliés, donne la distance du chemin optimal les reliant)
@@ -56,7 +57,7 @@ int **copie_tab(int **tab, int n)
 /**
  * @brief Construit un cycle en selectionnant toujours le point le plus proche par lequel on n'est encore pas passé (distances calculé précédemment par Floyd_Warshall)
  * @param tabWarshall Tableau des distances de Floy-Warshall
- * @param distTab le tableau des distances initiales 
+ * @param distTab le tableau des distances initiales
  * @param n la taille du tableau
  * @param indDep l'indice dans tabSommet du point de départ
  * @param sol l'adresse d'un entier qui prend la valeur de la solution de ce cycle
@@ -126,7 +127,7 @@ void cycle_Floyd_Warshall(int **tabWarshall, int **tabDist, int n, int indDep, i
  */
 int multi_Start_Floyd_Warshall(int **tabWarshall, int **distTab, int n)
 {
-    //print_dist_tab(tabWarshall, &n);
+    // print_dist_tab(tabWarshall, &n);
     int min = 99999999;
     int sol;
     int tmp;
@@ -143,10 +144,10 @@ int multi_Start_Floyd_Warshall(int **tabWarshall, int **distTab, int n)
 }
 
 /**
- * @brief permute deux entier dans un tableau 
+ * @brief permute deux entier dans un tableau
  * @param tab le pointeur sur le tableau d'entier dont deux indices vont etre échangé
  * @param n nombre de sommets du graph (et dimension du tableau des distances)
-*/
+ */
 void permute(int **tab, int n)
 {
     int a = 0, b = 0;
@@ -161,14 +162,13 @@ void permute(int **tab, int n)
     (*tab)[b] = tmp;
 }
 
-
 /**
  * @brief calcul la taille d'un chemin passer en parametre avec la méthode de Floyd-Warshall
  * @param tabWarshall Tableau des distance de Floyd-Warshall
  * @param n nombre de sommets du graph (et dimension du tableau des distances)
  * @param tab le tableau d'entier d'ordre d'apparition des sommets (tab[0] = 1er sommet du cycle)
  * @return la taille du chemin
-*/
+ */
 int calcul_chemin_Floy_Warshall(int **tabWarshall, int n, int *tab)
 {
     int chem = 0;
@@ -181,12 +181,12 @@ int calcul_chemin_Floy_Warshall(int **tabWarshall, int n, int *tab)
 }
 
 /**
- * @brief applique la méthode du recuit simulé 
+ * @brief applique la méthode du recuit simulé
  * @param tabWarshall Tableau des distance de Floyd-Warshall
  * @param n nombre de sommets du graph (et dimension du tableau des distances)
  * @return taille chemin optimal trouvé
-*/
-int recuit_simule(int **tabWarshall, int n)
+ */
+int recuit_simule(int **tabWarshall, int n, sommet_t **tabSom)
 {
     int *tab = malloc(n * sizeof(int));
     int chem;
@@ -198,28 +198,48 @@ int recuit_simule(int **tabWarshall, int n)
     }
     int *tabTemp = tab;
     chem = calcul_chemin_Floy_Warshall(tabWarshall, n, tab);
+    int reclalcul_pas_chem = chem;
+    int chemMin = 999999;
     float T = chem;
-    float alpha = powf(sqrt(0.0001/(T*50)), 100);
-    int cpt=0;
-    
-    while (T > 0.0001)
-    {
-        cpt++;
-        chem = calcul_chemin_Floy_Warshall(tabWarshall, n, tab);
-        p = rand() % 1000;
-        permute(&tabTemp, n);
+    float alpha = 0.9951;
+    int cpt = 0;
 
-        ecart = chem - calcul_chemin_Floy_Warshall(tabWarshall, n, tabTemp);
-        ;
-        if (ecart < 0 || p < (int)exp(-ecart / T))
+    //for (alpha = 0.995; alpha < 0.997; alpha += 0.0001)
+    //{
+        printf("Alpha = %f  --  ", alpha);
+        T = reclalcul_pas_chem;
+        for (int i = 0; i < n; i++)
         {
-            for (int i = 0; i < n; i++)
-            {
-                tab[i] = tabTemp[i];
-            }
+            tab[i] = i;
         }
-        T = alpha * T;
-    }
+        while (T > 0.0001)
+        {
+            //printf("T = %f\n", T);
+            affiche_Chem(tab, tabSom, n);
+            cpt++;
+            chem = calcul_chemin_Floy_Warshall(tabWarshall, n, tab);
+            p = rand() % 1000;
+            permute(&tabTemp, n);
 
-    return chem;
+            ecart = chem - calcul_chemin_Floy_Warshall(tabWarshall, n, tabTemp);
+            if (ecart < 0 || p < (int)exp(-ecart / T))
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    tab[i] = tabTemp[i];
+                }
+            }
+            T = alpha * T;
+            affiche_Chem(tab, tabSom, n);
+        }
+        if(chem<chemMin)
+        {
+            chemMin = chem;
+            printf("chemin = %d\n", chemMin);
+        }
+
+    //}
+
+    closeSDL();
+    return chemMin;
 }

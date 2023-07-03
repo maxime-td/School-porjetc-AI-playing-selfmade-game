@@ -65,7 +65,7 @@ int calcul_chemin_Floy_Warshall(int **tabWarshall, int n, int *tab);
  * @param n nombre de sommets du graph (et dimension du tableau des distances)
  * @return taille chemin optimal trouvé
 */
-int recuit_simule(int ** tabWarshall, int n);
+int recuit_simule(int **tabWarshall, int n, sommet_t ** tabSom);
 
 
 
