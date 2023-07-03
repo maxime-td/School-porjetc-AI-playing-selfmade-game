@@ -740,7 +740,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             tmpSpeedX = speedX;
             tmpSpeedY = speedY;
 
-            while (!isInPath(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath(x-32, y-32, sous_graphe, n, PATH_SIZE-10))
+            while (!isInPath_Line(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath_Line(x-32, y-32, sous_graphe, n, PATH_SIZE-10))
             {
                 x -= tmpSpeedX*2;
                 y -= tmpSpeedY*2;
@@ -811,19 +811,21 @@ void boucle_jeu()
     int fin=0;
 
     while (!fin){
-        tab = gen_tab_sommets(&n);
+        tab = gen_tab_sommets_rand(&n);
 
         tab_to_graph(tab, 0, n - 1);
 
         make_new_links(10*5/n, tab, &n);
 
-        int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
+       // int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
 
         if(!fin)
             boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 0, NULL, 0, NULL, 1);
 
+        boucle_jeu_sans_graph();
+
         if(chemin != NULL)
-            free(chemin);
+           free(chemin);
 
         free2DTab((void **)tab, n);
     }
@@ -924,7 +926,7 @@ int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
     for (int i = 0; i < 4; i++){
         for (int j = 1; j < bestDist; j++)
         {
-            if (!isInPath(p.x + direction[i].x*j, p.y + direction[i].y*j, tab, n, PATH_SIZE-10)){
+            if (isInPath_Line(p.x + direction[i].x*j, p.y + direction[i].y*j, tab, n, PATH_SIZE-10)){
                 bestDist = j;
                 closest = i;
             }
@@ -958,7 +960,7 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
 
     for (int i = 0; i < dist; i+=precision)
     {
-        if (isInPath(p1.x + direction[dir_noeud].x*i, p1.y + direction[dir_noeud].y*i, tab, n, PATH_SIZE-10)){
+        if (isInPath_Line(p1.x + direction[dir_noeud].x*i, p1.y + direction[dir_noeud].y*i, tab, n, PATH_SIZE-10)){
             return 1;
         }
     }
@@ -1047,7 +1049,7 @@ void boucle_jeu_sans_graph()
 
         tab_to_graph(tab, 0, n - 1);
 
-        make_new_links(10*5/n, tab, &n);
+        make_new_links(7*5/n, tab, &n);
 
         matDist = dist_tab(tab, &n);
         chemin = colonni_fourmi(matDist, n, rand()%n, &n_chemin);

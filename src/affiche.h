@@ -13,6 +13,9 @@
 
 #define R_NOEUD 15
 
+void affiche_Chem(int * tab, sommet_t ** tabSom, int n);
+
+
 /**
  * @brief Clear le fond en blanc
 */
@@ -99,6 +102,8 @@ void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int 
 void draw_rect(SDL_Rect rect);
 
 void affichAst(asteroid_t * tab, int n, SDL_Texture * image);
+
+void draw_Line(Point point1, Point point2);
 
 
 #endif // AFFICHE_H

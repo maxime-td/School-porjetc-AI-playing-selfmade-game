@@ -13,6 +13,17 @@
 SDL_Renderer* renderer;
 SDL_Window* window = NULL;
 
+void affiche_Chem(int * tab, sommet_t ** tabSom, int n)
+{
+    for(int i=0; i<n-1; i++)
+    {
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_RenderDrawLine(renderer, tabSom[tab[i]]->x, tabSom[tab[i]]->y, tabSom[tab[i+1]]->x, tabSom[tab[i+1]]->y); //Traçage du lien
+        SDL_RenderPresent(renderer);
+    }
+}
+
+
 /**
  * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
  * @param tab Le tableau de sommets représentant le graphe.
@@ -439,4 +450,11 @@ void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int 
 void draw_rect(SDL_Rect rect){
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(renderer, &rect);
+}
+
+void draw_Line(Point point1, Point point2)
+{
+    SDL_SetRenderDrawColor(renderer, 0,255,0,0);
+    SDL_RenderDrawLine(renderer, point1.x, point1.y, point2.x, point2.y);
+    SDL_RenderPresent(renderer);
 }
