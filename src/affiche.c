@@ -19,8 +19,7 @@ void affiche_Chem(int * tab, sommet_t ** tabSom, int n)
     {
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         SDL_RenderDrawLine(renderer, tabSom[tab[i]]->x, tabSom[tab[i]]->y, tabSom[tab[i+1]]->x, tabSom[tab[i+1]]->y); //Traçage du lien
-            SDL_RenderPresent(renderer);
-
+        SDL_RenderPresent(renderer);
     }
 }
 

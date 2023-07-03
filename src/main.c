@@ -23,7 +23,10 @@ int main()
     int **distMat = dist_tab(tab, &n);
     warshallDist = copie_tab(distMat, n);
 
-    printf("%d",recuit_simule(warshallDist, n, tab));
+    printf("RECUIT : %d\n\n",recuit_simule(warshallDist, n, tab));
+    printf("floyd_voisins : %d\n\n",multi_Start_Floyd_Warshall(warshallDist, distMat, n));
+    printf("multi fourmis : %d\n\n",multi_start_fourmi(distMat, n));
+    
     //boucle_jeu();
     return 0;
 }
