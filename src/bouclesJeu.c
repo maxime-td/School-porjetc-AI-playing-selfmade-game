@@ -112,7 +112,7 @@ void * afficheJeu(afficheArgs * argsAff){
             }
 
             else{
-                afficheFinEspace(seconde);
+                affiche_fin_espace(seconde, 0);
             }
 
             render(); //rendre les differents elements
