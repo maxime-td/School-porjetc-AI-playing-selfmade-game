@@ -559,8 +559,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             posPlan.y   = tab[closestP]->y;
             posClosestP = position_relative(posNav, posPlan);
 
-            posClosestW = mur_proche(posNav, tab, n, 2, 4);
-            //printf("mur : %d\n", posClosestW);
+            posClosestW = mur_proche(posNav, tab, n, 8, 8);
 
             isWall = is_mur_in_between(posNav, posPlan, sous_graphe, n, 4);
 
@@ -571,13 +570,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                     if (tabIA[i][1] == -1 || tabIA[i][1] == posClosestW){
                         if (tabIA[i][2] == -1 || tabIA[i][2] == isWall){
                             selectRule = i;
-                            printf("%d\n", i);
                         }
                     }
                 } 
             }
-            //printf("rule : %d\n", selectRule);
-            //affich_tab(tabIA[selectRule], N_RULE+2);
 
             keyPressZ = (tabIA[selectRule][3] == 1);
             keyPressS = (tabIA[selectRule][3] == -1);
@@ -852,7 +848,7 @@ int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
     for (int i = 0; i < 4; i++){
         for (int j = 1; j < bestDist; j++)
         {
-            if (isInPath(p.x + direction[i].x*j, p.y + direction[i].y*j, tab, n, PATH_SIZE-10)){
+            if (!isInPath(p.x + direction[i].x*j, p.y + direction[i].y*j, tab, n, PATH_SIZE-10)){
                 bestDist = j;
                 closest = i;
             }
@@ -951,31 +947,7 @@ void boucle_jeu_sans_graph()
 
     while (!fin){
         tab = gen_tab_sommets(&n);
-        rules = generate_tab_rules(n_rules);
-
-        for (int i = 0; i < 4; i++){
-            for (int j = 0; j < 4; j++){
-                rules[i][j] = -1;
-            }
-        }
-
-        rules[0][1] = 0;
-        rules[0][3] = -1;
-        rules[0][4] = -1;
-
-        rules[1][1] = 1;
-        rules[1][3] = -1;
-        rules[1][4] = 1;
-
-        rules[2][1] = 2;
-        rules[2][3] = 1;
-        rules[2][4] = -1;
-
-        rules[3][1] = 3;
-        rules[3][3] = 1;
-        rules[3][4] = 1;
-
-        
+        rules = generate_tab_rules(n_rules);        
 
 
         //affich_tab_2D(rules, n_rules);
