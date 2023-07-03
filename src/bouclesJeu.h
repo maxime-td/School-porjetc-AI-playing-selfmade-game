@@ -146,6 +146,27 @@ void boucle_jeu();
 void boucle_jeu_sans_graph();
 
 /**
+ * @brief calcul de la direction du trou noir
+ * @param directionX permet de recuperer la direction x du trou noir
+ * @param directionY permet de recuperer la direction y du trou noir
+ * @param xTN position x du trou noir
+ * @param yTN position y du trou noir
+*/
+void directionTN(float * directionX, float * directionY, int xTN, int yTN);
+
+/**
+ * @brief calcul de la vitesse du trou noir
+ * @param directionXTN direction x du trou noir
+ * @param directionYTN direction y du trou noir
+ * @param speedXTN permet de recuperer la vitesse x du trou noir
+ * @param speedYTN permet de recuperer la vitesse y du trou noir
+ * @param xTN pemet de recuperer la nouvelle position x du trou noir
+ * @param yTN pemet de recuperer la nouvelle position y du trou noir
+ * @param trouNoir le rectangle representant le trou noir 
+*/
+void speedTN(float directionXTN, float directionYTN, float * speedXTN, float * speedYTN, float * xTN, float * yTN, SDL_Rect * trouNoir);
+
+/**
  * @brief Trouve l'index du sommet qui a la plus courte distance avec le point p
  * @param p Position à comparer
  * @param tab Le tableau de sommet

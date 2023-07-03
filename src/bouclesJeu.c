@@ -392,10 +392,12 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 {
     double speedX = 0; //vitesse x du joueur
     double speedY = 0; //vitesse y du joueur
+    float speedXTN = 0; //vitesse x trou noir
+    float speedYTN = 0; //Vitesse y trou noir
     double x = tab[chemin[0]]->x - 16; //position x du joueur
     double y = tab[chemin[0]]->y - 16; //position y du joueur
-    float xTN = W/2, yTN = H/2;
-    float directionXTN = 0, directionYTN = 0; 
+    float xTN = W/2, yTN = H/2; //Position trou noir
+    float directionXTN = 0, directionYTN = 0; //Direction trou noir
     float directionX = 0; //direction x du joueur
     float directionY = 0; //direction y du joueur
     int planeteVisite[n]; //tableau de booleen representant les planetes déjà visité 1 si oui 0 sinon
@@ -1167,13 +1169,17 @@ void boucle_jeu_sans_graph()
     closeSDL(); // free de tout les elements de SDL
 }
 
-
+/**
+ * @brief calcul de la direction du trou noir
+ * @param directionX permet de recuperer la direction x du trou noir
+ * @param directionY permet de recuperer la direction y du trou noir
+ * @param xTN position x du trou noir
+ * @param yTN position y du trou noir
+*/
 void directionTN(float * directionX, float * directionY, int xTN, int yTN)
 {
     int tirage;
     tirage = (rand()%20)-10;
-    //if((xTN<W/6 && *directionX<0) || (xTN>5*W/6 && *directionX>0)){*directionX = -*directionX;}
-    //if((yTN<H/6 && *directionY<0) || (yTN>5*H/6 && *directionY>0)){*directionY = -*directionY;}
     if(*directionY<0)
     {
             tirage = (rand()%20-4);
@@ -1196,17 +1202,22 @@ void directionTN(float * directionX, float * directionY, int xTN, int yTN)
     *directionX += ((float)tirage)/200;
 }
 
-
+/**
+ * @brief calcul de la vitesse du trou noir
+ * @param directionXTN direction x du trou noir
+ * @param directionYTN direction y du trou noir
+ * @param speedXTN permet de recuperer la vitesse x du trou noir
+ * @param speedYTN permet de recuperer la vitesse y du trou noir
+ * @param xTN pemet de recuperer la nouvelle position x du trou noir
+ * @param yTN pemet de recuperer la nouvelle position y du trou noir
+ * @param trouNoir le rectangle representant le trou noir 
+*/
 void speedTN(float directionXTN, float directionYTN, float * speedXTN, float * speedYTN, float * xTN, float * yTN, SDL_Rect * trouNoir)
 {
 
 
     *speedXTN += directionXTN * ACCELERATION_TROU;
     *speedYTN += directionYTN * ACCELERATION_TROU;
-    //printf("AAAAAAAAAAAAAA        speed : x = %.2f,  y = %.2f\n", *speedXTN, *speedYTN);
-
-    //SDL_Delay(100);
-
 
     if (directionXTN == 0 && speedXTN != 0)
     {
