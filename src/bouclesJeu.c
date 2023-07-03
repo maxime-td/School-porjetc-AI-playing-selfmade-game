@@ -713,13 +713,15 @@ void boucle_jeu()
 
         make_new_links(10*5/n, tab, &n);
 
-        int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
+       // int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
 
-        if(!fin)
-            boucle_jeu_espace(tab, n, chemin, n_chemin, &fin);
+       // if(!fin)
+        //    boucle_jeu_espace(tab, n, chemin, n_chemin, &fin);
 
-        if(chemin != NULL)
-            free(chemin);
+        boucle_jeu_sans_graph();
+
+       // if(chemin != NULL)
+        //    free(chemin);
 
         free2DTab((void **)tab, n);
     }
@@ -864,11 +866,11 @@ void boucle_jeu_sans_graph()
 
     while (!fin){
         //tab = gen_tab_sommets_cercle(&n);
-        tab = gen_tab_sommets_cercle(&n);
+        tab = gen_tab_sommets_rand(&n);
 
         tab_to_graph(tab, 0, n - 1);
 
-        make_new_links(10*5/n, tab, &n);
+        make_new_links(7*5/n, tab, &n);
 
         matDist = dist_tab(tab, &n);
         chemin = colonni_fourmi(matDist, n, rand()%n, &n_chemin);

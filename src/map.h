@@ -1,7 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 
-#define PATH_SIZE 90
+#define PATH_SIZE 75
 
 #include "graph.h"
 #include <SDL2/SDL.h>

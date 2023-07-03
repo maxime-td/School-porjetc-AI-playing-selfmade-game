@@ -115,8 +115,8 @@ sommet_t ** gen_tab_sommets_rand(int * n)
         while (first || is_close_to_value_in_tab(tab, i, tab[i], 125))
         {
             first = 0;
-            x = rand()%W;
-            y = rand()%H;
+            x = rand()%(W-200)+90;
+            y = rand()%(H-200)+90;
         
             tab[i]->x = x;
             tab[i]->y = y;        //On génère les nombre aléatoirement entre des bornes représentants la taille de la fenêtre
