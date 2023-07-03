@@ -365,7 +365,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     timerArgs argsT;
     pthread_t thread, thread2;
 
-
     Point p1;
     Point p2;
 
@@ -386,12 +385,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     coordonne_t co[n];
     sommet_t **sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n, &n_sous_graphe);
 
-
     asteroid_t * asteroid = ast_Partout(sous_graphe, n_sous_graphe, &n_ast);
 
     int planeteLigne   = 10;
     int planeteColones[10] = {8, 14, 16, 4, 12, 8, 12, 12, 16, 8}; 
-
 
     SDL_bool program_on = SDL_TRUE; // Booléen de boucle de jeu
     SDL_Event event;
@@ -432,42 +429,39 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     SDL_Texture *textureEF = create_texture(imageEF);
     IMG_Quit();
 
-    if(affiche){
-        afficheArgs affArgs;
-        affArgs.asteroid = asteroid;
-        affArgs.count = &argsT.time;
-        affArgs.fin   = &fin;
-        affArgs.program_on = &program_on;
-        affArgs.frame = frame;
-        affArgs.frameFlag = frameFlag;
-        affArgs.frameEF = frameEF;
-        affArgs.n = n;
-        affArgs.n_sous_graphe = n_sous_graphe;
-        affArgs.planeteVisite = planeteVisite;
-        affArgs.sous_graphe = sous_graphe;
-        affArgs.tab = tab;
-        affArgs.texture = texture;
-        affArgs.textureBg = textureBg;
-        affArgs.textureE1 = textureE1;
-        affArgs.textureE2 = textureE2;
-        affArgs.textureEF = textureEF;
-        affArgs.textureF = textureF;
-        affArgs.textureP = textureP;
-        affArgs.chemin = chemin;
-        affArgs.co = co;
-        affArgs.etoileFilante = etoileFilante;
-        affArgs.planete = planete;
-        affArgs.etoile = etoile;
-        affArgs.background = background;
-        affArgs.navette = navette;
-        affArgs.flag = flag;
-        affArgs.n_ast = n_ast;
-        affArgs.x = &x;
-        affArgs.y = &y;
-
-        
-        pthread_create(&thread2, NULL, (void *(*)(void *))afficheJeu, &affArgs);
-    }
+    afficheArgs affArgs;
+    affArgs.asteroid = asteroid;
+    affArgs.count = &argsT.time;
+    affArgs.fin   = &fin;
+    affArgs.program_on = &program_on;
+    affArgs.frame = frame;
+    affArgs.frameFlag = frameFlag;
+    affArgs.frameEF = frameEF;
+    affArgs.n = n;
+    affArgs.n_sous_graphe = n_sous_graphe;
+    affArgs.planeteVisite = planeteVisite;
+    affArgs.sous_graphe = sous_graphe;
+    affArgs.tab = tab;
+    affArgs.texture = texture;
+    affArgs.textureBg = textureBg;
+    affArgs.textureE1 = textureE1;
+    affArgs.textureE2 = textureE2;
+    affArgs.textureEF = textureEF;
+    affArgs.textureF = textureF;
+    affArgs.textureP = textureP;
+    affArgs.chemin = chemin;
+    affArgs.co = co;
+    affArgs.etoileFilante = etoileFilante;
+    affArgs.planete = planete;
+    affArgs.etoile = etoile;
+    affArgs.background = background;
+    affArgs.navette = navette;
+    affArgs.flag = flag;
+    affArgs.n_ast = n_ast;
+    affArgs.x = &x;
+    affArgs.y = &y;
+    
+    pthread_create(&thread2, NULL, (void *(*)(void *))afficheJeu, &affArgs);
 
     for (int i = 0; i < n_sous_graphe; i++)
     {
@@ -479,7 +473,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     for (int i = 0; i < n; i++){
         planeteVisite[i] = 0;
     }
-
 
     while (program_on)
     {
@@ -596,6 +589,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
         directionX = 0;
         directionY = 0;
+
         if (keyPressZ)
         {
             directionY += -0.5;
@@ -832,7 +826,6 @@ int position_relative(Point p1, Point p2){
     } 
 }
 
-
 /**
  * @brief Donne la position du mur le plus proche par rapport au point donné
  * @param p Point donné
@@ -867,7 +860,6 @@ int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
     }
     return closest;
 }
-
 
 /**
  * @brief Cherche si il y a un mur entre les deux points
