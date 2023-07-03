@@ -10,6 +10,6 @@ int main()
 {
     srand(time(NULL));
     
-    boucle_jeu();
+    boucle_jeu_sans_graph();
     return 0;
 }

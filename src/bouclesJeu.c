@@ -568,9 +568,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             break;
         }
         if(ia){
-            if(rand()%1000 == 0){
-                posNav.x = x;
-                posNav.y = y;
+            if(rand()%500 == 0){
+                posNav.x = x+navette.w/2;
+                posNav.y = y+navette.h/2;
 
                 if (!tout_noeud(planeteVisite, n)){
                     closestP = closest_point(posNav, tab, n, planeteVisite);
@@ -582,9 +582,11 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 posPlan.y   = tab[closestP]->y;
                 posClosestP = position_relative(posNav, posPlan);
 
-                posClosestW = mur_proche(posNav, tab, n, 8, 8);
+                posClosestW = mur_proche(posNav, tab, n, 128, 1);
 
-                isWall = is_mur_in_between(posNav, posPlan, sous_graphe, n, 4);
+                isWall = is_mur_in_between(posNav, posPlan, sous_graphe, n, 1);
+
+                printf("%d, %d, %d\n", posClosestP, isWall, posClosestW);
 
                 selectRule = -1;
 
@@ -742,10 +744,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             tmpSpeedX = speedX;
             tmpSpeedY = speedY;
 
-            while (!isInPath_Line(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath_Line(x-32, y-32, sous_graphe, n, PATH_SIZE-10))
+            if (!isInPath_Line(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath_Line(x-32, y-32, sous_graphe, n, PATH_SIZE-10))
             {
-                x -= tmpSpeedX*2;
-                y -= tmpSpeedY*2;
+                x -= tmpSpeedX*8;
+                y -= tmpSpeedY*8;
                 speedX = 0;
                 speedY = 0;
             }
@@ -819,12 +821,10 @@ void boucle_jeu()
 
         make_new_links(10*5/n, tab, &n);
 
-       // int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
+       int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
 
         if(!fin)
             boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 0, NULL, 0, NULL, 1);
-
-        boucle_jeu_sans_graph();
 
         if(chemin != NULL)
            free(chemin);
@@ -926,11 +926,14 @@ int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
     int bestDist = depth;
 
     for (int i = 0; i < 4; i++){
-        for (int j = 1; j < bestDist; j++)
+        //printf("i : %d\n", i);
+        for (int j = precision; j < bestDist; j++)
         {
-            if (isInPath_Line(p.x + direction[i].x*j, p.y + direction[i].y*j, tab, n, PATH_SIZE-10)){
+            //printf("   j : %d\n", j);
+            if (!isInPath_Line(p.x + direction[i].x*j, p.y + direction[i].y*j, tab, n, PATH_SIZE)){
                 bestDist = j;
                 closest = i;
+                
             }
         }
     }
@@ -962,7 +965,7 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
 
     for (int i = 0; i < dist; i+=precision)
     {
-        if (isInPath_Line(p1.x + direction[dir_noeud].x*i, p1.y + direction[dir_noeud].y*i, tab, n, PATH_SIZE-10)){
+        if (!isInPath_Line(p1.x + direction[dir_noeud].x*i, p1.y + direction[dir_noeud].y*i, tab, n, PATH_SIZE)){
             return 1;
         }
     }
@@ -1048,7 +1051,7 @@ void boucle_jeu_sans_graph()
     int res;
 
     while (!fin){
-        tab = gen_tab_sommets(&n);
+        tab = gen_tab_sommets_rand(&n);
 
         rules = get_rule_from_file("testRule.txt", &n_rules);     
 
@@ -1059,7 +1062,7 @@ void boucle_jeu_sans_graph()
         matDist = dist_tab(tab, &n);
         chemin = colonni_fourmi(matDist, n, rand()%n, &n_chemin);
 
-        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 0, rules, n_rules, &res, 1);
+        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 1, rules, n_rules, &res, 1);
 
         if(chemin != NULL)
             free(chemin);

@@ -162,7 +162,6 @@ int min(int a, int b)
 int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, int largeur)
 {
     int res = 0;
-    int un_seul = 0;
     int dist = 0;
     Point tmp;
     Point P = {pX, pY};
