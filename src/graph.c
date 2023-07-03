@@ -64,6 +64,7 @@ int is_close_to_value_in_tab(sommet_t ** tab, int size, sommet_t * cour, int thr
     return 0;
 }
 
+
 /**
  * @brief Créée un tableau de points avec des coordonnées aléatoires
  * @param n le pointeur sur le nombre de points à générer
@@ -72,7 +73,7 @@ int is_close_to_value_in_tab(sommet_t ** tab, int size, sommet_t * cour, int thr
  * @return un pointeur sur un tableau de sommets
  */
 
-sommet_t ** gen_tab_sommets(int * n)
+sommet_t ** gen_tab_sommets_cercle(int * n)
 {
     *n = rand()%(N-(N_MIN-1)) + N_MIN;
     int first = 1;
@@ -90,6 +91,35 @@ sommet_t ** gen_tab_sommets(int * n)
             
             tab[i]->x = cos(angle)*R+W/2;
             tab[i]->y = sin(angle)*R+H/2;        //On génère les nombre aléatoirement entre des bornes représentants la taille de la fenêtre
+        }
+
+        tab[i]->val = i+'A';             //On assigne des valeurs aux sommet, en l'occurence A,B,C...
+
+        for(int j=0; j<*n;j++){
+            tab[i]->voisins[j]=0;    //Tableau des liens initialisé vide
+        }
+    }
+    return tab;
+}
+
+sommet_t ** gen_tab_sommets_rand(int * n)
+{
+    *n = rand()%(N-(N_MIN-1)) + N_MIN;
+    int first = 1;
+    int x,y;
+    sommet_t ** tab = malloc((*n)*sizeof(sommet_t *));
+    for(int i=0; i<*n; i++)
+    {
+        first = 1;
+        tab[i] = malloc(sizeof(sommet_t));
+        while (first || is_close_to_value_in_tab(tab, i, tab[i], 125))
+        {
+            first = 0;
+            x = rand()%W;
+            y = rand()%H;
+        
+            tab[i]->x = x;
+            tab[i]->y = y;        //On génère les nombre aléatoirement entre des bornes représentants la taille de la fenêtre
         }
 
         tab[i]->val = i+'A';             //On assigne des valeurs aux sommet, en l'occurence A,B,C...

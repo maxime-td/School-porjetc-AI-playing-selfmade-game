@@ -4,8 +4,8 @@
 #define N  8// NOMBRE_MAX_SOMMET 
 #define N_MIN  5// NOMBRE_MIN_SOMMET 
 #define R 300 //Rayon cercle repartition
-#define W 800
-#define H 800
+#define W 1280
+#define H 720
  
 
 /**
@@ -44,7 +44,10 @@ void tab_to_graph(sommet_t ** tab, int n, int start);
  * @param height la borne sur l axe des ordonnées
  * @return un pointeur sur un tableau de sommets
  */
-sommet_t ** gen_tab_sommets(int * n);
+sommet_t ** gen_tab_sommets_cercle(int * n);
+
+sommet_t ** gen_tab_sommets_rand(int * n);
+
 
 
 /**

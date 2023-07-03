@@ -707,7 +707,7 @@ void boucle_jeu()
     int fin=0;
 
     while (!fin){
-        tab = gen_tab_sommets(&n);
+        tab = gen_tab_sommets_rand(&n);
 
         tab_to_graph(tab, 0, n - 1);
 
@@ -863,7 +863,8 @@ void boucle_jeu_sans_graph()
     int *chemin;
 
     while (!fin){
-        tab = gen_tab_sommets(&n);
+        //tab = gen_tab_sommets_cercle(&n);
+        tab = gen_tab_sommets_cercle(&n);
 
         tab_to_graph(tab, 0, n - 1);
 
