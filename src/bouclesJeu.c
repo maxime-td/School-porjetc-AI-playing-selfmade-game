@@ -70,8 +70,6 @@ void * afficheJeu(afficheArgs * argsAff){
 
             draw_sprite(argsAff->etoileFilante, argsAff->textureEF, argsAff->frameEF, 0, 0, 26);
 
-            
-
             if (!(*(argsAff->fin))){
 
                 for (int i = 0; i < argsAff->n_sous_graphe; i++){
@@ -110,18 +108,23 @@ void * afficheJeu(afficheArgs * argsAff){
                 draw_time(*(argsAff->count)/100);
             }
 
-            else{
+            else
+            {
                 affiche_fin_espace(seconde, 0);
             }
 
             render(); //rendre les differents elements
 
-            if (etatAlpha){
+            if (etatAlpha)
+            {
                 alpha--;
                 if (0 >= alpha){
                     etatAlpha = !etatAlpha;
                 } 
-            }else{
+            }
+            
+            else
+            {
                 alpha++;
                 if (255 <= alpha){
                     etatAlpha = !etatAlpha;
