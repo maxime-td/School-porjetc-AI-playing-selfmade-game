@@ -16,18 +16,31 @@
 #include "bouclesJeu.h"
 #include "map.h"
 
+/**
+ * @brief fonction de lancement de thread pour l'algorithme des fourmis
+ * @param args Une structure contenant tout les argument a donner a multi_start_fourmi
+*/
 void *thread_fourmi(FourmiArgs *args)
 {
     args->result = multi_start_fourmi(args->matDist, args->n);
     return NULL;
 }
 
+
+/**
+ * @brief fonction de lancement de thread pour l'algorithme des floyd
+ * @param args Une structure contenant tout les argument a donner a multi_Start_Floyd_Warshall
+*/
 void *thread_floyd(FloydWarshallArgs *args)
 {
     args->result = multi_Start_Floyd_Warshall(args->tabWarshall, args->tabDist, args->n);
     return NULL;
 }
 
+/**
+ * @brief fonction de lancement de thread pour le timer du jeu
+ * @param args Une structure contenant tout les argument necessaire au timer et à la recuperation de ce timer
+*/
 void *timer(timerArgs* timer){
     while((*timer->fin)){
         SDL_Delay(10);
@@ -36,21 +49,29 @@ void *timer(timerArgs* timer){
     return NULL;
 }
 
+/**
+ * @brief fonction de lancement de thread pour l'affichage graphique du jeu
+ * @param args Une structure contenant tout les argument necessaire a l'affichage du jeu
+*/
 void * afficheJeu(afficheArgs * argsAff){
-    int alpha = 0;
-    int etatAlpha = 1;
-    int first = 1;
+    int alpha = 0; //l'aplpha des etoile de fond
+    int etatAlpha = 1; //booleen disant si l'on doit augmenter ou baisser l'alpha des etoiles
+    int first = 1; //booleen permetant de savoir si c le premier tour de boucle depuis la fin du jeu
 
-    int seconde = 0;
+    int seconde = 0; //variable permetant de stoquer le temps de fin de jeu
     
     while (*(argsAff->program_on))
     {   
+        //verification de fin de jeu pour stoquer le temps de fin
         if (*(argsAff->fin) && first){
             first = 0;
             seconde = *(argsAff->count)/100;
         }
         
+        //une refresh toute les 2 ms
         if (*(argsAff->count)%2 == 0){
+
+            //changement de frame pour les etoile filantes
             if (*(argsAff->count)%10 == 0){
                 argsAff->frameEF = (argsAff->frameEF + 1)%8;
                 if (argsAff->frameEF == 0){
@@ -59,23 +80,31 @@ void * afficheJeu(afficheArgs * argsAff){
                 }
             }
             
+            //Affichage du fond
             draw_sprite(argsAff->background, argsAff->textureBg, 1, 0, 0, 540);
 
+            //Set de l'alpha des etoile de fond
             SDL_SetTextureAlphaMod(argsAff->textureE2, alpha);
             SDL_SetTextureAlphaMod(argsAff->textureE1, 255-alpha);
 
+            //Affichage des etoiles de fond
             draw_sprite(argsAff->etoile, argsAff->textureE1, 0, 0, 0, 540);
             draw_sprite(argsAff->etoile, argsAff->textureE2, 0, 1, 0, 540);
 
+            //Affichage de l'etoile filante
             draw_sprite(argsAff->etoileFilante, argsAff->textureEF, argsAff->frameEF, 0, 0, 26);
-
+            
             if (!(*(argsAff->fin))){
+                //Affichage en jeu
 
+                //Affichage des planetes
                 for (int i = 0; i < argsAff->n_sous_graphe; i++){
                     argsAff->planete.x = argsAff->sous_graphe[i]->x-24;
                     argsAff->planete.y = argsAff->sous_graphe[i]->y-24;
                     draw_sprite(argsAff->planete, argsAff->textureP, argsAff->co[i].x, argsAff->co[i].y, 0, 48);
                 }
+
+                //Affichage des drapeaux
                 for (int i = 0; i < argsAff->n; i++){
                     if (argsAff->planeteVisite[i]){
                         argsAff->flag.x = argsAff->tab[i]->x-12;
@@ -90,40 +119,43 @@ void * afficheJeu(afficheArgs * argsAff){
                     
                 }
 
+                //Affichage du trou noir
                 draw_sprite(argsAff->affTrouNoir, argsAff->textureTN, argsAff->frameTN, 0, 0, 48);
+
+                //Affichage de la navette
                 draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);
-                
+
+                //Frame de la nevette du trou noir et du drapeau
                 if (*(argsAff->count)%20 == 0){
                     argsAff->frame = (argsAff->frame + 1)%4;
                     argsAff->frameTN = (argsAff->frameTN + 1)%4;
                     argsAff->frameFlag = (argsAff->frameFlag + 1)%5;
                 }
 
+                //Affichage des asteroides
                 affichAst(argsAff->asteroid, argsAff->n_ast, argsAff->textureP);
 
                 argsAff->navette.x = *(argsAff->x);
                 argsAff->navette.y = *(argsAff->y);
 
+                //Affichage du temps
                 draw_time(*(argsAff->count)/100);
             }
 
-            else
-            {
+            else{
+                //Affiche ecran de fin
                 affiche_fin_espace(seconde, argsAff->type_fin);
             }
 
             render(); //rendre les differents elements
 
-            if (etatAlpha)
-            {
+            //Modification du alpha des etoiles de fond
+            if (etatAlpha){
                 alpha--;
                 if (0 >= alpha){
                     etatAlpha = !etatAlpha;
                 } 
-            }
-
-            else
-            {
+            } else {
                 alpha++;
                 if (255 <= alpha){
                     etatAlpha = !etatAlpha;
@@ -140,6 +172,8 @@ void * afficheJeu(afficheArgs * argsAff){
  * @brief Exécute la boucle de jeu  de graphe
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
+ * @param n_chemin permet de retourner la taille du chemin choisi par le joueur
+ * @param fin permet de savoir si la fonction à était quitter en appuyant sur la crois
  * @return tableau du chemin du joueur
  */
 int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
@@ -346,85 +380,95 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
  * @param chemin Tableau du chemin choisi par le joueur
+ * @param n_chemin Taille du chemin choisi par le joueur
+ * @param close Permet de savoir si la boucle à était quitter en appuyant sur la crois
+ * @param ia booleen disant si c'est une ia qui joue
+ * @param tabIA tableau de regle de l'ia
+ * @param n_ia taille du tableau de regle
+ * @param result permet de recuperer le score de l'ia
+ * @param affiche booleen permetant d'activer ou non l'interface graphique
  */
 void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche)
 {
-    float speedX = 0;
-    float speedY = 0;
-    float x = tab[chemin[0]]->x;
-    float y = tab[chemin[0]]->y;
-    float directionX = 0;
-    int planeteVisite[n];
-    int frame = 0;
-    int frameFlag = 0;
-    int frameEF = 0;
-    int frameTN = 0;
-    int n_sous_graphe = 0;
-    int n_ast = 0;
-    float directionY = 0; 
-    int fin = 0;
-    int nb_planet = 0;
-    int seconde = 0;
-    int k;
-    int poid;
-    int selectPoid;
+    double speedX = 0; //vitesse x du joueur
+    double speedY = 0; //vitesse y du joueur
+    double x = tab[chemin[0]]->x - 16; //position x du joueur
+    double y = tab[chemin[0]]->y - 16; //position y du joueur
+    float directionX = 0; //direction x du joueur
+    float directionY = 0; //direction y du joueur
+    int planeteVisite[n]; //tableau de booleen representant les planetes déjà visité 1 si oui 0 sinon
+    int frame = 0; //taille d'une frame de la navette
+    int frameFlag = 0; //taille d'une frame du drapeau
+    int frameEF = 0; //taille d'une frame d'une etoile filante
+    int frameTN = 0; //taille d'une frame du trou noir
+    int n_sous_graphe = 0; //nombre de noeud du sous graph généré à partir du chemin
+    int n_ast = 0; //nombre d'asteroid
+    int fin = 0; //booleen gerant si l'on passe à l'ecran de fin
+    int nb_planet = 0; //nombre de planete
+    int seconde = 0; //nombre de seconde ecoule quand le jeu s'arrete (pas initialise avant)
+    int k; //variable iterative pour le parcour de tabIA
+    int poid; //variable servant à stoquer la somme des poids des regles pouvant être prise
+    int selectPoid; //variable prise au hasard denant le poid selectionner aleatoirement 
+    int distTrouNoir; //la ditance du trou noir au joueur
 
-    float tmpSpeedX = 0;
-    float tmpSpeedY = 0;
+    timerArgs argsT; // variable servant à stoquer les argument de la fonction timer pour l'appeler en thread
+    pthread_t thread, thread2; // initialisation des 2 thread pour le timer et l'affichage
 
-    timerArgs argsT;
-    pthread_t thread, thread2;
-
-    Point p1;
+    Point p1; //deux point temporaire servant à stoquer des coordonees pour les compare
     Point p2;
 
-    Point posNav;
-    Point posPlan;
-    Point joueur;
-    Point pTN;
+    Point posNav; //point servant à stoquer les coordonees de la navette
+    Point posPlan; //point servant à stoquer les coordonees d'une planete
+    Point joueur; //point servant à stoquer les coordonees du joueur
+    Point pTN; //point servant à stoquer les coordonees du trou noir
 
-    int closestP;
-    int posClosestP;
-    int posClosestW;
-    int isWall;
-    int selectRule;
-    int * validRule = (int *) malloc(sizeof(int)*n_ia);
+    // veriable pour les regles à choisir
+    int closestP; // variable servant à stoquer la sortie de closest_point (l'index de la planete la plus proche)
+    int posClosestP; //variable servant à stoquer la sortie de position_relative (la position de la planete la plus proche)
+    int posClosestW; // variable servant à stoquer la sortie de mur_proche (la position du mur le plus proche)
+    int isWall; // booleen servant à stoquer la sortie de is_wall_in_between (si il y a un mur entre le joueur et la planete la plus proche)
+    int selectRule; //variable servant à stoquer l'index de la regle selectionne
+    int * validRule = (int *) malloc(sizeof(int)*n_ia); //tableau servant a stoquer les regle valide dans l'etat du jeu actuel
 
-    int keyPressZ = 0;
-    int keyPressS = 0;
-    int keyPressQ = 0;
-    int keyPressD = 0;
+    int keyPressZ = 0; //booleen disant si la touche z est presse
+    int keyPressS = 0; //booleen disant si la touche s est presse
+    int keyPressQ = 0; //booleen disant si la touche q est presse
+    int keyPressD = 0; //booleen disant si la touche d est presse
 
-    coordonne_t co[n];
-    sommet_t **sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n, &n_sous_graphe);
+    coordonne_t co[n]; //tableau de coordonne servant à stoquer les coordonné des images des planetes genere
+    sommet_t **sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n, &n_sous_graphe); //sous graphe genere a partir du chemin
 
-    asteroid_t * asteroid = ast_Partout(sous_graphe, n_sous_graphe, &n_ast);
+    asteroid_t * asteroid = ast_Partout(sous_graphe, n_sous_graphe, &n_ast); //tableau des asteroid
 
-    int planeteLigne   = 10;
-    int planeteColones[10] = {8, 14, 16, 4, 12, 8, 12, 12, 16, 8}; 
+    int planeteLigne   = 10; //nombre de ligne sur l'image des planete
+    int planeteColones[10] = {8, 14, 16, 4, 12, 8, 12, 12, 16, 8}; //nombre de planete par ligne
 
     SDL_bool program_on = SDL_TRUE; // Booléen de boucle de jeu
-    SDL_Event event;
+    SDL_Event event; //variable SDL pour la gestion d'event
 
-    argsT.time = 0;
+    argsT.time = 0; 
     argsT.fin = &(program_on);
     pthread_create(&thread, NULL, (void *(*)(void *))timer, &argsT);
     
-    SDL_Rect navette = {x, y, 32, 32};
+    //texture navette
+    SDL_Rect navette = {x, y, 32, 32}; 
     SDL_Surface * image = IMG_Load("images/soucoupeV3.png");
     SDL_Texture * texture = create_texture(image);
     IMG_Quit();
 
+    //texture drapeau
     SDL_Rect flag = {0, 0, 48, 48};
     SDL_Surface * imageF = IMG_Load("images/flag.png");
     SDL_Texture * textureF = create_texture(imageF);
     IMG_Quit();
 
+    //texture fond
     SDL_Rect background = {0, 0, W, H};
     SDL_Surface * imageBg = IMG_Load("images/background.png");
     SDL_Texture * textureBg = create_texture(imageBg);
     IMG_Quit();
 
+    //texture etoile
     SDL_Rect etoile = {0, 0, W, H};
     SDL_Surface * imageE = IMG_Load("images/etoiles.png");    
     SDL_Texture * textureE1 = create_texture(imageE);
@@ -432,22 +476,27 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     SDL_SetTextureAlphaMod(textureE2, 0);
     IMG_Quit();
 
+
+    //texture planete
     SDL_Rect planete = {0, 0, 48, 48};
     SDL_Surface *imageP = IMG_Load("images/planetes.png");
     SDL_Texture *textureP = create_texture(imageP);
     IMG_Quit();
 
+    //texture navette
     SDL_Rect etoileFilante = {rand()%W, rand()%H, 26, 26};
     SDL_Surface *imageEF = IMG_Load("images/Comet.png");
     SDL_Texture *textureEF = create_texture(imageEF);
     IMG_Quit();
 
+    //texture trou noir
     int rayonTN = 50; //Le rayon du trou noir
     SDL_Rect trouNoir = {300, 200, rayonTN*2, rayonTN*2};
     SDL_Surface * imageTN = IMG_Load("images/trou_noir.png");
     SDL_Texture * textureTN = create_texture(imageTN);
     IMG_Quit();
 
+    //argument pour le thread affiche
     afficheArgs affArgs;
     affArgs.asteroid = asteroid;
     affArgs.count = &argsT.time;
@@ -484,8 +533,11 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     affArgs.y = &y;
     affArgs.type_fin = 0;
     
-    pthread_create(&thread2, NULL, (void *(*)(void *))afficheJeu, &affArgs);
+    if(affiche){
+        pthread_create(&thread2, NULL, (void *(*)(void *))afficheJeu, &affArgs);
+    }
 
+    //Choix aleatoire des texture des planetes
     for (int i = 0; i < n_sous_graphe; i++)
     {
         co[i].y = rand() % planeteLigne;
@@ -493,10 +545,12 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
         co[i].y++;
     }
 
+    //Initialisation des planetes
     for (int i = 0; i < n; i++){
         planeteVisite[i] = 0;
     }
 
+    //Boucle principale
     while (program_on && (!ia || argsT.time/100 <= TIME_MAX_IA))
     {
         // Gestion des événements
@@ -571,8 +625,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             }
             break;
         }
+
         if(ia){
-            if(rand()%500 == 0){
+            if(rand()%500 == 0){ //On ne change pas le mouvement de l'ia à chaque tour de boucle (~1/500)
+                //Intialisation des variables pour donner l'etat du jeu
                 posNav.x = x+navette.w/2;
                 posNav.y = y+navette.h/2;
 
@@ -590,8 +646,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
                 isWall = is_mur_in_between(posNav, posPlan, sous_graphe, n, 1);
 
-                //printf("%d, %d, %d\n", posClosestP, isWall, posClosestW);
-
                 selectRule = -1;
 
                 for (int i = 0; i < n_ia; i++){
@@ -600,6 +654,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 
                 k = 0;
 
+                //recherche des regles valides
                 for (int i = 0; i < n_ia; i++){
                     if (tabIA[i][0] == -1 || tabIA[i][0] == posClosestP){
                         if (tabIA[i][1] == -1 || tabIA[i][1] == posClosestW){
@@ -611,6 +666,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                     } 
                 }
 
+                //choix d'une regles valide au hasard
                 poid = 0;
 
                 for (int i = 0; i < k; i++){
@@ -627,8 +683,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                         selectRule = validRule[i];
                     }
                 }
-                //printf("rule : %d\nInput : %d, %d\n", selectRule, tabIA[selectRule][3], tabIA[selectRule][4]);
-
+                
+                //Prise en conte des input en fonction de la regles choisi
                 keyPressZ = (tabIA[selectRule][3] == 1);
                 keyPressS = (tabIA[selectRule][3] == -1);
                 keyPressD = (tabIA[selectRule][4] == -1);
@@ -636,7 +692,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             }
         }
         
-
+        //Prise en conte de la direction du joueur en fonction des input
         directionX = 0;
         directionY = 0;
 
@@ -674,7 +730,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             directionY *= 2;
         }
         
-        if (argsT.time%2 == 0){
+
+        if (argsT.time%4 == 0){
             speedX += directionX * ACCELERATION;
             speedY += directionY * ACCELERATION;
 
@@ -745,13 +802,11 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 }
             }
             
-            tmpSpeedX = speedX;
-            tmpSpeedY = speedY;
 
             if (!isInPath_Line(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath_Line(x-32, y-32, sous_graphe, n, PATH_SIZE-10))
             {
-                x -= tmpSpeedX*8;
-                y -= tmpSpeedY*8;
+                x -= speedX*8;
+                y -= speedY*8;
                 speedX = 0;
                 speedY = 0;
             }
@@ -759,9 +814,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             //Partie vérif trou noir
             joueur.x = x+16;
             joueur.y = y+16;
-            pTN.x = trouNoir.x+rayonTN/4+25;
-            pTN.y = trouNoir.y+rayonTN/4+25;
-            if(distance(joueur, pTN)<rayonTN){
+            pTN.x = trouNoir.x+50;
+            pTN.y = trouNoir.y+50;
+            distTrouNoir = distance(joueur, pTN);
+            if(distTrouNoir<rayonTN){
                 affArgs.type_fin = 1;
                 fin = 1;
             }
@@ -1007,6 +1063,11 @@ int * generate_rule(){
     return rule;
 }
 
+/**
+ * @brief genere un tableau de n regles aleatoire
+ * @param n nombre de regle a generer
+ * @return le tableau de regle
+*/
 int ** generate_tab_rules(int n){
     int ** tab_rules = (int **) malloc(sizeof(int*)*n);
 
@@ -1026,12 +1087,16 @@ int ** generate_tab_rules(int n){
     return tab_rules;
 }
 
-
+/**
+ * @brief recupere un tableau de regle à partir d'un fichier
+ * @param name nom du fichier depuis le quelle on recpuere le tableau de regle
+ * @param n permet de recuperer la taille du tableau de regle
+ * @return le tableau de regle
+*/
 int ** get_rule_from_file(char * name, int * n){
     int code;
     FILE * file = fopen(name, "r");
     code = fscanf(file, "%d\n", n);
-    //printf("%d\n", *n);
     int ** tab = (int**) malloc(sizeof(int*)*(*n));
     for (int i = 0; i < *n; i++){
         tab[i] = (int*) malloc(sizeof(int)*(N_RULE+3));
@@ -1048,7 +1113,7 @@ int ** get_rule_from_file(char * name, int * n){
 
 
 /**
- * @brief Exécute la boucle de jeu principal sans la première partie
+ * @brief Exécute la boucle de jeu principal sans la première partie (la partie graph)
  */
 void boucle_jeu_sans_graph()
 {

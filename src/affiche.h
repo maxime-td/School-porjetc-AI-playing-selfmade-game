@@ -13,13 +13,35 @@
 
 #define R_NOEUD 15
 
+/**
+ * @brief affiche un grph qui sert à faire le debugage de certaine fonction
+ * @param tab Le chemin à tracer
+ * @param tabSom Le tableau de sommet
+ * @param n La taille du chemin
+*/
 void affiche_Chem(int * tab, sommet_t ** tabSom, int n);
 
+/**
+ * @brief Initialise l'affichage SDL
+*/
+void init();
 
 /**
  * @brief Clear le fond en blanc
 */
 void clear_SDL();
+
+/**
+ * @brief Affiche un entier en bas à droite de l'ecran
+ * @param n L'entier à afficher
+*/
+void draw_int(int n);
+
+/**
+ * @brief Sert à afficher le chronometre en haut à gauche
+ * @param n temps à afficher
+*/
+void draw_time(int n);
 
 /**
  * @brief Trace un disque.
@@ -30,12 +52,13 @@ void clear_SDL();
 */
 void draw_disk(int center_x, int center_y, int radius);
 
+
 /**
  * @brief Dessine un graphe à l'aide d'un rendu SDL.
  * @param renderer Le rendu SDL utilisé pour afficher le graphe.
- * @param tab Le tableau de sommets représentant le graphe.
+ * @param tab Le tableau de sommet du graph.
  * @param n Le nombre de sommets dans le tableau.
- * @param displayPoid
+ * @param displayPoid booleen permetant d'afficher ou non les poids sur les arretes
  */
 void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid);
 
@@ -49,31 +72,33 @@ void draw_path(sommet_t ** tab, int * path, int nPath);
 
 /**
  * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
- * @param score Le score à afficher en tant que votre score
- * @param bestScore Le score à afficher en tant que meilleur score 
-*/
-void afficheFin(int score, int bestScore);
-
-/**
- * @brief Affiche le graphe initial à l'aide de la bibliothèque SDL.
- * @param tab Le tableau de sommets représentant le graphe.
- * @param n Le nombre de sommets dans le tableau.
-*/
-void init();
-
-/**
- * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
  * @param tab Le tableau de sommets représentant le graphe.
  * @param n Le nombre de sommets dans le tableau.
 */
 void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid);
 
 /**
- * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
+ * @brief Affiche les asteroid avec des rotation à partir d'un tableau
+ * @param tableau d'asteroid à afficher
+ * @param n taille du tableau
+ * @param image texture des asteroids
+*/
+void affichAst(asteroid_t * tab, int n, SDL_Texture * image);
+
+/**
+ * @brief Affiche l'ecran de fin
  * @param score Le score à afficher en tant que votre score
  * @param bestScore Le score à afficher en tant que meilleur score 
 */
-void draw_int(int n);
+void afficheFin(int score, int bestScore);
+
+
+/**
+ * @brief affiche l'ecran de fin du jeu trzvelling spaceman
+ * @param time le temps de fin 
+ * @param type_fin permet d'afficher soit l'ecran de mort doit l'ecran de victoire 
+*/
+void affiche_fin_espace(int time, int type_fin);
 
 /**
  * @brief Affiche le rendue du renderer
@@ -87,21 +112,28 @@ void closeSDL();
 
 SDL_Texture* load_texture_from_image(SDL_Surface * texture_soucoupe);
 
-void affiche_fin_espace(int time, int _fin); // 0 = Victoire, 1 = Mort
+
 
 /**
  * @brief C'est un secret
 */
 void secret1();
 
-SDL_Texture * create_texture(SDL_Surface * surface);
-
-void draw_time(int n);
+/**
+ * @brief permet d'afficher un sprite
+ * @param destination le rectangle de destination du sprite
+ * @param texture la texture du sprite
+ * @param x la coordoné x de la texture à partir de la quelle prendre le sprite
+ * @param y la coordoné y de la texture à partir de la quelle prendre le sprite
+ * @param angle l'angle de rotation du sprite
+ * @param size la taille du sprite sur l'image
+*/
 void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int angle, int size);
 
-void draw_rect(SDL_Rect rect);
 
-void affichAst(asteroid_t * tab, int n, SDL_Texture * image);
+SDL_Texture * create_texture(SDL_Surface * surface);
+
+void draw_rect(SDL_Rect rect);
 
 void draw_Line(Point point1, Point point2);
 
