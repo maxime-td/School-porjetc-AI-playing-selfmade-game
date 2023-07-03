@@ -31,7 +31,7 @@ asteroid_t *ast_Partout(/*SDL_Renderer *render,*/ sommet_t **tab, int n, int *nA
             srcrect.x = alea;
             angle = rand() % 360;
 
-            if (isInPath_carres(dstrect.x, dstrect.y, tab, n, PATH_SIZE) == 0)
+            if (isInPath_line(dstrect.x, dstrect.y, tab, n, PATH_SIZE) == 0)
             {
                 tabAst[a].x = dstrect.x;
                 tabAst[a].y = dstrect.y;
@@ -132,6 +132,49 @@ int isInPath_carres(int pX, int pY, sommet_t **tabSom, int n, int largeur)
     return res;
 }
 
+int isInPath_line(int pX, int pY, sommet_t **tabSom, int n, int largeur)
+{
+    res = 0;
+    float a1,a2,a3,a4;
+    int b1,b2,b3,b4;
+    int dist;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (tabSom[i]->voisins[j] == 1)
+            {
+                Point p1 = {tabSom[i]->x, tabSom[i]->y};
+                Point p2 = {tabSom[j]->x, tabSom[j]->y};
+                Point Angle1 = {p1->x-largeur, p1->y};
+                Point Angle2 = {p1->x, p1->y+largeur};
+                Point Angle3 = {p2->x+largeur, p1->y};
+                Point Angle4 = {p2->x, p1->y-largeur};
+
+                calculateLineCoefficients(Angle1->x, Angle1->y, Angle2->x, Angle2->y, &a1, &b1);
+                calculateLineCoefficients(Angle2->x, Angle2->y, Angle3->x, Angle3->y, &a2, &b2);
+                calculateLineCoefficients(Angle1->x, Angle1->y, Angle4->x, Angle4->y, &a3, &b3);
+                calculateLineCoefficients(Angle3->x, Angle3->y, Angle4->x, Angle4->y, &a4, &b4);
+
+                if(fonction_affine(a1, pX, b1)<pY && fonction_affine(a2, pX, b2)<pY && fonction_affine(a3, pX, b3)>pY && fonction_affine(a4, pX, b4)>pY)
+                {
+                    res +=1;
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        tmp.x = tabSom[i]->x;
+        tmp.y = tabSom[i]->y;
+        if (distance(tmp, P) < largeur)
+        {
+            res += 1;
+        }
+    }
+}
+
 int isPointInsideRectangle(Point p, Point rect[4])
 {
     int c = 0;
@@ -158,6 +201,3 @@ void calculateLineCoefficients(int x1, int y1, int x2, int y2, float *a, float *
     *a = (float)(y2 - y1) / (x2 - x1);
     *b = y1 - (*a) * x1;
 }
-
-
-void 
