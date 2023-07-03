@@ -580,111 +580,113 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             directionX *= 2;
             directionY *= 2;
         }
+        
+        if (argsT.time%2 == 0){
+            speedX += directionX * ACCELERATION;
+            speedY += directionY * ACCELERATION;
 
-        speedX += directionX * ACCELERATION;
-        speedY += directionY * ACCELERATION;
-
-        if (directionX == 0 && speedX != 0)
-        {
-            if (speedX < 0)
+            if (directionX == 0 && speedX != 0)
             {
-                speedX += ACCELERATION * 0.25;
-            }
-            else
-            {
-                speedX -= ACCELERATION * 0.25;
-            }
+                if (speedX < 0)
+                {
+                    speedX += ACCELERATION * 0.25;
+                }
+                else
+                {
+                    speedX -= ACCELERATION * 0.25;
+                }
 
-            if (speedX < ACCELERATION && speedX > -ACCELERATION)
-            {
-                speedX = 0;
-            }
-        }
-
-        if (directionY == 0 && speedY != 0)
-        {
-            if (speedY < 0)
-            {
-                speedY += ACCELERATION * 0.25;
-            }
-            else
-            {
-                speedY -= ACCELERATION * 0.25;
-            }
-            if (speedY < ACCELERATION && speedY > -ACCELERATION)
-            {
-                speedY = 0;
-            }
-        }
-
-        if (speedX < -MAX_SPEED / 2)
-        {
-            speedX = -MAX_SPEED / 2;
-        }
-        else if (speedX > MAX_SPEED / 2)
-        {
-            speedX = MAX_SPEED / 2;
-        }
-
-        if (speedY < -MAX_SPEED / 2)
-        {
-            speedY = -MAX_SPEED / 2;
-        }
-        else if (speedY > MAX_SPEED / 2)
-        {
-            speedY = MAX_SPEED / 2;
-        }
-
-        x += speedX;
-        y += speedY;
-
-        for (int i = 0; i < n; i++){
-            p1.x = tab[i]->x;
-            p1.y = tab[i]->y;
-            p2.x = x+16;
-            p2.y = y+16;
-            if (distance(p1, p2) < 16+24){
-                planeteVisite[i] = 1;
-                if (tout_noeud(planeteVisite, n) && i == chemin[0]){
-                    fin = 1;
+                if (speedX < ACCELERATION && speedX > -ACCELERATION)
+                {
+                    speedX = 0;
                 }
             }
-        }
-        
-        tmpSpeedX = speedX;
-        tmpSpeedY = speedY;
 
-        while (!isInPath(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath(x-32, y-32, sous_graphe, n, PATH_SIZE-10))
-        {
-            x -= tmpSpeedX*2;
-            y -= tmpSpeedY*2;
-            speedX = 0;
-            speedY = 0;
-        }
+            if (directionY == 0 && speedY != 0)
+            {
+                if (speedY < 0)
+                {
+                    speedY += ACCELERATION * 0.25;
+                }
+                else
+                {
+                    speedY -= ACCELERATION * 0.25;
+                }
+                if (speedY < ACCELERATION && speedY > -ACCELERATION)
+                {
+                    speedY = 0;
+                }
+            }
 
-        if (x < 0){
-            x = 0;
-            speedX = 0;
-            speedY = 0;
-        }else if (x > W-navette.w){
-            x = W-navette.w;
-            speedX = 0;
-            speedY = 0;
-        }
-        if (y < 0){
-            y = 0;
-            speedX = 0;
-            speedY = 0;
-        }else if (y > H-navette.h){
-            y = H-navette.h;
-            speedX = 0;
-            speedY = 0;
-        }
+            if (speedX < -MAX_SPEED / 2)
+            {
+                speedX = -MAX_SPEED / 2;
+            }
+            else if (speedX > MAX_SPEED / 2)
+            {
+                speedX = MAX_SPEED / 2;
+            }
 
-        if (fin && seconde == 0){
-            seconde = argsT.time;
+            if (speedY < -MAX_SPEED / 2)
+            {
+                speedY = -MAX_SPEED / 2;
+            }
+            else if (speedY > MAX_SPEED / 2)
+            {
+                speedY = MAX_SPEED / 2;
+            }
+
+            x += speedX;
+            y += speedY;
+
+            for (int i = 0; i < n; i++){
+                p1.x = tab[i]->x;
+                p1.y = tab[i]->y;
+                p2.x = x+16;
+                p2.y = y+16;
+                if (distance(p1, p2) < 16+24){
+                    planeteVisite[i] = 1;
+                    if (tout_noeud(planeteVisite, n) && i == chemin[0]){
+                        fin = 1;
+                    }
+                }
+            }
+            
+            tmpSpeedX = speedX;
+            tmpSpeedY = speedY;
+
+            while (!isInPath(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath(x-32, y-32, sous_graphe, n, PATH_SIZE-10))
+            {
+                x -= tmpSpeedX*2;
+                y -= tmpSpeedY*2;
+                speedX = 0;
+                speedY = 0;
+            }
+
+            if (x < 0){
+                x = 0;
+                speedX = 0;
+                speedY = 0;
+            }else if (x > W-navette.w){
+                x = W-navette.w;
+                speedX = 0;
+                speedY = 0;
+            }
+            if (y < 0){
+                y = 0;
+                speedX = 0;
+                speedY = 0;
+            }else if (y > H-navette.h){
+                y = H-navette.h;
+                speedX = 0;
+                speedY = 0;
+            }
+
+            if (fin && seconde == 0){
+                seconde = argsT.time;
+            }
+            
         }
-        
     }
 
     free2DTab((void**)sous_graphe, n_sous_graphe);
@@ -836,7 +838,7 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
     int dir_noeud = position_relative(p1, p2);
     int dist = distance(p1, p2);
 
-    for (int i = 0; i < dist; i+=precisions)
+    for (int i = 0; i < dist; i+=precision)
     {
         if (isInPath(p1.x + direction[dir_noeud].x*i, p1.y + direction[dir_noeud].y*i, tab, n, PATH_SIZE-10)){
             return 1;
