@@ -29,7 +29,7 @@ float fonction_affine(float a, int x, float b);
 
 int isInPath_carres(int pX, int pY, sommet_t **tabSom, int n, int largeur);
 
-int isInPath_line(int pX, int pY, sommet_t **tabSom, int n, int largeur);
+//int isInPath_line(int pX, int pY, sommet_t **tabSom, int n, int largeur);
 
 
 

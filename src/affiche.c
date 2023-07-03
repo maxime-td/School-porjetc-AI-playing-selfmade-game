@@ -441,5 +441,7 @@ void draw_rect(SDL_Rect rect){
 
 void draw_Line(Point point1, Point point2)
 {
+    SDL_SetRenderDrawColor(renderer, 0,255,0,0);
     SDL_RenderDrawLine(renderer, point1.x, point1.y, point2.x, point2.y);
+    SDL_RenderPresent(renderer);
 }
