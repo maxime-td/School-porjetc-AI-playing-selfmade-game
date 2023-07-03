@@ -671,10 +671,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             directionX *= 2;
             directionY *= 2;
         }
-
-        directionXTN = 0;
-        directionYTN = 0;
-        if(rand()%5 == 0)directionTN(&directionXTN, &directionYTN);
  
         if (argsT.time%2 == 0){
             speedX += directionX * ACCELERATION;
@@ -781,6 +777,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 seconde = argsT.time/100;
             }
         }
+
+        if(rand()%15000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
+
+//      printf("direction : x = %f, y = %f\n", directionXTN, directionYTN);
         speedTN(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir);
 
         trouNoir.x = (int)xTN;
@@ -1082,46 +1082,28 @@ void boucle_jeu_sans_graph()
 }
 
 
-void directionTN(float * directionX, float * directionY)
+void directionTN(float * directionX, float * directionY, int xTN, int yTN)
 {
-    int tirage = rand()%6;
-
-        switch(tirage)
-        {
-            case 0:
-                *directionY -= 0.5;
-                break;
-        
-            case 1:
-                *directionY += 0.5;
-                break;
-
-            case 2:
-                *directionY = 0;
-                break;
-
-            case 3:        
-                *directionX -= 0.5;
-                break;
-
-            case 4:
-                *directionX += 0.5;
-                break;
-        
-
-            case 5:
-                *directionX = 0;
-                break;
-
-            default: 
-                break;
-        }
-
-        if ((*directionX) + (*directionY) == 0.5)
-        {
-            *directionX *= 2;
-            *directionY *= 2;
-        }
+    int tirage;
+    tirage = (rand()%20)-10;
+    if((xTN<W/6 && *directionX<0) || (xTN>5*W/6 && *directionX>0)){*directionX= -*directionX;}
+    if((yTN<H/6 && *directionY<0) || (yTN>5*H/6 && *directionY>0)){*directionY= -*directionY;}
+    if(*directionY<0)
+    {
+            tirage = (rand()%20-4);
+    }
+    else if(*directionY>0){
+            tirage = (rand()%20)-15;
+    }    
+    *directionY += ((float)tirage)/200;
+    tirage = (rand()%20)-10;
+    if(*directionX<0){
+            tirage = (rand()%20-3);
+    }    
+    else if(*directionX>0){
+            tirage = (rand()%20)-16;
+    }
+    *directionX += ((float)tirage)/200;
 }
 
 

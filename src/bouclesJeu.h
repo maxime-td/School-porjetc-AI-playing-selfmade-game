@@ -15,7 +15,7 @@
 
 #define MAX_SPEED 0.003
 #define ACCELERATION 0.000000025
-#define ACCELERATION_TROU 0.00025
+#define ACCELERATION_TROU 0.000000025
 
 #define N_RULE 3
 #define TIME_MAX_IA 10
@@ -158,7 +158,7 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
 int calcul_score(int seconde, int nbPlanete, int distDep);
 
 
-void directionTN(float * directionX, float * directionY);
+void directionTN(float * directionX, float * directionY, int xTN, int yTN);
 
 void speedTN(float directionXTN, float directionYTN, float * speedXTN, float * speedYTN, float * xTN, float * yTN, SDL_Rect * trouNoir);
 
