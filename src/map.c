@@ -31,7 +31,6 @@ asteroid_t * ast_Partout(/*SDL_Renderer *render,*/ sommet_t ** tab, int n, int *
             srcrect.x = alea;
             angle = rand() % 360;
             
-            
             if(isInPath(dstrect.x, dstrect.y, tab, n, PATH_SIZE)==0){
                 tabAst[a].x = dstrect.x;
                 tabAst[a].y = dstrect.y;
@@ -50,7 +49,6 @@ float fonction_affine(float a, int x, float b)
 {
     return a*x+b;
 }
-
 
 float distance(Point p1, Point p2) {
     float dx = p2.x - p1.x;
@@ -129,10 +127,8 @@ int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur)
         
     }
     
-
     return res;
 }
-
 
 int isPointInsideRectangle(Point p, Point rect[4]) {
     int c=0;
@@ -142,7 +138,6 @@ int isPointInsideRectangle(Point p, Point rect[4]) {
     }
     return c;
 }
-
 
 void calculateLineCoefficients(int x1, int y1, int x2, int y2, float *a, float *b) {
     if (x1 > x2) {

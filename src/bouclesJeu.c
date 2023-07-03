@@ -36,7 +36,6 @@ void *timer(timerArgs* timer){
     return NULL;
 }
 
-
 void * afficheJeu(afficheArgs * argsAff){
     int alpha = 0;
     int etatAlpha = 1;
@@ -91,7 +90,7 @@ void * afficheJeu(afficheArgs * argsAff){
                     
                 }
 
-                draw_sprite(argsAff->trouNoir, argsAff->textureTN, argsAff->frameTN, 0, 0, argsAff->trouNoir.w);
+                draw_sprite(argsAff->trouNoir, argsAff->textureTN, argsAff->frameTN, 0, 0, 48);
                 draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);
                 
                 if (*(argsAff->count)%20 == 0){
@@ -122,7 +121,7 @@ void * afficheJeu(afficheArgs * argsAff){
                     etatAlpha = !etatAlpha;
                 } 
             }
-            
+
             else
             {
                 alpha++;
@@ -441,7 +440,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     SDL_Texture *textureEF = create_texture(imageEF);
     IMG_Quit();
 
-    SDL_Rect trouNoir = {300, 200, 48, 48};
+    SDL_Rect trouNoir = {300, 200, 100, 100};
     SDL_Surface * imageTN = IMG_Load("images/trou_noir.png");
     SDL_Texture * textureTN = create_texture(imageTN);
     IMG_Quit();
@@ -1053,7 +1052,7 @@ void boucle_jeu_sans_graph()
         matDist = dist_tab(tab, &n);
         chemin = colonni_fourmi(matDist, n, rand()%n, &n_chemin);
 
-        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 1, rules, n_rules, &res, 1);
+        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 0, rules, n_rules, &res, 1);
 
         if(chemin != NULL)
             free(chemin);
