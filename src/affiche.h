@@ -87,7 +87,7 @@ void closeSDL();
 
 SDL_Texture* load_texture_from_image(SDL_Surface * texture_soucoupe);
 
-void afficheFinEspace(int time);
+void affiche_fin_espace(int time, int type); // 0 = Victoire, 1 = Mort
 
 /**
  * @brief C'est un secret

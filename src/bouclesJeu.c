@@ -70,8 +70,6 @@ void * afficheJeu(afficheArgs * argsAff){
 
             draw_sprite(argsAff->etoileFilante, argsAff->textureEF, argsAff->frameEF, 0, 0, 26);
 
-            
-
             if (!(*(argsAff->fin))){
 
                 for (int i = 0; i < argsAff->n_sous_graphe; i++){
@@ -93,9 +91,12 @@ void * afficheJeu(afficheArgs * argsAff){
                     
                 }
 
+                draw_sprite(argsAff->trouNoir, argsAff->textureTN, argsAff->frameTN, 0, 0, argsAff->trouNoir.w);
                 draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);
+                
                 if (*(argsAff->count)%20 == 0){
                     argsAff->frame = (argsAff->frame + 1)%4;
+                    argsAff->frameTN = (argsAff->frameTN + 1)%4;
                     argsAff->frameFlag = (argsAff->frameFlag + 1)%5;
                 }
 
@@ -104,21 +105,26 @@ void * afficheJeu(afficheArgs * argsAff){
                 argsAff->navette.x = *(argsAff->x);
                 argsAff->navette.y = *(argsAff->y);
 
-
                 draw_time(*(argsAff->count)/100);
-                
-            }else{
-                afficheFinEspace(seconde);
+            }
+
+            else
+            {
+                affiche_fin_espace(seconde, 0);
             }
 
             render(); //rendre les differents elements
 
-            if (etatAlpha){
+            if (etatAlpha)
+            {
                 alpha--;
                 if (0 >= alpha){
                     etatAlpha = !etatAlpha;
                 } 
-            }else{
+            }
+            
+            else
+            {
                 alpha++;
                 if (255 <= alpha){
                     etatAlpha = !etatAlpha;
@@ -342,7 +348,7 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
  * @param n Le nombre de sommets
  * @param chemin Tableau du chemin choisi par le joueur
  */
-void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close)
+void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche)
 {
     float speedX = 0;
     float speedY = 0;
@@ -353,11 +359,16 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     int frame = 0;
     int frameFlag = 0;
     int frameEF = 0;
+    int frameTN = 0;
     int n_sous_graphe = 0;
     int n_ast = 0;
     float directionY = 0; 
     int fin = 0;
+    int nb_planet = 0;
     int seconde = 0;
+    int k;
+    int poid;
+    int selectPoid;
 
     float tmpSpeedX = 0;
     float tmpSpeedY = 0;
@@ -365,9 +376,18 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     timerArgs argsT;
     pthread_t thread, thread2;
 
-
     Point p1;
     Point p2;
+
+    Point posNav;
+    Point posPlan;
+
+    int closestP;
+    int posClosestP;
+    int posClosestW;
+    int isWall;
+    int selectRule;
+    int * validRule = (int *) malloc(sizeof(int)*n_ia);
 
     int keyPressZ = 0;
     int keyPressS = 0;
@@ -377,12 +397,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     coordonne_t co[n];
     sommet_t **sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n, &n_sous_graphe);
 
-
     asteroid_t * asteroid = ast_Partout(sous_graphe, n_sous_graphe, &n_ast);
 
     int planeteLigne   = 10;
     int planeteColones[10] = {8, 14, 16, 4, 12, 8, 12, 12, 16, 8}; 
-
 
     SDL_bool program_on = SDL_TRUE; // Booléen de boucle de jeu
     SDL_Event event;
@@ -391,22 +409,22 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     argsT.fin = &(program_on);
     pthread_create(&thread, NULL, (void *(*)(void *))timer, &argsT);
     
-    SDL_Rect  navette = {x, y, 32, 32};
+    SDL_Rect navette = {x, y, 32, 32};
     SDL_Surface * image = IMG_Load("images/soucoupeV3.png");
     SDL_Texture * texture = create_texture(image);
     IMG_Quit();
 
-    SDL_Rect  flag = {0, 0, 48, 48};
+    SDL_Rect flag = {0, 0, 48, 48};
     SDL_Surface * imageF = IMG_Load("images/flag.png");
     SDL_Texture * textureF = create_texture(imageF);
     IMG_Quit();
 
-    SDL_Rect  background = {0, 0, W, H};
+    SDL_Rect background = {0, 0, W, H};
     SDL_Surface * imageBg = IMG_Load("images/background.png");
     SDL_Texture * textureBg = create_texture(imageBg);
     IMG_Quit();
 
-    SDL_Rect  etoile = {0, 0, W, H};
+    SDL_Rect etoile = {0, 0, W, H};
     SDL_Surface * imageE = IMG_Load("images/etoiles.png");    
     SDL_Texture * textureE1 = create_texture(imageE);
     SDL_Texture * textureE2 = create_texture(imageE);
@@ -423,6 +441,11 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     SDL_Texture *textureEF = create_texture(imageEF);
     IMG_Quit();
 
+    SDL_Rect trouNoir = {300, 200, 48, 48};
+    SDL_Surface * imageTN = IMG_Load("images/trou_noir.png");
+    SDL_Texture * textureTN = create_texture(imageTN);
+    IMG_Quit();
+
     afficheArgs affArgs;
     affArgs.asteroid = asteroid;
     affArgs.count = &argsT.time;
@@ -431,6 +454,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     affArgs.frame = frame;
     affArgs.frameFlag = frameFlag;
     affArgs.frameEF = frameEF;
+    affArgs.frameTN = frameTN;
     affArgs.n = n;
     affArgs.n_sous_graphe = n_sous_graphe;
     affArgs.planeteVisite = planeteVisite;
@@ -443,6 +467,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     affArgs.textureEF = textureEF;
     affArgs.textureF = textureF;
     affArgs.textureP = textureP;
+    affArgs.textureTN = textureTN;
     affArgs.chemin = chemin;
     affArgs.co = co;
     affArgs.etoileFilante = etoileFilante;
@@ -451,10 +476,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     affArgs.background = background;
     affArgs.navette = navette;
     affArgs.flag = flag;
+    affArgs.trouNoir = trouNoir;
     affArgs.n_ast = n_ast;
     affArgs.x = &x;
     affArgs.y = &y;
-
     
     pthread_create(&thread2, NULL, (void *(*)(void *))afficheJeu, &affArgs);
 
@@ -469,8 +494,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
         planeteVisite[i] = 0;
     }
 
-
-    while (program_on)
+    while (program_on && (!ia || argsT.time/100 <= TIME_MAX_IA))
     {
         // Gestion des événements
         while (SDL_PollEvent(&event))
@@ -486,67 +510,129 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                     break;
 
                 case SDL_KEYDOWN:
+                    if(!ia){
+                        switch (event.key.keysym.sym){
+                            case SDLK_z:
+                                keyPressZ = 1;
+                                break;
 
-                    switch (event.key.keysym.sym)
-                    {
-                    case SDLK_z:
-                        keyPressZ = 1;
-                        break;
+                            case SDLK_s:
+                                keyPressS = 1;
+                                break;
 
-                    case SDLK_s:
-                        keyPressS = 1;
-                        break;
+                            case SDLK_q:
+                                keyPressQ = 1;
+                                break;
 
-                    case SDLK_q:
-                        keyPressQ = 1;
-                        break;
+                            case SDLK_d:
+                                keyPressD = 1;
+                                break;
 
-                    case SDLK_d:
-                        keyPressD = 1;
-                        break;
+                            case SDLK_RETURN:
+                                if (fin)
+                                    program_on = SDL_FALSE;
+                                break;
 
-                    case SDLK_RETURN:
-                        if (fin)
-                            program_on = SDL_FALSE;
-                        break;
-
-                    default:
-                        break;
+                            default:
+                                break;
+                        }
                     }
                     break;
 
                 case SDL_KEYUP:
+                    if(!ia){
+                        switch (event.key.keysym.sym)
+                        {
+                        case SDLK_z:
+                            keyPressZ = 0;
+                            break;
 
-                    switch (event.key.keysym.sym)
-                    {
-                    case SDLK_z:
-                        keyPressZ = 0;
-                        break;
+                        case SDLK_s:
+                            keyPressS = 0;
+                            break;
 
-                    case SDLK_s:
-                        keyPressS = 0;
-                        break;
+                        case SDLK_q:
+                            keyPressQ = 0;
+                            break;
 
-                    case SDLK_q:
-                        keyPressQ = 0;
-                        break;
+                        case SDLK_d:
+                            keyPressD = 0;
+                            break;
 
-                    case SDLK_d:
-                        keyPressD = 0;
-                        break;
-
-                    default:
-                        break;
+                        default:
+                            break;
+                        }
                     }
-
                 default:
                     break;
-                }
-                break;
+            }
+            break;
         }
+        if(ia){
+
+            posNav.x = x;
+            posNav.y = y;
+
+            if (!tout_noeud(planeteVisite, n)){
+                closestP = closest_point(posNav, tab, n, planeteVisite);
+            }else{
+                closestP = chemin[0];   
+            }
+
+            posPlan.x   = tab[closestP]->x;
+            posPlan.y   = tab[closestP]->y;
+            posClosestP = position_relative(posNav, posPlan);
+
+            posClosestW = mur_proche(posNav, tab, n, 8, 8);
+
+            isWall = is_mur_in_between(posNav, posPlan, sous_graphe, n, 4);
+
+            selectRule = -1;
+
+            for (int i = 0; i < n_ia; i++){
+                validRule[i] = -1;
+            }
+            
+            k = 0;
+
+            for (int i = 0; i < n_ia; i++){
+                if (tabIA[i][0] == -1 || tabIA[i][0] == posClosestP){
+                    if (tabIA[i][1] == -1 || tabIA[i][1] == posClosestW){
+                        if (tabIA[i][2] == -1 || tabIA[i][2] == isWall){
+                            validRule[k] = i;
+                            k++;
+                        }
+                    }
+                } 
+            }
+
+            poid = 0;
+
+            for (int i = 0; i < k; i++){
+                poid += tabIA[validRule[i]][N_RULE+2];
+            }
+
+            selectPoid = rand()%poid;
+            selectRule = -1;
+
+            poid = 0;
+            for (int i = 0; i < k && selectRule == -1; i++){
+                poid += tabIA[validRule[i]][N_RULE+2];
+                if (poid > selectPoid){
+                    selectRule = validRule[i];
+                }
+            }
+
+            keyPressZ = (tabIA[selectRule][3] == 1);
+            keyPressS = (tabIA[selectRule][3] == -1);
+            keyPressD = (tabIA[selectRule][4] == -1);
+            keyPressQ = (tabIA[selectRule][4] == 1);
+        }
+        
 
         directionX = 0;
         directionY = 0;
+
         if (keyPressZ)
         {
             directionY += -0.5;
@@ -580,116 +666,135 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             directionX *= 2;
             directionY *= 2;
         }
+        
+        if (argsT.time%2 == 0){
+            speedX += directionX * ACCELERATION;
+            speedY += directionY * ACCELERATION;
 
-        speedX += directionX * ACCELERATION;
-        speedY += directionY * ACCELERATION;
-
-        if (directionX == 0 && speedX != 0)
-        {
-            if (speedX < 0)
+            if (directionX == 0 && speedX != 0)
             {
-                speedX += ACCELERATION * 0.25;
-            }
-            else
-            {
-                speedX -= ACCELERATION * 0.25;
-            }
+                if (speedX < 0)
+                {
+                    speedX += ACCELERATION * 0.25;
+                }
+                else
+                {
+                    speedX -= ACCELERATION * 0.25;
+                }
 
-            if (speedX < ACCELERATION && speedX > -ACCELERATION)
-            {
-                speedX = 0;
-            }
-        }
-
-        if (directionY == 0 && speedY != 0)
-        {
-            if (speedY < 0)
-            {
-                speedY += ACCELERATION * 0.25;
-            }
-            else
-            {
-                speedY -= ACCELERATION * 0.25;
-            }
-            if (speedY < ACCELERATION && speedY > -ACCELERATION)
-            {
-                speedY = 0;
-            }
-        }
-
-        if (speedX < -MAX_SPEED / 2)
-        {
-            speedX = -MAX_SPEED / 2;
-        }
-        else if (speedX > MAX_SPEED / 2)
-        {
-            speedX = MAX_SPEED / 2;
-        }
-
-        if (speedY < -MAX_SPEED / 2)
-        {
-            speedY = -MAX_SPEED / 2;
-        }
-        else if (speedY > MAX_SPEED / 2)
-        {
-            speedY = MAX_SPEED / 2;
-        }
-
-        x += speedX;
-        y += speedY;
-
-        for (int i = 0; i < n; i++){
-            p1.x = tab[i]->x;
-            p1.y = tab[i]->y;
-            p2.x = x+16;
-            p2.y = y+16;
-            if (distance(p1, p2) < 16+24){
-                planeteVisite[i] = 1;
-                if (tout_noeud(planeteVisite, n) && i == chemin[0]){
-                    fin = 1;
+                if (speedX < ACCELERATION && speedX > -ACCELERATION)
+                {
+                    speedX = 0;
                 }
             }
-        }
-        
-        tmpSpeedX = speedX;
-        tmpSpeedY = speedY;
 
-        while (!isInPath_Line(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath_Line(x-32, y-32, sous_graphe, n, PATH_SIZE-10))
-        {
-            x -= tmpSpeedX*2;
-            y -= tmpSpeedY*2;
-            speedX = 0;
-            speedY = 0;
-        }
+            if (directionY == 0 && speedY != 0)
+            {
+                if (speedY < 0)
+                {
+                    speedY += ACCELERATION * 0.25;
+                }
+                else
+                {
+                    speedY -= ACCELERATION * 0.25;
+                }
+                if (speedY < ACCELERATION && speedY > -ACCELERATION)
+                {
+                    speedY = 0;
+                }
+            }
 
-        if (x < 0){
-            x = 0;
-            speedX = 0;
-            speedY = 0;
-        }else if (x > W-navette.w){
-            x = W-navette.w;
-            speedX = 0;
-            speedY = 0;
-        }
-        if (y < 0){
-            y = 0;
-            speedX = 0;
-            speedY = 0;
-        }else if (y > H-navette.h){
-            y = H-navette.h;
-            speedX = 0;
-            speedY = 0;
-        }
+            if (speedX < -MAX_SPEED / 2)
+            {
+                speedX = -MAX_SPEED / 2;
+            }
+            else if (speedX > MAX_SPEED / 2)
+            {
+                speedX = MAX_SPEED / 2;
+            }
 
-        if (fin && seconde == 0){
-            seconde = argsT.time;
+            if (speedY < -MAX_SPEED / 2)
+            {
+                speedY = -MAX_SPEED / 2;
+            }
+            else if (speedY > MAX_SPEED / 2)
+            {
+                speedY = MAX_SPEED / 2;
+            }
+
+            x += speedX;
+            y += speedY;
+
+            for (int i = 0; i < n; i++){
+                p1.x = tab[i]->x;
+                p1.y = tab[i]->y;
+                p2.x = x+16;
+                p2.y = y+16;
+                if (distance(p1, p2) < 16+24){
+                    planeteVisite[i] = 1;
+                    if (tout_noeud(planeteVisite, n) && i == chemin[0]){
+                        fin = 1;
+                    }
+                }
+            }
+            
+            tmpSpeedX = speedX;
+            tmpSpeedY = speedY;
+
+            while (!isInPath_Line(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath_Line(x-32, y-32, sous_graphe, n, PATH_SIZE-10))
+            {
+                x -= tmpSpeedX*2;
+                y -= tmpSpeedY*2;
+                speedX = 0;
+                speedY = 0;
+            }
+
+            if (x < 0){
+                x = 0;
+                speedX = 0;
+                speedY = 0;
+            }else if (x > W-navette.w){
+                x = W-navette.w;
+                speedX = 0;
+                speedY = 0;
+            }
+            if (y < 0){
+                y = 0;
+                speedX = 0;
+                speedY = 0;
+            }else if (y > H-navette.h){
+                y = H-navette.h;
+                speedX = 0;
+                speedY = 0;
+            }
+
+            if (fin && seconde == 0){
+                seconde = argsT.time/100;
+            }
         }
-        
+    }
+    
+    program_on = SDL_FALSE;
+    pthread_join(thread,  NULL);
+
+
+    seconde = argsT.time/100;   
+    for (int i = 0; i < n; i++){
+        nb_planet += planeteVisite[i];
     }
 
+    posPlan.x = tab[chemin[0]]->x;
+    posPlan.y = tab[chemin[0]]->y;
+
+    *result = calcul_score(seconde, nb_planet, distance(posNav, posPlan));
+
     free2DTab((void**)sous_graphe, n_sous_graphe);
-    pthread_join(thread,  NULL);
-    pthread_join(thread2, NULL);
+    
+    if (affiche){
+        pthread_join(thread2, NULL);
+    }
+    
+    free(validRule);
     free(asteroid);
 }
 
@@ -715,18 +820,36 @@ void boucle_jeu()
 
        // int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
 
-       // if(!fin)
-        //    boucle_jeu_espace(tab, n, chemin, n_chemin, &fin);
+        if(!fin)
+            boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 0, NULL, 0, NULL, 1);
 
         boucle_jeu_sans_graph();
 
-       // if(chemin != NULL)
-        //    free(chemin);
+        if(chemin != NULL)
+           free(chemin);
 
         free2DTab((void **)tab, n);
     }
     
     closeSDL(); // free de tout les elements de SDL
+}
+
+
+
+/**
+ * @brief Calcul le score de l'ia
+ * @param seconde Temps que l'ia à mit pour finir
+ * @param nbPlanete Le nombre de planete que l'ia a visité 
+ * @param distDep La distance au point de depart
+ * @return Le score trouvé
+ */
+int calcul_score(int seconde, int nbPlanete, int distDep){
+    int score = 0;
+    score += (TIME_MAX_IA - seconde)*5;
+    score += (TIME_MAX_IA - seconde > 0)*500;
+    score += nbPlanete*5;
+    score += distDep/20;
+    return score;   
 }
 
 /**
@@ -778,15 +901,14 @@ int position_relative(Point p1, Point p2){
     } 
 }
 
-
 /**
- * @brief Donne la position du mur le plus proche par rapport au point donner
- * @param p Point donner
- * @param tab Tableau des sommet
+ * @brief Donne la position du mur le plus proche par rapport au point donné
+ * @param p Point donné
+ * @param tab Tableau des sommets
  * @param n Le nombre de sommet
- * @param depth plus depth grand plus on va chercher des mur loins
- * @param precision plus elle est grande moins il y a de chance de loupé un mur mais la verification serra plus longue
- * @return position : -1 si pas de mur trouver 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
+ * @param depth Le nombre de pats qui seront fait
+ * @param precision La taille d'un pats
+ * @return position : 4 si pas de mur trouver 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
  */
 int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
     Point direction[4];
@@ -799,7 +921,7 @@ int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
     direction[3].x =  precision;
     direction[3].y =  precision;
 
-    int closest = -1;
+    int closest = 4;
     int bestDist = depth;
 
     for (int i = 0; i < 4; i++){
@@ -813,7 +935,6 @@ int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
     }
     return closest;
 }
-
 
 /**
  * @brief Cherche si il y a un mur entre les deux points
@@ -847,6 +968,62 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
     return 0;
 }
 
+/**
+ * @brief Génere une regle au hasard
+ * @return La règle générée (avec les 2 dernier paramètre representant l'input)
+ */
+int * generate_rule(){
+    int * rule = (int *) malloc(sizeof(int)*(N_RULE+3));
+
+    //Etat du jeu
+    rule[0] = (rand()%5)-1;
+    rule[1] = (rand()%6)-1;
+    rule[2] = (rand()%3)-1;
+
+    //Input du bot en fonction de l'etat
+    rule[3] = (rand()%3)-1;
+    rule[4] = (rand()%3)-1;
+    rule[5] = (rand()%10)+1;
+
+    return rule;
+}
+
+int ** generate_tab_rules(int n){
+    int ** tab_rules = (int **) malloc(sizeof(int*)*n);
+
+    for (int i = 0; i < n-1; i++){
+        tab_rules[i] = generate_rule();
+    }
+
+    tab_rules[n-1] = (int *) malloc(sizeof(int)*(N_RULE+3));
+
+    tab_rules[n-1][0] = -1;
+    tab_rules[n-1][1] = -1;
+    tab_rules[n-1][2] = -1;
+    tab_rules[n-1][3] = (rand()%3)-1;
+    tab_rules[n-1][4] = (rand()%3)-1;
+    tab_rules[n-1][5] = 1;
+    
+    return tab_rules;
+}
+
+
+int ** get_rule_from_file(char * name, int * n){
+    int code;
+    FILE * file = fopen(name, "r");
+    code = fscanf(file, "%d\n", n);
+    int ** tab = (int**) malloc(sizeof(int*)*(*n));
+    for (int i = 0; i < *n; i++){
+        tab[i] = (int*) malloc(sizeof(int)*(N_RULE+3));
+        for (int j = 0; j < (N_RULE+3); j++){
+            code = fscanf(file, "%d\n", &tab[i][j]);
+        }
+        code = fscanf(file, "\n");
+    }
+    code = fclose(file);
+
+    return tab;
+}
 
 
 /**
@@ -863,10 +1040,13 @@ void boucle_jeu_sans_graph()
     int fin=0;
     int ** matDist;
     int *chemin;
+    int ** rules;
+    int n_rules = 10;
+    int res;
 
     while (!fin){
-        //tab = gen_tab_sommets_cercle(&n);
-        tab = gen_tab_sommets_rand(&n);
+        tab = gen_tab_sommets(&n);
+        rules = get_rule_from_file("testRule.txt" ,&n_rules);        
 
         tab_to_graph(tab, 0, n - 1);
 
@@ -875,15 +1055,17 @@ void boucle_jeu_sans_graph()
         matDist = dist_tab(tab, &n);
         chemin = colonni_fourmi(matDist, n, rand()%n, &n_chemin);
 
-        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin);
+        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 1, rules, n_rules, &res, 1);
 
         if(chemin != NULL)
             free(chemin);
 
         free2DTab((void **)matDist, n);
         free2DTab((void **)tab, n);
+        free2DTab((void **)rules, n);
     }
     
     closeSDL(); // free de tout les elements de SDL
 }
+
 

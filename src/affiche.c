@@ -48,8 +48,6 @@ void init() {
         exit(EXIT_FAILURE);
     }
 
-
-
     if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
     {
         SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
@@ -94,9 +92,6 @@ void draw_int(int n) {
     SDL_Texture* textTexture;
     SDL_Color color = {50, 150, 0, 255};
     char Val[10];
-    
-
-
 
     font = TTF_OpenFont("arial.ttf", 60);
 
@@ -113,7 +108,6 @@ void draw_int(int n) {
     SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
     SDL_DestroyTexture(textTexture);
     
-
     TTF_CloseFont(font);
 }
 
@@ -142,7 +136,6 @@ void draw_time(int n) {
     SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
     SDL_DestroyTexture(textTexture);
     
-
     TTF_CloseFont(font);
 }
 
@@ -201,9 +194,6 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
     SDL_Rect poidRect = {0, 0, 30, 30};
 
     int ** distTab = dist_tab(tab, &n);
-
-
-
 
     font = TTF_OpenFont("arial.ttf", rayon+10);
 
@@ -267,8 +257,6 @@ void draw_path(sommet_t ** tab, int * path, int nPath) {
     SDL_Color color = {50, 150, 0, 255};
     char Tag[10];
 
-
-
     font = TTF_OpenFont("arial.ttf", R_NOEUD+10);
 
     textRect.y = 0;
@@ -328,8 +316,6 @@ void afficheFin(int score, int bestScore) {
     char Txt1[100];
     char Txt2[100];
 
-
-
     font = TTF_OpenFont("arial.ttf", 40);
 
     sprintf(Txt1, "Votre score : %d", score);
@@ -359,32 +345,59 @@ void afficheFin(int score, int bestScore) {
     TTF_CloseFont(font);
 }
 
-void afficheFinEspace(int time) {
-    SDL_Rect textRect;
-    TTF_Font* font;
-    SDL_Surface* textSurface;
-    SDL_Texture* textTexture;
-    SDL_Color color = {200, 200, 200, 255};
-    char Txt1[100];
+void affiche_fin_espace(int time, int type) {
+    if(type)
+    {
+        SDL_Rect textRect;
+        TTF_Font* font;
+        SDL_Surface* textSurface;
+        SDL_Texture* textTexture;
+        SDL_Color color = {200, 200, 200, 255};
+        char Txt1[100];
 
+        font = TTF_OpenFont("arial.ttf", 40);
 
+        sprintf(Txt1, "Vous etes mort");
 
-    font = TTF_OpenFont("arial.ttf", 40);
+        textSurface = TTF_RenderText_Solid(font, Txt1, color);
+        textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
 
-    sprintf(Txt1, "Votre temps : %d s", time);
+        SDL_FreeSurface(textSurface);
+        SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+        textRect.x = W/2-textRect.w/2;
+        textRect.y = H/2-textRect.h/2;
 
-    textSurface = TTF_RenderText_Solid(font, Txt1, color);
-    textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+        SDL_DestroyTexture(textTexture);
 
-    SDL_FreeSurface(textSurface);
-    SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
-    textRect.x = W/2-textRect.w/2;
-    textRect.y = H/2-textRect.h/2;
+        TTF_CloseFont(font);
+    }
+    else
+    {
+        SDL_Rect textRect;
+        TTF_Font* font;
+        SDL_Surface* textSurface;
+        SDL_Texture* textTexture;
+        SDL_Color color = {200, 200, 200, 255};
+        char Txt1[100];
 
-    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
-    SDL_DestroyTexture(textTexture);
+        font = TTF_OpenFont("arial.ttf", 40);
 
-    TTF_CloseFont(font);
+        sprintf(Txt1, "Votre temps : %d s", time);
+
+        textSurface = TTF_RenderText_Solid(font, Txt1, color);
+        textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+        SDL_FreeSurface(textSurface);
+        SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+        textRect.x = W/2-textRect.w/2;
+        textRect.y = H/2-textRect.h/2;
+
+        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+        SDL_DestroyTexture(textTexture);
+
+        TTF_CloseFont(font);
+    }
 }
 
 /**
@@ -427,7 +440,7 @@ SDL_Texture * create_texture(SDL_Surface * surface){
     return SDL_CreateTextureFromSurface(renderer, surface);
 }
 
-/* Partie sur l'animation de la soucoupe volante */
+//Partie sur l'animation de la soucoupe volante
 
 void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int angle, int size){
     SDL_Rect srcrect = {size*x, size*y, size, size};
