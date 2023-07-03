@@ -818,7 +818,7 @@ void boucle_jeu()
 
         make_new_links(10*5/n, tab, &n);
 
-       // int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
+        int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
 
         if(!fin)
             boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 0, NULL, 0, NULL, 1);
@@ -1045,7 +1045,7 @@ void boucle_jeu_sans_graph()
     int res;
 
     while (!fin){
-        tab = gen_tab_sommets(&n);
+        tab = gen_tab_sommets_rand(&n);
         rules = get_rule_from_file("testRule.txt" ,&n_rules);        
 
         tab_to_graph(tab, 0, n - 1);
