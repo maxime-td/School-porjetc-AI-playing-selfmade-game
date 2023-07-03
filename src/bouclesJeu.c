@@ -784,8 +784,8 @@ int position_relative(Point p1, Point p2){
  * @param p Point donné
  * @param tab Tableau des sommets
  * @param n Le nombre de sommet
- * @param depth plus depth est grand plus on va chercher des murs loins
- * @param precision plus elle est grande moins il y a de chance de loupé un mur mais la verification serra plus longue
+ * @param depth Le nombre de pats qui seront fait
+ * @param precision La taille d'un pats
  * @return position : -1 si pas de mur trouver 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
  */
 int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
