@@ -107,7 +107,6 @@ void * afficheJeu(afficheArgs * argsAff){
                 argsAff->navette.y = *(argsAff->y);
 
                 draw_time(*(argsAff->count)/100);
-                
             }
 
             else{
