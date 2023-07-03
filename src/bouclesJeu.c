@@ -836,7 +836,7 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
     int dir_noeud = position_relative(p1, p2);
     int dist = distance(p1, p2);
 
-    for (int i = 0; i < dist; i+=precisions)
+    for (int i = 0; i < dist; i+=precision)
     {
         if (isInPath(p1.x + direction[dir_noeud].x*i, p1.y + direction[dir_noeud].y*i, tab, n, PATH_SIZE-10)){
             return 1;
