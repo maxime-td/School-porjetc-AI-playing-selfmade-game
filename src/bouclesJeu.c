@@ -778,7 +778,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             }
         }
 
-        if(rand()%15000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
+        if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
 
 //      printf("direction : x = %f, y = %f\n", directionXTN, directionYTN);
         speedTN(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir);
@@ -1086,22 +1086,26 @@ void directionTN(float * directionX, float * directionY, int xTN, int yTN)
 {
     int tirage;
     tirage = (rand()%20)-10;
-    if((xTN<W/6 && *directionX<0) || (xTN>5*W/6 && *directionX>0)){*directionX= -*directionX;}
-    if((yTN<H/6 && *directionY<0) || (yTN>5*H/6 && *directionY>0)){*directionY= -*directionY;}
+    //if((xTN<W/6 && *directionX<0) || (xTN>5*W/6 && *directionX>0)){*directionX = -*directionX;}
+    //if((yTN<H/6 && *directionY<0) || (yTN>5*H/6 && *directionY>0)){*directionY = -*directionY;}
     if(*directionY<0)
     {
             tirage = (rand()%20-4);
+            if(yTN<H/4){tirage *= 2;}
     }
     else if(*directionY>0){
-            tirage = (rand()%20)-15;
+            tirage = (rand()%20)-16;
+            if(yTN>3*H/4){tirage *= 2;}
     }    
     *directionY += ((float)tirage)/200;
     tirage = (rand()%20)-10;
     if(*directionX<0){
-            tirage = (rand()%20-3);
+            tirage = (rand()%20-4);
+            if(xTN<W/4){tirage *= 2;}
     }    
     else if(*directionX>0){
             tirage = (rand()%20)-16;
+            if(xTN>3*W/4){tirage *= 2;}
     }
     *directionX += ((float)tirage)/200;
 }
