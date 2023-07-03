@@ -30,11 +30,10 @@ void affiche_Chem(int * tab, sommet_t ** tabSom, int n)
  * @param tab Le tableau de sommets représentant le graphe.
  * @param n Le nombre de sommets dans le tableau.
 */
-void init(sommet_t ** tab, int n) {
-    int y = 0, x;
-    int width, height, w_window = W, h_window = H;  
+void init() {
+    int w_window = W, h_window = H;
 
-    SDL_DisplayMode dm;
+    SDL_DisplayMode dm;  
 
     //Initialisation de la SDL  + gestion de l'échec possible
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -44,26 +43,28 @@ void init(sommet_t ** tab, int n) {
         exit(EXIT_FAILURE);
     }
 
-    //Récupère la taille de l'ecran
+    if (TTF_Init()!= 0){
+        SDL_Log("Error : SDL initialisation - %s\n",
+                SDL_GetError()); // l'initialisation de la TTF a échoué
+        exit(EXIT_FAILURE);
+    }
+
+
+
     if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
     {
         SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
-        return;
+        exit(EXIT_FAILURE);
     }
-
-    width = dm.w;
-    height = dm.h;
 
     //Création de la fenêtre de gauche
     window = SDL_CreateWindow(
         "The travelling Spaceman", //Nom de la fenètre
-        width/2-w_window/2, height/2-(h_window+100)/2, //Coordonnées de la fenètre
+        dm.w/2-w_window/2, 0, //Coordonnées de la fenètre
         w_window, h_window, //Dimensions de la fenètre
         SDL_WINDOW_RESIZABLE); //Paramètre de la fenètre
 
     renderer = SDL_CreateRenderer(window, -1, 0);
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderClear(renderer);
 
     if (window == NULL)
     {
@@ -72,12 +73,6 @@ void init(sommet_t ** tab, int n) {
         SDL_Quit();              // On referme la SDL
         exit(EXIT_FAILURE);
     }
-
-    SDL_GetWindowPosition(window, &x, &y);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    draw_graph(renderer, tab, n, 1);
-    
-    SDL_RenderPresent(renderer);
 }
 
 /**
@@ -102,12 +97,7 @@ void draw_int(int n) {
     char Val[10];
     
 
-    if (TTF_Init()!= 0)
-    {
-        SDL_Log("Error : SDL initialisation - %s\n",
-                SDL_GetError()); // l'initialisation de la TTF a échoué
-        exit(EXIT_FAILURE);
-    }
+
 
     font = TTF_OpenFont("arial.ttf", 60);
 
@@ -126,7 +116,6 @@ void draw_int(int n) {
     
 
     TTF_CloseFont(font);
-    TTF_Quit();
 }
 
 void draw_time(int n) {
@@ -137,16 +126,6 @@ void draw_time(int n) {
     SDL_Color color = {200, 200, 200, 255};
     char Val[10];
     SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
-
-
-    if (TTF_Init()!= 0)
-    {
-        SDL_Log("Error : SDL initialisation - %s\n",
-                SDL_GetError()); // l'initialisation de la TTF a échoué
-        exit(EXIT_FAILURE);
-    }
-
-    
 
     font = TTF_OpenFont("arial.ttf", 60);
 
@@ -166,7 +145,6 @@ void draw_time(int n) {
     
 
     TTF_CloseFont(font);
-    TTF_Quit();
 }
 
 /**
@@ -226,12 +204,7 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
     int ** distTab = dist_tab(tab, &n);
 
 
-    if (TTF_Init()!= 0)
-    {
-        SDL_Log("Error : SDL initialisation - %s\n",
-                SDL_GetError()); // l'initialisation de la TTF a échoué
-        exit(EXIT_FAILURE);
-    }
+
 
     font = TTF_OpenFont("arial.ttf", rayon+10);
 
@@ -279,7 +252,6 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
 
     free2DTab((void**)distTab, n);
     TTF_CloseFont(font);
-    TTF_Quit();
 }
 
 /**
@@ -296,12 +268,7 @@ void draw_path(sommet_t ** tab, int * path, int nPath) {
     SDL_Color color = {50, 150, 0, 255};
     char Tag[10];
 
-    if (TTF_Init()!= 0)
-    {
-        SDL_Log("Error : SDL initialisation - %s\n",
-                SDL_GetError()); // l'initialisation de la TTF a échoué
-        exit(EXIT_FAILURE);
-    }
+
 
     font = TTF_OpenFont("arial.ttf", R_NOEUD+10);
 
@@ -327,7 +294,6 @@ void draw_path(sommet_t ** tab, int * path, int nPath) {
     }
 
     TTF_CloseFont(font);
-    TTF_Quit();
 }
 
 /**
@@ -363,12 +329,7 @@ void afficheFin(int score, int bestScore) {
     char Txt1[100];
     char Txt2[100];
 
-    if (TTF_Init()!= 0)
-    {
-        SDL_Log("Error : SDL initialisation - %s\n",
-                SDL_GetError()); // l'initialisation de la TTF a échoué
-        exit(EXIT_FAILURE);
-    }
+
 
     font = TTF_OpenFont("arial.ttf", 40);
 
@@ -397,7 +358,6 @@ void afficheFin(int score, int bestScore) {
     SDL_DestroyTexture(textTexture);
     
     TTF_CloseFont(font);
-    TTF_Quit();
 }
 
 void afficheFinEspace(int time) {
@@ -408,12 +368,7 @@ void afficheFinEspace(int time) {
     SDL_Color color = {200, 200, 200, 255};
     char Txt1[100];
 
-    if (TTF_Init()!= 0)
-    {
-        SDL_Log("Error : SDL initialisation - %s\n",
-                SDL_GetError()); // l'initialisation de la TTF a échoué
-        exit(EXIT_FAILURE);
-    }
+
 
     font = TTF_OpenFont("arial.ttf", 40);
 
@@ -431,7 +386,6 @@ void afficheFinEspace(int time) {
     SDL_DestroyTexture(textTexture);
 
     TTF_CloseFont(font);
-    TTF_Quit();
 }
 
 /**
@@ -447,6 +401,7 @@ void render() {
 void closeSDL() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    TTF_Quit();
     SDL_Quit();
 }
 

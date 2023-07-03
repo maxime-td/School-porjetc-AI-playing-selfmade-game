@@ -83,4 +83,6 @@ void add_feromone(int* path, int ** probaMat, int n, int sizePath);
  */
 void remove_feromone(int ** probaMat, int n, int facteur);
 
+int ** getProbaMat(int ** matDist, int n);
+
 #endif /* FOURMI_H_ */
