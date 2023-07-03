@@ -394,6 +394,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     double speedY = 0; //vitesse y du joueur
     double x = tab[chemin[0]]->x - 16; //position x du joueur
     double y = tab[chemin[0]]->y - 16; //position y du joueur
+    float xTN = W/2, yTN = H/2;
+    float directionXTN = 0, directionYTN = 0; 
     float directionX = 0; //direction x du joueur
     float directionY = 0; //direction y du joueur
     int planeteVisite[n]; //tableau de booleen representant les planetes déjà visité 1 si oui 0 sinon
@@ -845,6 +847,16 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 seconde = argsT.time/100;
             }
         }
+
+        if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
+
+//      printf("direction : x = %f, y = %f\n", directionXTN, directionYTN);
+        speedTN(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir);
+
+        trouNoir.x = (int)xTN;
+        trouNoir.y = (int)yTN;
+
+        affArgs.affTrouNoir = trouNoir;
     }
     
     program_on = SDL_FALSE;
@@ -1156,3 +1168,117 @@ void boucle_jeu_sans_graph()
 }
 
 
+void directionTN(float * directionX, float * directionY, int xTN, int yTN)
+{
+    int tirage;
+    tirage = (rand()%20)-10;
+    //if((xTN<W/6 && *directionX<0) || (xTN>5*W/6 && *directionX>0)){*directionX = -*directionX;}
+    //if((yTN<H/6 && *directionY<0) || (yTN>5*H/6 && *directionY>0)){*directionY = -*directionY;}
+    if(*directionY<0)
+    {
+            tirage = (rand()%20-4);
+            if(yTN<H/4){tirage *= 2;}
+    }
+    else if(*directionY>0){
+            tirage = (rand()%20)-16;
+            if(yTN>3*H/4){tirage *= 2;}
+    }    
+    *directionY += ((float)tirage)/200;
+    tirage = (rand()%20)-10;
+    if(*directionX<0){
+            tirage = (rand()%20-4);
+            if(xTN<W/4){tirage *= 2;}
+    }    
+    else if(*directionX>0){
+            tirage = (rand()%20)-16;
+            if(xTN>3*W/4){tirage *= 2;}
+    }
+    *directionX += ((float)tirage)/200;
+}
+
+
+void speedTN(float directionXTN, float directionYTN, float * speedXTN, float * speedYTN, float * xTN, float * yTN, SDL_Rect * trouNoir)
+{
+
+
+    *speedXTN += directionXTN * ACCELERATION_TROU;
+    *speedYTN += directionYTN * ACCELERATION_TROU;
+    //printf("AAAAAAAAAAAAAA        speed : x = %.2f,  y = %.2f\n", *speedXTN, *speedYTN);
+
+    //SDL_Delay(100);
+
+
+    if (directionXTN == 0 && speedXTN != 0)
+    {
+        if (*speedXTN < 0)
+        {
+            *speedXTN += ACCELERATION_TROU * 0.25;
+        }
+        else
+        {
+           *speedXTN -= ACCELERATION_TROU * 0.25;
+        }
+
+        if (*speedXTN < ACCELERATION_TROU && *speedXTN > -ACCELERATION_TROU)
+        {
+            *speedXTN = 0;
+        }
+    }
+
+    if (directionYTN == 0 && *speedYTN != 0)
+    {
+        if (*speedYTN < 0)
+        {
+            *speedYTN += ACCELERATION_TROU * 0.25;
+        }
+        else
+        {
+            *speedYTN -= ACCELERATION_TROU * 0.25;
+        }
+        if (*speedYTN < ACCELERATION_TROU && *speedYTN > -ACCELERATION_TROU)
+        {
+            *speedYTN = 0;
+        }
+    }
+
+    if (*speedXTN < -MAX_SPEED / 2)
+    {
+        *speedXTN = -MAX_SPEED / 2;
+    }
+    else if (*speedXTN > MAX_SPEED / 2)
+    {
+        *speedXTN = MAX_SPEED / 2;
+    }
+
+    if (*speedYTN < -MAX_SPEED / 2)
+    {
+        *speedYTN = -MAX_SPEED / 2;
+    }
+    else if (*speedYTN > MAX_SPEED / 2)
+    {
+        *speedYTN = MAX_SPEED / 2;
+    }
+
+    *xTN += *speedXTN;
+    *yTN += *speedYTN;
+
+    if (*xTN < 0){
+        *xTN = 0;
+        *speedXTN = 0;
+        *speedYTN = 0;
+    }else if (*xTN > W-trouNoir->w){
+        *xTN = W-trouNoir->w;
+        *speedXTN = 0;
+        *speedYTN = 0;
+    }
+    if (*yTN < 0){
+        *yTN = 0;
+        *speedXTN = 0;
+        *speedYTN = 0;
+    }else if (*yTN > H-trouNoir->h){
+        *yTN = H-trouNoir->h;
+        *speedXTN = 0;
+        *speedYTN = 0;
+    }
+
+}
