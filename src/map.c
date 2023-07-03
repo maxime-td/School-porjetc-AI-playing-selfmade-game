@@ -6,7 +6,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-asteroid_t *ast_Partout(/*SDL_Renderer *render,*/ sommet_t **tab, int n, int *nAst)
+asteroid_t *ast_Partout(sommet_t **tab, int n, int *nAst)
 {
     int frame_size = 48;
 
@@ -31,7 +31,7 @@ asteroid_t *ast_Partout(/*SDL_Renderer *render,*/ sommet_t **tab, int n, int *nA
             srcrect.x = alea;
             angle = rand() % 360;
 
-            if (isInPath_carres(dstrect.x, dstrect.y, tab, n, PATH_SIZE) == 0)
+            if (isInPath_Line(dstrect.x, dstrect.y, tab, n, PATH_SIZE) == 0)
             {
                 tabAst[a].x = dstrect.x;
                 tabAst[a].y = dstrect.y;
@@ -132,16 +132,43 @@ int isInPath_carres(int pX, int pY, sommet_t **tabSom, int n, int largeur)
     return res;
 }
 
+void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double* x_proj, double* y_proj) {
+    // Calcul des coordonnées du vecteur de la droite
+    int dx = x2 - x1;
+    int dy = y2 - y1;
 
-/*
-int isInPath_line(int pX, int pY, sommet_t **tabSom, int n, int largeur)
+    // Calcul des coordonnées du vecteur du point à projeter par rapport à un des points de la droite
+    int dx_point = x - x1;
+    int dy_point = y - y1;
+
+    // Calcul du produit scalaire entre le vecteur de la droite et le vecteur du point à projeter
+    int dot_product = dx * dx_point + dy * dy_point;
+
+    // Calcul des coordonnées du projeté orthogonal en utilisant le produit scalaire
+    *x_proj = x1 + (dot_product * dx) / (dx * dx + dy * dy);
+    *y_proj = y1 + (dot_product * dy) / (dx * dx + dy * dy);
+}
+
+int max(int a, int b)
+{
+    if(a<b){return b;}
+    return a;
+}
+int min(int a, int b)
+{
+    if(a>b){return b;}
+    return a;
+}
+int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, int largeur)
 {
     int res = 0;
-    int un_seul=0;
+    int un_seul = 0;
+    int dist = 0;
     Point tmp;
     Point P = {pX, pY};
-    float a1, a2, a3, a4;
-    int b1, b2, b3, b4;
+    double x_proj, y_proj;
+    //float a1, a2, a3, a4;
+    //int b1, b2, b3, b4;
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
@@ -150,32 +177,12 @@ int isInPath_line(int pX, int pY, sommet_t **tabSom, int n, int largeur)
             {
                 Point p1 = {tabSom[i]->x, tabSom[i]->y};
                 Point p2 = {tabSom[j]->x, tabSom[j]->y};
-                Point Angle1 = {p1.x - largeur, p1.y};
-                Point Angle2 = {p1.x, p1.y + largeur};
-                Point Angle3 = {p2.x + largeur, p1.y};
-                Point Angle4 = {p2.x, p1.y - largeur};
+                projetOrthogonal(pX, pY, p1.x, p1.y, p2.x, p2.y, &x_proj, &y_proj);
 
-                calculateLineCoefficients(Angle1.x, Angle1.y, Angle2.x, Angle2.y, &a1, &b1);
-                calculateLineCoefficients(Angle2.x, Angle2.y, Angle3.x, Angle3.y, &a2, &b2);
-                calculateLineCoefficients(Angle1.x, Angle1.y, Angle4.x, Angle4.y, &a3, &b3);
-                calculateLineCoefficients(Angle3.x, Angle3.y, Angle4.x, Angle4.y, &a4, &b4);
+                Point projete = {x_proj, y_proj};
 
-                
-                //if(un_seul==0)
-                //{
-                //printf("BBBB\n");
-                //draw_Line(Angle1, Angle2);
-                //draw_Line(Angle1, Angle4);
-                //draw_Line(Angle3, Angle4);
-                //draw_Line(Angle2, Angle3);
-                //un_seul = 1;
-                //}
-
-
-                if (fonction_affine(a1, pX, b1) > pY && fonction_affine(a2, pX, b2) < pY && fonction_affine(a3, pX, b3) > pY && fonction_affine(a4, pX, b4) > pY)
-                {
-                    res += 1;
-                }
+                dist = distance(projete, P);
+                if(dist<largeur && x_proj>min(p1.x, p2.x) && x_proj<max(p1.x, p2.x)){res++;}
             }
         }
     }
@@ -190,7 +197,7 @@ int isInPath_line(int pX, int pY, sommet_t **tabSom, int n, int largeur)
         }
     }
     return res;
-}*/
+}
 
 int isPointInsideRectangle(Point p, Point rect[4])
 {
@@ -215,6 +222,6 @@ void calculateLineCoefficients(int x1, int y1, int x2, int y2, float *a, int *b)
         y2 = tempY;
     }
 
-    *a = (float)(y2 - y1) / (x2 - x1);
+    *a = (float)(y1 - y2) / (x2 - x1);
     *b = y1 - (*a) * x1;
 }
