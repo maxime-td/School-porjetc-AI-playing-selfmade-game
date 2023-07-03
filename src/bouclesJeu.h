@@ -91,7 +91,7 @@ int * boucle_jeu_graphe(sommet_t** tab, int n, int * nb_noeuds_chemin, int *fin)
  * @param n Le nombre de sommets
  * @param chemin Tableau du chemin choisi par le joueur
 */
-void boucle_jeu_espace(sommet_t** tab, int n, int * chemin, int n_chemin, int* close);
+void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche);
 
 /**
  * @brief Exécute la boucle de jeu principal
@@ -130,5 +130,16 @@ int position_relative(Point p1, Point p2);
  * @return position : -1 si pas de mur trouver 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
  */
 int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision);
+
+/**
+ * @brief Cherche si il y a un mur entre les deux points
+ * @param p1 Point 1
+ * @param p2 Point 2
+ * @param tab Tableau des sommet
+ * @param n Le nombre de sommet
+ * @param precision plus elle est grande moins il y a de chance de loupé un mur mais la verification serra plus longue
+ * @return 0 si pas de mur 1 sinon
+ */
+int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision);
 
 #endif

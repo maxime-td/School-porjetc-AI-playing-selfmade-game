@@ -342,7 +342,7 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
  * @param n Le nombre de sommets
  * @param chemin Tableau du chemin choisi par le joueur
  */
-void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close)
+void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche)
 {
     float speedX = 0;
     float speedY = 0;
@@ -368,6 +368,15 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
     Point p1;
     Point p2;
+
+    Point posNav;
+    Point posPlan;
+
+    int closestP;
+    int posClosestP;
+    int posClosestW;
+    int isWall;
+    int selectRule;
 
     int keyPressZ = 0;
     int keyPressS = 0;
@@ -423,40 +432,42 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     SDL_Texture *textureEF = create_texture(imageEF);
     IMG_Quit();
 
-    afficheArgs affArgs;
-    affArgs.asteroid = asteroid;
-    affArgs.count = &argsT.time;
-    affArgs.fin   = &fin;
-    affArgs.program_on = &program_on;
-    affArgs.frame = frame;
-    affArgs.frameFlag = frameFlag;
-    affArgs.frameEF = frameEF;
-    affArgs.n = n;
-    affArgs.n_sous_graphe = n_sous_graphe;
-    affArgs.planeteVisite = planeteVisite;
-    affArgs.sous_graphe = sous_graphe;
-    affArgs.tab = tab;
-    affArgs.texture = texture;
-    affArgs.textureBg = textureBg;
-    affArgs.textureE1 = textureE1;
-    affArgs.textureE2 = textureE2;
-    affArgs.textureEF = textureEF;
-    affArgs.textureF = textureF;
-    affArgs.textureP = textureP;
-    affArgs.chemin = chemin;
-    affArgs.co = co;
-    affArgs.etoileFilante = etoileFilante;
-    affArgs.planete = planete;
-    affArgs.etoile = etoile;
-    affArgs.background = background;
-    affArgs.navette = navette;
-    affArgs.flag = flag;
-    affArgs.n_ast = n_ast;
-    affArgs.x = &x;
-    affArgs.y = &y;
+    if(affiche){
+        afficheArgs affArgs;
+        affArgs.asteroid = asteroid;
+        affArgs.count = &argsT.time;
+        affArgs.fin   = &fin;
+        affArgs.program_on = &program_on;
+        affArgs.frame = frame;
+        affArgs.frameFlag = frameFlag;
+        affArgs.frameEF = frameEF;
+        affArgs.n = n;
+        affArgs.n_sous_graphe = n_sous_graphe;
+        affArgs.planeteVisite = planeteVisite;
+        affArgs.sous_graphe = sous_graphe;
+        affArgs.tab = tab;
+        affArgs.texture = texture;
+        affArgs.textureBg = textureBg;
+        affArgs.textureE1 = textureE1;
+        affArgs.textureE2 = textureE2;
+        affArgs.textureEF = textureEF;
+        affArgs.textureF = textureF;
+        affArgs.textureP = textureP;
+        affArgs.chemin = chemin;
+        affArgs.co = co;
+        affArgs.etoileFilante = etoileFilante;
+        affArgs.planete = planete;
+        affArgs.etoile = etoile;
+        affArgs.background = background;
+        affArgs.navette = navette;
+        affArgs.flag = flag;
+        affArgs.n_ast = n_ast;
+        affArgs.x = &x;
+        affArgs.y = &y;
 
-    
-    pthread_create(&thread2, NULL, (void *(*)(void *))afficheJeu, &affArgs);
+        
+        pthread_create(&thread2, NULL, (void *(*)(void *))afficheJeu, &affArgs);
+    }
 
     for (int i = 0; i < n_sous_graphe; i++)
     {
@@ -486,64 +497,102 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                     break;
 
                 case SDL_KEYDOWN:
+                    if(!ia){
+                        switch (event.key.keysym.sym){
+                            case SDLK_z:
+                                keyPressZ = 1;
+                                break;
 
-                    switch (event.key.keysym.sym)
-                    {
-                    case SDLK_z:
-                        keyPressZ = 1;
-                        break;
+                            case SDLK_s:
+                                keyPressS = 1;
+                                break;
 
-                    case SDLK_s:
-                        keyPressS = 1;
-                        break;
+                            case SDLK_q:
+                                keyPressQ = 1;
+                                break;
 
-                    case SDLK_q:
-                        keyPressQ = 1;
-                        break;
+                            case SDLK_d:
+                                keyPressD = 1;
+                                break;
 
-                    case SDLK_d:
-                        keyPressD = 1;
-                        break;
+                            case SDLK_RETURN:
+                                if (fin)
+                                    program_on = SDL_FALSE;
+                                break;
 
-                    case SDLK_RETURN:
-                        if (fin)
-                            program_on = SDL_FALSE;
-                        break;
-
-                    default:
-                        break;
+                            default:
+                                break;
+                        }
                     }
                     break;
 
                 case SDL_KEYUP:
+                    if(!ia){
+                        switch (event.key.keysym.sym)
+                        {
+                        case SDLK_z:
+                            keyPressZ = 0;
+                            break;
 
-                    switch (event.key.keysym.sym)
-                    {
-                    case SDLK_z:
-                        keyPressZ = 0;
-                        break;
+                        case SDLK_s:
+                            keyPressS = 0;
+                            break;
 
-                    case SDLK_s:
-                        keyPressS = 0;
-                        break;
+                        case SDLK_q:
+                            keyPressQ = 0;
+                            break;
 
-                    case SDLK_q:
-                        keyPressQ = 0;
-                        break;
+                        case SDLK_d:
+                            keyPressD = 0;
+                            break;
 
-                    case SDLK_d:
-                        keyPressD = 0;
-                        break;
-
-                    default:
-                        break;
+                        default:
+                            break;
+                        }
                     }
-
                 default:
                     break;
-                }
-                break;
+            }
+            break;
         }
+        if(ia){
+
+            posNav.x = x;
+            posNav.y = y;
+
+            closestP    = closest_point(posNav, tab, n, planeteVisite);
+
+            posPlan.x   = tab[closestP]->x;
+            posPlan.y   = tab[closestP]->y;
+            posClosestP = position_relative(posNav, posPlan);
+
+            posClosestW = mur_proche(posNav, tab, n, 2, 4);
+            //printf("mur : %d\n", posClosestW);
+
+            isWall = is_mur_in_between(posNav, posPlan, sous_graphe, n, 4);
+
+            selectRule = -1;
+
+            for (int i = 0; i < n_ia && selectRule == -1; i++){
+                if (tabIA[i][0] == -1 || tabIA[i][0] == posClosestP){
+                    if (tabIA[i][1] == -1 || tabIA[i][1] == posClosestW){
+                        if (tabIA[i][2] == -1 || tabIA[i][2] == isWall){
+                            selectRule = i;
+                            printf("%d\n", i);
+                        }
+                    }
+                } 
+            }
+            //printf("rule : %d\n", selectRule);
+            //affich_tab(tabIA[selectRule], N_RULE+2);
+
+            keyPressZ = (tabIA[selectRule][3] == 1);
+            keyPressS = (tabIA[selectRule][3] == -1);
+            keyPressD = (tabIA[selectRule][4] == -1);
+            keyPressQ = (tabIA[selectRule][4] == 1);
+            
+        }
+        
 
         directionX = 0;
         directionY = 0;
@@ -689,9 +738,14 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
         }
     }
 
+    *result = seconde;
+
     free2DTab((void**)sous_graphe, n_sous_graphe);
     pthread_join(thread,  NULL);
-    pthread_join(thread2, NULL);
+    if (affiche){
+        pthread_join(thread2, NULL);
+    }
+    
     free(asteroid);
 }
 
@@ -718,7 +772,7 @@ void boucle_jeu()
         int *chemin = boucle_jeu_graphe(tab, n, &n_chemin, &fin);
 
         if(!fin)
-            boucle_jeu_espace(tab, n, chemin, n_chemin, &fin);
+            boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 0, NULL, 0, NULL, 1);
 
         if(chemin != NULL)
             free(chemin);
@@ -900,9 +954,39 @@ void boucle_jeu_sans_graph()
     int fin=0;
     int ** matDist;
     int *chemin;
+    int ** rules;
+    int n_rules = 10;
 
     while (!fin){
         tab = gen_tab_sommets(&n);
+        rules = generate_tab_rules(n_rules);
+
+        for (int i = 0; i < 4; i++){
+            for (int j = 0; j < 4; j++){
+                rules[i][j] = -1;
+            }
+        }
+
+        rules[0][1] = 0;
+        rules[0][3] = -1;
+        rules[0][4] = -1;
+
+        rules[1][1] = 1;
+        rules[1][3] = -1;
+        rules[1][4] = 1;
+
+        rules[2][1] = 2;
+        rules[2][3] = 1;
+        rules[2][4] = -1;
+
+        rules[3][1] = 3;
+        rules[3][3] = 1;
+        rules[3][4] = 1;
+
+        
+
+
+        //affich_tab_2D(rules, n_rules);
 
         tab_to_graph(tab, 0, n - 1);
 
@@ -911,13 +995,14 @@ void boucle_jeu_sans_graph()
         matDist = dist_tab(tab, &n);
         chemin = colonni_fourmi(matDist, n, rand()%n, &n_chemin);
 
-        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin);
+        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 1, rules, n_rules, NULL, 1);
 
         if(chemin != NULL)
             free(chemin);
 
         free2DTab((void **)matDist, n);
         free2DTab((void **)tab, n);
+        free2DTab((void **)rules, n);
     }
     
     closeSDL(); // free de tout les elements de SDL
