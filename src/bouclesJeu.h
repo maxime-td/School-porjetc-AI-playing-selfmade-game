@@ -16,6 +16,7 @@
 #define MAX_SPEED 0.003
 #define ACCELERATION 0.000000025
 #define N_RULE 3
+#define TIME_MAX_IA 10
 
 // Structure pour les arguments de multi_start_fourmi
 typedef struct coordonne_s{
@@ -144,5 +145,14 @@ int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision);
  * @return 0 si pas de mur 1 sinon
  */
 int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision);
+
+/**
+ * @brief Calcul le score de l'ia
+ * @param seconde Temps que l'ia à mit pour finir
+ * @param nbPlanete Le nombre de planete que l'ia a visité 
+ * @param distDep La distance au point de depart
+ * @return Le score trouvé
+ */
+int calcul_score(int seconde, int nbPlanete, int distDep);
 
 #endif
