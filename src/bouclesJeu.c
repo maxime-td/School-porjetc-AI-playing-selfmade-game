@@ -674,7 +674,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
         directionXTN = 0;
         directionYTN = 0;
-        directionTN(&directionXTN, &directionYTN);
+        if(rand()%5 == 0)directionTN(&directionXTN, &directionYTN);
  
         if (argsT.time%2 == 0){
             speedX += directionX * ACCELERATION;
@@ -781,13 +781,12 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 seconde = argsT.time/100;
             }
         }
-        printf("AAAAAAAAAAAA     xTN : %f  --  yTN : %f\n", xTN, yTN);
         speedTN(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir);
-        printf("BBBBBBBBBBBB     xTN : %f  --  yTN : %f\n", xTN, yTN);
 
         trouNoir.x = (int)xTN;
         trouNoir.y = (int)yTN;
-        printf("CCCCCCCCCCCCC     trouNoir.x : %d  --  trouNoir.y : %d\n", trouNoir.x, trouNoir.y);
+
+        affArgs.trouNoir = trouNoir;
     }
     
     program_on = SDL_FALSE;
@@ -1090,7 +1089,7 @@ void directionTN(float * directionX, float * directionY)
         switch(tirage)
         {
             case 0:
-                *directionY += -0.5;
+                *directionY -= 0.5;
                 break;
         
             case 1:
@@ -1102,7 +1101,7 @@ void directionTN(float * directionX, float * directionY)
                 break;
 
             case 3:        
-                *directionX += -0.5;
+                *directionX -= 0.5;
                 break;
 
             case 4:
@@ -1129,10 +1128,12 @@ void directionTN(float * directionX, float * directionY)
 void speedTN(float directionXTN, float directionYTN, float * speedXTN, float * speedYTN, float * xTN, float * yTN, SDL_Rect * trouNoir)
 {
 
+
     *speedXTN += directionXTN * ACCELERATION_TROU;
     *speedYTN += directionYTN * ACCELERATION_TROU;
+    //printf("AAAAAAAAAAAAAA        speed : x = %.2f,  y = %.2f\n", *speedXTN, *speedYTN);
 
-                                printf("SPEED : x = %.2f,  y = %.2f\n", *speedXTN, *speedYTN);
+    //SDL_Delay(100);
 
 
     if (directionXTN == 0 && speedXTN != 0)
