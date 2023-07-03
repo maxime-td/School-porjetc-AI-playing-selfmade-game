@@ -134,10 +134,11 @@ int isInPath_carres(int pX, int pY, sommet_t **tabSom, int n, int largeur)
 
 int isInPath_line(int pX, int pY, sommet_t **tabSom, int n, int largeur)
 {
-    res = 0;
+    int res = 0;
+    Point tmp;
+    Point P = {pX, pY};
     float a1,a2,a3,a4;
     int b1,b2,b3,b4;
-    int dist;
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
@@ -146,15 +147,15 @@ int isInPath_line(int pX, int pY, sommet_t **tabSom, int n, int largeur)
             {
                 Point p1 = {tabSom[i]->x, tabSom[i]->y};
                 Point p2 = {tabSom[j]->x, tabSom[j]->y};
-                Point Angle1 = {p1->x-largeur, p1->y};
-                Point Angle2 = {p1->x, p1->y+largeur};
-                Point Angle3 = {p2->x+largeur, p1->y};
-                Point Angle4 = {p2->x, p1->y-largeur};
+                Point Angle1 = {p1.x-largeur, p1.y};
+                Point Angle2 = {p1.x, p1.y+largeur};
+                Point Angle3 = {p2.x+largeur, p1.y};
+                Point Angle4 = {p2.x, p1.y-largeur};
 
-                calculateLineCoefficients(Angle1->x, Angle1->y, Angle2->x, Angle2->y, &a1, &b1);
-                calculateLineCoefficients(Angle2->x, Angle2->y, Angle3->x, Angle3->y, &a2, &b2);
-                calculateLineCoefficients(Angle1->x, Angle1->y, Angle4->x, Angle4->y, &a3, &b3);
-                calculateLineCoefficients(Angle3->x, Angle3->y, Angle4->x, Angle4->y, &a4, &b4);
+                calculateLineCoefficients(Angle1.x, Angle1.y, Angle2.x, Angle2.y, &a1, &b1);
+                calculateLineCoefficients(Angle2.x, Angle2.y, Angle3.x, Angle3.y, &a2, &b2);
+                calculateLineCoefficients(Angle1.x, Angle1.y, Angle4.x, Angle4.y, &a3, &b3);
+                calculateLineCoefficients(Angle3.x, Angle3.y, Angle4.x, Angle4.y, &a4, &b4);
 
                 if(fonction_affine(a1, pX, b1)<pY && fonction_affine(a2, pX, b2)<pY && fonction_affine(a3, pX, b3)>pY && fonction_affine(a4, pX, b4)>pY)
                 {
@@ -173,6 +174,7 @@ int isInPath_line(int pX, int pY, sommet_t **tabSom, int n, int largeur)
             res += 1;
         }
     }
+    return res;
 }
 
 int isPointInsideRectangle(Point p, Point rect[4])
@@ -185,7 +187,7 @@ int isPointInsideRectangle(Point p, Point rect[4])
     return c;
 }
 
-void calculateLineCoefficients(int x1, int y1, int x2, int y2, float *a, float *b)
+void calculateLineCoefficients(int x1, int y1, int x2, int y2, float *a, int *b)
 {
     if (x1 > x2)
     {

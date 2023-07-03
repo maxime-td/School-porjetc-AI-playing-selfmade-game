@@ -27,7 +27,10 @@ asteroid_t* ast_Partout(sommet_t ** tab, int n, int *nAst);
 
 float fonction_affine(float a, int x, float b);
 
-int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur);
+int isInPath_carres(int pX, int pY, sommet_t **tabSom, int n, int largeur);
+
+int isInPath_line(int pX, int pY, sommet_t **tabSom, int n, int largeur);
+
 
 
 /**
@@ -45,7 +48,7 @@ int coord_sur_chemin(int pX, int pY, sommet_t **tabSom, int n, int frame_size, i
 int isInPath(int pX, int pY, sommet_t **tabSom, int n, int largeur);
 
 
-void calculateLineCoefficients(int x1, int y1, int x2, int y2, float *a, float *b);
+void calculateLineCoefficients(int x1, int y1, int x2, int y2, float *a, int *b);
 
 float distance(Point p1, Point p2);
 
