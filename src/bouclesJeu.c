@@ -590,7 +590,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
                 isWall = is_mur_in_between(posNav, posPlan, sous_graphe, n, 1);
 
-                printf("%d, %d, %d\n", posClosestP, isWall, posClosestW);
+                //printf("%d, %d, %d\n", posClosestP, isWall, posClosestW);
 
                 selectRule = -1;
 
@@ -757,12 +757,11 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             }
 
             //Partie vérif trou noir
-            joueur.x = x+navette.w/2;
-            joueur.y = y+navette.y/2;
-            pTN.x = trouNoir.x+trouNoir.w/2;
-            pTN.y = trouNoir.y+trouNoir.h/2;
-            if((int)distance(joueur, pTN) <= (rayonTN))
-            {
+            joueur.x = x+16;
+            joueur.y = y+16;
+            pTN.x = trouNoir.x+rayonTN/4+25;
+            pTN.y = trouNoir.y+rayonTN/4+25;
+            if(distance(joueur, pTN)<rayonTN){
                 affArgs.type_fin = 1;
                 fin = 1;
             }
