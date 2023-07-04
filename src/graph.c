@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include "graph.h"
+#include "affiche.h"
 
 /**
  * Libère la mémoire allouée pour un tableau à deux dimensions.

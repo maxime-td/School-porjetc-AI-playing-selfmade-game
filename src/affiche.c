@@ -13,6 +13,8 @@
 
 SDL_Renderer* renderer;
 SDL_Window* window = NULL;
+SDL_DisplayMode dm;
+
 
 /**
  * @brief affiche un grph qui sert à faire le debugage de certaine fonction
@@ -32,10 +34,6 @@ void affiche_Chem(int * tab, sommet_t ** tabSom, int n) {
  * @brief Initialise l'affichage SDL
 */
 void init() {
-    int w_window = W, h_window = H;
-
-    SDL_DisplayMode dm;  
-
     //Initialisation de la SDL  + gestion de l'échec possible
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         SDL_Log("Error : SDL initialisation - %s\n",
@@ -58,8 +56,8 @@ void init() {
     //Création de la fenêtre de gauche
     window = SDL_CreateWindow(
         "The travelling Spaceman", //Nom de la fenètre
-        dm.w/2-w_window/2, 0, //Coordonnées de la fenètre
-        w_window, h_window, //Dimensions de la fenètre
+        dm.w/2-W/2, 0, //Coordonnées de la fenètre
+        W, H, //Dimensions de la fenètre
         SDL_WINDOW_RESIZABLE); //Paramètre de la fenètre
 
     renderer = SDL_CreateRenderer(window, -1, 0);
@@ -71,6 +69,15 @@ void init() {
         exit(EXIT_FAILURE);
     }
 }
+
+int get_w_window(){
+    return dm.w;
+}
+
+int get_h_window(){
+    return dm.h;
+}
+
 
 /**
  * @brief Clear le fond en blanc
