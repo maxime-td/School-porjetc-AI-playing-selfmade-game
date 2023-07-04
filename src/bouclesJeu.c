@@ -797,7 +797,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
         if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
 
-//      printf("direction : x = %f, y = %f\n", directionXTN, directionYTN);
         speedTN(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir);
 
         trouNoir.x = (int)xTN;
