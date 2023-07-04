@@ -15,158 +15,8 @@
 #include "OptiFloyd_Warshall.h"
 #include "bouclesJeu.h"
 #include "map.h"
+#include "threads.h"
 
-/**
- * @brief fonction de lancement de thread pour l'algorithme des fourmis
- * @param args Une structure contenant tout les argument a donner a multi_start_fourmi
-*/
-void *thread_fourmi(FourmiArgs *args)
-{
-    args->result = multi_start_fourmi(args->matDist, args->n);
-    return NULL;
-}
-
-
-/**
- * @brief fonction de lancement de thread pour l'algorithme des floyd
- * @param args Une structure contenant tout les argument a donner a multi_Start_Floyd_Warshall
-*/
-void *thread_floyd(FloydWarshallArgs *args)
-{
-    args->result = multi_Start_Floyd_Warshall(args->tabWarshall, args->tabDist, args->n);
-    return NULL;
-}
-
-/**
- * @brief fonction de lancement de thread pour le timer du jeu
- * @param args Une structure contenant tout les argument necessaire au timer et à la recuperation de ce timer
-*/
-void *timer(timerArgs* timer){
-    while((*timer->fin)){
-        SDL_Delay(10);
-        (timer->time)++;
-    }
-    return NULL;
-}
-
-/**
- * @brief fonction de lancement de thread pour l'affichage graphique du jeu
- * @param args Une structure contenant tout les argument necessaire a l'affichage du jeu
-*/
-void * afficheJeu(afficheArgs * argsAff){
-    int alpha = 0; //l'aplpha des etoile de fond
-    int etatAlpha = 1; //booleen disant si l'on doit augmenter ou baisser l'alpha des etoiles
-    int first = 1; //booleen permetant de savoir si c le premier tour de boucle depuis la fin du jeu
-
-    int seconde = 0; //variable permetant de stoquer le temps de fin de jeu
-    
-    while (*(argsAff->program_on))
-    {   
-        //verification de fin de jeu pour stoquer le temps de fin
-        if (*(argsAff->fin) && first){
-            first = 0;
-            seconde = *(argsAff->count)/100;
-        }
-        
-        //une refresh toute les 2 ms
-        if (*(argsAff->count)%2 == 0){
-
-            //changement de frame pour les etoile filantes
-            if (*(argsAff->count)%10 == 0){
-                argsAff->frameEF = (argsAff->frameEF + 1)%8;
-                if (argsAff->frameEF == 0){
-                    argsAff->etoileFilante.x = rand()%W;
-                    argsAff->etoileFilante.y = rand()%H;
-                }
-            }
-            
-            //Affichage du fond
-            draw_sprite(argsAff->background, argsAff->textureBg, 1, 0, 0, 540);
-
-            //Set de l'alpha des etoile de fond
-            SDL_SetTextureAlphaMod(argsAff->textureE2, alpha);
-            SDL_SetTextureAlphaMod(argsAff->textureE1, 255-alpha);
-
-            //Affichage des etoiles de fond
-            draw_sprite(argsAff->etoile, argsAff->textureE1, 0, 0, 0, 540);
-            draw_sprite(argsAff->etoile, argsAff->textureE2, 0, 1, 0, 540);
-
-            //Affichage de l'etoile filante
-            draw_sprite(argsAff->etoileFilante, argsAff->textureEF, argsAff->frameEF, 0, 0, 26);
-            
-            if (!(*(argsAff->fin))){
-                //Affichage en jeu
-
-                //Affichage des planetes
-                for (int i = 0; i < argsAff->n_sous_graphe; i++){
-                    argsAff->planete.x = argsAff->sous_graphe[i]->x-24;
-                    argsAff->planete.y = argsAff->sous_graphe[i]->y-24;
-                    draw_sprite(argsAff->planete, argsAff->textureP, argsAff->co[i].x, argsAff->co[i].y, 0, 48);
-                }
-
-                //Affichage des drapeaux
-                for (int i = 0; i < argsAff->n; i++){
-                    if (argsAff->planeteVisite[i]){
-                        argsAff->flag.x = argsAff->tab[i]->x-12;
-                        argsAff->flag.y = argsAff->tab[i]->y-48;
-                        if (i == argsAff->chemin[0]){
-                            draw_sprite(argsAff->flag, argsAff->textureF, argsAff->frameFlag, 1, 0, 60);
-                        }else{
-                            draw_sprite(argsAff->flag, argsAff->textureF, argsAff->frameFlag, 0, 0, 60);
-                        }
-                        
-                    }
-                    
-                }
-
-                //Affichage du trou noir
-                draw_sprite(argsAff->affTrouNoir, argsAff->textureTN, argsAff->frameTN, 0, 0, 48);
-
-                //Affichage de la navette
-                draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);
-
-                //Frame de la nevette du trou noir et du drapeau
-                if (*(argsAff->count)%20 == 0){
-                    argsAff->frame = (argsAff->frame + 1)%4;
-                    argsAff->frameTN = (argsAff->frameTN + 1)%4;
-                    argsAff->frameFlag = (argsAff->frameFlag + 1)%5;
-                }
-
-                //Affichage des asteroides
-                affichAst(argsAff->asteroid, argsAff->n_ast, argsAff->textureP);
-
-                argsAff->navette.x = *(argsAff->x);
-                argsAff->navette.y = *(argsAff->y);
-
-                //Affichage du temps
-                draw_time(*(argsAff->count)/100);
-            }
-
-            else{
-                //Affiche ecran de fin
-                affiche_fin_espace(seconde, argsAff->type_fin);
-            }
-
-            render(); //rendre les differents elements
-
-            //Modification du alpha des etoiles de fond
-            if (etatAlpha){
-                alpha--;
-                if (0 >= alpha){
-                    etatAlpha = !etatAlpha;
-                } 
-            } else {
-                alpha++;
-                if (255 <= alpha){
-                    etatAlpha = !etatAlpha;
-                }
-            }
-                
-        }
-    }
-
-    return NULL;
-}
 
 /**
  * @brief Exécute la boucle de jeu  de graphe
@@ -439,7 +289,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     int keyPressQ = 0; //booleen disant si la touche q est presse
     int keyPressD = 0; //booleen disant si la touche d est presse
 
-    coordonne_t co[n]; //tableau de coordonne servant à stoquer les coordonné des images des planetes genere
+    Point co[n]; //tableau de coordonne servant à stoquer les coordonné des images des planetes genere
     sommet_t **sous_graphe = chemin_en_graphe(chemin, n_chemin, tab, n, &n_sous_graphe); //sous graphe genere a partir du chemin
 
     asteroid_t * asteroid = ast_Partout(sous_graphe, n_sous_graphe, &n_ast); //tableau des asteroid
