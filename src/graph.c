@@ -271,3 +271,24 @@ sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n, i
     
     return sous_graphe_chemin;
 }
+
+
+segmment_t * gen_tab_seg(sommet_t ** tab, int n, int * n_seg){
+    segmment_t * seg = (segmment_t *) malloc(sizeof(segmment_t)*(n*n));
+
+    int k = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = i; j < n; j++) {
+            if (tab[i]->voisins[j] == 1) {
+                seg[k].p1.x = tab[i]->x;
+                seg[k].p1.y = tab[i]->y;
+                seg[k].p2.x = tab[j]->x;
+                seg[k].p2.y = tab[j]->y;
+                k++;
+            }
+        }
+    }
+    
+    *n_seg = k;
+    return seg;
+}

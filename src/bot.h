@@ -11,7 +11,7 @@
 #include "bouclesJeu.h"
 
 #define N_RULE 5
-#define TIME_MAX_IA 30000
+#define TIME_MAX_IA 10000
 
 /**
  * @brief Trouve l'index du sommet qui a la plus courte distance avec le point p
@@ -40,7 +40,7 @@ int position_relative(Point p1, Point p2);
  * @param precision plus elle est grande moins il y a de chance de loupé un mur mais la verification serra plus longue
  * @return position : -1 si pas de mur trouver 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
  */
-int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision);
+int mur_proche(Point p, sommet_t ** tab, int n, segmment_t * segs, int n_seg, int depth, int precision);
 
 /**
  * @brief Cherche si il y a un mur entre les deux points
@@ -51,7 +51,7 @@ int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision);
  * @param precision plus elle est grande moins il y a de chance de loupé un mur mais la verification serra plus longue
  * @return 0 si pas de mur 1 sinon
  */
-int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision);
+int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, segmment_t * segs, int n_seg, int precision);
 
 /**
  * @brief Calcul le score de l'ia

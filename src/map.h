@@ -8,11 +8,6 @@
 #include "graph.h"
 #include "affiche.h"
 
-typedef struct {
-    int x;
-    int y;
-} Point;
-
 typedef struct asteroid_s{
     int x;
     int y;
@@ -20,7 +15,7 @@ typedef struct asteroid_s{
     int angle;
 } asteroid_t;
 
-asteroid_t* ast_Partout(sommet_t ** tab, int n, int *nAst);
+asteroid_t *ast_Partout(sommet_t **tab, int n, segmment_t * segs, int n_seg, int *nAst);
 
 int isPointInsideRectangle(Point p, Point rect[4]);
 
@@ -28,7 +23,7 @@ float fonction_affine(float a, int x, float b);
 
 int isInPath_carres(int pX, int pY, sommet_t **tabSom, int n, int largeur);
 
-int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, int largeur);
+int isInPath_Line(int pX, int pY, sommet_t ** tabSom, int n ,segmment_t *tabSeg, int n_seg, int largeur);
 
 /**
  * @brief Permet de savoir si un objet est dans un chemin ou s'il est en dehors de tous

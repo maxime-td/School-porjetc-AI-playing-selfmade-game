@@ -101,7 +101,7 @@ int distance_objet(Point p1, Point p2){
  * @param precision La taille d'un pats
  * @return position : 4 si pas de mur trouver 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
  */
-int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision) {
+int mur_proche(Point p, sommet_t ** tab, int n, segmment_t * segs, int n_seg, int depth, int precision) {
     Point direction[4];
     direction[0].x = -precision;
     direction[0].y = -precision;
@@ -117,7 +117,7 @@ int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision) {
 
     for (int i = 0; i < 4; i++) {
         for (int j = precision; j < bestDist; j++) {
-            if (!isInPath_Line(p.x + direction[i].x*j, p.y + direction[i].y*j, tab, n, PATH_SIZE)) {
+            if (!isInPath_Line(p.x + direction[i].x*j, p.y + direction[i].y*j, tab, n, segs, n_seg,  PATH_SIZE)) {
                 bestDist = j;
                 closest = i;
             }
@@ -136,7 +136,7 @@ int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision) {
  * @param precision plus elle est grande moins il y a de chance de loupé un mur mais la verification serra plus longue
  * @return 0 si pas de mur 1 sinon
  */
-int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision) {
+int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, segmment_t * segs, int n_seg, int precision) {
     Point direction[4];
     direction[0].x = -1;
     direction[0].y = -1;
@@ -152,7 +152,7 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
 
     for (int i = 0; i < dist; i+=precision)
     {
-        if (!isInPath_Line(p1.x + direction[dir_noeud].x*i, p1.y + direction[dir_noeud].y*i, tab, n, PATH_SIZE))
+        if (!isInPath_Line(p1.x + direction[dir_noeud].x*i, p1.y + direction[dir_noeud].y*i, tab, n, segs, n_seg, PATH_SIZE))
             return 1;
     }
 

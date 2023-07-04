@@ -8,7 +8,7 @@
 #include "affiche.h"
 #include "map.h"
 
-asteroid_t *ast_Partout(sommet_t **tab, int n, int *nAst) {
+asteroid_t *ast_Partout(sommet_t **tab, int n, segmment_t * segs, int n_seg, int *nAst) {
     int frame_size = 48;
     int alea = 0;
     int angle = 0;
@@ -29,7 +29,7 @@ asteroid_t *ast_Partout(sommet_t **tab, int n, int *nAst) {
             srcrect.x = alea;
             angle = rand() % 360;
 
-            if (isInPath_Line(dstrect.x, dstrect.y, tab, n, PATH_SIZE) == 0) {
+            if (isInPath_Line(dstrect.x, dstrect.y, tab, n, segs, n_seg, PATH_SIZE) == 0) {
                 tabAst[a].x = dstrect.x;
                 tabAst[a].y = dstrect.y;
                 tabAst[a].frame = srcrect.x;
@@ -143,38 +143,26 @@ int min(int a, int b) {
     return a;
 }
 
-int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, int largeur) {
+int isInPath_Line(int pX, int pY, sommet_t ** tabSom, int n ,segmment_t *tabSeg, int n_seg, int largeur) {
     int res = 0;
     int dist = 0;
 
     Point tmp;
     Point P = {pX, pY};
-    Point p1;
-    Point p2;
     Point projete;
 
     double x_proj, y_proj;
 
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (tabSom[i]->voisins[j] == 1) {
-                p1.x = tabSom[i]->x;
-                p1.y = tabSom[i]->y;
+    for (int i = 0; i < n_seg && res == 0; i++) {
+        projetOrthogonal(pX, pY, tabSeg[i].p1.x, tabSeg[i].p1.y, tabSeg[i].p2.x, tabSeg[i].p2.y, &x_proj, &y_proj);
+        projete.x = x_proj;
+        projete.y = y_proj;
 
-                p2.x = tabSom[j]->x;
-                p2.y = tabSom[j]->y;
-
-                projetOrthogonal(pX, pY, p1.x, p1.y, p2.x, p2.y, &x_proj, &y_proj);
-                projete.x = x_proj;
-                projete.y = y_proj;
-
-                dist = distance(projete, P);
-                if(dist<largeur && x_proj>min(p1.x, p2.x) && x_proj<max(p1.x, p2.x)){res++;}
-            }
-        }
+        dist = distance(projete, P);
+        if(dist<largeur && x_proj>min(tabSeg[i].p1.x, tabSeg[i].p2.x) && x_proj<max(tabSeg[i].p1.x, tabSeg[i].p2.x)){res++;}
     }
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n && res == 0; i++) {
         tmp.x = tabSom[i]->x;
         tmp.y = tabSom[i]->y;
         if (distance(tmp, P) < largeur)

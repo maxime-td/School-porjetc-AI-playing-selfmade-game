@@ -267,6 +267,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
     double max_speed = (ia) ? MAX_SPEED_IA : MAX_SPEED;
     double attraction = (ia) ? ATTRACTION_TROU_IA : ATTRACTION_TROU; 
 
+    int n_seg;
+    segmment_t * segs = gen_tab_seg(tab, n, &n_seg);
 
     SDL_Rect navette = {x, y, 32, 32};
     SDL_Rect trouNoir = {300, 200, rayonTN*2, rayonTN*2};
@@ -299,7 +301,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
     int keyPressD = 0; //booleen disant si la touche d est presse
 
     Point co[n]; //tableau de coordonne servant à stoquer les coordonné des images des planetes genere
-    asteroid_t * asteroid = ast_Partout(tab, n, &n_ast); //tableau des asteroid
+    asteroid_t * asteroid = ast_Partout(tab, n, segs, n_seg, &n_ast); //tableau des asteroid
 
     int planeteLigne   = 10; //nombre de ligne sur l'image des planete
     int planeteColones[10] = {8, 14, 16, 4, 12, 8, 12, 12, 16, 8}; //nombre de planete par ligne
@@ -523,9 +525,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                     p2.y = tab[closestP]->y;
                     posClosestP = position_relative(p1, p2);
 
-                    posClosestW = mur_proche(p1, tab, n, 50, 5);
+                    posClosestW = mur_proche(p1, tab, n, segs, n_seg, 100, 20);
 
-                    isWall = is_mur_in_between(p1, p2, tab, n, 5);
+                    isWall = is_mur_in_between(p1, p2, tab, n, segs, n_seg, 10);
                 }
 
                 selectRule = -1;
@@ -581,10 +583,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
             directionY = 0;
 
             calcul_direction_navette(keyPressZ, keyPressS, keyPressQ, keyPressD, &directionX, &directionY);
-            //if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
-
             calcul_speed(directionX, directionY, &speedX, &speedY, &x, &y, &navette, acceleration, max_speed);
-            //calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, accelerationTN);
 
             for (int i = 0; i < n; i++) {
                 p1.x = tab[i]->x;
@@ -598,7 +597,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                 }
             }
 
-            if (!isInPath_Line(x+16, y+16, tab, n, PATH_SIZE-10)) {
+            if (!isInPath_Line(x, y, tab, n, segs, n_seg, PATH_SIZE-10)) {
                 x -= speedX;
                 y -= speedY;
                 speedX = -speedX/2;
