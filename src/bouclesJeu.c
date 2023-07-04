@@ -549,8 +549,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             }
 
             if (!isInPath_Line(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath_Line(x-32, y-32, sous_graphe, n, PATH_SIZE-10)) {
-                x -= speedX*8;
-                y -= speedY*8;
+                x -= speedX;
+                y -= speedY;
                 speedX = 0;
                 speedY = 0;
             }
