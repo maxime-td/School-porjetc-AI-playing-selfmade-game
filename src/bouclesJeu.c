@@ -240,12 +240,12 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
  */
 void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche)
 {
-    double speedX = 0; //vitesse x du joueur
-    double speedY = 0; //vitesse y du joueur
+    float speedX = 0; //vitesse x du joueur
+    float speedY = 0; //vitesse y du joueur
     float speedXTN = 0; //vitesse x trou noir
     float speedYTN = 0; //Vitesse y trou noir
-    double x = tab[chemin[0]]->x - 16; //position x du joueur
-    double y = tab[chemin[0]]->y - 16; //position y du joueur
+    float x = tab[chemin[0]]->x - 16; //position x du joueur
+    float y = tab[chemin[0]]->y - 16; //position y du joueur
     float xTN = W/2, yTN = H/2; //Position trou noir
     float directionXTN = 0, directionYTN = 0; //Direction trou noir
     float directionX = 0; //direction x du joueur
@@ -550,98 +550,12 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
         directionX = 0;
         directionY = 0;
 
-        if (keyPressZ)
-        {
-            directionY += -0.5;
-        }
-        if (keyPressS)
-        {
-            directionY += 0.5;
-        }
-
-        if (!keyPressZ && !keyPressS)
-        {
-            directionY = 0;
-        }
-
-        if (keyPressQ)
-        {
-            directionX += -0.5;
-        }
-        if (keyPressD)
-        {
-            directionX += 0.5;
-        }
-
-        if (!keyPressD && !keyPressQ)
-        {
-            directionX = 0;
-        }
-
-        if (fabs(directionX) + fabs(directionY) == 0.5)
-        {
-            directionX *= 2;
-            directionY *= 2;
-        }
+        calcul_direction_navette(keyPressZ, keyPressS, keyPressQ, keyPressD, &directionX, &directionY);
         
 
         if (argsT.time%2 == 0){
-            speedX += directionX * ACCELERATION;
-            speedY += directionY * ACCELERATION;
-
-            if (directionX == 0 && speedX != 0)
-            {
-                if (speedX < 0)
-                {
-                    speedX += ACCELERATION * 0.25;
-                }
-                else
-                {
-                    speedX -= ACCELERATION * 0.25;
-                }
-
-                if (speedX < ACCELERATION && speedX > -ACCELERATION)
-                {
-                    speedX = 0;
-                }
-            }
-
-            if (directionY == 0 && speedY != 0)
-            {
-                if (speedY < 0)
-                {
-                    speedY += ACCELERATION * 0.25;
-                }
-                else
-                {
-                    speedY -= ACCELERATION * 0.25;
-                }
-                if (speedY < ACCELERATION && speedY > -ACCELERATION)
-                {
-                    speedY = 0;
-                }
-            }
-
-            if (speedX < -MAX_SPEED / 2)
-            {
-                speedX = -MAX_SPEED / 2;
-            }
-            else if (speedX > MAX_SPEED / 2)
-            {
-                speedX = MAX_SPEED / 2;
-            }
-
-            if (speedY < -MAX_SPEED / 2)
-            {
-                speedY = -MAX_SPEED / 2;
-            }
-            else if (speedY > MAX_SPEED / 2)
-            {
-                speedY = MAX_SPEED / 2;
-            }
-
-            x += speedX;
-            y += speedY;
+              
+            calcul_speed(directionX, directionY, &speedX, &speedY, &x, &y, &navette, ACCELERATION);
 
             for (int i = 0; i < n; i++){
                 p1.x = tab[i]->x;
@@ -655,7 +569,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                     }
                 }
             }
-            
 
             if (!isInPath_Line(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath_Line(x-32, y-32, sous_graphe, n, PATH_SIZE-10))
             {
@@ -676,24 +589,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 fin = 1;
             }
 
-            if (x < 0){
-                x = 0;
-                speedX = 0;
-                speedY = 0;
-            }else if (x > W-navette.w){
-                x = W-navette.w;
-                speedX = 0;
-                speedY = 0;
-            }
-            if (y < 0){
-                y = 0;
-                speedX = 0;
-                speedY = 0;
-            }else if (y > H-navette.h){
-                y = H-navette.h;
-                speedX = 0;
-                speedY = 0;
-            }
 
             if (fin && seconde == 0){
                 seconde = argsT.time/100;
@@ -702,7 +597,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
         if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
 
-        speedTN(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir);
+        calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, ACCELERATION_TROU);
 
         trouNoir.x = (int)xTN;
         trouNoir.y = (int)yTN;
@@ -869,14 +764,10 @@ int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
     int bestDist = depth;
 
     for (int i = 0; i < 4; i++){
-        //printf("i : %d\n", i);
-        for (int j = precision; j < bestDist; j++)
-        {
-            //printf("   j : %d\n", j);
+        for (int j = precision; j < bestDist; j++){
             if (!isInPath_Line(p.x + direction[i].x*j, p.y + direction[i].y*j, tab, n, PATH_SIZE)){
                 bestDist = j;
                 closest = i;
-                
             }
         }
     }
@@ -1014,7 +905,7 @@ void boucle_jeu_sans_graph()
         matDist = dist_tab(tab, &n);
         chemin = colonni_fourmi(matDist, n, rand()%n, &n_chemin);
 
-        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 1, rules, n_rules, &res, 1);
+        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 0, rules, n_rules, &res, 1);
 
         if(chemin != NULL)
             free(chemin);
@@ -1031,8 +922,8 @@ void boucle_jeu_sans_graph()
  * @brief calcul de la direction du trou noir
  * @param directionX permet de recuperer la direction x du trou noir
  * @param directionY permet de recuperer la direction y du trou noir
- * @param xTN position x du trou noir
- * @param yTN position y du trou noir
+ * @param x position x du trou noir
+ * @param y position y du trou noir
 */
 void directionTN(float * directionX, float * directionY, int xTN, int yTN)
 {
@@ -1061,93 +952,135 @@ void directionTN(float * directionX, float * directionY, int xTN, int yTN)
 }
 
 /**
- * @brief calcul de la vitesse du trou noir
- * @param directionXTN direction x du trou noir
- * @param directionYTN direction y du trou noir
- * @param speedXTN permet de recuperer la vitesse x du trou noir
- * @param speedYTN permet de recuperer la vitesse y du trou noir
- * @param xTN pemet de recuperer la nouvelle position x du trou noir
- * @param yTN pemet de recuperer la nouvelle position y du trou noir
- * @param trouNoir le rectangle representant le trou noir 
+ * @brief calcul la direction de la navette en fonction des touches pressee
+ * @param keyPressZ booleen indiquant si z est pressee
+ * @param keyPressS booleen indiquant si s est pressee
+ * @param keyPressQ booleen indiquant si q est pressee
+ * @param keyPressD booleen indiquant si d est pressee
+ * @param directionX permet de recuperer la direction x trouve
+ * @param directionY permet de recuperer la direction y trouve
 */
-void speedTN(float directionXTN, float directionYTN, float * speedXTN, float * speedYTN, float * xTN, float * yTN, SDL_Rect * trouNoir)
-{
-
-
-    *speedXTN += directionXTN * ACCELERATION_TROU;
-    *speedYTN += directionYTN * ACCELERATION_TROU;
-
-    if (directionXTN == 0 && speedXTN != 0)
-    {
-        if (*speedXTN < 0)
+void calcul_direction_navette(int keyPressZ, int keyPressS, int keyPressQ, int keyPressD, float * directionX, float * directionY){
+    if (keyPressZ)
         {
-            *speedXTN += ACCELERATION_TROU * 0.25;
+            (*directionY) += -0.5;
+        }
+        if (keyPressS)
+        {
+            (*directionY) += 0.5;
+        }
+
+        if (!keyPressZ && !keyPressS)
+        {
+            (*directionY) = 0;
+        }
+
+        if (keyPressQ)
+        {
+            (*directionX) += -0.5;
+        }
+        if (keyPressD)
+        {
+            (*directionX) += 0.5;
+        }
+
+        if (!keyPressD && !keyPressQ)
+        {
+            (*directionX) = 0;
+        }
+
+        if (fabs((*directionX)) + fabs((*directionY)) == 0.5)
+        {
+            (*directionX) *= 2;
+            (*directionY) *= 2;
+        }
+}
+
+/**
+ * @brief calcul de la vitesse d'un objet
+ * @param directionX direction x du trou noir
+ * @param directionY direction y du trou noir
+ * @param speedX permet de recuperer la vitesse x du trou noir
+ * @param speedY permet de recuperer la vitesse y du trou noir
+ * @param x pemet de recuperer la nouvelle position x du trou noir
+ * @param y pemet de recuperer la nouvelle position y du trou noir
+ * @param rect le rectangle representant le trou noir 
+*/
+void calcul_speed(float directionX, float directionY, float * speedX, float * speedY, float * x, float * y, SDL_Rect * rect, double acceleration){
+    *speedX += directionX * acceleration;
+    *speedY += directionY * acceleration;
+
+    if (directionX == 0 && speedX != 0)
+    {
+        if (*speedX < 0)
+        {
+            *speedX += acceleration * 0.25;
         }
         else
         {
-           *speedXTN -= ACCELERATION_TROU * 0.25;
+           *speedX -= acceleration * 0.25;
         }
 
-        if (*speedXTN < ACCELERATION_TROU && *speedXTN > -ACCELERATION_TROU)
+        if (*speedX < acceleration && *speedX > -acceleration)
         {
-            *speedXTN = 0;
+            *speedX = 0;
         }
     }
 
-    if (directionYTN == 0 && *speedYTN != 0)
+    if (directionY == 0 && *speedY != 0)
     {
-        if (*speedYTN < 0)
+        if (*speedY < 0)
         {
-            *speedYTN += ACCELERATION_TROU * 0.25;
+            *speedY += acceleration * 0.25;
         }
         else
         {
-            *speedYTN -= ACCELERATION_TROU * 0.25;
+            *speedY -= acceleration * 0.25;
         }
-        if (*speedYTN < ACCELERATION_TROU && *speedYTN > -ACCELERATION_TROU)
+        if (*speedY < acceleration && *speedY > -acceleration)
         {
-            *speedYTN = 0;
+            *speedY = 0;
         }
     }
 
-    if (*speedXTN < -MAX_SPEED / 2)
+    if (*speedX < -MAX_SPEED / 2)
     {
-        *speedXTN = -MAX_SPEED / 2;
+        *speedX = -MAX_SPEED / 2;
     }
-    else if (*speedXTN > MAX_SPEED / 2)
+    else if (*speedX > MAX_SPEED / 2)
     {
-        *speedXTN = MAX_SPEED / 2;
+        *speedX = MAX_SPEED / 2;
     }
 
-    if (*speedYTN < -MAX_SPEED / 2)
+    if (*speedY < -MAX_SPEED / 2)
     {
-        *speedYTN = -MAX_SPEED / 2;
+        *speedY = -MAX_SPEED / 2;
     }
-    else if (*speedYTN > MAX_SPEED / 2)
+    else if (*speedY > MAX_SPEED / 2)
     {
-        *speedYTN = MAX_SPEED / 2;
+        *speedY = MAX_SPEED / 2;
     }
 
-    *xTN += *speedXTN;
-    *yTN += *speedYTN;
+    *x += *speedX;
+    *y += *speedY;
 
-    if (*xTN < 0){
-        *xTN = 0;
-        *speedXTN = 0;
-        *speedYTN = 0;
-    }else if (*xTN > W-trouNoir->w){
-        *xTN = W-trouNoir->w;
-        *speedXTN = 0;
-        *speedYTN = 0;
+    if (*x < 0){
+        *x = 0;
+        *speedX = 0;
+        *speedY = 0;
+    }else if (*x > W-rect->w){
+        *x = W-rect->w;
+        *speedX = 0;
+        *speedY = 0;
     }
-    if (*yTN < 0){
-        *yTN = 0;
-        *speedXTN = 0;
-        *speedYTN = 0;
-    }else if (*yTN > H-trouNoir->h){
-        *yTN = H-trouNoir->h;
-        *speedXTN = 0;
-        *speedYTN = 0;
+    if (*y < 0){
+        *y = 0;
+        *speedX = 0;
+        *speedY = 0;
+    }else if (*y > H-rect->h){
+        *y = H-rect->h;
+        *speedX = 0;
+        *speedY = 0;
     }
 
 }
