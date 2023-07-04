@@ -18,7 +18,6 @@
 #include "threads.h"
 #include "calculPosition.h"
 
-
 /**
  * @brief Exécute la boucle de jeu  de graphe
  * @param tab Le tableau des sommets
@@ -27,8 +26,7 @@
  * @param fin permet de savoir si la fonction à était quitter en appuyant sur la crois
  * @return tableau du chemin du joueur
  */
-int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
-{
+int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin) {
     pthread_t thread1, thread2;
     // Initialisation
     int i;                    // Incrément
@@ -135,20 +133,14 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
                                       // Si oui on passe dans l'etat de l'écran de fin de jeu (etat_graphe = 1)
 
                         for (int i = 0; i < n; i++)
-                        {
                             all[i] = 0;
-                        }
-
+                    
                         for (int i = 0; i < nb_noeuds_chemin; i++)
-                        {
                             all[chemin_joueur[i]] = 1;
-                        }
 
                         if (tout_noeud(all, n) && chemin_joueur[nb_noeuds_chemin - 1] == chemin_joueur[0])
-                        {
                             etat_graphe += 1;
-                        }
-
+                        
                         break;
 
                     default:
@@ -164,55 +156,54 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
                 update = 0;
                 clear_SDL(); // Clear la fenêtre (la remetre blanc)
 
-                switch (etat_graphe)
-                {
-                case 0: // etat_graphe = 0, etat jeu en cours
-                    affiche(tab, n, 0, 0, 0, 255, 1);
-                    sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
-                    affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
+                switch (etat_graphe) {
+                    case 0: // etat_graphe = 0, etat jeu en cours
+                        affiche(tab, n, 0, 0, 0, 255, 1);
+                        sous_graphe = chemin_en_graphe(chemin_joueur, nb_noeuds_chemin, tab, n, &n_s_graphe);
+                        affiche(sous_graphe, n_s_graphe, 255, 0, 0, 255, 0);
 
-                    draw_path(tab, chemin_joueur, nb_noeuds_chemin);
-                    draw_int(path_size(chemin_joueur, distMat, nb_noeuds_chemin));
+                        draw_path(tab, chemin_joueur, nb_noeuds_chemin);
+                        draw_int(path_size(chemin_joueur, distMat, nb_noeuds_chemin));
 
-                    free2DTab((void **)sous_graphe, n_s_graphe);
+                        free2DTab((void **)sous_graphe, n_s_graphe);
 
-                    break;
+                        break;
 
-                case 1: // etat_graphe = 1, etat écran de fin
-                    if (first)
-                    {
-                        first = 0;
-                        pthread_join(thread1, NULL);
-                        pthread_join(thread2, NULL);
-                        scoreFloyd = argsFl.result;
-                        scoreFourmi = argsF.result;
-                    }
+                    case 1: // etat_graphe = 1, etat écran de fin
+                        if (first)
+                        {
+                            first = 0;
+                            pthread_join(thread1, NULL);
+                            pthread_join(thread2, NULL);
+                            scoreFloyd = argsFl.result;
+                            scoreFourmi = argsF.result;
+                        }
 
-                    score = path_size(chemin_joueur, distMat, nb_noeuds_chemin); // Score du joueur
+                        score = path_size(chemin_joueur, distMat, nb_noeuds_chemin); // Score du joueur
 
-                    scoreBest = scoreFourmi;
-                    if (scoreFloyd < scoreFourmi)
-                    { // recherche quelle est le meilleur score obtenu entre les differents algo et le joueur
-                        scoreBest = scoreFloyd;
-                    }
+                        scoreBest = scoreFourmi;
+                        if (scoreFloyd < scoreFourmi)
+                        { // recherche quelle est le meilleur score obtenu entre les differents algo et le joueur
+                            scoreBest = scoreFloyd;
+                        }
 
-                    if (scoreBest > score)
-                    {
-                        scoreBest = score;
-                    }
+                        if (scoreBest > score)
+                        {
+                            scoreBest = score;
+                        }
 
-                    afficheFin(score, scoreBest); // On affiche l'ecran de fin
+                        afficheFin(score, scoreBest); // On affiche l'ecran de fin
 
-                    if (scoreBest == score)
-                    {
-                        secret1();
-                    }
+                        if (scoreBest == score)
+                        {
+                            secret1();
+                        }
 
-                    break;
+                        break;
 
-                default:                    // etat_graphe = 2
-                    program_on = SDL_FALSE; // On ferme cette boucle
-                    break;
+                    default:                    // etat_graphe = 2
+                        program_on = SDL_FALSE; // On ferme cette boucle
+                        break;
                 }
 
                 render(); // rendre les differents elements
@@ -223,6 +214,7 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
     free2DTab((void **)warshallDist, n);
     free2DTab((void **)distMat, n);
     *n_chemin = nb_noeuds_chemin;
+
     return chemin_joueur;
 }
 
@@ -239,8 +231,7 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin)
  * @param result permet de recuperer le score de l'ia
  * @param affiche booleen permetant d'activer ou non l'interface graphique
  */
-void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche)
-{
+void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche) {
     float speedX = 0; //vitesse x du joueur
     float speedY = 0; //vitesse y du joueur
     float speedXTN = 0; //vitesse x trou noir
@@ -271,7 +262,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
     Point p1; //deux point temporaire servant à stoquer des coordonees pour les compare
     Point p2;
-
 
     // variable pour les regles à choisir
     int closestP; // variable servant à stoquer la sortie de closest_point (l'index de la planete la plus proche)
@@ -384,20 +374,18 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     affArgs.y = &y;
     affArgs.type_fin = 0;
     
-    if(affiche){
+    if(affiche)
         pthread_create(&thread2, NULL, (void *(*)(void *))afficheJeu, &affArgs);
-    }
 
     //Choix aleatoire des texture des planetes
-    for (int i = 0; i < n_sous_graphe; i++)
-    {
+    for (int i = 0; i < n_sous_graphe; i++) {
         co[i].y = rand() % planeteLigne;
         co[i].x = rand() % planeteColones[co[i].y];
         co[i].y++;
     }
 
     //Initialisation des planetes
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < n; i++) {
         planeteVisite[i] = 0;
     }
 
@@ -418,8 +406,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                     break;
 
                 case SDL_KEYDOWN:
-                    if(!ia){
-                        switch (event.key.keysym.sym){
+                    if(!ia) {
+                        switch (event.key.keysym.sym) {
                             case SDLK_z:
                                 keyPressZ = 1;
                                 break;
@@ -448,9 +436,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                     break;
 
                 case SDL_KEYUP:
-                    if(!ia){
-                        switch (event.key.keysym.sym)
-                        {
+                    if(!ia) {
+                        switch (event.key.keysym.sym) {
                         case SDLK_z:
                             keyPressZ = 0;
                             break;
@@ -477,20 +464,19 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             break;
         }
 
-        if(ia){
-            if(rand()%500 == 0){ //On ne change pas le mouvement de l'ia à chaque tour de boucle (~1/500)
+        if(ia) {
+            if(rand()%500 == 0) { //On ne change pas le mouvement de l'ia à chaque tour de boucle (~1/500)
                 //Intialisation des variables pour donner l'etat du jeu
                 p1.x = x+navette.w/2;
                 p1.y = y+navette.h/2;
 
-                if (!tout_noeud(planeteVisite, n)){
+                if (!tout_noeud(planeteVisite, n))
                     closestP = closest_point(p1, tab, n, planeteVisite);
-                }else{
-                    closestP = chemin[0];   
-                }
+                else
+                    closestP = chemin[0];
 
-                p2.x   = tab[closestP]->x;
-                p2.y   = tab[closestP]->y;
+                p2.x = tab[closestP]->x;
+                p2.y = tab[closestP]->y;
                 posClosestP = position_relative(p1, p2);
 
                 posClosestW = mur_proche(p1, tab, n, 128, 1);
@@ -499,17 +485,16 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
                 selectRule = -1;
 
-                for (int i = 0; i < n_ia; i++){
+                for (int i = 0; i < n_ia; i++)
                     validRule[i] = -1;
-                }
                 
                 k = 0;
 
                 //recherche des regles valides
-                for (int i = 0; i < n_ia; i++){
-                    if (tabIA[i][0] == -1 || tabIA[i][0] == posClosestP){
-                        if (tabIA[i][1] == -1 || tabIA[i][1] == posClosestW){
-                            if (tabIA[i][2] == -1 || tabIA[i][2] == isWall){
+                for (int i = 0; i < n_ia; i++) {
+                    if (tabIA[i][0] == -1 || tabIA[i][0] == posClosestP) { 
+                        if (tabIA[i][1] == -1 || tabIA[i][1] == posClosestW) {
+                            if (tabIA[i][2] == -1 || tabIA[i][2] == isWall) {
                                 validRule[k] = i;
                                 k++;
                             }
@@ -520,9 +505,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 //choix d'une regles valide au hasard
                 poid = 0;
 
-                for (int i = 0; i < k; i++){
+                for (int i = 0; i < k; i++)
                     poid += tabIA[validRule[i]][N_RULE+2];
-                }
 
                 selectPoid = rand()%poid;
                 selectRule = -1;
@@ -530,9 +514,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 poid = 0;
                 for (int i = 0; i < k && selectRule == -1; i++){
                     poid += tabIA[validRule[i]][N_RULE+2];
-                    if (poid > selectPoid){
+                    if (poid > selectPoid)
                         selectRule = validRule[i];
-                    }
                 }
                 
                 //Prise en conte des input en fonction de la regles choisi
@@ -549,26 +532,22 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
         calcul_direction_navette(keyPressZ, keyPressS, keyPressQ, keyPressD, &directionX, &directionY);
         
-
-        if (argsT.time%2 == 0){
-              
+        if (argsT.time%2 == 0) {
             calcul_speed(directionX, directionY, &speedX, &speedY, &x, &y, &navette, ACCELERATION);
 
-            for (int i = 0; i < n; i++){
+            for (int i = 0; i < n; i++) {
                 p1.x = tab[i]->x;
                 p1.y = tab[i]->y;
                 p2.x = x+16;
                 p2.y = y+16;
-                if (distance(p1, p2) < 16+24){
+                if (distance(p1, p2) < 16+24) {
                     planeteVisite[i] = 1;
-                    if (tout_noeud(planeteVisite, n) && i == chemin[0]){
+                    if (tout_noeud(planeteVisite, n) && i == chemin[0])
                         fin = 1;
-                    }
                 }
             }
 
-            if (!isInPath_Line(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath_Line(x-32, y-32, sous_graphe, n, PATH_SIZE-10))
-            {
+            if (!isInPath_Line(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath_Line(x-32, y-32, sous_graphe, n, PATH_SIZE-10)) {
                 x -= speedX*8;
                 y -= speedY*8;
                 speedX = 0;
@@ -581,15 +560,13 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             p2.x = trouNoir.x+50;
             p2.y = trouNoir.y+50;
             distTrouNoir = distance(p1, p2);
-            if(distTrouNoir<rayonTN/3){
+            if(distTrouNoir<rayonTN/3) {
                 affArgs.type_fin = 1;
                 fin = 1;
             }
 
-
-            if (fin && seconde == 0){
+            if (fin && seconde == 0)
                 seconde = argsT.time/100;
-            }
         }
 
         if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
@@ -601,24 +578,20 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
         affArgs.affTrouNoir = trouNoir;
 
-        if (ia && fin){
+        if (ia && fin) {
             program_on = SDL_FALSE;
-            if (affArgs.type_fin){
+            if (affArgs.type_fin)
                 argsT.time = (1+TIME_MAX_IA)*100;
-            }
-            
         }
-        
     }
     
     program_on = SDL_FALSE;
     pthread_join(thread,  NULL);
 
-    if (ia){
+    if (ia) {
         seconde = argsT.time/100;   
-        for (int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++)
             nb_planet += planeteVisite[i];
-        }
 
         p2.x = tab[chemin[0]]->x;
         p2.y = tab[chemin[0]]->y;
@@ -628,9 +601,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
     free2DTab((void**)sous_graphe, n_sous_graphe);
     
-    if (affiche){
+    if (affiche)
         pthread_join(thread2, NULL);
-    }
     
     free(validRule);
     free(asteroid);
@@ -639,8 +611,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 /**
  * @brief Exécute la boucle de jeu principal
  */
-void boucle_jeu()
-{
+void boucle_jeu() {
     int n = 0;
     sommet_t **tab = NULL;
 
@@ -649,7 +620,7 @@ void boucle_jeu()
     int n_chemin;
     int fin=0;
 
-    while (!fin){
+    while (!fin) {
         tab = gen_tab_sommets_rand(&n);
 
         tab_to_graph(tab, 0, n - 1);
@@ -679,7 +650,7 @@ void boucle_jeu()
  * @param distDep La distance au point de depart
  * @return Le score trouvé
  */
-int calcul_score(int seconde, int nbPlanete, int distDep){
+int calcul_score(int seconde, int nbPlanete, int distDep) {
     int score = 0;
     score += (TIME_MAX_IA - seconde)*5;
     score += (TIME_MAX_IA - seconde > 0)*500;
@@ -696,17 +667,17 @@ int calcul_score(int seconde, int nbPlanete, int distDep){
  * @param planeteVisit Les index des planete déjà faite
  * @return index du sommet le plus proche
  */
-int closest_point(Point p, sommet_t ** tab, int n, int * planeteVisit){
+int closest_point(Point p, sommet_t ** tab, int n, int * planeteVisit) {
     int res = 0;
     int bestDist = INT_MAX;
     int dist;
     Point p2;
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < n; i++) {
         if(!planeteVisit[i]){
             p2.x = tab[i]->x;
             p2.y = tab[i]->y;
             dist = distance(p, p2);
-            if (dist < bestDist){
+            if (dist < bestDist) {
                 bestDist = dist;
                 res = i;
             }
@@ -721,19 +692,18 @@ int closest_point(Point p, sommet_t ** tab, int n, int * planeteVisit){
  * @param p2 Point 2
  * @return position : 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
  */
-int position_relative(Point p1, Point p2){
-    if (p1.x > p2.x){
-        if (p1.y > p2.y){
+int position_relative(Point p1, Point p2) {
+    if (p1.x > p2.x) {
+        if (p1.y > p2.y)
             return 0;
-        }else{
+        else
             return 1;
-        }        
-    }else{
-        if (p1.y > p2.y){
+    }
+    else {
+        if (p1.y > p2.y)
             return 2;
-        }else{
+        else
             return 3;
-        }
     } 
 }
 
@@ -746,7 +716,7 @@ int position_relative(Point p1, Point p2){
  * @param precision La taille d'un pats
  * @return position : 4 si pas de mur trouver 0 si en haut à gauche 1 si en haut à droite 2 si en bas à gauche et 3 si en bas à droite
  */
-int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
+int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision) {
     Point direction[4];
     direction[0].x = -precision;
     direction[0].y = -precision;
@@ -760,9 +730,9 @@ int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
     int closest = 4;
     int bestDist = depth;
 
-    for (int i = 0; i < 4; i++){
-        for (int j = precision; j < bestDist; j++){
-            if (!isInPath_Line(p.x + direction[i].x*j, p.y + direction[i].y*j, tab, n, PATH_SIZE)){
+    for (int i = 0; i < 4; i++) {
+        for (int j = precision; j < bestDist; j++) {
+            if (!isInPath_Line(p.x + direction[i].x*j, p.y + direction[i].y*j, tab, n, PATH_SIZE)) {
                 bestDist = j;
                 closest = i;
             }
@@ -780,7 +750,7 @@ int mur_proche(Point p, sommet_t ** tab, int n, int depth, int precision){
  * @param precision plus elle est grande moins il y a de chance de loupé un mur mais la verification serra plus longue
  * @return 0 si pas de mur 1 sinon
  */
-int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision){
+int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision) {
     Point direction[4];
     direction[0].x = -1;
     direction[0].y = -1;
@@ -794,12 +764,11 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
     int dir_noeud = position_relative(p1, p2);
     int dist = distance(p1, p2);
 
-    for (int i = 0; i < dist; i+=precision)
-    {
-        if (!isInPath_Line(p1.x + direction[dir_noeud].x*i, p1.y + direction[dir_noeud].y*i, tab, n, PATH_SIZE)){
+    for (int i = 0; i < dist; i+=precision) {
+        if (!isInPath_Line(p1.x + direction[dir_noeud].x*i, p1.y + direction[dir_noeud].y*i, tab, n, PATH_SIZE))
             return 1;
-        }
     }
+
     return 0;
 }
 
@@ -807,7 +776,7 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
  * @brief Génere une regle au hasard
  * @return La règle générée (avec les 2 dernier paramètre representant l'input)
  */
-int * generate_rule(){
+int * generate_rule() {
     int * rule = (int *) malloc(sizeof(int)*(N_RULE+3));
 
     //Etat du jeu
@@ -828,12 +797,11 @@ int * generate_rule(){
  * @param n nombre de regle a generer
  * @return le tableau de regle
 */
-int ** generate_tab_rules(int n){
+int ** generate_tab_rules(int n) {
     int ** tab_rules = (int **) malloc(sizeof(int*)*n);
 
-    for (int i = 0; i < n-1; i++){
+    for (int i = 0; i < n-1; i++)
         tab_rules[i] = generate_rule();
-    }
 
     tab_rules[n-1] = (int *) malloc(sizeof(int)*(N_RULE+3));
 
@@ -855,14 +823,16 @@ int ** generate_tab_rules(int n){
 */
 int ** get_rule_from_file(char * name, int * n){
     int code;
+
     FILE * file = fopen(name, "r");
     code = fscanf(file, "%d\n", n);
+
     int ** tab = (int**) malloc(sizeof(int*)*(*n));
+    
     for (int i = 0; i < *n; i++){
         tab[i] = (int*) malloc(sizeof(int)*(N_RULE+3));
-        for (int j = 0; j < (N_RULE+3); j++){
+        for (int j = 0; j < (N_RULE+3); j++)
             code = fscanf(file, "%d\n", &tab[i][j]);
-        }
         code = fscanf(file, "\n");
     }
     code = fclose(file);
@@ -871,12 +841,10 @@ int ** get_rule_from_file(char * name, int * n){
     return tab;
 }
 
-
 /**
  * @brief Exécute la boucle de jeu principal sans la première partie (la partie graph)
  */
-void boucle_jeu_sans_graph()
-{
+void boucle_jeu_sans_graph() {
     int n = 0;
     sommet_t **tab = NULL;
 
@@ -890,7 +858,7 @@ void boucle_jeu_sans_graph()
     int n_rules = 10;
     int res;
 
-    while (!fin){
+    while (!fin) {
         tab = gen_tab_sommets_rand(&n);
 
         rules = get_rule_from_file("testRule.txt", &n_rules);     
@@ -914,4 +882,3 @@ void boucle_jeu_sans_graph()
     
     closeSDL(); // free de tout les elements de SDL
 }
-
