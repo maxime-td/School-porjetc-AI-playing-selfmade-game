@@ -17,7 +17,6 @@
 #include "bouclesJeu.h"
 #include "OptiFloyd_Warshall.h"
 
-
 // Structure pour les arguments de multi_start_fourmi
 typedef struct FourmiArgs_s{
     int** matDist;
@@ -38,8 +37,6 @@ typedef struct {
     SDL_bool * fin;
     int time;
 } timerArgs;
-
-
 
 /**
  * @brief fonction de lancement de thread pour l'algorithme des fourmis
