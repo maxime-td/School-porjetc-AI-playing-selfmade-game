@@ -14,8 +14,8 @@
 #include "fourmi.h"
 #include "threads.h"
 
-#define MAX_SPEED 0.0025
-#define ACCELERATION 0.000000015
+#define MAX_SPEED 0.005
+#define ACCELERATION 0.00000004
 #define ACCELERATION_TROU 0.00000004
 
 #define N_RULE 3

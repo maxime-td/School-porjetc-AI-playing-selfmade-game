@@ -406,7 +406,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     }
 
     //Boucle principale
-    while (program_on && (!ia || argsT.time/100 <= TIME_MAX_IA))
+    while (program_on && (!ia || argsT.time/1000 <= TIME_MAX_IA))
     {
         // Gestion des événements
         while (SDL_PollEvent(&event))
@@ -541,60 +541,57 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 keyPressQ = (tabIA[selectRule][4] == 1);
             }
         }
-        if (!fin){
+        if (!fin && argsT.time%3 == 0){
             
             //Prise en conte de la direction du joueur en fonction des input
+            
             directionX = 0;
             directionY = 0;
 
             calcul_direction_navette(keyPressZ, keyPressS, keyPressQ, keyPressD, &directionX, &directionY);
-            
-            if (argsT.time%2 == 0) {
-                calcul_speed(directionX, directionY, &speedX, &speedY, &x, &y, &navette, ACCELERATION);
-
-                for (int i = 0; i < n; i++) {
-                    p1.x = tab[i]->x;
-                    p1.y = tab[i]->y;
-                    p2.x = x+16;
-                    p2.y = y+16;
-                    if (distance(p1, p2) < 16+24) {
-                        planeteVisite[i] = 1;
-                        if (tout_noeud(planeteVisite, n) && i == chemin[0])
-                            fin = 1;
-                    }
-                }
-
-                if (!isInPath_Line(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath_Line(x-32, y-32, sous_graphe, n, PATH_SIZE-10)) {
-                    x -= speedX;
-                    y -= speedY;
-                    speedX = -speedX/2;
-                    speedY = -speedY/2;
-                }
-
-                //Partie vérif trou noir
-                p1.x = x+16;
-                p1.y = y+16;
-                p2.x = trouNoir.x+50;
-                p2.y = trouNoir.y+50;
-                distTrouNoir = distance(p1, p2);
-                if(distTrouNoir<rayonTN/3) {
-                    affArgs.type_fin = 1;
-                    fin = 1;
-                }
-
-                if (fin && seconde == 0)
-                    seconde = argsT.time/100;
-            }
-
             if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
 
+            calcul_speed(directionX, directionY, &speedX, &speedY, &x, &y, &navette, ACCELERATION);
             calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, ACCELERATION_TROU);
+
+            for (int i = 0; i < n; i++) {
+                p1.x = tab[i]->x;
+                p1.y = tab[i]->y;
+                p2.x = x+16;
+                p2.y = y+16;
+                if (distance(p1, p2) < 16+24) {
+                    planeteVisite[i] = 1;
+                    if (tout_noeud(planeteVisite, n) && i == chemin[0])
+                        fin = 1;
+                }
+            }
+
+            if (!isInPath_Line(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath_Line(x-32, y-32, sous_graphe, n, PATH_SIZE-10)) {
+                x -= speedX;
+                y -= speedY;
+                speedX = -speedX/2;
+                speedY = -speedY/2;
+            }
+
+            //Partie vérif trou noir
+            p1.x = x+16;
+            p1.y = y+16;
+            p2.x = trouNoir.x+50;
+            p2.y = trouNoir.y+50;
+            distTrouNoir = distance(p1, p2);
+            if(distTrouNoir<rayonTN/3) {
+                affArgs.type_fin = 1;
+                fin = 1;
+            }
+
+            if (fin && seconde == 0)
+                seconde = argsT.time/1000;
             
             trouNoir.x = (int)xTN;
             trouNoir.y = (int)yTN;
 
             if (fin && seconde == 0)
-                seconde = argsT.time/100;
+                seconde = argsT.time/1000;
             //Partie vérif trou noir2
 
             p2.x = trouNoir2.x+50;
@@ -606,26 +603,26 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             }
 
             if (fin && seconde == 0)
-                seconde = argsT.time/100;
+                seconde = argsT.time/1000;
+
+            if(rand()%10000 == 0)directionTN(&directionXTN2, &directionYTN2, xTN2, yTN2);
+            calcul_speed(directionXTN2, directionYTN2, &speedXTN2, &speedYTN2, &xTN2, &yTN2, &trouNoir2, ACCELERATION_TROU);
+
+            if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
+            calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, ACCELERATION_TROU);
+            
+            trouNoir2.x = (int)xTN2;
+            trouNoir2.y = (int)yTN2;
+
+            affArgs.affTrouNoir2 = trouNoir2;
+            attractionTN(&directionX, &directionY, xTN2, yTN2, x, y, &speedX, &speedY);
+
+            trouNoir.x = (int)xTN;
+            trouNoir.y = (int)yTN;
+
+            affArgs.affTrouNoir = trouNoir;
+            attractionTN(&directionX, &directionY, xTN, yTN, x, y, &speedX, &speedY);
         }
-
-        if(rand()%10000 == 0)directionTN(&directionXTN2, &directionYTN2, xTN2, yTN2);
-        calcul_speed(directionXTN2, directionYTN2, &speedXTN2, &speedYTN2, &xTN2, &yTN2, &trouNoir2, ACCELERATION_TROU);
-
-        if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
-        calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, ACCELERATION_TROU);
-           
-        trouNoir2.x = (int)xTN2;
-        trouNoir2.y = (int)yTN2;
-
-        affArgs.affTrouNoir2 = trouNoir2;
-        attractionTN(&directionX, &directionY, xTN2, yTN2, x, y, &speedX, &speedY);
-
-        trouNoir.x = (int)xTN;
-        trouNoir.y = (int)yTN;
-
-        affArgs.affTrouNoir = trouNoir;
-        attractionTN(&directionX, &directionY, xTN, yTN, x, y, &speedX, &speedY);
 
         if (ia && fin){
             program_on = SDL_FALSE;
@@ -638,7 +635,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     pthread_join(thread,  NULL);
 
     if (ia) {
-        seconde = argsT.time/100;   
+        seconde = argsT.time/1000;   
         for (int i = 0; i < n; i++)
             nb_planet += planeteVisite[i];
 

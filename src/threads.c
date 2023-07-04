@@ -30,7 +30,7 @@ void *thread_floyd(FloydWarshallArgs *args)
 */
 void *timer(timerArgs* timer){
     while((*timer->fin)){
-        SDL_Delay(10);
+        SDL_Delay(1);
         (timer->time)++;
     }
     return NULL;
