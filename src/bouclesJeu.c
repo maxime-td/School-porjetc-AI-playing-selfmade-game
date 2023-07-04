@@ -325,7 +325,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     SDL_SetTextureAlphaMod(textureE2, 0);
     IMG_Quit();
 
-
     //texture planete
     SDL_Rect planete = {0, 0, 48, 48};
     SDL_Surface *imageP = IMG_Load("images/planetes.png");
@@ -592,7 +591,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
             if (fin && seconde == 0)
                 seconde = argsT.time/1000;
-                
+
             //Partie vérif trou noir2
             p2.x = trouNoir2.x+50;
             p2.y = trouNoir2.y+50;
