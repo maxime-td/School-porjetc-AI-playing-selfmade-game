@@ -325,7 +325,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     SDL_SetTextureAlphaMod(textureE2, 0);
     IMG_Quit();
 
-
     //texture planete
     SDL_Rect planete = {0, 0, 48, 48};
     SDL_Surface *imageP = IMG_Load("images/planetes.png");
@@ -592,8 +591,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
             if (fin && seconde == 0)
                 seconde = argsT.time/1000;
-            //Partie vérif trou noir2
 
+            //Partie vérif trou noir2
             p2.x = trouNoir2.x+50;
             p2.y = trouNoir2.y+50;
             distTrouNoir = distance(p1, p2);
@@ -605,10 +604,12 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             if (fin && seconde == 0)
                 seconde = argsT.time/1000;
 
-            if(rand()%10000 == 0)directionTN(&directionXTN2, &directionYTN2, xTN2, yTN2);
+            if(rand()%10000 == 0)
+                directionTN(&directionXTN2, &directionYTN2, xTN2, yTN2);
             calcul_speed(directionXTN2, directionYTN2, &speedXTN2, &speedYTN2, &xTN2, &yTN2, &trouNoir2, ACCELERATION_TROU);
 
-            if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
+            if(rand()%10000 == 0)
+                directionTN(&directionXTN, &directionYTN, xTN, yTN);
             calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, ACCELERATION_TROU);
             
             trouNoir2.x = (int)xTN2;
