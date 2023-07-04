@@ -16,6 +16,51 @@
 
 #define R_NOEUD 15
 
+SDL_Texture* create_texture(SDL_Surface * surface);
+
+void draw_rect(SDL_Rect rect);
+
+void draw_Line(Point point1, Point point2);
+
+// Structure pour les arguments de affiche
+typedef struct afficheArgs_s{
+    int * count;
+    int frame;
+    int frameEF;
+    int frameFlag;
+    int frameTN;
+    int type_fin;
+    SDL_Rect etoile;
+    SDL_Rect etoileFilante;
+    SDL_Rect background;
+    SDL_Rect navette;
+    SDL_Rect planete;
+    SDL_Rect flag;
+    SDL_Rect affTrouNoir;
+    asteroid_t * asteroid;
+    SDL_Texture * texture;
+    SDL_Texture * textureBg;
+    SDL_Texture * textureE1;
+    SDL_Texture * textureE2;
+    SDL_Texture * textureEF;
+    SDL_Texture * textureP;
+    SDL_Texture * textureF;
+    SDL_Texture * textureTN;
+    int * fin;
+    int * planeteVisite;
+    sommet_t ** sous_graphe;
+    sommet_t ** tab;
+    int n_sous_graphe;
+    int n;
+    int n_ast;
+    SDL_bool * program_on;
+    int * chemin;
+    Point * co;
+    float * x;
+    float * y;
+}afficheArgs;
+
+
 /**
  * @brief affiche un grph qui sert à faire le debugage de certaine fonction
  * @param tab Le chemin à tracer
@@ -54,7 +99,6 @@ void draw_time(int n);
  * @param radius Le rayon du disque.
 */
 void draw_disk(int center_x, int center_y, int radius);
-
 
 /**
  * @brief Dessine un graphe à l'aide d'un rendu SDL.
@@ -95,7 +139,6 @@ void affichAst(asteroid_t * tab, int n, SDL_Texture * image);
 */
 void afficheFin(int score, int bestScore);
 
-
 /**
  * @brief affiche l'ecran de fin du jeu trzvelling spaceman
  * @param time le temps de fin 
@@ -113,10 +156,6 @@ void render();
 */
 void closeSDL();
 
-SDL_Texture* load_texture_from_image(SDL_Surface * texture_soucoupe);
-
-
-
 /**
  * @brief C'est un secret
 */
@@ -133,57 +172,10 @@ void secret1();
 */
 void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int angle, int size);
 
-
-SDL_Texture * create_texture(SDL_Surface * surface);
-
-void draw_rect(SDL_Rect rect);
-
-void draw_Line(Point point1, Point point2);
-
-
-// Structure pour les arguments de affiche
-typedef struct afficheArgs_s{
-    int * count;
-    int frame;
-    int frameEF;
-    int frameFlag;
-    int frameTN;
-    int type_fin;
-    SDL_Rect etoile;
-    SDL_Rect etoileFilante;
-    SDL_Rect background;
-    SDL_Rect navette;
-    SDL_Rect planete;
-    SDL_Rect flag;
-    SDL_Rect affTrouNoir;
-    asteroid_t * asteroid;
-    SDL_Texture * texture;
-    SDL_Texture * textureBg;
-    SDL_Texture * textureE1;
-    SDL_Texture * textureE2;
-    SDL_Texture * textureEF;
-    SDL_Texture * textureP;
-    SDL_Texture * textureF;
-    SDL_Texture * textureTN;
-    int * fin;
-    int * planeteVisite;
-    sommet_t ** sous_graphe;
-    sommet_t ** tab;
-    int n_sous_graphe;
-    int n;
-    int n_ast;
-    SDL_bool * program_on;
-    int * chemin;
-    Point * co;
-    float * x;
-    float * y;
-}afficheArgs;
-
 /**
  * @brief fonction de lancement de thread pour l'affichage graphique du jeu
  * @param args Une structure contenant tout les argument necessaire a l'affichage du jeu
 */
 void * afficheJeu(afficheArgs * argsAff);
-
 
 #endif // AFFICHE_H

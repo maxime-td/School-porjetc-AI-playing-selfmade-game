@@ -14,29 +14,34 @@
  * @param x position x du trou noir
  * @param y position y du trou noir
 */
-void directionTN(float * directionX, float * directionY, int xTN, int yTN)
-{
+void directionTN(float * directionX, float * directionY, int xTN, int yTN) {
     int tirage;
     tirage = (rand()%20)-10;
-    if(*directionY<0)
-    {
-            tirage = (rand()%20-4);
-            if(yTN<H/4){tirage *= 2;}
+
+    if(*directionY<0) {
+        tirage = (rand()%20-4);
+        if(yTN<H/4){tirage *= 2;}
     }
-    else if(*directionY>0){
+    else if(*directionY>0) {
             tirage = (rand()%20)-16;
-            if(yTN>3*H/4){tirage *= 2;}
-    }    
+            if(yTN>3*H/4)
+                tirage *= 2;
+    }
+
     *directionY += ((float)tirage)/200;
     tirage = (rand()%20)-10;
-    if(*directionX<0){
+
+    if(*directionX<0) {
             tirage = (rand()%20-4);
-            if(xTN<W/4){tirage *= 2;}
+            if(xTN<W/4)
+                tirage *= 2;
     }    
-    else if(*directionX>0){
+    else if(*directionX>0) {
             tirage = (rand()%20)-16;
-            if(xTN>3*W/4){tirage *= 2;}
+            if(xTN>3*W/4)
+                tirage *= 2;
     }
+
     *directionX += ((float)tirage)/200;
 }
 
@@ -51,35 +56,24 @@ void directionTN(float * directionX, float * directionY, int xTN, int yTN)
 */
 void calcul_direction_navette(int keyPressZ, int keyPressS, int keyPressQ, int keyPressD, float * directionX, float * directionY){
     if (keyPressZ)
-        {
-            (*directionY) += -0.5;
-        }
-        if (keyPressS)
-        {
-            (*directionY) += 0.5;
-        }
+        (*directionY) += -0.5;
 
-        if (!keyPressZ && !keyPressS)
-        {
-            (*directionY) = 0;
-        }
+    if (keyPressS)
+        (*directionY) += 0.5;
 
-        if (keyPressQ)
-        {
-            (*directionX) += -0.5;
-        }
-        if (keyPressD)
-        {
-            (*directionX) += 0.5;
-        }
+    if (!keyPressZ && !keyPressS)
+        (*directionY) = 0;
 
-        if (!keyPressD && !keyPressQ)
-        {
-            (*directionX) = 0;
-        }
+    if (keyPressQ)
+        (*directionX) += -0.5;
+        
+    if (keyPressD)
+        (*directionX) += 0.5;
 
-        if (fabs((*directionX)) + fabs((*directionY)) == 0.5)
-        {
+    if (!keyPressD && !keyPressQ)
+        (*directionX) = 0;
+
+    if (fabs((*directionX)) + fabs((*directionY)) == 0.5) {
             (*directionX) *= 2;
             (*directionY) *= 2;
         }
