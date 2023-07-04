@@ -10,6 +10,7 @@
 #include "graph.h"
 
 #define ATTRACTION_TROU 0.000007
+#define ATTRACTION_TROU_IA 0.007
 
 
 /**
@@ -42,7 +43,7 @@ void calcul_direction_navette(int keyPressZ, int keyPressS, int keyPressQ, int k
  * @param y pemet de recuperer la nouvelle position y du trou noir
  * @param rect le rectangle representant le trou noir 
 */
-void calcul_speed(float directionX, float directionY, float * speedX, float * speedY, float * x, float * y, SDL_Rect * rect, double acceleration);
+void calcul_speed(float directionX, float directionY, float * speedX, float * speedY, float * x, float * y, SDL_Rect * rect, double acceleration, double max_speed);
 
 /**
  * @brief modifie la direction de la navette en fonction de sa distance au Trou Noir
@@ -55,7 +56,7 @@ void calcul_speed(float directionX, float directionY, float * speedX, float * sp
  * @param speedX adresse de la vitesse sur X de la navette
  * @param speedY adresse de la vitesse sur Y de la navette
 */
-void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, float x, float y , float * speedX, float * speedY);
+void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, float x, float y , float * speedX, float * speedY, double attraction);
 
 /**
  * @brief Initialise la position du Trou noir assez loin de la navette
