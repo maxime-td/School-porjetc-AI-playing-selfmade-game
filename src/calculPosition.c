@@ -5,6 +5,7 @@
 #include "calculPosition.h"
 #include "graph.h"
 #include "bouclesJeu.h"
+#include "map.h"
 
 /**
  * @brief calcul de la direction du trou noir
@@ -164,5 +165,28 @@ void calcul_speed(float directionX, float directionY, float * speedX, float * sp
         *speedX = 0;
         *speedY = 0;
     }
+}
 
+/**
+ * @brief modifie la direction de la navette en fonction de sa distance au Trou Noir
+ * @param directionXN adresse de la direction X de la navette
+ * @param directionYN adresse de la direction Y de la navette
+ * @param xTN coord X du trou Noir
+ * @param yTN coord Y du trou Noir
+ * @param x adresse de la coord X de la navette
+ * @param y adresse de la coord Y de la navette
+ * @param speedX adresse de la vitesse sur X de la navette
+ * @param speedY adresse de la vitesse sur Y de la navette
+*/
+void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, float x, float y , float * speedX, float * speedY)
+{
+    Point navette = {(int)x, (int)y};
+    Point trouNoir = {xTN, yTN};
+    float dist = distance(navette, trouNoir);
+
+    *directionXN += (xTN+24-x);
+    *directionYN += (yTN+24-y);
+
+    *speedX += *directionXN * ATTRACTION_TROU/(dist*dist);
+    *speedY += *directionYN * ATTRACTION_TROU/(dist*dist);
 }

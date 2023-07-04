@@ -4,8 +4,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
+#include <math.h>
+
 
 #include "graph.h"
+
+#define ATTRACTION_TROU 0.0000008
+
 
 /**
  * @brief calcul de la direction du trou noir
@@ -38,5 +43,18 @@ void calcul_direction_navette(int keyPressZ, int keyPressS, int keyPressQ, int k
  * @param rect le rectangle representant le trou noir 
 */
 void calcul_speed(float directionX, float directionY, float * speedX, float * speedY, float * x, float * y, SDL_Rect * rect, double acceleration);
+
+/**
+ * @brief modifie la direction de la navette en fonction de sa distance au Trou Noir
+ * @param directionXN adresse de la direction X de la navette
+ * @param directionYN adresse de la direction Y de la navette
+ * @param xTN coord X du trou Noir
+ * @param yTN coord Y du trou Noir
+ * @param x adresse de la coord X de la navette
+ * @param y adresse de la coord Y de la navette
+ * @param speedX adresse de la vitesse sur X de la navette
+ * @param speedY adresse de la vitesse sur Y de la navette
+*/
+void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, float x, float y , float * speedX, float * speedY);
 
 #endif
