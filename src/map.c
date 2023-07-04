@@ -1,15 +1,15 @@
 #include <stdio.h>
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+
 #include "fourmi.h"
 #include "graph.h"
 #include "affiche.h"
 #include "map.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 
-asteroid_t *ast_Partout(sommet_t **tab, int n, int *nAst)
-{
+asteroid_t *ast_Partout(sommet_t **tab, int n, int *nAst) {
     int frame_size = 48;
-
     int alea = 0;
     int angle = 0;
     int ecart = (rand() % 50) - 25;
@@ -19,20 +19,17 @@ asteroid_t *ast_Partout(sommet_t **tab, int n, int *nAst)
     SDL_Rect srcrect = {0, 0, frame_size, frame_size}; // position and size of the part of the image to draw
     SDL_Rect dstrect = {100, 100, 42, 42};             // position and size of the destination on the screen
 
-    for (int i = 0; i < W; i += 21 + ecart)
-    {
+    for (int i = 0; i < W; i += 21 + ecart) {
         ecart = (rand() % 50) - 25;
         dstrect.x = i;
-        for (int j = 0; j < H; j += 21 + ecart)
-        {
+        for (int j = 0; j < H; j += 21 + ecart) {
             ecart = (rand() % 50) - 25;
             dstrect.y = j;
             alea = (rand() % 16);
             srcrect.x = alea;
             angle = rand() % 360;
 
-            if (isInPath_Line(dstrect.x, dstrect.y, tab, n, PATH_SIZE) == 0)
-            {
+            if (isInPath_Line(dstrect.x, dstrect.y, tab, n, PATH_SIZE) == 0) {
                 tabAst[a].x = dstrect.x;
                 tabAst[a].y = dstrect.y;
                 tabAst[a].frame = srcrect.x;
@@ -46,20 +43,17 @@ asteroid_t *ast_Partout(sommet_t **tab, int n, int *nAst)
     return tabAst;
 }
 
-float fonction_affine(float a, int x, float b)
-{
+float fonction_affine(float a, int x, float b) {
     return a * x + b;
 }
 
-float distance(Point p1, Point p2)
-{
+float distance(Point p1, Point p2) {
     float dx = p2.x - p1.x;
     float dy = p2.y - p1.y;
     return sqrt(dx * dx + dy * dy);
 }
 
-void remp_tabPm(Point p1, Point p2, Point *tab)
-{
+void remp_tabPm(Point p1, Point p2, Point *tab) {
     tab[0].x = (p1.x + p2.x) / 2 - 12;
     tab[0].y = (p1.y + p2.y) / 2 - 12;
     tab[1].x = ((p1.x + tab[0].x) / 2) - 12;
@@ -80,24 +74,19 @@ void remp_tabPm(Point p1, Point p2, Point *tab)
     tab[8].y = (tab[5].y + tab[0].y) / 2 - 12;
 }
 
-int isInPath_carres(int pX, int pY, sommet_t **tabSom, int n, int largeur)
-{
+int isInPath_carres(int pX, int pY, sommet_t **tabSom, int n, int largeur) {
     int res = 0;
     Point P = {pX, pY};
     Point tmp;
     Point carre[4];
     Point pmTab[9];
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            if (tabSom[i]->voisins[j] == 1)
-            {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (tabSom[i]->voisins[j] == 1) {
                 Point p1 = {tabSom[i]->x, tabSom[i]->y};
                 Point p2 = {tabSom[j]->x, tabSom[j]->y};
                 remp_tabPm(p1, p2, pmTab);
-                for (int k = 0; k < 9; k++)
-                {
+                for (int k = 0; k < 9; k++) {
                     carre[0].x = pmTab[k].x - (largeur / 2);
                     carre[0].y = pmTab[k].y - (largeur / 2);
 
@@ -111,22 +100,17 @@ int isInPath_carres(int pX, int pY, sommet_t **tabSom, int n, int largeur)
                     carre[3].y = pmTab[k].y + (largeur / 2);
 
                     if (isPointInsideRectangle(P, carre) == 1)
-                    {
                         res += 1;
-                    }
                 }
             }
         }
     }
 
-    for (int i = 0; i < n; i++)
-    {
+    for (int i = 0; i < n; i++) {
         tmp.x = tabSom[i]->x;
         tmp.y = tabSom[i]->y;
         if (distance(tmp, P) < largeur)
-        {
             res += 1;
-        }
     }
 
     return res;
@@ -149,36 +133,40 @@ void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double* x_pr
     *y_proj = y1 + (dot_product * dy) / (dx * dx + dy * dy);
 }
 
-int max(int a, int b)
-{
+int max(int a, int b) {
     if(a<b){return b;}
     return a;
 }
-int min(int a, int b)
-{
+
+int min(int a, int b) {
     if(a>b){return b;}
     return a;
 }
-int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, int largeur)
-{
+
+int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, int largeur) {
     int res = 0;
     int dist = 0;
+
     Point tmp;
     Point P = {pX, pY};
-    double x_proj, y_proj;
-    //float a1, a2, a3, a4;
-    //int b1, b2, b3, b4;
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            if (tabSom[i]->voisins[j] == 1)
-            {
-                Point p1 = {tabSom[i]->x, tabSom[i]->y};
-                Point p2 = {tabSom[j]->x, tabSom[j]->y};
-                projetOrthogonal(pX, pY, p1.x, p1.y, p2.x, p2.y, &x_proj, &y_proj);
+    Point p1;
+    Point p2;
+    Point projete;
 
-                Point projete = {x_proj, y_proj};
+    double x_proj, y_proj;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (tabSom[i]->voisins[j] == 1) {
+                p1.x = tabSom[i]->x;
+                p1.y = tabSom[i]->y;
+
+                p2.x = tabSom[j]->x;
+                p2.y = tabSom[j]->y;
+
+                projetOrthogonal(pX, pY, p1.x, p1.y, p2.x, p2.y, &x_proj, &y_proj);
+                projete.x = x_proj;
+                projete.y = y_proj;
 
                 dist = distance(projete, P);
                 if(dist<largeur && x_proj>min(p1.x, p2.x) && x_proj<max(p1.x, p2.x)){res++;}
@@ -186,32 +174,26 @@ int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, int largeur)
         }
     }
 
-    for (int i = 0; i < n; i++)
-    {
+    for (int i = 0; i < n; i++) {
         tmp.x = tabSom[i]->x;
         tmp.y = tabSom[i]->y;
         if (distance(tmp, P) < largeur)
-        {
             res += 1;
-        }
     }
+
     return res;
 }
 
-int isPointInsideRectangle(Point p, Point rect[4])
-{
+int isPointInsideRectangle(Point p, Point rect[4]) {
     int c = 0;
     if (rect[0].x < p.x && rect[1].x > p.x && rect[0].y < p.y && rect[3].y > p.y)
-    {
         c = 1;
-    }
+
     return c;
 }
 
-void calculateLineCoefficients(int x1, int y1, int x2, int y2, float *a, int *b)
-{
-    if (x1 > x2)
-    {
+void calculateLineCoefficients(int x1, int y1, int x2, int y2, float *a, int *b) {
+    if (x1 > x2) {
         // Inverser les points
         int tempX = x1;
         int tempY = y1;
