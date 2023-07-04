@@ -582,15 +582,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 affArgs.type_fin = 1;
                 fin = 1;
             }
-
-            if (fin && seconde == 0)
-                seconde = argsT.time/1000;
             
             trouNoir.x = (int)xTN;
             trouNoir.y = (int)yTN;
-
-            if (fin && seconde == 0)
-                seconde = argsT.time/1000;
 
             //Partie vérif trou noir2
             p2.x = trouNoir2.x+50;
@@ -600,6 +594,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 affArgs.type_fin = 1;
                 fin = 1;
             }
+
+            trouNoir2.x = (int)xTN2;
+            trouNoir2.y = (int)yTN2;
 
             if (fin && seconde == 0)
                 seconde = argsT.time/1000;
@@ -611,9 +608,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             if(rand()%10000 == 0)
                 directionTN(&directionXTN, &directionYTN, xTN, yTN);
             calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, ACCELERATION_TROU);
-            
-            trouNoir2.x = (int)xTN2;
-            trouNoir2.y = (int)yTN2;
 
             affArgs.affTrouNoir2 = trouNoir2;
             attractionTN(&directionX, &directionY, xTN2, yTN2, x, y, &speedX, &speedY);
