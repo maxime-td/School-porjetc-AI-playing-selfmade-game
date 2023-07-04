@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_image.h>
-#include "graph.h"
-#include "affiche.h"
 #include <math.h>
 #include <string.h>
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
+
+#include "graph.h"
+#include "affiche.h"
 
 SDL_Renderer* renderer;
 SDL_Window* window = NULL;
@@ -19,16 +20,13 @@ SDL_Window* window = NULL;
  * @param tabSom Le tableau de sommet
  * @param n La taille du chemin
 */
-void affiche_Chem(int * tab, sommet_t ** tabSom, int n)
-{
-    for(int i=0; i<n-1; i++)
-    {
+void affiche_Chem(int * tab, sommet_t ** tabSom, int n) {
+    for(int i=0; i<n-1; i++) {
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         SDL_RenderDrawLine(renderer, tabSom[tab[i]]->x, tabSom[tab[i]]->y, tabSom[tab[i+1]]->x, tabSom[tab[i+1]]->y); //Traçage du lien
         SDL_RenderPresent(renderer);
     }
 }
-
 
 /**
  * @brief Initialise l'affichage SDL
@@ -39,22 +37,21 @@ void init() {
     SDL_DisplayMode dm;  
 
     //Initialisation de la SDL  + gestion de l'échec possible
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
-    {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         SDL_Log("Error : SDL initialisation - %s\n",
-                SDL_GetError()); // l'initialisation de la SDL a échoué
+            SDL_GetError()); // l'initialisation de la SDL a échoué
         exit(EXIT_FAILURE);
     }
 
-    if (TTF_Init()!= 0){
+    if (TTF_Init()!= 0) {
         SDL_Log("Error : SDL initialisation - %s\n",
-                SDL_GetError()); // l'initialisation de la TTF a échoué
+            SDL_GetError()); // l'initialisation de la TTF a échoué
         exit(EXIT_FAILURE);
     }
 
-    if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
-    {
-        SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
+    if (SDL_GetDesktopDisplayMode(0, &dm) != 0) {
+        SDL_Log("SDL_GetDesktopDisplayMode failed: %s",
+            SDL_GetError());
         exit(EXIT_FAILURE);
     }
 
@@ -67,11 +64,10 @@ void init() {
 
     renderer = SDL_CreateRenderer(window, -1, 0);
 
-    if (window == NULL)
-    {
+    if (window == NULL) {
         SDL_Log("Error : SDL window 1 creation - %s\n",
-                SDL_GetError()); // échec de la création de la fenêtre
-        SDL_Quit();              // On referme la SDL
+            SDL_GetError()); // échec de la création de la fenêtre
+        SDL_Quit(); // On referme la SDL
         exit(EXIT_FAILURE);
     }
 }
@@ -79,7 +75,7 @@ void init() {
 /**
  * @brief Clear le fond en blanc
 */
-void clear_SDL(){
+void clear_SDL() {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
 }
@@ -89,13 +85,14 @@ void clear_SDL(){
  * @param n L'entier à afficher
 */
 void draw_int(int n) {
+    char Val[10];
+
     SDL_Rect textRect;
     TTF_Font* font;
     SDL_Surface* textSurface;
     SDL_Texture* textTexture;
     SDL_Color color = {50, 150, 0, 255};
-    char Val[10];
-
+    
     font = TTF_OpenFont("arial.ttf", 60);
 
     sprintf(Val, "%d", n);
@@ -119,12 +116,14 @@ void draw_int(int n) {
  * @param n temps à afficher
 */
 void draw_time(int n) {
+    char Val[10];
+
     SDL_Rect textRect;
     TTF_Font* font;
     SDL_Surface* textSurface;
     SDL_Texture* textTexture;
     SDL_Color color = {200, 200, 200, 255};
-    char Val[10];
+    
     SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
 
     font = TTF_OpenFont("arial.ttf", 60);
@@ -163,9 +162,8 @@ void draw_disk(int center_x, int center_y, int radius) {
     for (int i = x; i < x + width; i++) {
         for (int j = y; j < y + height; j++) {
             // Vérifier si le point (i, j) est à l'intérieur du cercle
-            if ((i - center_x) * (i - center_x) + (j - center_y) * (j - center_y) <= radius * radius) {
+            if ((i - center_x) * (i - center_x) + (j - center_y) * (j - center_y) <= radius * radius)
                 SDL_RenderDrawPoint(renderer, i, j);
-            }
         }
     }
 }
@@ -223,8 +221,8 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
 
                 SDL_FreeSurface(textSurfacePoid);
                 SDL_QueryTexture(textTexturePoid, NULL, NULL, &poidRect.w, &poidRect.h);
-                //SDL_RenderFillRect(renderer, &poidRect);
-                if (displayPoid){
+
+                if (displayPoid) {
                     SDL_RenderCopy(renderer, textTexturePoid, NULL, &poidRect);
                 }
                 
@@ -258,28 +256,30 @@ void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) 
  * @param nPath La taille du tableau path
  */
 void draw_path(sommet_t ** tab, int * path, int nPath) {
+    char Tag[10];
+
     SDL_Rect textRect;
     TTF_Font* font;
     SDL_Surface* textSurface;
     SDL_Texture* textTexture;
     SDL_Color color = {50, 150, 0, 255};
-    char Tag[10];
 
     font = TTF_OpenFont("arial.ttf", R_NOEUD+10);
 
     textRect.y = 0;
+
     for (int i = 0; i < nPath ; i++){
-        if (i != nPath-1){
+        if (i != nPath-1)
             sprintf(Tag, "%c - ", tab[path[i]]->val);
-        }else{
+        else
             sprintf(Tag, "%c", tab[path[i]]->val);
-        }
         
         textSurface = TTF_RenderText_Solid(font, Tag, color);
         textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
 
         SDL_FreeSurface(textSurface);
         SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+
         textRect.x = i*(R_NOEUD-2)*3;
         textRect.y = ((int)(textRect.x/W))*textRect.h;
         textRect.x = textRect.x%W;
@@ -307,9 +307,9 @@ void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid
  * @param n taille du tableau
  * @param image texture des asteroids
 */
-void affichAst(asteroid_t * tab, int n, SDL_Texture * image){
+void affichAst(asteroid_t * tab, int n, SDL_Texture * image) {
     SDL_Rect dest = {0, 0, 48, 48};
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < n; i++) {
         dest.x = tab[i].x;
         dest.y = tab[i].y;
         draw_sprite(dest, image, tab[i].frame, 0, tab[i].angle, 48);
@@ -327,6 +327,7 @@ void afficheFin(int score, int bestScore) {
     SDL_Surface* textSurface;
     SDL_Texture* textTexture;
     SDL_Color color = {50, 150, 0, 255};
+
     char Txt1[100];
     char Txt2[100];
 
@@ -370,14 +371,14 @@ void affiche_fin_espace(int time, int type_fin) {
     SDL_Surface* textSurface;
     SDL_Texture* textTexture;
     SDL_Color color = {200, 200, 200, 255};
+
     char Txt1[100];
 
     font = TTF_OpenFont("arial.ttf", 40);
-    if (!type_fin){
+    if (!type_fin)
         sprintf(Txt1, "Votre temps : %d s", time);
-    } else {
+    else 
         sprintf(Txt1, "Vous etes mort");
-    }
     
     textSurface = TTF_RenderText_Solid(font, Txt1, color);
     textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
@@ -438,7 +439,7 @@ void secret1() {
  * @param angle l'angle de rotation du sprite
  * @param size la taille du sprite sur l'image
 */
-void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int angle, int size){
+void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int angle, int size) {
     SDL_Rect srcrect = {size*x, size*y, size, size};
     SDL_RenderCopyEx(renderer, texture, &srcrect, &destination, angle, NULL, 0);
 }
@@ -448,7 +449,7 @@ void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int 
  * @param surface la surface
  * @return la texture cree
 */
-SDL_Texture * create_texture(SDL_Surface * surface){
+SDL_Texture * create_texture(SDL_Surface * surface) {
     return SDL_CreateTextureFromSurface(renderer, surface);
 }
 
@@ -456,7 +457,7 @@ SDL_Texture * create_texture(SDL_Surface * surface){
  * @brief Dessine un rectangle
  * @param rect Le rectangle à dessiner
 */
-void draw_rect(SDL_Rect rect){
+void draw_rect(SDL_Rect rect) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(renderer, &rect);
 }
@@ -466,40 +467,37 @@ void draw_rect(SDL_Rect rect){
  * @param point1 premier point de la ligne
  * @param point2 deuxieme point de la ligne
 */
-void draw_Line(Point point1, Point point2)
-{
+void draw_Line(Point point1, Point point2) {
     SDL_SetRenderDrawColor(renderer, 0,255,0,0);
     SDL_RenderDrawLine(renderer, point1.x, point1.y, point2.x, point2.y);
     SDL_RenderPresent(renderer);
 }
 
-
 /**
  * @brief fonction de lancement de thread pour l'affichage graphique du jeu
  * @param args Une structure contenant tout les argument necessaire a l'affichage du jeu
 */
-void * afficheJeu(afficheArgs * argsAff){
+void * afficheJeu(afficheArgs * argsAff) {
     int alpha = 0; //l'aplpha des etoile de fond
     int etatAlpha = 1; //booleen disant si l'on doit augmenter ou baisser l'alpha des etoiles
     int first = 1; //booleen permetant de savoir si c le premier tour de boucle depuis la fin du jeu
-
     int seconde = 0; //variable permetant de stoquer le temps de fin de jeu
     
     while (*(argsAff->program_on))
     {   
         //verification de fin de jeu pour stoquer le temps de fin
-        if (*(argsAff->fin) && first){
+        if (*(argsAff->fin) && first) {
             first = 0;
             seconde = *(argsAff->count)/100;
         }
         
         //une refresh toute les 2 ms
-        if (*(argsAff->count)%2 == 0){
+        if (*(argsAff->count)%2 == 0) {
 
             //changement de frame pour les etoile filantes
-            if (*(argsAff->count)%10 == 0){
+            if (*(argsAff->count)%10 == 0) {
                 argsAff->frameEF = (argsAff->frameEF + 1)%8;
-                if (argsAff->frameEF == 0){
+                if (argsAff->frameEF == 0) {
                     argsAff->etoileFilante.x = rand()%W;
                     argsAff->etoileFilante.y = rand()%H;
                 }
@@ -519,29 +517,26 @@ void * afficheJeu(afficheArgs * argsAff){
             //Affichage de l'etoile filante
             draw_sprite(argsAff->etoileFilante, argsAff->textureEF, argsAff->frameEF, 0, 0, 26);
             
-            if (!(*(argsAff->fin))){
+            if (!(*(argsAff->fin))) {
                 //Affichage en jeu
 
                 //Affichage des planetes
-                for (int i = 0; i < argsAff->n_sous_graphe; i++){
+                for (int i = 0; i < argsAff->n_sous_graphe; i++) {
                     argsAff->planete.x = argsAff->sous_graphe[i]->x-24;
                     argsAff->planete.y = argsAff->sous_graphe[i]->y-24;
                     draw_sprite(argsAff->planete, argsAff->textureP, argsAff->co[i].x, argsAff->co[i].y, 0, 48);
                 }
 
                 //Affichage des drapeaux
-                for (int i = 0; i < argsAff->n; i++){
-                    if (argsAff->planeteVisite[i]){
+                for (int i = 0; i < argsAff->n; i++) {
+                    if (argsAff->planeteVisite[i]) {
                         argsAff->flag.x = argsAff->tab[i]->x-12;
                         argsAff->flag.y = argsAff->tab[i]->y-48;
-                        if (i == argsAff->chemin[0]){
+                        if (i == argsAff->chemin[0])
                             draw_sprite(argsAff->flag, argsAff->textureF, argsAff->frameFlag, 1, 0, 60);
-                        }else{
+                        else
                             draw_sprite(argsAff->flag, argsAff->textureF, argsAff->frameFlag, 0, 0, 60);
-                        }
-                        
                     }
-                    
                 }
 
                 //Affichage du trou noir
@@ -551,7 +546,7 @@ void * afficheJeu(afficheArgs * argsAff){
                 draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);
 
                 //Frame de la nevette du trou noir et du drapeau
-                if (*(argsAff->count)%20 == 0){
+                if (*(argsAff->count)%20 == 0) {
                     argsAff->frame = (argsAff->frame + 1)%4;
                     argsAff->frameTN = (argsAff->frameTN + 1)%4;
                     argsAff->frameFlag = (argsAff->frameFlag + 1)%5;
@@ -567,27 +562,24 @@ void * afficheJeu(afficheArgs * argsAff){
                 draw_time(*(argsAff->count)/100);
             }
 
-            else{
-                //Affiche ecran de fin
+            else //Affiche ecran de fin
                 affiche_fin_espace(seconde, argsAff->type_fin);
-            }
 
             render(); //rendre les differents elements
 
             //Modification du alpha des etoiles de fond
-            if (etatAlpha){
+            if (etatAlpha) {
                 alpha--;
-                if (0 >= alpha){
+                if (0 >= alpha)
                     etatAlpha = !etatAlpha;
-                } 
-            } else {
-                alpha++;
-                if (255 <= alpha){
-                    etatAlpha = !etatAlpha;
-                }
             }
-                
+            else {
+                alpha++;
+                if (255 <= alpha)
+                    etatAlpha = !etatAlpha;
+            }      
         }
     }
+
     return NULL;
 }
