@@ -572,48 +572,61 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 speedY = -speedY/2;
             }
 
-            //Partie vérif trou noir
+            //Coo joueur pour tests trous noirs
             p1.x = x+16;
             p1.y = y+16;
+
+            //Partie trou noir (bleu)
             p2.x = trouNoir.x+50;
             p2.y = trouNoir.y+50;
+
             distTrouNoir = distance(p1, p2);
-            if(distTrouNoir<rayonTN/3) {
+
+            if(distTrouNoir<rayonTN/3) { //Si trop près meurt
                 affArgs.type_fin = 1;
                 fin = 1;
             }
+
+            if(distTrouNoir<4*rayonTN)
+                attractionTN(&directionX, &directionY, xTN, yTN, x, y, &speedX, &speedY);
             
-            trouNoir.x = (int)xTN;
-            trouNoir.y = (int)yTN;
-
-            //Partie vérif trou noir2
-            p2.x = trouNoir2.x+50;
-            p2.y = trouNoir2.y+50;
-            distTrouNoir = distance(p1, p2);
-            if(distTrouNoir<rayonTN/3) {
-                affArgs.type_fin = 1;
-                fin = 1;
-            }
-
-            trouNoir2.x = (int)xTN2;
-            trouNoir2.y = (int)yTN2;
-
-            if (fin && seconde == 0)
-                seconde = argsT.time/1000;
-
-            if(rand()%10000 == 0)
-                directionTN(&directionXTN2, &directionYTN2, xTN2, yTN2);
-            calcul_speed(directionXTN2, directionYTN2, &speedXTN2, &speedYTN2, &xTN2, &yTN2, &trouNoir2, ACCELERATION_TROU);
-
             if(rand()%10000 == 0)
                 directionTN(&directionXTN, &directionYTN, xTN, yTN);
             calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, ACCELERATION_TROU);
 
-            affArgs.affTrouNoir2 = trouNoir2;
+            trouNoir.x = (int)xTN;
+            trouNoir.y = (int)yTN;
+            
             affArgs.affTrouNoir = trouNoir;
+            //Fin trou noir (bleu)
 
-            attractionTN(&directionX, &directionY, xTN, yTN, x, y, &speedX, &speedY);
-            attractionTN(&directionX, &directionY, xTN2, yTN2, x, y, &speedX, &speedY);
+            //Partie vérif trou noir 2 (rouge)
+            p2.x = trouNoir2.x+50;
+            p2.y = trouNoir2.y+50;
+
+            distTrouNoir = distance(p1, p2);
+
+            if(distTrouNoir<rayonTN/3) { //Si trop près meurt
+                affArgs.type_fin = 1;
+                fin = 1;
+            }
+
+            if(distTrouNoir<4*rayonTN)
+                attractionTN(&directionX, &directionY, xTN2, yTN2, x, y, &speedX, &speedY);
+
+            if(rand()%10000 == 0)
+                directionTN(&directionXTN2, &directionYTN2, xTN2, yTN2);
+
+            trouNoir2.x = (int)xTN2;
+            trouNoir2.y = (int)yTN2;
+
+            calcul_speed(directionXTN2, directionYTN2, &speedXTN2, &speedYTN2, &xTN2, &yTN2, &trouNoir2, ACCELERATION_TROU);
+
+            affArgs.affTrouNoir2 = trouNoir2;
+            //Fin trou noir 2 (rouge)
+
+            if (fin && seconde == 0)
+                seconde = argsT.time/1000;
         }
 
         if (ia && fin){
