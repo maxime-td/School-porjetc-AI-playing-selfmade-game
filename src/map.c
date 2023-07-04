@@ -118,15 +118,15 @@ int isInPath_carres(int pX, int pY, sommet_t **tabSom, int n, int largeur) {
 
 void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double* x_proj, double* y_proj) {
     // Calcul des coordonnées du vecteur de la droite
-    int dx = x2 - x1;
-    int dy = y2 - y1;
+    double dx = x2 - x1;
+    double dy = y2 - y1;
 
     // Calcul des coordonnées du vecteur du point à projeter par rapport à un des points de la droite
-    int dx_point = x - x1;
-    int dy_point = y - y1;
+    double dx_point = x - x1;
+    double dy_point = y - y1;
 
     // Calcul du produit scalaire entre le vecteur de la droite et le vecteur du point à projeter
-    int dot_product = dx * dx_point + dy * dy_point;
+    double dot_product = dx * dx_point + dy * dy_point;
 
     // Calcul des coordonnées du projeté orthogonal en utilisant le produit scalaire
     *x_proj = x1 + (dot_product * dx) / (dx * dx + dy * dy);
