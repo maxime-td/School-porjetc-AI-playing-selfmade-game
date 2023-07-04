@@ -496,7 +496,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     //texture trou noir
     int rayonTN = 50; //Le rayon du trou noir
     SDL_Rect trouNoir = {300, 200, rayonTN*2, rayonTN*2};
-    SDL_Surface * imageTN = IMG_Load("images/trou_noir.png");
+    SDL_Surface * imageTN = IMG_Load("images/trou_noir_bleu.png");
     SDL_Texture * textureTN = create_texture(imageTN);
     IMG_Quit();
 
@@ -821,7 +821,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             pTN.x = trouNoir.x+50;
             pTN.y = trouNoir.y+50;
             distTrouNoir = distance(joueur, pTN);
-            if(distTrouNoir<rayonTN){
+            if(distTrouNoir<rayonTN/2){
                 affArgs.type_fin = 1;
                 fin = 1;
             }
@@ -1164,7 +1164,7 @@ void boucle_jeu_sans_graph()
         matDist = dist_tab(tab, &n);
         chemin = colonni_fourmi(matDist, n, rand()%n, &n_chemin);
 
-        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 1, rules, n_rules, &res, 1);
+        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 0, rules, n_rules, &res, 1);
 
         if(chemin != NULL)
             free(chemin);
