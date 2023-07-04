@@ -73,7 +73,8 @@ float distance(Point p1, Point p2) {
  * @param x_proj l'adresse de la coord X du projeté du point sur la droite
  * @param y_proj l'adresse de la coord X du projeté du point sur la droite
 */
-void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double* x_proj, double* y_proj) {
+void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double* x_proj, double* y_proj) 
+{
     // Calcul des coordonnées du vecteur de la droite
     double dx = x2 - x1;
     double dy = y2 - y1;
@@ -96,7 +97,8 @@ void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double* x_pr
  * @param b second entier
  * @return la valeur du plus grand entre a et b
 */
-int max(int a, int b) {
+int max(int a, int b) 
+{
     if(a<b){return b;}
     return a;
 }
@@ -107,7 +109,8 @@ int max(int a, int b) {
  * @param b second entier
  * @return la valeur du plus petit entre a et b
 */
-int min(int a, int b) {
+int min(int a, int b) 
+{
     if(a>b){return b;}
     return a;
 }
@@ -122,7 +125,8 @@ int min(int a, int b) {
  * @return - 0 si l'objet n'est pas sur le chemin
  *         - 1 si l'objet est sur le chemin
 */
-int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, int largeur) {
+int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, int largeur) 
+{
     int res = 0;
     int dist = 0;
 
