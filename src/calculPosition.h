@@ -7,7 +7,6 @@
 
 #include "graph.h"
 
-
 /**
  * @brief calcul de la direction du trou noir
  * @param directionX permet de recuperer la direction x du trou noir
