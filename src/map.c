@@ -90,11 +90,23 @@ void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double* x_pr
     *y_proj = y1 + (dot_product * dy) / (dx * dx + dy * dy);
 }
 
+/**
+ * @brief donne le maximum parmi 2 entier
+ * @param a premier entier
+ * @param b second entier
+ * @return la valeur du plus grand entre a et b
+*/
 int max(int a, int b) {
     if(a<b){return b;}
     return a;
 }
 
+/**
+ * @brief donne le minimum parmi 2 entier
+ * @param a premier entier
+ * @param b second entier
+ * @return la valeur du plus petit entre a et b
+*/
 int min(int a, int b) {
     if(a>b){return b;}
     return a;
