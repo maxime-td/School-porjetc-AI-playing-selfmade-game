@@ -7,7 +7,6 @@
 #define W 1920
 #define H 1080
  
-
 /**
  * @struct sommet_s
  * Structure représentant un sommet dans un graphe.
@@ -36,19 +35,19 @@ void free2DTab(void ** tab, int n);
  */
 void tab_to_graph(sommet_t ** tab, int n, int start);
 
-
 /**
  * @brief Créée un tableau de points avec des coordonnées aléatoires
  * @param n le pointeur sur le nombre de points à générer
- * @param width la borne sur l'axe des abscisses
- * @param height la borne sur l axe des ordonnées
  * @return un pointeur sur un tableau de sommets
  */
 sommet_t ** gen_tab_sommets_cercle(int * n);
 
+/**
+ * @brief Créée un tableau de points avec des coordonnées aléatoires
+ * @param n le pointeur sur le nombre de points à générer
+ * @return un pointeur sur un tableau de sommets
+ */
 sommet_t ** gen_tab_sommets_rand(int * n);
-
-
 
 /**
  * @brief Créée des liasons aléatoires entre les sommets
