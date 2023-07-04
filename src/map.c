@@ -62,69 +62,17 @@ float distance(Point p1, Point p2) {
     return sqrt(dx * dx + dy * dy);
 }
 
-void remp_tabPm(Point p1, Point p2, Point *tab) {
-    tab[0].x = (p1.x + p2.x) / 2 - 12;
-    tab[0].y = (p1.y + p2.y) / 2 - 12;
-    tab[1].x = ((p1.x + tab[0].x) / 2) - 12;
-    tab[1].y = ((p1.y + tab[0].y) / 2) - 12;
-    tab[2].x = ((p1.x + tab[1].x) / 2) - 12;
-    tab[2].y = ((p1.y + tab[1].y) / 2) - 12;
-    tab[3].x = ((p1.x + tab[2].x) / 2) - 12;
-    tab[3].y = ((p1.y + tab[2].y) / 2) - 12;
-    tab[4].x = ((tab[0].x + tab[1].x) / 2) - 12;
-    tab[4].y = ((tab[0].y + tab[1].y) / 2) - 12;
-    tab[5].x = (tab[0].x + p2.x) / 2 - 12;
-    tab[5].y = (tab[0].y + p2.y) / 2 - 12;
-    tab[6].x = (tab[5].x + p2.x) / 2 - 12;
-    tab[6].y = (tab[5].y + p2.y) / 2 - 12;
-    tab[7].x = (tab[6].x + p2.x) / 2 - 12;
-    tab[7].y = (tab[6].y + p2.y) / 2 - 12;
-    tab[8].x = (tab[5].x + tab[0].x) / 2 - 12;
-    tab[8].y = (tab[5].y + tab[0].y) / 2 - 12;
-}
-
-int isInPath_carres(int pX, int pY, sommet_t **tabSom, int n, int largeur) {
-    int res = 0;
-    Point P = {pX, pY};
-    Point tmp;
-    Point carre[4];
-    Point pmTab[9];
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (tabSom[i]->voisins[j] == 1) {
-                Point p1 = {tabSom[i]->x, tabSom[i]->y};
-                Point p2 = {tabSom[j]->x, tabSom[j]->y};
-                remp_tabPm(p1, p2, pmTab);
-                for (int k = 0; k < 9; k++) {
-                    carre[0].x = pmTab[k].x - (largeur / 2);
-                    carre[0].y = pmTab[k].y - (largeur / 2);
-
-                    carre[1].x = pmTab[k].x + (largeur / 2);
-                    carre[1].y = pmTab[k].y - (largeur / 2);
-
-                    carre[2].x = pmTab[k].x - (largeur / 2);
-                    carre[2].y = pmTab[k].y + (largeur / 2);
-
-                    carre[3].x = pmTab[k].x + (largeur / 2);
-                    carre[3].y = pmTab[k].y + (largeur / 2);
-
-                    if (isPointInsideRectangle(P, carre) == 1)
-                        res += 1;
-                }
-            }
-        }
-    }
-
-    for (int i = 0; i < n; i++) {
-        tmp.x = tabSom[i]->x;
-        tmp.y = tabSom[i]->y;
-        if (distance(tmp, P) < largeur)
-            res += 1;
-    }
-
-    return res;
-}
-
+/**
+ * @brief calcul le projeté orthogonal d'un point sur une droite
+ * @param x la coord X du point a projeter
+ * @param y la coord Y du point a projeter
+ * @param x1 la xoord X d'un point de la droite
+ * @param y1 la coord Y d'un point de la droite
+ * @param x2 la xoord X d'un deuxieme point de la droite
+ * @param y2 la coord Y d'un deuxieme point de la droite
+ * @param x_proj l'adresse de la coord X du projeté du point sur la droite
+ * @param y_proj l'adresse de la coord X du projeté du point sur la droite
+*/
 void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double* x_proj, double* y_proj) {
     // Calcul des coordonnées du vecteur de la droite
     double dx = x2 - x1;
