@@ -595,11 +595,14 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
         if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
 
         calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, ACCELERATION_TROU);
-
+           
         trouNoir.x = (int)xTN;
         trouNoir.y = (int)yTN;
 
         affArgs.affTrouNoir = trouNoir;
+
+        attractionTN(&directionX, &directionY, xTN, yTN, x, y, &speedX, &speedY);
+
 
         if (ia && fin){
             program_on = SDL_FALSE;
