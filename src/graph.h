@@ -7,6 +7,11 @@
 #define W 800//get_w_window()
 #define H 800//get_h_window()
  
+typedef struct {
+    int x;
+    int y;
+} Point;
+
 /**
  * @struct sommet_s
  * Structure représentant un sommet dans un graphe.
@@ -18,6 +23,16 @@ typedef struct sommet_s{
     int x;                       /**< Coordonnée x du sommet */
     int y;                       /**< Coordonnée y du sommet */
 }sommet_t;
+
+/**
+ * @struct segmment_s
+ * Structure représentant une arrete d'un graphe.
+ */
+typedef struct segmment_s{
+    Point p1;
+    Point p2;
+}segmment_t;
+
 
 /**
  * Libère la mémoire allouée pour un tableau à deux dimensions.
@@ -95,5 +110,7 @@ void print_dist_tab(int ** distTab, int * n);
  * @param n Le nombre de noeuds dans le graphe initial
 */
 sommet_t** chemin_en_graphe(int * chemin, int n_chemin, sommet_t** tab, int n, int* n_sous_graph);
+
+segmment_t * gen_tab_seg(sommet_t ** tab, int n, int * n_seg);
 
 #endif /* GRAPH_H_ */
