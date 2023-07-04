@@ -18,7 +18,7 @@
  * @param directionY permet de recuperer la direction y du trou noir
  * @param x position x du trou noir
  * @param y position y du trou noir
-*/
+*/ 
 void directionTN(float * directionX, float * directionY, int xTN, int yTN);
 
 /**
