@@ -4,8 +4,8 @@
 #define N  13// NOMBRE_MAX_SOMMET 
 #define N_MIN  5// NOMBRE_MIN_SOMMET 
 #define R 300 //Rayon cercle repartition
-#define W 1280
-#define H 720
+#define W 1920
+#define H 1080
  
 
 /**

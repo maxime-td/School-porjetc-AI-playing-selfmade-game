@@ -336,7 +336,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     //texture trou noir
     int rayonTN = 50; //Le rayon du trou noir
     SDL_Rect trouNoir = {300, 200, rayonTN*2, rayonTN*2};
-    SDL_Surface * imageTN = IMG_Load("images/trou_noir_bleu.png");
+    SDL_Surface * imageTN = IMG_Load("images/trou_noir_rouge.png");
     SDL_Texture * textureTN = create_texture(imageTN);
     IMG_Quit();
 
