@@ -2,12 +2,22 @@
 #ifndef THREADS_H
 #define THREADS_H
 
-// Structure pour les arguments de multi_start_fourmi
-typedef struct coordonne_s{
-    int x;
-    int y;
-} coordonne_t;
- 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include <pthread.h>
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+
+#include "graph.h"
+#include "affiche.h"
+#include "fourmi.h"
+#include "bouclesJeu.h"
+#include "OptiFloyd_Warshall.h"
+
+
 // Structure pour les arguments de multi_start_fourmi
 typedef struct FourmiArgs_s{
     int** matDist;
@@ -29,43 +39,6 @@ typedef struct {
     int time;
 } timerArgs;
 
-// Structure pour les arguments de affiche
-typedef struct afficheArgs_s{
-    int * count;
-    int frame;
-    int frameEF;
-    int frameFlag;
-    int frameTN;
-    int type_fin;
-    SDL_Rect etoile;
-    SDL_Rect etoileFilante;
-    SDL_Rect background;
-    SDL_Rect navette;
-    SDL_Rect planete;
-    SDL_Rect flag;
-    SDL_Rect affTrouNoir;
-    asteroid_t * asteroid;
-    SDL_Texture * texture;
-    SDL_Texture * textureBg;
-    SDL_Texture * textureE1;
-    SDL_Texture * textureE2;
-    SDL_Texture * textureEF;
-    SDL_Texture * textureP;
-    SDL_Texture * textureF;
-    SDL_Texture * textureTN;
-    int * fin;
-    int * planeteVisite;
-    sommet_t ** sous_graphe;
-    sommet_t ** tab;
-    int n_sous_graphe;
-    int n;
-    int n_ast;
-    SDL_bool * program_on;
-    int * chemin;
-    coordonne_t * co;
-    double * x;
-    double * y;
-}afficheArgs;
 
 
 /**

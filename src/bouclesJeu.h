@@ -12,7 +12,7 @@
 #include "graph.h"
 #include "affiche.h"
 #include "fourmi.h"
-#include "thredas.h"
+#include "threads.h"
 
 #define MAX_SPEED 0.003
 #define ACCELERATION 0.000000025
@@ -21,11 +21,6 @@
 #define N_RULE 3
 #define TIME_MAX_IA 40
 
-/**
- * @brief fonction de lancement de thread pour l'affichage graphique du jeu
- * @param args Une structure contenant tout les argument necessaire a l'affichage du jeu
-*/
-void * afficheJeu(afficheArgs * argsAff);
 
 /**
  * @brief Exécute la boucle de jeu  de graphe

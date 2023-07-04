@@ -1,6 +1,8 @@
 #include <stdio.h>
+
 #include "threads.h"
-#include "boucles_jeu.h"
+#include "bouclesJeu.h"
+#include "affiche.h"
 
 /**
  * @brief fonction de lancement de thread pour l'algorithme des fourmis

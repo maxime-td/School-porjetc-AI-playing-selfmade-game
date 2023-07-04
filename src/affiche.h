@@ -4,12 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
+
 #include "graph.h"
 #include "map.h"
-#include <math.h>
+#include "threads.h"
 
 #define R_NOEUD 15
 
@@ -136,6 +139,51 @@ SDL_Texture * create_texture(SDL_Surface * surface);
 void draw_rect(SDL_Rect rect);
 
 void draw_Line(Point point1, Point point2);
+
+
+// Structure pour les arguments de affiche
+typedef struct afficheArgs_s{
+    int * count;
+    int frame;
+    int frameEF;
+    int frameFlag;
+    int frameTN;
+    int type_fin;
+    SDL_Rect etoile;
+    SDL_Rect etoileFilante;
+    SDL_Rect background;
+    SDL_Rect navette;
+    SDL_Rect planete;
+    SDL_Rect flag;
+    SDL_Rect affTrouNoir;
+    asteroid_t * asteroid;
+    SDL_Texture * texture;
+    SDL_Texture * textureBg;
+    SDL_Texture * textureE1;
+    SDL_Texture * textureE2;
+    SDL_Texture * textureEF;
+    SDL_Texture * textureP;
+    SDL_Texture * textureF;
+    SDL_Texture * textureTN;
+    int * fin;
+    int * planeteVisite;
+    sommet_t ** sous_graphe;
+    sommet_t ** tab;
+    int n_sous_graphe;
+    int n;
+    int n_ast;
+    SDL_bool * program_on;
+    int * chemin;
+    Point * co;
+    double * x;
+    double * y;
+}afficheArgs;
+
+/**
+ * @brief fonction de lancement de thread pour l'affichage graphique du jeu
+ * @param args Une structure contenant tout les argument necessaire a l'affichage du jeu
+*/
+void * afficheJeu(afficheArgs * argsAff);
 
 
 #endif // AFFICHE_H
