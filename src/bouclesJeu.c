@@ -548,10 +548,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             directionY = 0;
 
             calcul_direction_navette(keyPressZ, keyPressS, keyPressQ, keyPressD, &directionX, &directionY);
-            if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
+            //if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
 
             calcul_speed(directionX, directionY, &speedX, &speedY, &x, &y, &navette, ACCELERATION);
-            calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, ACCELERATION_TROU);
+            //calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, ACCELERATION_TROU);
 
             for (int i = 0; i < n; i++) {
                 p1.x = tab[i]->x;
@@ -610,13 +610,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, ACCELERATION_TROU);
 
             affArgs.affTrouNoir2 = trouNoir2;
-            attractionTN(&directionX, &directionY, xTN2, yTN2, x, y, &speedX, &speedY);
-
-            trouNoir.x = (int)xTN;
-            trouNoir.y = (int)yTN;
-
             affArgs.affTrouNoir = trouNoir;
+
             attractionTN(&directionX, &directionY, xTN, yTN, x, y, &speedX, &speedY);
+            attractionTN(&directionX, &directionY, xTN2, yTN2, x, y, &speedX, &speedY);
         }
 
         if (ia && fin){
