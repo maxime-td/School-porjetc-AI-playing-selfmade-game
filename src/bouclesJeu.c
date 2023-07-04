@@ -587,7 +587,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 fin = 1;
             }
 
-            if(distTrouNoir<4*rayonTN)
+            if(distTrouNoir<4*rayonTN) //Si trop près attiré
                 attractionTN(&directionX, &directionY, xTN, yTN, x, y, &speedX, &speedY);
             
             if(rand()%10000 == 0)
@@ -611,7 +611,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 fin = 1;
             }
 
-            if(distTrouNoir<4*rayonTN)
+            if(distTrouNoir<4*rayonTN) //Si trop près attiré
                 attractionTN(&directionX, &directionY, xTN2, yTN2, x, y, &speedX, &speedY);
 
             if(rand()%10000 == 0)
