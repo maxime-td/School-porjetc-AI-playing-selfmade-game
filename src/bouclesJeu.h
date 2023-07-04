@@ -12,103 +12,15 @@
 #include "graph.h"
 #include "affiche.h"
 #include "fourmi.h"
+#include "threads.h"
 
-#define MAX_SPEED 0.003
-#define ACCELERATION 0.000000025
-#define ACCELERATION_TROU 0.000000020
+#define MAX_SPEED 0.0025
+#define ACCELERATION 0.000000015
+#define ACCELERATION_TROU 0.00000002
 
 #define N_RULE 3
 #define TIME_MAX_IA 40
 
-// Structure pour les arguments de multi_start_fourmi
-typedef struct coordonne_s{
-    int x;
-    int y;
-} coordonne_t;
- 
-// Structure pour les arguments de multi_start_fourmi
-typedef struct FourmiArgs_s{
-    int** matDist;
-    int n;
-    int result;
-} FourmiArgs;
-
-// Structure pour les arguments de cycle_Floyd_Warshall
-typedef struct {
-    int** tabWarshall;
-    int** tabDist;
-    int n;
-    int result;
-} FloydWarshallArgs;
-
-// Structure pour les arguments de cycle_Floyd_Warshall
-typedef struct {
-    SDL_bool * fin;
-    int time;
-} timerArgs;
-
-// Structure pour les arguments de affiche
-typedef struct afficheArgs_s{
-    int * count;
-    int frame;
-    int frameEF;
-    int frameFlag;
-    int frameTN;
-    int type_fin;
-    SDL_Rect etoile;
-    SDL_Rect etoileFilante;
-    SDL_Rect background;
-    SDL_Rect navette;
-    SDL_Rect planete;
-    SDL_Rect flag;
-    SDL_Rect affTrouNoir;
-    asteroid_t * asteroid;
-    SDL_Texture * texture;
-    SDL_Texture * textureBg;
-    SDL_Texture * textureE1;
-    SDL_Texture * textureE2;
-    SDL_Texture * textureEF;
-    SDL_Texture * textureP;
-    SDL_Texture * textureF;
-    SDL_Texture * textureTN;
-    int * fin;
-    int * planeteVisite;
-    sommet_t ** sous_graphe;
-    sommet_t ** tab;
-    int n_sous_graphe;
-    int n;
-    int n_ast;
-    SDL_bool * program_on;
-    int * chemin;
-    coordonne_t * co;
-    double * x;
-    double * y;
-}afficheArgs;
-
-
-/**
- * @brief fonction de lancement de thread pour l'algorithme des fourmis
- * @param args Une structure contenant tout les argument a donner a multi_start_fourmi
-*/
-void *thread_fourmi(FourmiArgs *args);
-
-/**
- * @brief fonction de lancement de thread pour l'algorithme des floyd
- * @param args Une structure contenant tout les argument a donner a multi_Start_Floyd_Warshall
-*/
-void *thread_floyd(FloydWarshallArgs *args);
-
-/**
- * @brief fonction de lancement de thread pour le timer du jeu
- * @param args Une structure contenant tout les argument necessaire au timer et à la recuperation de ce timer
-*/
-void *timer(timerArgs* timer);
-
-/**
- * @brief fonction de lancement de thread pour l'affichage graphique du jeu
- * @param args Une structure contenant tout les argument necessaire a l'affichage du jeu
-*/
-void * afficheJeu(afficheArgs * argsAff);
 
 /**
  * @brief Exécute la boucle de jeu  de graphe
@@ -155,16 +67,27 @@ void boucle_jeu_sans_graph();
 void directionTN(float * directionX, float * directionY, int xTN, int yTN);
 
 /**
- * @brief calcul de la vitesse du trou noir
- * @param directionXTN direction x du trou noir
- * @param directionYTN direction y du trou noir
- * @param speedXTN permet de recuperer la vitesse x du trou noir
- * @param speedYTN permet de recuperer la vitesse y du trou noir
- * @param xTN pemet de recuperer la nouvelle position x du trou noir
- * @param yTN pemet de recuperer la nouvelle position y du trou noir
- * @param trouNoir le rectangle representant le trou noir 
+ * @brief calcul de la vitesse d'un objet
+ * @param directionX direction x du trou noir
+ * @param directionY direction y du trou noir
+ * @param speedX permet de recuperer la vitesse x du trou noir
+ * @param speedY permet de recuperer la vitesse y du trou noir
+ * @param x pemet de recuperer la nouvelle position x du trou noir
+ * @param y pemet de recuperer la nouvelle position y du trou noir
+ * @param rect le rectangle representant le trou noir 
 */
-void speedTN(float directionXTN, float directionYTN, float * speedXTN, float * speedYTN, float * xTN, float * yTN, SDL_Rect * trouNoir);
+void calcul_speed(float directionX, float directionY, float * speedX, float * speedY, float * x, float * y, SDL_Rect * rect, double acceleration);
+
+/**
+ * @brief calcul la direction de la navette en fonction des touches pressee
+ * @param keyPressZ booleen indiquant si z est pressee
+ * @param keyPressS booleen indiquant si s est pressee
+ * @param keyPressQ booleen indiquant si q est pressee
+ * @param keyPressD booleen indiquant si d est pressee
+ * @param directionX permet de recuperer la direction x trouve
+ * @param directionY permet de recuperer la direction y trouve
+*/
+void calcul_direction_navette(int keyPressZ, int keyPressS, int keyPressQ, int keyPressD, float * directionX, float * directionY);
 
 /**
  * @brief Trouve l'index du sommet qui a la plus courte distance avec le point p
