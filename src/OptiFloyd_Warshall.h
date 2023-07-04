@@ -3,8 +3,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "graph.h"
 #include <math.h>
+
+#include "graph.h"
 
 /**
  * @brief Construit la matrice des distances minimales (pour les sommets non reliés, donne la distance du chemin optimal les reliant)
@@ -12,8 +13,6 @@
  * @param n la taille du tableau
 */
 void Floyd_Warshall(int ** distTab, int n);
-
-
 
 /**
  * @brief Applique l'algo de cyclage ci-dessus sur chaque premier point et sors le plus efficace
@@ -24,7 +23,6 @@ void Floyd_Warshall(int ** distTab, int n);
  * @return la longueur du chemin optimal
  */
 void cycle_Floyd_Warshall(int **tabWarshall, int **tabDist, int n, int indDep, int *sol);
-
 
 /**
  * @brief Créé une copie d'un tableau 2D d'entier
@@ -49,7 +47,6 @@ int multi_Start_Floyd_Warshall(int ** tabWarshall, int **distTab, int n);
 */
 void permute(int ** tab, int n);
 
-
 /**
  * @brief calcul la taille d'un chemin passer en parametre avec la méthode de Floyd-Warshall
  * @param tabWarshall Tableau des distance de Floyd-Warshall
@@ -66,8 +63,5 @@ int calcul_chemin_Floy_Warshall(int **tabWarshall, int n, int *tab);
  * @return taille chemin optimal trouvé
 */
 int recuit_simule(int **tabWarshall, int n, sommet_t ** tabSom);
-
-
-
 
 #endif /* SOLOPT_H_ */
