@@ -163,25 +163,3 @@ int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, int largeur) {
     return res;
 }
 
-int isPointInsideRectangle(Point p, Point rect[4]) {
-    int c = 0;
-    if (rect[0].x < p.x && rect[1].x > p.x && rect[0].y < p.y && rect[3].y > p.y)
-        c = 1;
-
-    return c;
-}
-
-void calculateLineCoefficients(int x1, int y1, int x2, int y2, float *a, int *b) {
-    if (x1 > x2) {
-        // Inverser les points
-        int tempX = x1;
-        int tempY = y1;
-        x1 = x2;
-        y1 = y2;
-        x2 = tempX;
-        y2 = tempY;
-    }
-
-    *a = (float)(y1 - y2) / (x2 - x1);
-    *b = y1 - (*a) * x1;
-}
