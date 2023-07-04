@@ -237,10 +237,14 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     float speedY = 0; //vitesse y du joueur
     float speedXTN = 0; //vitesse x trou noir
     float speedYTN = 0; //Vitesse y trou noir
+    float speedXTN2 = 0; //vitesse x trou noir
+    float speedYTN2 = 0; //Vitesse y trou noir
     float x = tab[chemin[0]]->x - 16; //position x du joueur
     float y = tab[chemin[0]]->y - 16; //position y du joueur
     float xTN = 0, yTN = 0; //Position trou noir
+    float xTN2 = 0, yTN2 = 0; //Position trou noir 2
     float directionXTN = 0, directionYTN = 0; //Direction trou noir
+    float directionXTN2 = 0, directionYTN2 = 0; //Direction trou noir
     float directionX = 0; //direction x du joueur
     float directionY = 0; //direction y du joueur
     int planeteVisite[n]; //tableau de booleen representant les planetes déjà visité 1 si oui 0 sinon
@@ -265,6 +269,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     Point p2;
 
     initPosTN(&xTN, &yTN, x, y);
+    initPosTN(&xTN2, &yTN2, x, y);
 
     // variable pour les regles à choisir
     int closestP; // variable servant à stoquer la sortie de closest_point (l'index de la planete la plus proche)
@@ -339,6 +344,12 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     SDL_Surface * imageTN = IMG_Load("images/trou_noir_rouge.png");
     SDL_Texture * textureTN = create_texture(imageTN);
     IMG_Quit();
+    //texture trou noir 2
+    rayonTN = 50; //Le rayon du trou noir
+    SDL_Rect trouNoir2 = {300, 200, rayonTN*2, rayonTN*2};
+    SDL_Surface * imageTN2 = IMG_Load("images/trou_noir_bleu.png");
+    SDL_Texture * textureTN2 = create_texture(imageTN2);
+    IMG_Quit();
 
     //argument pour le thread affiche
     afficheArgs affArgs;
@@ -363,6 +374,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     affArgs.textureF = textureF;
     affArgs.textureP = textureP;
     affArgs.textureTN = textureTN;
+    affArgs.textureTN2 = textureTN2;
     affArgs.chemin = chemin;
     affArgs.co = co;
     affArgs.etoileFilante = etoileFilante;
@@ -372,6 +384,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     affArgs.navette = navette;
     affArgs.flag = flag;
     affArgs.affTrouNoir = trouNoir;
+    affArgs.affTrouNoir2 = trouNoir2;
     affArgs.n_ast = n_ast;
     affArgs.x = &x;
     affArgs.y = &y;
@@ -580,10 +593,39 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             trouNoir.x = (int)xTN;
             trouNoir.y = (int)yTN;
 
-            affArgs.affTrouNoir = trouNoir;
+            if (fin && seconde == 0)
+                seconde = argsT.time/100;
+            //Partie vérif trou noir2
 
-            attractionTN(&directionX, &directionY, xTN, yTN, x, y, &speedX, &speedY);
+            p2.x = trouNoir2.x+50;
+            p2.y = trouNoir2.y+50;
+            distTrouNoir = distance(p1, p2);
+            if(distTrouNoir<rayonTN/3) {
+                affArgs.type_fin = 1;
+                fin = 1;
+            }
+
+            if (fin && seconde == 0)
+                seconde = argsT.time/100;
         }
+
+        if(rand()%10000 == 0)directionTN(&directionXTN2, &directionYTN2, xTN2, yTN2);
+        calcul_speed(directionXTN2, directionYTN2, &speedXTN2, &speedYTN2, &xTN2, &yTN2, &trouNoir2, ACCELERATION_TROU);
+
+        if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
+        calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, ACCELERATION_TROU);
+           
+        trouNoir2.x = (int)xTN2;
+        trouNoir2.y = (int)yTN2;
+
+        affArgs.affTrouNoir2 = trouNoir2;
+        attractionTN(&directionX, &directionY, xTN2, yTN2, x, y, &speedX, &speedY);
+
+        trouNoir.x = (int)xTN;
+        trouNoir.y = (int)yTN;
+
+        affArgs.affTrouNoir = trouNoir;
+        attractionTN(&directionX, &directionY, xTN, yTN, x, y, &speedX, &speedY);
 
         if (ia && fin){
             program_on = SDL_FALSE;
