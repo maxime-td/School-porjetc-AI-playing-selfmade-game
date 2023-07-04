@@ -541,6 +541,7 @@ void * afficheJeu(afficheArgs * argsAff) {
 
                 //Affichage du trou noir
                 draw_sprite(argsAff->affTrouNoir, argsAff->textureTN, argsAff->frameTN, 0, 0, 48);
+                draw_sprite(argsAff->affTrouNoir2, argsAff->textureTN2, argsAff->frameTN, 0, 0, 48);
 
                 //Affichage de la navette
                 draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);

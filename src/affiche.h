@@ -37,6 +37,7 @@ typedef struct afficheArgs_s{
     SDL_Rect planete;
     SDL_Rect flag;
     SDL_Rect affTrouNoir;
+    SDL_Rect affTrouNoir2;
     asteroid_t * asteroid;
     SDL_Texture * texture;
     SDL_Texture * textureBg;
@@ -46,6 +47,7 @@ typedef struct afficheArgs_s{
     SDL_Texture * textureP;
     SDL_Texture * textureF;
     SDL_Texture * textureTN;
+    SDL_Texture * textureTN2;
     int * fin;
     int * planeteVisite;
     sommet_t ** sous_graphe;
