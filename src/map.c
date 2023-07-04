@@ -8,6 +8,13 @@
 #include "affiche.h"
 #include "map.h"
 
+/**
+ * @brief génère le champ d'atéroïdes hors des chemins entre les planètes
+ * @param tab le tableau des sommets
+ * @param n le nombre de sommets
+ * @param nAst adresse du nombre d'asteroïdes
+ * @return retourne le tableau de taille nAst des astéroïdes
+*/
 asteroid_t *ast_Partout(sommet_t **tab, int n, int *nAst) {
     int frame_size = 48;
     int alea = 0;
