@@ -6,6 +6,7 @@
 #include "calculPosition.h"
 #include "graph.h"
 #include "bouclesJeu.h"
+#include "bot.h"
 
 /**
  * @brief Calcul le score de l'ia
@@ -150,14 +151,18 @@ int * generate_rule() {
     int * rule = (int *) malloc(sizeof(int)*(N_RULE+3));
 
     //Etat du jeu
-    rule[0] = (rand()%5)-1;
-    rule[1] = (rand()%6)-1;
-    rule[2] = (rand()%3)-1;
+    rule[0] = (rand()%5)-1; //Position planete
+    rule[1] = (rand()%6)-1; //Position mur
+    rule[2] = (rand()%3)-1; //Is Mur
+    rule[3] = (rand()%5)-1; //Pos trou noir
+    rule[4] = (rand()%4)-1; //Distance trou noir
 
     //Input du bot en fonction de l'etat
-    rule[3] = (rand()%3)-1;
-    rule[4] = (rand()%3)-1;
-    rule[5] = (rand()%10)+1;
+    rule[N_RULE]   = (rand()%3) -1; //Direction haut/bas
+    rule[N_RULE+1] = (rand()%3) -1; //Direction droite/gauche
+
+    //Priorite
+    rule[N_RULE+2] = (rand()%10)+1;
 
     return rule;
 }
@@ -175,12 +180,13 @@ int ** generate_tab_rules(int n) {
 
     tab_rules[n-1] = (int *) malloc(sizeof(int)*(N_RULE+3));
 
-    tab_rules[n-1][0] = -1;
-    tab_rules[n-1][1] = -1;
-    tab_rules[n-1][2] = -1;
-    tab_rules[n-1][3] = (rand()%3)-1;
-    tab_rules[n-1][4] = (rand()%3)-1;
-    tab_rules[n-1][5] = 1;
+    for (int i = 0; i < N_RULE; i++){
+        tab_rules[n-1][i] = -1;
+    }
+    
+    tab_rules[n-1][N_RULE]   = (rand()%3)-1;
+    tab_rules[n-1][N_RULE+1] = (rand()%3)-1;
+    tab_rules[n-1][N_RULE+2] = 1;
     
     return tab_rules;
 }

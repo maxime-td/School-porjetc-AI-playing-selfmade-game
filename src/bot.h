@@ -10,6 +10,9 @@
 #include "graph.h"
 #include "bouclesJeu.h"
 
+#define N_RULE 5
+#define TIME_MAX_IA 400
+
 /**
  * @brief Trouve l'index du sommet qui a la plus courte distance avec le point p
  * @param p Position à comparer
