@@ -18,9 +18,6 @@
 #define ACCELERATION 0.00000004
 #define ACCELERATION_TROU 0.00000004
 
-#define N_RULE 3
-#define TIME_MAX_IA 40
-
 /**
  * @brief Exécute la boucle de jeu  de graphe
  * @param tab Le tableau des sommets

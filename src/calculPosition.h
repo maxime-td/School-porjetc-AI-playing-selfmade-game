@@ -6,11 +6,9 @@
 #include <SDL2/SDL.h>
 #include <math.h>
 
-
 #include "graph.h"
 
-#define ATTRACTION_TROU 0.000007
-
+#define ATTRACTION_TROU 0.000004
 
 /**
  * @brief calcul de la direction du trou noir
