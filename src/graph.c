@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "graph.h"
 #include <math.h>
 
+#include "graph.h"
 
 /**
  * Libère la mémoire allouée pour un tableau à deux dimensions.
@@ -11,13 +11,11 @@
  * @param tab Le tableau à libérer.
  * @param n   Le nombre de lignes du tableau.
  */
-void free2DTab(void ** tab, int n){
-    for (int i = 0; i < n; i++){
+void free2DTab(void ** tab, int n) {
+    for (int i = 0; i < n; i++)
         free(tab[i]);
-    }
     free(tab);
 }
-
 
 /**
  * @brief Convertit un tableau de sommets en un graphe connexe non cyclique.
@@ -181,8 +179,7 @@ void make_new_links(int p, sommet_t ** tab, int * n)
  * @return La distance
  */
 
-int calcul_distance(sommet_t * a, sommet_t * b)
-{
+int calcul_distance(sommet_t * a, sommet_t * b) {
     int tmp1 = (a->x-b->x), tmp2 = (a->y-b->y);
     return (int) round(sqrt(tmp1*tmp1+tmp2*tmp2)/10);
 }
@@ -193,8 +190,7 @@ int calcul_distance(sommet_t * a, sommet_t * b)
  * @param n le pointeur sur le ombre de sommets
  * @return Le pointeur sur le tableau 2D des distances.
  */
-int ** dist_tab(sommet_t ** tab, int * n)
-{
+int ** dist_tab(sommet_t ** tab, int * n) {
     int ** tabDist = malloc((*n)*sizeof(int *));
     int tmpDist=0;
     for(int i=0; i<*n; i++)
