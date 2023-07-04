@@ -13,9 +13,9 @@
 #include "affiche.h"
 #include "fourmi.h"
 
-#define MAX_SPEED 0.003
-#define ACCELERATION 0.000000025
-#define ACCELERATION_TROU 0.000000020
+#define MAX_SPEED 0.0025
+#define ACCELERATION 0.000000015
+#define ACCELERATION_TROU 0.00000002
 
 #define N_RULE 3
 #define TIME_MAX_IA 40
@@ -81,8 +81,8 @@ typedef struct afficheArgs_s{
     SDL_bool * program_on;
     int * chemin;
     coordonne_t * co;
-    double * x;
-    double * y;
+    float * x;
+    float * y;
 }afficheArgs;
 
 
@@ -155,16 +155,27 @@ void boucle_jeu_sans_graph();
 void directionTN(float * directionX, float * directionY, int xTN, int yTN);
 
 /**
- * @brief calcul de la vitesse du trou noir
- * @param directionXTN direction x du trou noir
- * @param directionYTN direction y du trou noir
- * @param speedXTN permet de recuperer la vitesse x du trou noir
- * @param speedYTN permet de recuperer la vitesse y du trou noir
- * @param xTN pemet de recuperer la nouvelle position x du trou noir
- * @param yTN pemet de recuperer la nouvelle position y du trou noir
- * @param trouNoir le rectangle representant le trou noir 
+ * @brief calcul de la vitesse d'un objet
+ * @param directionX direction x du trou noir
+ * @param directionY direction y du trou noir
+ * @param speedX permet de recuperer la vitesse x du trou noir
+ * @param speedY permet de recuperer la vitesse y du trou noir
+ * @param x pemet de recuperer la nouvelle position x du trou noir
+ * @param y pemet de recuperer la nouvelle position y du trou noir
+ * @param rect le rectangle representant le trou noir 
 */
-void speedTN(float directionXTN, float directionYTN, float * speedXTN, float * speedYTN, float * xTN, float * yTN, SDL_Rect * trouNoir);
+void calcul_speed(float directionX, float directionY, float * speedX, float * speedY, float * x, float * y, SDL_Rect * rect, double acceleration);
+
+/**
+ * @brief calcul la direction de la navette en fonction des touches pressee
+ * @param keyPressZ booleen indiquant si z est pressee
+ * @param keyPressS booleen indiquant si s est pressee
+ * @param keyPressQ booleen indiquant si q est pressee
+ * @param keyPressD booleen indiquant si d est pressee
+ * @param directionX permet de recuperer la direction x trouve
+ * @param directionY permet de recuperer la direction y trouve
+*/
+void calcul_direction_navette(int keyPressZ, int keyPressS, int keyPressQ, int keyPressD, float * directionX, float * directionY);
 
 /**
  * @brief Trouve l'index du sommet qui a la plus courte distance avec le point p
