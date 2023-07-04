@@ -528,9 +528,9 @@ void * afficheJeu(afficheArgs * argsAff) {
                 //Affichage en jeu
 
                 //Affichage des planetes
-                for (int i = 0; i < argsAff->n_sous_graphe; i++) {
-                    argsAff->planete.x = argsAff->sous_graphe[i]->x-24;
-                    argsAff->planete.y = argsAff->sous_graphe[i]->y-24;
+                for (int i = 0; i < argsAff->n; i++) {
+                    argsAff->planete.x = argsAff->tab[i]->x-24;
+                    argsAff->planete.y = argsAff->tab[i]->y-24;
                     draw_sprite(argsAff->planete, argsAff->textureP, argsAff->co[i].x, argsAff->co[i].y, 0, 48);
                 }
 
@@ -539,7 +539,7 @@ void * afficheJeu(afficheArgs * argsAff) {
                     if (argsAff->planeteVisite[i]) {
                         argsAff->flag.x = argsAff->tab[i]->x-12;
                         argsAff->flag.y = argsAff->tab[i]->y-48;
-                        if (i == argsAff->chemin[0])
+                        if (i == 0)
                             draw_sprite(argsAff->flag, argsAff->textureF, argsAff->frameFlag, 1, 0, 60);
                         else
                             draw_sprite(argsAff->flag, argsAff->textureF, argsAff->frameFlag, 0, 0, 60);
@@ -548,7 +548,11 @@ void * afficheJeu(afficheArgs * argsAff) {
 
                 //Affichage du trou noir
                 draw_sprite(argsAff->affTrouNoir, argsAff->textureTN, argsAff->frameTN, 0, 0, 48);
-                draw_sprite(argsAff->affTrouNoir2, argsAff->textureTN2, argsAff->frameTN, 0, 0, 48);
+                if (W > 800){
+                    draw_sprite(argsAff->affTrouNoir2, argsAff->textureTN2, argsAff->frameTN, 0, 0, 48);
+                }
+                
+                
 
                 //Affichage de la navette
                 draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);

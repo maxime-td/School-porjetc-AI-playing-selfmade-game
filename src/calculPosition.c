@@ -20,28 +20,26 @@ void directionTN(float * directionX, float * directionY, int xTN, int yTN) {
 
     if(*directionY<0) {
         tirage = (rand()%20-4);
-        if(yTN<H/4)
-            tirage *= 2;
+        if(yTN<H/4){tirage *= 2;}
     }
     else if(*directionY>0) {
-        tirage = (rand()%20)-16;
-        if(yTN>3*H/4)
-            tirage *= 2;
+            tirage = (rand()%20)-16;
+            if(yTN>3*H/4)
+                tirage *= 2;
     }
 
     *directionY += ((float)tirage)/200;
-    
     tirage = (rand()%20)-10;
 
     if(*directionX<0) {
-        tirage = (rand()%20-4);
-        if(xTN<W/4)
-            tirage *= 2;
+            tirage = (rand()%20-4);
+            if(xTN<W/4)
+                tirage *= 2;
     }    
     else if(*directionX>0) {
-        tirage = (rand()%20)-16;
-        if(xTN>3*W/4)
-            tirage *= 2;
+            tirage = (rand()%20)-16;
+            if(xTN>3*W/4)
+                tirage *= 2;
     }
 
     *directionX += ((float)tirage)/200;
@@ -91,7 +89,7 @@ void calcul_direction_navette(int keyPressZ, int keyPressS, int keyPressQ, int k
  * @param y pemet de recuperer la nouvelle position y du trou noir
  * @param rect le rectangle representant le trou noir 
 */
-void calcul_speed(float directionX, float directionY, float * speedX, float * speedY, float * x, float * y, SDL_Rect * rect, double acceleration){
+void calcul_speed(float directionX, float directionY, float * speedX, float * speedY, float * x, float * y, SDL_Rect * rect, double acceleration, double max_speed){
     *speedX += directionX * acceleration;
     *speedY += directionY * acceleration;
 
@@ -128,22 +126,22 @@ void calcul_speed(float directionX, float directionY, float * speedX, float * sp
         }
     }
 
-    if (*speedX < -MAX_SPEED / 2)
+    if (*speedX < -max_speed / 2)
     {
-        *speedX = -MAX_SPEED / 2;
+        *speedX = -max_speed / 2;
     }
-    else if (*speedX > MAX_SPEED / 2)
+    else if (*speedX > max_speed / 2)
     {
-        *speedX = MAX_SPEED / 2;
+        *speedX = max_speed / 2;
     }
 
-    if (*speedY < -MAX_SPEED / 2)
+    if (*speedY < -max_speed / 2)
     {
-        *speedY = -MAX_SPEED / 2;
+        *speedY = -max_speed / 2;
     }
-    else if (*speedY > MAX_SPEED / 2)
+    else if (*speedY > max_speed / 2)
     {
-        *speedY = MAX_SPEED / 2;
+        *speedY = max_speed / 2;
     }
 
     *x += *speedX;
@@ -180,7 +178,7 @@ void calcul_speed(float directionX, float directionY, float * speedX, float * sp
  * @param speedX adresse de la vitesse sur X de la navette
  * @param speedY adresse de la vitesse sur Y de la navette
 */
-void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, float x, float y , float * speedX, float * speedY)
+void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, float x, float y , float * speedX, float * speedY, double attraction)
 {
     Point navette = {(int)x, (int)y};
     Point trouNoir = {xTN, yTN};
@@ -189,8 +187,8 @@ void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, fl
     *directionXN += (xTN+24-x);
     *directionYN += (yTN+24-y);
 
-    *speedX += *directionXN * ATTRACTION_TROU/(dist*dist);
-    *speedY += *directionYN * ATTRACTION_TROU/(dist*dist);
+    *speedX += *directionXN * attraction/(dist*dist);
+    *speedY += *directionYN * attraction/(dist*dist);
 }
 
 /**

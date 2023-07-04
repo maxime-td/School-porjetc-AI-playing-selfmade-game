@@ -15,7 +15,6 @@
  */
 int multi_start_fourmi(int ** matDist, int n);
 
-
 /**
  * Recherche le chemin optimal pour le voyageur de commerce en utilisant des fourmis artificielles.
  * @param matDist La matrice des distances entre les sommets.

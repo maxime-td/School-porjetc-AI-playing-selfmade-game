@@ -11,7 +11,7 @@
 #include "bouclesJeu.h"
 
 #define N_RULE 5
-#define TIME_MAX_IA 400
+#define TIME_MAX_IA 30000
 
 /**
  * @brief Trouve l'index du sommet qui a la plus courte distance avec le point p
@@ -61,6 +61,14 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
  * @return Le score trouvé
  */
 int calcul_score(int seconde, int nbPlanete, int distDep);
+
+/**
+ * @brief donne la distance entre deux points de façon de discretise cad (0 proche, 1 moyen, 2 loin)
+ * @param p1 premier point
+ * @param p2 second point
+ * @return distance discrete
+*/
+int distance_objet(Point p1, Point p2);
 
 /**
  * @brief Génere une regle au hasard

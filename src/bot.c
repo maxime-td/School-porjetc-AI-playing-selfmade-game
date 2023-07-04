@@ -18,10 +18,10 @@
 int calcul_score(int seconde, int nbPlanete, int distDep) {
     int score = 0;
 
-    score += (TIME_MAX_IA - seconde)*5;
-    score += (TIME_MAX_IA - seconde > 0)*500;
-    score += nbPlanete*5;
-    score += distDep/20;
+    score += ((TIME_MAX_IA+1) - seconde)*5;
+    score += (TIME_MAX_IA - seconde > 0)*1000;
+    score += (nbPlanete-1)*100;
+    score += distDep/10;
 
     return score;   
 }
@@ -74,6 +74,22 @@ int position_relative(Point p1, Point p2) {
         else
             return 3;
     } 
+}
+
+/**
+ * @brief donne la distance entre deux points de façon de discretise cad (0 proche, 1 moyen, 2 loin)
+ * @param p1 premier point
+ * @param p2 second point
+ * @return distance discrete
+*/
+int distance_objet(Point p1, Point p2){
+    int dist = distance(p1, p2);
+    if (dist < 150){
+        return 0;
+    }else if(dist < 500){
+        return 1;
+    }
+    return 2;
 }
 
 /**

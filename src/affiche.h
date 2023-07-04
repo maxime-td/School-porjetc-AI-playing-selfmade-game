@@ -50,13 +50,10 @@ typedef struct afficheArgs_s{
     SDL_Texture * textureTN2;
     int * fin;
     int * planeteVisite;
-    sommet_t ** sous_graphe;
     sommet_t ** tab;
-    int n_sous_graphe;
     int n;
     int n_ast;
     SDL_bool * program_on;
-    int * chemin;
     Point * co;
     float * x;
     float * y;

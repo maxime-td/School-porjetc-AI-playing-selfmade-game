@@ -8,13 +8,6 @@
 #include "affiche.h"
 #include "map.h"
 
-/**
- * @brief génère le champ d'atéroïdes hors des chemins entre les planètes
- * @param tab le tableau des sommets
- * @param n le nombre de sommets
- * @param nAst adresse du nombre d'asteroïdes
- * @return retourne le tableau de taille nAst des astéroïdes
-*/
 asteroid_t *ast_Partout(sommet_t **tab, int n, int *nAst) {
     int frame_size = 48;
     int alea = 0;
@@ -50,31 +43,80 @@ asteroid_t *ast_Partout(sommet_t **tab, int n, int *nAst) {
     return tabAst;
 }
 
-/**
- * @brief calcul la distance euclidienne entre 2 points
- * @param p1 1er points 
- * @param p2 2eme points
- * @return la distance en floatant
-*/
+float fonction_affine(float a, int x, float b) {
+    return a * x + b;
+}
+
 float distance(Point p1, Point p2) {
     float dx = p2.x - p1.x;
     float dy = p2.y - p1.y;
     return sqrt(dx * dx + dy * dy);
 }
 
-/**
- * @brief calcul le projeté orthogonal d'un point sur une droite
- * @param x la coord X du point a projeter
- * @param y la coord Y du point a projeter
- * @param x1 la xoord X d'un point de la droite
- * @param y1 la coord Y d'un point de la droite
- * @param x2 la xoord X d'un deuxieme point de la droite
- * @param y2 la coord Y d'un deuxieme point de la droite
- * @param x_proj l'adresse de la coord X du projeté du point sur la droite
- * @param y_proj l'adresse de la coord X du projeté du point sur la droite
-*/
-void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double* x_proj, double* y_proj) 
-{
+void remp_tabPm(Point p1, Point p2, Point *tab) {
+    tab[0].x = (p1.x + p2.x) / 2 - 12;
+    tab[0].y = (p1.y + p2.y) / 2 - 12;
+    tab[1].x = ((p1.x + tab[0].x) / 2) - 12;
+    tab[1].y = ((p1.y + tab[0].y) / 2) - 12;
+    tab[2].x = ((p1.x + tab[1].x) / 2) - 12;
+    tab[2].y = ((p1.y + tab[1].y) / 2) - 12;
+    tab[3].x = ((p1.x + tab[2].x) / 2) - 12;
+    tab[3].y = ((p1.y + tab[2].y) / 2) - 12;
+    tab[4].x = ((tab[0].x + tab[1].x) / 2) - 12;
+    tab[4].y = ((tab[0].y + tab[1].y) / 2) - 12;
+    tab[5].x = (tab[0].x + p2.x) / 2 - 12;
+    tab[5].y = (tab[0].y + p2.y) / 2 - 12;
+    tab[6].x = (tab[5].x + p2.x) / 2 - 12;
+    tab[6].y = (tab[5].y + p2.y) / 2 - 12;
+    tab[7].x = (tab[6].x + p2.x) / 2 - 12;
+    tab[7].y = (tab[6].y + p2.y) / 2 - 12;
+    tab[8].x = (tab[5].x + tab[0].x) / 2 - 12;
+    tab[8].y = (tab[5].y + tab[0].y) / 2 - 12;
+}
+
+int isInPath_carres(int pX, int pY, sommet_t **tabSom, int n, int largeur) {
+    int res = 0;
+    Point P = {pX, pY};
+    Point tmp;
+    Point carre[4];
+    Point pmTab[9];
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (tabSom[i]->voisins[j] == 1) {
+                Point p1 = {tabSom[i]->x, tabSom[i]->y};
+                Point p2 = {tabSom[j]->x, tabSom[j]->y};
+                remp_tabPm(p1, p2, pmTab);
+                for (int k = 0; k < 9; k++) {
+                    carre[0].x = pmTab[k].x - (largeur / 2);
+                    carre[0].y = pmTab[k].y - (largeur / 2);
+
+                    carre[1].x = pmTab[k].x + (largeur / 2);
+                    carre[1].y = pmTab[k].y - (largeur / 2);
+
+                    carre[2].x = pmTab[k].x - (largeur / 2);
+                    carre[2].y = pmTab[k].y + (largeur / 2);
+
+                    carre[3].x = pmTab[k].x + (largeur / 2);
+                    carre[3].y = pmTab[k].y + (largeur / 2);
+
+                    if (isPointInsideRectangle(P, carre) == 1)
+                        res += 1;
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        tmp.x = tabSom[i]->x;
+        tmp.y = tabSom[i]->y;
+        if (distance(tmp, P) < largeur)
+            res += 1;
+    }
+
+    return res;
+}
+
+void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double* x_proj, double* y_proj) {
     // Calcul des coordonnées du vecteur de la droite
     double dx = x2 - x1;
     double dy = y2 - y1;
@@ -91,42 +133,17 @@ void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double* x_pr
     *y_proj = y1 + (dot_product * dy) / (dx * dx + dy * dy);
 }
 
-/**
- * @brief donne le maximum parmi 2 entier
- * @param a premier entier
- * @param b second entier
- * @return la valeur du plus grand entre a et b
-*/
-int max(int a, int b) 
-{
+int max(int a, int b) {
     if(a<b){return b;}
     return a;
 }
 
-/**
- * @brief donne le minimum parmi 2 entier
- * @param a premier entier
- * @param b second entier
- * @return la valeur du plus petit entre a et b
-*/
-int min(int a, int b) 
-{
+int min(int a, int b) {
     if(a>b){return b;}
     return a;
 }
 
-/**
- * @brief permet de savoir si un objet est situé entre 2 planètes connectées en se servant du projeté orthogonal
- * @param pX coord X de l'objet
- * @param pY coord Y de l'objet
- * @param tabSom le tableau des sommets (planètes)
- * @param n le nombre de sommets (planètes)
- * @param largeur la largeur du chemin souhaité entre les 2 planètes
- * @return - 0 si l'objet n'est pas sur le chemin
- *         - 1 si l'objet est sur le chemin
-*/
-int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, int largeur) 
-{
+int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, int largeur) {
     int res = 0;
     int dist = 0;
 
@@ -167,3 +184,25 @@ int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, int largeur)
     return res;
 }
 
+int isPointInsideRectangle(Point p, Point rect[4]) {
+    int c = 0;
+    if (rect[0].x < p.x && rect[1].x > p.x && rect[0].y < p.y && rect[3].y > p.y)
+        c = 1;
+
+    return c;
+}
+
+void calculateLineCoefficients(int x1, int y1, int x2, int y2, float *a, int *b) {
+    if (x1 > x2) {
+        // Inverser les points
+        int tempX = x1;
+        int tempY = y1;
+        x1 = x2;
+        y1 = y2;
+        x2 = tempX;
+        y2 = tempY;
+    }
+
+    *a = (float)(y1 - y2) / (x2 - x1);
+    *b = y1 - (*a) * x1;
+}

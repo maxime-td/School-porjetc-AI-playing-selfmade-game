@@ -18,6 +18,10 @@
 #define ACCELERATION 0.00000004
 #define ACCELERATION_TROU 0.00000004
 
+#define MAX_SPEED_IA 5
+#define ACCELERATION_IA 0.00004
+#define ACCELERATION_TROU_IA 0.00004
+
 /**
  * @brief Exécute la boucle de jeu  de graphe
  * @param tab Le tableau des sommets
@@ -32,8 +36,6 @@ int * boucle_jeu_graphe(sommet_t** tab, int n, int * nb_noeuds_chemin, int *fin)
  * @brief Exécute la boucle de jeu dans l'espace
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
- * @param chemin Tableau du chemin choisi par le joueur
- * @param n_chemin Taille du chemin choisi par le joueur
  * @param close Permet de savoir si la boucle à était quitter en appuyant sur la crois
  * @param ia booleen disant si c'est une ia qui joue
  * @param tabIA tableau de regle de l'ia
@@ -41,7 +43,7 @@ int * boucle_jeu_graphe(sommet_t** tab, int n, int * nb_noeuds_chemin, int *fin)
  * @param result permet de recuperer le score de l'ia
  * @param affiche booleen permetant d'activer ou non l'interface graphique
  */
-void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche);
+void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche);
 
 /**
  * @brief Exécute la boucle de jeu principal
