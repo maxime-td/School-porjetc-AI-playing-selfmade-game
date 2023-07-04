@@ -50,10 +50,12 @@ asteroid_t *ast_Partout(sommet_t **tab, int n, int *nAst) {
     return tabAst;
 }
 
-float fonction_affine(float a, int x, float b) {
-    return a * x + b;
-}
-
+/**
+ * @brief calcul la distance euclidienne entre 2 points
+ * @param p1 1er points 
+ * @param p2 2eme points
+ * @return la distance en floatant
+*/
 float distance(Point p1, Point p2) {
     float dx = p2.x - p1.x;
     float dy = p2.y - p1.y;
