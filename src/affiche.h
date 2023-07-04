@@ -76,6 +76,9 @@ void affiche_Chem(int * tab, sommet_t ** tabSom, int n);
 */
 void init();
 
+int get_w_window();
+int get_h_window();
+
 /**
  * @brief Clear le fond en blanc
 */

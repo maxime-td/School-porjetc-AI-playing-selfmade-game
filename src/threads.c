@@ -14,7 +14,6 @@ void *thread_fourmi(FourmiArgs *args)
     return NULL;
 }
 
-
 /**
  * @brief fonction de lancement de thread pour l'algorithme des floyd
  * @param args Une structure contenant tout les argument a donner a multi_Start_Floyd_Warshall

@@ -4,8 +4,8 @@
 #define N  13// NOMBRE_MAX_SOMMET 
 #define N_MIN  5// NOMBRE_MIN_SOMMET 
 #define R 300 //Rayon cercle repartition
-#define W 1920
-#define H 1080
+#define W get_w_window()
+#define H get_h_window()
  
 /**
  * @struct sommet_s

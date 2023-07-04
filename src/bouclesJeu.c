@@ -541,45 +541,57 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
                 keyPressQ = (tabIA[selectRule][4] == 1);
             }
         }
-        
-        //Prise en conte de la direction du joueur en fonction des input
-        directionX = 0;
-        directionY = 0;
+        if (!fin){
+            
+            //Prise en conte de la direction du joueur en fonction des input
+            directionX = 0;
+            directionY = 0;
 
-        calcul_direction_navette(keyPressZ, keyPressS, keyPressQ, keyPressD, &directionX, &directionY);
-        
-        if (argsT.time%2 == 0) {
-            calcul_speed(directionX, directionY, &speedX, &speedY, &x, &y, &navette, ACCELERATION);
+            calcul_direction_navette(keyPressZ, keyPressS, keyPressQ, keyPressD, &directionX, &directionY);
+            
+            if (argsT.time%2 == 0) {
+                calcul_speed(directionX, directionY, &speedX, &speedY, &x, &y, &navette, ACCELERATION);
 
-            for (int i = 0; i < n; i++) {
-                p1.x = tab[i]->x;
-                p1.y = tab[i]->y;
-                p2.x = x+16;
-                p2.y = y+16;
-                if (distance(p1, p2) < 16+24) {
-                    planeteVisite[i] = 1;
-                    if (tout_noeud(planeteVisite, n) && i == chemin[0])
-                        fin = 1;
+                for (int i = 0; i < n; i++) {
+                    p1.x = tab[i]->x;
+                    p1.y = tab[i]->y;
+                    p2.x = x+16;
+                    p2.y = y+16;
+                    if (distance(p1, p2) < 16+24) {
+                        planeteVisite[i] = 1;
+                        if (tout_noeud(planeteVisite, n) && i == chemin[0])
+                            fin = 1;
+                    }
                 }
+
+                if (!isInPath_Line(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath_Line(x-32, y-32, sous_graphe, n, PATH_SIZE-10)) {
+                    x -= speedX;
+                    y -= speedY;
+                    speedX = 0;
+                    speedY = 0;
+                }
+
+                //Partie vérif trou noir
+                p1.x = x+16;
+                p1.y = y+16;
+                p2.x = trouNoir.x+50;
+                p2.y = trouNoir.y+50;
+                distTrouNoir = distance(p1, p2);
+                if(distTrouNoir<rayonTN/3) {
+                    affArgs.type_fin = 1;
+                    fin = 1;
+                }
+
+                if (fin && seconde == 0)
+                    seconde = argsT.time/100;
             }
 
-            if (!isInPath_Line(x, y, sous_graphe, n, PATH_SIZE-10) && !isInPath_Line(x-32, y-32, sous_graphe, n, PATH_SIZE-10)) {
-                x -= speedX*8;
-                y -= speedY*8;
-                speedX = 0;
-                speedY = 0;
-            }
+            if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
 
-            //Partie vérif trou noir
-            p1.x = x+16;
-            p1.y = y+16;
-            p2.x = trouNoir.x+50;
-            p2.y = trouNoir.y+50;
-            distTrouNoir = distance(p1, p2);
-            if(distTrouNoir<rayonTN/3) {
-                affArgs.type_fin = 1;
-                fin = 1;
-            }
+            calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, ACCELERATION_TROU);
+            
+            trouNoir.x = (int)xTN;
+            trouNoir.y = (int)yTN;
 
             if (fin && seconde == 0)
                 seconde = argsT.time/100;
