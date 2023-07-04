@@ -175,8 +175,8 @@ typedef struct afficheArgs_s{
     SDL_bool * program_on;
     int * chemin;
     Point * co;
-    double * x;
-    double * y;
+    float * x;
+    float * y;
 }afficheArgs;
 
 /**
