@@ -56,7 +56,7 @@ void init() {
     //Création de la fenêtre de gauche
     window = SDL_CreateWindow(
         "The travelling Spaceman", //Nom de la fenètre
-        dm.w/2-W/2, 0, //Coordonnées de la fenètre
+        0, 0, //Coordonnées de la fenètre
         W, H, //Dimensions de la fenètre
         SDL_WINDOW_RESIZABLE); //Paramètre de la fenètre
 
@@ -71,11 +71,11 @@ void init() {
 }
 
 int get_w_window(){
-    return dm.w;
+    return dm.w-10;
 }
 
 int get_h_window(){
-    return dm.h;
+    return dm.h-35;
 }
 
 
