@@ -13,6 +13,12 @@
 SDL_Renderer* renderer;
 SDL_Window* window = NULL;
 
+/**
+ * @brief affiche un grph qui sert à faire le debugage de certaine fonction
+ * @param tab Le chemin à tracer
+ * @param tabSom Le tableau de sommet
+ * @param n La taille du chemin
+*/
 void affiche_Chem(int * tab, sommet_t ** tabSom, int n)
 {
     for(int i=0; i<n-1; i++)
@@ -25,9 +31,7 @@ void affiche_Chem(int * tab, sommet_t ** tabSom, int n)
 
 
 /**
- * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
- * @param tab Le tableau de sommets représentant le graphe.
- * @param n Le nombre de sommets dans le tableau.
+ * @brief Initialise l'affichage SDL
 */
 void init() {
     int w_window = W, h_window = H;
@@ -81,9 +85,8 @@ void clear_SDL(){
 }
 
 /**
- * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
- * @param score Le score à afficher en tant que votre score
- * @param bestScore Le score à afficher en tant que meilleur score 
+ * @brief Affiche un entier en bas à droite de l'ecran
+ * @param n L'entier à afficher
 */
 void draw_int(int n) {
     SDL_Rect textRect;
@@ -111,6 +114,10 @@ void draw_int(int n) {
     TTF_CloseFont(font);
 }
 
+/**
+ * @brief Sert à afficher le chronometre en haut à gauche
+ * @param n temps à afficher
+*/
 void draw_time(int n) {
     SDL_Rect textRect;
     TTF_Font* font;
@@ -166,8 +173,9 @@ void draw_disk(int center_x, int center_y, int radius) {
 /**
  * @brief Dessine un graphe à l'aide d'un rendu SDL.
  * @param renderer Le rendu SDL utilisé pour afficher le graphe.
- * @param graph Le pointeur vers le graphe à dessiner.
+ * @param tab Le tableau de sommet du graph.
  * @param n Le nombre de sommets dans le tableau.
+ * @param displayPoid booleen permetant d'afficher ou non les poids sur les arretes
  */
 void draw_graph(SDL_Renderer* renderer, sommet_t** tab, int n, int displayPoid) {
 
@@ -293,6 +301,12 @@ void affiche(sommet_t ** tab, int n, int r, int g, int b, int a, int displayPoid
     draw_graph(renderer, tab, n, displayPoid);
 }
 
+/**
+ * @brief Affiche les asteroid avec des rotation à partir d'un tableau
+ * @param tableau d'asteroid à afficher
+ * @param n taille du tableau
+ * @param image texture des asteroids
+*/
 void affichAst(asteroid_t * tab, int n, SDL_Texture * image){
     SDL_Rect dest = {0, 0, 48, 48};
     for (int i = 0; i < n; i++){
@@ -303,7 +317,7 @@ void affichAst(asteroid_t * tab, int n, SDL_Texture * image){
 }
 
 /**
- * @brief Affiche un graphe à l'aide de la bibliothèque SDL.
+ * @brief Affiche l'ecran de fin
  * @param score Le score à afficher en tant que votre score
  * @param bestScore Le score à afficher en tant que meilleur score 
 */
@@ -345,59 +359,38 @@ void afficheFin(int score, int bestScore) {
     TTF_CloseFont(font);
 }
 
+/**
+ * @brief affiche l'ecran de fin du jeu trzvelling spaceman
+ * @param time le temps de fin 
+ * @param type_fin permet d'afficher soit l'ecran de mort doit l'ecran de victoire 
+*/
 void affiche_fin_espace(int time, int type_fin) {
-    if(type_fin)
-    {
-        SDL_Rect textRect;
-        TTF_Font* font;
-        SDL_Surface* textSurface;
-        SDL_Texture* textTexture;
-        SDL_Color color = {200, 200, 200, 255};
-        char Txt1[100];
+    SDL_Rect textRect;
+    TTF_Font* font;
+    SDL_Surface* textSurface;
+    SDL_Texture* textTexture;
+    SDL_Color color = {200, 200, 200, 255};
+    char Txt1[100];
 
-        font = TTF_OpenFont("arial.ttf", 40);
-
-        sprintf(Txt1, "Vous etes mort");
-
-        textSurface = TTF_RenderText_Solid(font, Txt1, color);
-        textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-
-        SDL_FreeSurface(textSurface);
-        SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
-        textRect.x = W/2-textRect.w/2;
-        textRect.y = H/2-textRect.h/2;
-
-        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
-        SDL_DestroyTexture(textTexture);
-
-        TTF_CloseFont(font);
-    }
-    else
-    {
-        SDL_Rect textRect;
-        TTF_Font* font;
-        SDL_Surface* textSurface;
-        SDL_Texture* textTexture;
-        SDL_Color color = {200, 200, 200, 255};
-        char Txt1[100];
-
-        font = TTF_OpenFont("arial.ttf", 40);
-
+    font = TTF_OpenFont("arial.ttf", 40);
+    if (!type_fin){
         sprintf(Txt1, "Votre temps : %d s", time);
-
-        textSurface = TTF_RenderText_Solid(font, Txt1, color);
-        textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-
-        SDL_FreeSurface(textSurface);
-        SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
-        textRect.x = W/2-textRect.w/2;
-        textRect.y = H/2-textRect.h/2;
-
-        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
-        SDL_DestroyTexture(textTexture);
-
-        TTF_CloseFont(font);
+    } else {
+        sprintf(Txt1, "Vous etes mort");
     }
+    
+    textSurface = TTF_RenderText_Solid(font, Txt1, color);
+    textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+    SDL_FreeSurface(textSurface);
+    SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+    textRect.x = W/2-textRect.w/2;
+    textRect.y = H/2-textRect.h/2;
+
+    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+    SDL_DestroyTexture(textTexture);
+
+    TTF_CloseFont(font);
 }
 
 /**
@@ -411,9 +404,9 @@ void render() {
  * @brief Libere le renderer la fenêtre  et ferme SDL
 */
 void closeSDL() {
+    TTF_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    TTF_Quit();
     SDL_Quit();
 }
 
@@ -436,22 +429,43 @@ void secret1() {
     SDL_DestroyTexture(texture_secrete);
 }
 
-SDL_Texture * create_texture(SDL_Surface * surface){
-    return SDL_CreateTextureFromSurface(renderer, surface);
-}
-
-//Partie sur l'animation de la soucoupe volante
-
+/**
+ * @brief permet d'afficher un sprite
+ * @param destination le rectangle de destination du sprite
+ * @param texture la texture du sprite
+ * @param x la coordoné x de la texture à partir de la quelle prendre le sprite
+ * @param y la coordoné y de la texture à partir de la quelle prendre le sprite
+ * @param angle l'angle de rotation du sprite
+ * @param size la taille du sprite sur l'image
+*/
 void draw_sprite(SDL_Rect destination, SDL_Texture * texture, int x, int y, int angle, int size){
     SDL_Rect srcrect = {size*x, size*y, size, size};
     SDL_RenderCopyEx(renderer, texture, &srcrect, &destination, angle, NULL, 0);
 }
 
+/**
+ * @brief cree une texture à partir d'une surface
+ * @param surface la surface
+ * @return la texture cree
+*/
+SDL_Texture * create_texture(SDL_Surface * surface){
+    return SDL_CreateTextureFromSurface(renderer, surface);
+}
+
+/**
+ * @brief Dessine un rectangle
+ * @param rect Le rectangle à dessiner
+*/
 void draw_rect(SDL_Rect rect){
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(renderer, &rect);
 }
 
+/**
+ * @brief Dessine une ligne entre deux points
+ * @param point1 premier point de la ligne
+ * @param point2 deuxieme point de la ligne
+*/
 void draw_Line(Point point1, Point point2)
 {
     SDL_SetRenderDrawColor(renderer, 0,255,0,0);

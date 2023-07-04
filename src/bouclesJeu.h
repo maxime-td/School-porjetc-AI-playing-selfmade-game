@@ -47,6 +47,7 @@ typedef struct {
     int time;
 } timerArgs;
 
+// Structure pour les arguments de affiche
 typedef struct afficheArgs_s{
     int * count;
     int frame;
@@ -80,16 +81,43 @@ typedef struct afficheArgs_s{
     SDL_bool * program_on;
     int * chemin;
     coordonne_t * co;
-    float * x;
-    float * y;
+    double * x;
+    double * y;
 }afficheArgs;
+
+
+/**
+ * @brief fonction de lancement de thread pour l'algorithme des fourmis
+ * @param args Une structure contenant tout les argument a donner a multi_start_fourmi
+*/
+void *thread_fourmi(FourmiArgs *args);
+
+/**
+ * @brief fonction de lancement de thread pour l'algorithme des floyd
+ * @param args Une structure contenant tout les argument a donner a multi_Start_Floyd_Warshall
+*/
+void *thread_floyd(FloydWarshallArgs *args);
+
+/**
+ * @brief fonction de lancement de thread pour le timer du jeu
+ * @param args Une structure contenant tout les argument necessaire au timer et à la recuperation de ce timer
+*/
+void *timer(timerArgs* timer);
+
+/**
+ * @brief fonction de lancement de thread pour l'affichage graphique du jeu
+ * @param args Une structure contenant tout les argument necessaire a l'affichage du jeu
+*/
+void * afficheJeu(afficheArgs * argsAff);
 
 /**
  * @brief Exécute la boucle de jeu  de graphe
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
+ * @param n_chemin permet de retourner la taille du chemin choisi par le joueur
+ * @param fin permet de savoir si la fonction à était quitter en appuyant sur la crois
  * @return tableau du chemin du joueur
-*/
+ */
 int * boucle_jeu_graphe(sommet_t** tab, int n, int * nb_noeuds_chemin, int *fin);
 
 /**
@@ -97,17 +125,46 @@ int * boucle_jeu_graphe(sommet_t** tab, int n, int * nb_noeuds_chemin, int *fin)
  * @param tab Le tableau des sommets
  * @param n Le nombre de sommets
  * @param chemin Tableau du chemin choisi par le joueur
-*/
+ * @param n_chemin Taille du chemin choisi par le joueur
+ * @param close Permet de savoir si la boucle à était quitter en appuyant sur la crois
+ * @param ia booleen disant si c'est une ia qui joue
+ * @param tabIA tableau de regle de l'ia
+ * @param n_ia taille du tableau de regle
+ * @param result permet de recuperer le score de l'ia
+ * @param affiche booleen permetant d'activer ou non l'interface graphique
+ */
 void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche);
 
 /**
  * @brief Exécute la boucle de jeu principal
- * @param tab Le tableau des sommets
- * @param n Le nombre de sommets
 */
 void boucle_jeu();
 
+/**
+ * @brief Exécute la boucle de jeu principal sans la première partie (la partie graph)
+ */
 void boucle_jeu_sans_graph();
+
+/**
+ * @brief calcul de la direction du trou noir
+ * @param directionX permet de recuperer la direction x du trou noir
+ * @param directionY permet de recuperer la direction y du trou noir
+ * @param xTN position x du trou noir
+ * @param yTN position y du trou noir
+*/
+void directionTN(float * directionX, float * directionY, int xTN, int yTN);
+
+/**
+ * @brief calcul de la vitesse du trou noir
+ * @param directionXTN direction x du trou noir
+ * @param directionYTN direction y du trou noir
+ * @param speedXTN permet de recuperer la vitesse x du trou noir
+ * @param speedYTN permet de recuperer la vitesse y du trou noir
+ * @param xTN pemet de recuperer la nouvelle position x du trou noir
+ * @param yTN pemet de recuperer la nouvelle position y du trou noir
+ * @param trouNoir le rectangle representant le trou noir 
+*/
+void speedTN(float directionXTN, float directionYTN, float * speedXTN, float * speedYTN, float * xTN, float * yTN, SDL_Rect * trouNoir);
 
 /**
  * @brief Trouve l'index du sommet qui a la plus courte distance avec le point p
@@ -158,10 +215,25 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, int precision)
  */
 int calcul_score(int seconde, int nbPlanete, int distDep);
 
+/**
+ * @brief Génere une regle au hasard
+ * @return La règle générée (avec les 2 dernier paramètre representant l'input)
+ */
+int * generate_rule();
 
-void directionTN(float * directionX, float * directionY, int xTN, int yTN);
+/**
+ * @brief genere un tableau de n regles aleatoire
+ * @param n nombre de regle a generer
+ * @return le tableau de regle
+*/
+int ** generate_tab_rules(int n);
 
-void speedTN(float directionXTN, float directionYTN, float * speedXTN, float * speedYTN, float * xTN, float * yTN, SDL_Rect * trouNoir);
-void * afficheJeu(afficheArgs * argsAff);
+/**
+ * @brief recupere un tableau de regle à partir d'un fichier
+ * @param name nom du fichier depuis le quelle on recpuere le tableau de regle
+ * @param n permet de recuperer la taille du tableau de regle
+ * @return le tableau de regle
+*/
+int ** get_rule_from_file(char * name, int * n);
 
 #endif
