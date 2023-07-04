@@ -271,7 +271,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     Point p1; //deux point temporaire servant à stoquer des coordonees pour les compare
     Point p2;
 
-    // veriable pour les regles à choisir
+
+    // variable pour les regles à choisir
     int closestP; // variable servant à stoquer la sortie de closest_point (l'index de la planete la plus proche)
     int posClosestP; //variable servant à stoquer la sortie de position_relative (la position de la planete la plus proche)
     int posClosestW; // variable servant à stoquer la sortie de mur_proche (la position du mur le plus proche)
