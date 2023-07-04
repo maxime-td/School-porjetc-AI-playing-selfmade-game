@@ -183,7 +183,7 @@ void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, fl
     Point navette = {(int)x, (int)y};
     Point trouNoir = {xTN, yTN};
     float dist = distance(navette, trouNoir);
-
+    *directionXN = 0; *directionYN = 0;
     *directionXN += (xTN+24-x);
     *directionYN += (yTN+24-y);
 

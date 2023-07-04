@@ -495,14 +495,14 @@ void * afficheJeu(afficheArgs * argsAff) {
         //verification de fin de jeu pour stoquer le temps de fin
         if (*(argsAff->fin) && first) {
             first = 0;
-            seconde = *(argsAff->count)/100;
+            seconde = *(argsAff->count)/1000;
         }
         
         //une refresh toute les 2 ms
-        if (*(argsAff->count)%2 == 0) {
+        if (*(argsAff->count)%20 == 0) {
 
             //changement de frame pour les etoile filantes
-            if (*(argsAff->count)%10 == 0) {
+            if (*(argsAff->count)%100 == 0) {
                 argsAff->frameEF = (argsAff->frameEF + 1)%8;
                 if (argsAff->frameEF == 0) {
                     argsAff->etoileFilante.x = rand()%W;
@@ -554,7 +554,7 @@ void * afficheJeu(afficheArgs * argsAff) {
                 draw_sprite(argsAff->navette, argsAff->texture, argsAff->frame, 0, 0, argsAff->navette.w);
 
                 //Frame de la nevette du trou noir et du drapeau
-                if (*(argsAff->count)%20 == 0) {
+                if (*(argsAff->count)%200 == 0) {
                     argsAff->frame = (argsAff->frame + 1)%4;
                     argsAff->frameTN = (argsAff->frameTN + 1)%4;
                     argsAff->frameFlag = (argsAff->frameFlag + 1)%5;
@@ -567,7 +567,7 @@ void * afficheJeu(afficheArgs * argsAff) {
                 argsAff->navette.y = *(argsAff->y);
 
                 //Affichage du temps
-                draw_time(*(argsAff->count)/100);
+                draw_time(*(argsAff->count)/1000);
             }
 
             else //Affiche ecran de fin
