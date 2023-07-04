@@ -735,7 +735,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
         }
         
 
-        if (argsT.time%4 == 0){
+        if (argsT.time%2 == 0){
             speedX += directionX * ACCELERATION;
             speedY += directionY * ACCELERATION;
 
