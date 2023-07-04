@@ -852,13 +852,21 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
         if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
 
-//      printf("direction : x = %f, y = %f\n", directionXTN, directionYTN);
         speedTN(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir);
 
         trouNoir.x = (int)xTN;
         trouNoir.y = (int)yTN;
 
         affArgs.affTrouNoir = trouNoir;
+
+        if (ia && fin){
+            program_on = SDL_FALSE;
+            if (affArgs.type_fin){
+                argsT.time = (1+TIME_MAX_IA)*100;
+            }
+            
+        }
+        
     }
     
     program_on = SDL_FALSE;
@@ -1156,7 +1164,7 @@ void boucle_jeu_sans_graph()
         matDist = dist_tab(tab, &n);
         chemin = colonni_fourmi(matDist, n, rand()%n, &n_chemin);
 
-        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 0, rules, n_rules, &res, 1);
+        boucle_jeu_espace(tab, n, chemin, n_chemin, &fin, 1, rules, n_rules, &res, 1);
 
         if(chemin != NULL)
             free(chemin);
