@@ -57,4 +57,13 @@ void calcul_speed(float directionX, float directionY, float * speedX, float * sp
 */
 void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, float x, float y , float * speedX, float * speedY);
 
+/**
+ * @brief Initialise la position du Trou noir assez loin de la navette
+ * @param xTN pointeur sur la coord X du Trou Noir
+ * @param yTN pointeur sur la coord Y du Trou Noir
+ * @param x la coord X de la navette
+ * @param y la coord Y de la navette
+*/
+void initPosTN(float * xTN, float * yTN, float x, float y);
+
 #endif

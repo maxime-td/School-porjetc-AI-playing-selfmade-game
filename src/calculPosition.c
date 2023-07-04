@@ -190,3 +190,25 @@ void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, fl
     *speedX += *directionXN * ATTRACTION_TROU/(dist*dist);
     *speedY += *directionYN * ATTRACTION_TROU/(dist*dist);
 }
+
+/**
+ * @brief Initialise la position du Trou noir assez loin de la navette
+ * @param xTN pointeur sur la coord X du Trou Noir
+ * @param yTN pointeur sur la coord Y du Trou Noir
+ * @param x la coord X de la navette
+ * @param y la coord Y de la navette
+*/
+void initPosTN(float * xTN, float * yTN, float x, float y)
+{
+    *xTN = rand()%W;
+    *yTN = rand()%H;
+    Point navette = {x,y};
+    Point TN = {*xTN, *yTN};
+    while(distance(navette, TN)<250)
+    {
+        TN.x = rand()%W;
+        TN.y = rand()%H;
+    }
+    *xTN = TN.x;
+    *yTN = TN.y;
+}

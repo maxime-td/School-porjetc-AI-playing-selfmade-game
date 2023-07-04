@@ -239,7 +239,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
     float speedYTN = 0; //Vitesse y trou noir
     float x = tab[chemin[0]]->x - 16; //position x du joueur
     float y = tab[chemin[0]]->y - 16; //position y du joueur
-    float xTN = W/2, yTN = H/2; //Position trou noir
+    float xTN = 0, yTN = 0; //Position trou noir
     float directionXTN = 0, directionYTN = 0; //Direction trou noir
     float directionX = 0; //direction x du joueur
     float directionY = 0; //direction y du joueur
@@ -263,6 +263,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
 
     Point p1; //deux point temporaire servant à stoquer des coordonees pour les compare
     Point p2;
+
+    initPosTN(&xTN, &yTN, x, y);
 
     // variable pour les regles à choisir
     int closestP; // variable servant à stoquer la sortie de closest_point (l'index de la planete la plus proche)
