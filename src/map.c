@@ -112,6 +112,16 @@ int min(int a, int b) {
     return a;
 }
 
+/**
+ * @brief permet de savoir si un objet est situé entre 2 planètes connectées en se servant du projeté orthogonal
+ * @param pX coord X de l'objet
+ * @param pY coord Y de l'objet
+ * @param tabSom le tableau des sommets (planètes)
+ * @param n le nombre de sommets (planètes)
+ * @param largeur la largeur du chemin souhaité entre les 2 planètes
+ * @return - 0 si l'objet n'est pas sur le chemin
+ *         - 1 si l'objet est sur le chemin
+*/
 int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, int largeur) {
     int res = 0;
     int dist = 0;
