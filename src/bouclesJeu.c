@@ -604,10 +604,12 @@ void boucle_jeu_espace(sommet_t **tab, int n, int *chemin, int n_chemin, int* cl
             if (fin && seconde == 0)
                 seconde = argsT.time/1000;
 
-            if(rand()%10000 == 0)directionTN(&directionXTN2, &directionYTN2, xTN2, yTN2);
+            if(rand()%10000 == 0)
+                directionTN(&directionXTN2, &directionYTN2, xTN2, yTN2);
             calcul_speed(directionXTN2, directionYTN2, &speedXTN2, &speedYTN2, &xTN2, &yTN2, &trouNoir2, ACCELERATION_TROU);
 
-            if(rand()%10000 == 0)directionTN(&directionXTN, &directionYTN, xTN, yTN);
+            if(rand()%10000 == 0)
+                directionTN(&directionXTN, &directionYTN, xTN, yTN);
             calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, ACCELERATION_TROU);
             
             trouNoir2.x = (int)xTN2;
