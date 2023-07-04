@@ -234,7 +234,7 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin) {
  */
 void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche) {
     float speedX = 0; //vitesse x du joueur
-    float speedY = 0; //vitesse y du joueur
+    float speedY = 0; //vitesse y du joueur 
     float speedXTN = 0; //vitesse x trou noir
     float speedYTN = 0; //Vitesse y trou noir
     float speedXTN2 = 0; //vitesse x trou noir
