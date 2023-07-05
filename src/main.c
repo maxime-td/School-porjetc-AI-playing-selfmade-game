@@ -14,7 +14,7 @@ int main()
 
     int result;
     int n_regle = 20;
-    int * alea   = gen_tableau_alea((n_regle-1)*(N_RULE+3));
+    int * alea   = gen_tableau_alea((n_regle-1)*(N_RULE+3)+3);
     int ** regles = generate_tab_rules(n_regle);
 
     regles = recherche_local_bot_iteration(regles, n_regle, alea, &result, 1);
