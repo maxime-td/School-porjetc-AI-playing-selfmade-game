@@ -17,7 +17,7 @@ int main()
     int * alea   = gen_tableau_alea((n_regle-1)*(N_RULE+3));
     int ** regles = generate_tab_rules(n_regle);
 
-    regles = recherche_local_bot_iteration(regles, n_regle, alea, &result);
+    regles = recherche_local_bot_iteration(regles, n_regle, alea, &result, 3);
     printf("%d\n", result);
 
     free2DTab((void**)regles, n_regle);
