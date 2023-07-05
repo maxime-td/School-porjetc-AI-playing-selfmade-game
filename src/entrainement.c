@@ -2,12 +2,93 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <limits.h>
+#include <pthread.h>
 
 #include "calculPosition.h"
 #include "graph.h"
 #include "bouclesJeu.h"
 #include "bot.h"
+#include "entrainement.h"
 
+void* eval(argsEval * argsEv){
+    int n = 0;
+    sommet_t **tab = NULL;
+    int res;
+    int sum_score;
+
+    sum_score = 0;
+    for (int k = 0; k < NB_TEST; k++){
+        tab = gen_tab_sommets_rand(&n);  
+        tab_to_graph(tab, 0, n - 1);
+        make_new_links(7*5/n, tab, &n);
+        boucle_jeu_espace(tab, n, NULL, 1, argsEv->regle, argsEv->n_regle, &res, 0);
+        sum_score += res;
+    }
+
+    res = sum_score/NB_TEST;
+    (*argsEv->res) = res;
+    return NULL;
+}
+
+int ** copie_1_line_tab(int ** tab, int n, int i){
+    int ** tabCopie = (int**) malloc(sizeof(int*)*n);
+    for (int j = 0; j < n; j++){
+        if (j != i){
+            tabCopie[j] = tab[j];
+        }else{
+            tabCopie[j] = (int*)malloc(sizeof(int)*(N_RULE+3));
+            for (int k = 0; k < (N_RULE+3); k++){
+                tabCopie[j][k] = tab[i][k];
+            }
+        }
+    }
+    return tabCopie;
+}
+
+int ** recherche_local_bot_iteration(int ** regles, int n_regles, int * ordre, int * score){
+    int regle_taille[N_RULE+3] = {5, 6, 3, 5, 4, 3, 3, 10};
+    pthread_t pthreads[10];
+    argsEval argsE;
+    int x, y;
+    int min;
+    int best_res = 0;
+    int val_best_res = 0;
+    int res[10];
+    int ** regles_copies[10];
+
+    for (int i = 0; i < (n_regles-1)*(N_RULE+3); i++){
+        x = ordre[i]%(N_RULE+3);
+        y = ordre[i]/(N_RULE+3);
+        min = (x == N_RULE+2) ? 1 : -1;
+        best_res = 0;
+        printf("%d/160\n", i);
+        
+        
+        for (int j = 0; j < regle_taille[x]; j++){
+            regles_copies[j] = copie_1_line_tab(regles, n_regles, y);
+            regles_copies[j][y][x] = j+min;
+            argsE.n_regle = n_regles;
+            argsE.regle   = regles_copies[j];
+            argsE.res     = &res[j] ;
+            pthread_create(&pthreads[j], NULL, (void *(*)(void *))eval, &argsE);
+        }
+            
+        for (int j = 0; j < regle_taille[x]; j++){
+            pthread_join(pthreads[j], NULL);
+            if (res[j] > best_res){
+                val_best_res = j+min;
+                best_res     = res[j];
+            }
+
+            free(regles_copies[j][y]);
+            free(regles_copies[j]);
+        }
+        regles[y][x] = val_best_res;
+    }
+
+    *score = best_res;
+    return regles;
+}
 /**
  * @brief Genère un tableau de taille n avec des entiers disposés aléatoirement
  * @param n Le nombre d'entiers

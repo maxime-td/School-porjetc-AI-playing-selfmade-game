@@ -11,6 +11,19 @@
 #include "bouclesJeu.h"
 #include "bot.h"
 
+#define NB_TEST 100
+
+typedef struct {
+    int ** regle;
+    int n_regle;
+    int * res;
+}argsEval;
+
+
+void* eval(argsEval * argsEv);
+int ** recherche_local_bot_iteration(int ** regles, int n_regles, int * ordre, int * score);
+
+
 /**
  * @brief Genère un tableau de taille n avec des entiers disposés aléatoirement
  * @param n Le nombre d'entiers
