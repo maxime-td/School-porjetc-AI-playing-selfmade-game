@@ -178,7 +178,7 @@ int * generate_rule() {
     rule[N_RULE+1] = (rand()%3) -1; //Direction droite/gauche
 
     //Priorite
-    rule[N_RULE+2] = (rand()%10)+1;
+    rule[N_RULE+2] = (rand()%6)+1;
 
     return rule;
 }

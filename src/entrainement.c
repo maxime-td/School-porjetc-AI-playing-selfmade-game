@@ -16,17 +16,23 @@ void* eval(argsEval * argsEv){
     int res;
     int sum_score;
 
+    int ** regle_copie = copie_1_line_tab(argsEv->regle, argsEv->n_regle, argsEv->y);
+    regle_copie[argsEv->y][argsEv->x] = argsEv->val;
+
     sum_score = 0;
     for (int k = 0; k < NB_TEST; k++){
         tab = gen_tab_sommets_rand(&n);  
         tab_to_graph(tab, 0, n - 1);
         make_new_links(7*5/n, tab, &n);
-        boucle_jeu_espace(tab, n, NULL, 1, argsEv->regle, argsEv->n_regle, &res, 0);
+        boucle_jeu_espace(tab, n, NULL, 1, regle_copie, argsEv->n_regle, &res, 0);
         sum_score += res;
     }
 
     res = sum_score/NB_TEST;
     (*argsEv->res) = res;
+
+    free(regle_copie[argsEv->y]);
+    free(regle_copie);
     return NULL;
 }
 
@@ -46,15 +52,14 @@ int ** copie_1_line_tab(int ** tab, int n, int i){
 }
 
 int ** recherche_local_bot_iteration(int ** regles, int n_regles, int * ordre, int * score){
-    int regle_taille[N_RULE+3] = {5, 6, 3, 5, 4, 3, 3, 10};
-    pthread_t pthreads[10];
+    int regle_taille[N_RULE+3] = {5, 6, 3, 5, 4, 3, 3, 5};
+    pthread_t pthreads[6];
     argsEval argsE;
     int x, y;
     int min;
     int best_res = 0;
     int val_best_res = 0;
-    int res[10];
-    int ** regles_copies[10];
+    int res[6];
 
     for (int i = 0; i < (n_regles-1)*(N_RULE+3); i++){
         x = ordre[i]%(N_RULE+3);
@@ -65,10 +70,11 @@ int ** recherche_local_bot_iteration(int ** regles, int n_regles, int * ordre, i
         
         
         for (int j = 0; j < regle_taille[x]; j++){
-            regles_copies[j] = copie_1_line_tab(regles, n_regles, y);
-            regles_copies[j][y][x] = j+min;
             argsE.n_regle = n_regles;
-            argsE.regle   = regles_copies[j];
+            argsE.regle = regles;
+            argsE.y = y;
+            argsE.x = x;
+            argsE.val = j+min;
             argsE.res     = &res[j] ;
             pthread_create(&pthreads[j], NULL, (void *(*)(void *))eval, &argsE);
         }
@@ -79,9 +85,6 @@ int ** recherche_local_bot_iteration(int ** regles, int n_regles, int * ordre, i
                 val_best_res = j+min;
                 best_res     = res[j];
             }
-
-            free(regles_copies[j][y]);
-            free(regles_copies[j]);
         }
         regles[y][x] = val_best_res;
     }
