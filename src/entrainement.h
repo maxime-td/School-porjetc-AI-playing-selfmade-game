@@ -1,5 +1,5 @@
-#ifndef _ENTRAINEMENT_H_
-#define _ENTRAINEMENT_H_
+#ifndef ENTRAINEMENT_H
+#define ENTRAINEMENT_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,7 +11,7 @@
 #include "bouclesJeu.h"
 #include "bot.h"
 
-#define NB_TEST 10
+#define NB_TEST 100
 
 typedef struct {
     int ** regle;

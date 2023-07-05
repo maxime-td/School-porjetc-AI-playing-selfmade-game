@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <limits.h>
 #include <pthread.h>
+#include <unistd.h>
 
 #include "calculPosition.h"
 #include "graph.h"
@@ -26,11 +27,10 @@ void *eval(argsEval *argsEv)
 
     for (int k = 0; k < NB_TEST; k++)
     {
-        //Mettre ça en threas
         tab = gen_tab_sommets_rand(&n);
         tab_to_graph(tab, 0, n - 1);
         make_new_links(7 * 5 / n, tab, &n);
-        boucle_jeu_espace(tab, n, NULL, 1, regle_copie, argsEv->n_regle, &res, 0);
+        boucle_jeu_espace(tab, n, NULL, 1, regle_copie, argsEv->n_regle, &res, 0, 1);
         sum_score += res;
     }
 
@@ -82,7 +82,7 @@ int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int 
     int val_best_res[3];
     int res[6];
 
-    for (int i = 0; i < ((n_regles - 1) * (N_RULE + 3) - n_val + 1); i++)
+    for (int i = 0; i < ((n_regles-1) * (N_RULE + 3) - n_val + 1); i++)
     {
         for (int j = 0; j < n_val; j++){
             x[j] = ordre[i+j] % (N_RULE + 3);
@@ -110,11 +110,12 @@ int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int 
                     argsE[j].regle = regles;
                     argsE[j].y = y;
                     argsE[j].x = x;
-                    argsE[j].n_val = n_val;
                     argsE[j].val = val;
+                    argsE[j].n_val = n_val;
                     argsE[j].res = &res[j];
-                    pthread_create(&pthreads[j], NULL, (void *(*)(void *))eval, &(argsE[j]));
 
+                    //eval(&(argsE[j]));
+                    pthread_create(&pthreads[j], NULL, (void *(*)(void *))eval, &(argsE[j]));
                 }
 
                 for (int j = 0; j < regle_taille[x[0]]; j++)
@@ -132,10 +133,12 @@ int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int 
             }
         }
 
+
         for (int m = 0; m < n_val ; m++){
             regles[y[m]][x[m]] = val_best_res[m];
         }
     }
+
     *score = best_res;
     return regles;
 }

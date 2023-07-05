@@ -10,7 +10,7 @@
 
 int main()
 {
-    srand(time(NULL));
+    srand(0*time(NULL));
 
     int result;
     int n_regle = 20;
@@ -18,8 +18,12 @@ int main()
     int ** regles = generate_tab_rules(n_regle);
         set_rules_into_file("RULES.txt", regles, n_regle);
 
+<<<<<<< HEAD
 
     regles = practice_cycle(regles, n_regle, alea, &result, 15);
+=======
+    regles = recherche_local_bot_iteration(regles, n_regle, alea, &result, 1);
+>>>>>>> 0de50fe8142b0417e2ddf546b14035e38fc543e6
     printf("%d\n", result);
     set_rules_into_file("RULES.txt", regles, n_regle);
     free2DTab((void**)regles, n_regle);

@@ -15,13 +15,14 @@
  * @param distDep La distance au point de depart
  * @return Le score trouvé
  */
-int calcul_score(int seconde, int nbPlanete, int distDep) {
+int calcul_score(int seconde, int nbPlanete, int distG) {
     int score = 0;
 
     score += ((TIME_MAX_IA+1) - seconde)*5;
     score += (TIME_MAX_IA - seconde > 0)*1000;
     score += (nbPlanete-1)*100;
-    score += distDep/10;
+    score += 100/((distG/10)+1);
+    //printf("Score : %d\n", score);
 
     return score;   
 }
@@ -167,11 +168,11 @@ int * generate_rule() {
     int * rule = (int *) malloc(sizeof(int)*(N_RULE+3));
 
     //Etat du jeu
-    rule[0] = (rand()%5)-1; //Position planete
-    rule[1] = (rand()%6)-1; //Position mur
-    rule[2] = (rand()%3)-1; //Is Mur
-    rule[3] = (rand()%5)-1; //Pos trou noir
-    rule[4] = (rand()%4)-1; //Distance trou noir
+    rule[0] = (rand()%2 == 0) ? -1 : (rand()%4); //Position planete
+    rule[1] = (rand()%2 == 0) ? -1 : (rand()%5); //Position mur
+    rule[2] = (rand()%2 == 0) ? -1 : (rand()%2); //Is Mur
+    rule[3] = (rand()%2 == 0) ? -1 : (rand()%4); //Pos trou noir
+    rule[4] = (rand()%2 == 0) ? -1 : (rand()%3); //Distance trou noir
 
     //Input du bot en fonction de l'etat
     rule[N_RULE]   = (rand()%3) -1; //Direction haut/bas

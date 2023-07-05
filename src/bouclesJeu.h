@@ -43,7 +43,7 @@ int * boucle_jeu_graphe(sommet_t** tab, int n, int * nb_noeuds_chemin, int *fin)
  * @param result permet de recuperer le score de l'ia
  * @param affiche booleen permetant d'activer ou non l'interface graphique
  */
-void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche);
+void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche, int fast);
 
 /**
  * @brief Exécute la boucle de jeu principal

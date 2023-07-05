@@ -232,7 +232,7 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin) {
  * @param result permet de recuperer le score de l'ia
  * @param affiche booleen permetant d'activer ou non l'interface graphique
  */
-void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche) {
+void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche, int fast) {
     float speedX = 0; //vitesse x du joueur
     float speedY = 0; //vitesse y du joueur 
     float speedXTN = 0; //vitesse x trou noir
@@ -262,10 +262,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
     int distTrouNoir = 0; //la ditance du trou noir au joueur
     int rayonTN = 50; //Le rayon du trou noir
 
-    double acceleration = (ia) ? ACCELERATION_IA : ACCELERATION;
-    double accelerationTN = (ia) ? ACCELERATION_TROU_IA : ACCELERATION_TROU;
-    double max_speed = (ia) ? MAX_SPEED_IA : MAX_SPEED;
-    double attraction = (ia) ? ATTRACTION_TROU_IA : ATTRACTION_TROU; 
+    double acceleration = (fast) ? ACCELERATION_IA : ACCELERATION;
+    double accelerationTN = (fast) ? ACCELERATION_TROU_IA : ACCELERATION_TROU;
+    double max_speed = (fast) ? MAX_SPEED_IA : MAX_SPEED;
+    double attraction = (fast) ? ATTRACTION_TROU_IA : ATTRACTION_TROU; 
 
     int n_seg;
     segmment_t * segs = gen_tab_seg(tab, n, &n_seg);
@@ -301,7 +301,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
     int keyPressD = 0; //booleen disant si la touche d est presse
 
     Point co[n]; //tableau de coordonne servant à stoquer les coordonné des images des planetes genere
-    asteroid_t * asteroid = ast_Partout(tab, n, segs, n_seg, &n_ast); //tableau des asteroid
+    asteroid_t * asteroid = NULL;//ast_Partout(tab, n, segs, n_seg, &n_ast); //tableau des asteroid
 
     int planeteLigne   = 10; //nombre de ligne sur l'image des planete
     int planeteColones[10] = {8, 14, 16, 4, 12, 8, 12, 12, 16, 8}; //nombre de planete par ligne
@@ -311,8 +311,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
 
     afficheArgs affArgs;
 
+    argsT.time = 0;
+
     if(affiche){
-        argsT.time = 0; 
         argsT.fin = &(program_on);
         pthread_create(&thread, NULL, (void *(*)(void *))timer, &argsT);
         
@@ -576,8 +577,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                 keyPressQ = (tabIA[selectRule][4] == 1);
             }
         }
-        if (!fin && (argsT.time%3 == 0 || ia)){
-            
+        if (!fin && (argsT.time%3 == 0 || fast)){
             //Prise en conte de la direction du joueur en fonction des input
             directionX = 0;
             directionY = 0;
@@ -636,7 +636,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                 }
                 trouNoir2.x = (int)xTN2;
                 trouNoir2.y = (int)yTN2;
-                if(rand()%10000 == 0)
+                if(tour_boucle%10000 == 0)
                     directionTN(&directionXTN2, &directionYTN2, xTN2, yTN2);
                 calcul_speed(directionXTN2, directionYTN2, &speedXTN2, &speedYTN2, &xTN2, &yTN2, &trouNoir2, accelerationTN, max_speed);
                 attractionTN(&directionX, &directionY, xTN2, yTN2, x, y, &speedX, &speedY, attraction);
@@ -648,14 +648,13 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
             if (fin && seconde == 0)
                 seconde = argsT.time/1000;
 
-            if(rand()%10000 == 0)
+            if(tour_boucle%10000 == 0)
                 directionTN(&directionXTN, &directionYTN, xTN, yTN);
             calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, accelerationTN, max_speed);
 
             affArgs.affTrouNoir = trouNoir;
 
             attractionTN(&directionX, &directionY, xTN, yTN, x, y, &speedX, &speedY, attraction);
-            
         }
 
         if (ia && fin){
@@ -675,11 +674,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
         for (int i = 0; i < n; i++)
             nb_planet += planeteVisite[i];
 
-        p2.x = tab[0]->x;
-        p2.y = tab[0]->y;
+        p2.x = tab[closestP]->x;
+        p2.y = tab[closestP]->y;
 
         *result = calcul_score(tour_boucle, nb_planet, distance(p1, p2));
-        //printf("tour_boucle : %d\nnb_planet : %d\nres : %d\n",tour_boucle, nb_planet, *result);
     }
 
 
@@ -754,7 +752,7 @@ void boucle_jeu_sans_graph() {
 
         make_new_links(7*5/n, tab, &n);
 
-        boucle_jeu_espace(tab, n, &fin, ia, rules, n_rules, &res, affiche);
+        boucle_jeu_espace(tab, n, &fin, ia, rules, n_rules, &res, affiche, 0);
 
         if (count%100 == 0){
             printf("%d : %d\n",count , res);
