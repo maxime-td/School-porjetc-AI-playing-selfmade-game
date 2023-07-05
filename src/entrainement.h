@@ -11,7 +11,7 @@
 #include "bouclesJeu.h"
 #include "bot.h"
 
-#define NB_TEST 100
+#define NB_TEST 10
 
 typedef struct {
     int ** regle;
