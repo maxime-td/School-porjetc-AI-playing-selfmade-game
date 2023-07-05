@@ -188,7 +188,7 @@ int ** practice_cycle(int **regles, int n_regles, int *ordre, int *score, int ep
         do
         {
             *score = newScore;
-            recherche_local_bot_iteration(regles, n_regles, ordre, &newScore, i);
+            regles = recherche_local_bot_iteration(regles, n_regles, ordre, &newScore, i);
             tmp = newScore-*score;
             if(i>1 && tmp>eps)
                 i=1;
