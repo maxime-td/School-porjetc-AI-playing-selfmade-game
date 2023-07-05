@@ -69,6 +69,17 @@ float distance(Point p1, Point p2)
     return sqrt(dx * dx + dy * dy);
 }
 
+/**
+ * @brief calcul le projeté orthogonal d'un point sur une droite définie par 2 autres points
+ * @param x la coord X du point à projeter
+ * @param y la coord Y du point à projeter
+ * @param x1 la coord X d'un des points de la droite
+ * @param y1 la coord Y d'un des points de la droite
+ * @param x2 la coord X d'un des points de la droite
+ * @param y2 la coord Y d'un des points de la droite
+ * @param x_proj le pointeur sur la coord X du point qui est le projeté
+ * @param y_proj le pointeur sur la coord Y du point qui est le projeté
+*/
 void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double *x_proj, double *y_proj)
 {
 
