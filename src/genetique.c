@@ -50,6 +50,8 @@ int ** mutation_gen(int ** cerveau1, int ** cerveau2, int n_regle)
         fils[ligne][col] = mutagene;
     }
 
-
     return fils;
 }
+
+
+
