@@ -81,16 +81,21 @@ int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int 
     int best_res = 0;
     int val_best_res[3];
     int res[6];
+    int ordre_val;
 
-    for (int i = 0; i < ((n_regles-1) * (N_RULE + 3) - n_val + 1); i++)
-    {
+    for (int i = 0; i < ((n_regles-1) * (N_RULE + 3) - n_val + 4); i++)
+    {   
         for (int j = 0; j < n_val; j++){
-            x[j] = ordre[i+j] % (N_RULE + 3);
-            y[j] = ordre[i+j] / (N_RULE + 3);
+            ordre_val = ordre[i+j];
+            if (ordre_val >= (n_regles-1) * (N_RULE + 3) - n_val + 1){
+                ordre_val += N_RULE;
+            }
+            x[j] = ordre_val % (N_RULE + 3);
+            y[j] = ordre_val / (N_RULE + 3);
         }
 
         best_res = 0;
-        printf("%d -- %d/151\n",n_val, i);
+        printf("%d/154\n", i);
         for (int k = 0; k < ((n_val < 3) ? 1 : regle_taille[x[2]]) ; k++){
             if (n_val == 3){
                 min = (x[2] == N_RULE + 2) ? 1 : -1;
@@ -104,6 +109,7 @@ int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int 
                 }
                 
                 for (int j = 0; j < regle_taille[x[0]]; j++){
+                    srand(0);
                     min = (x[0] == N_RULE + 2) ? 1 : -1;
                     val[0] = j+min;
                     argsE[j].n_regle = n_regles;
