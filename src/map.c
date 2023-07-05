@@ -114,6 +114,12 @@ int max(int a, int b)
     return a;
 }
 
+/**
+ * @brief calcul le min entre 2 entiers
+ * @param a entier 1
+ * @param b entier 2
+ * @return le plus petit entre a et b
+*/
 int min(int a, int b)
 {
     if (a > b)
