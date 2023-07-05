@@ -17,16 +17,17 @@ typedef struct {
     int ** regle;
     int n_regle;
     int * res;
-    int x;
-    int y;
-    int val;
+    int * x;
+    int * y;
+    int * val;
+    int n_val;
 }argsEval;
 
-int ** copie_1_line_tab(int ** tab, int n, int i);
+int **copie_line_tab(int **tab, int n, int * i, int n_val);
 void* eval(argsEval * argsEv);
-int ** recherche_local_bot_iteration(int ** regles, int n_regles, int * ordre, int * score);
+int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int *score, int n_val);
 
-
+void free_line(int ** tab, int *i, int n_val);
 /**
  * @brief Genère un tableau de taille n avec des entiers disposés aléatoirement
  * @param n Le nombre d'entiers

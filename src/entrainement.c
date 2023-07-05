@@ -17,8 +17,10 @@ void *eval(argsEval *argsEv)
     int res;
     int sum_score;
 
-    int **regle_copie = copie_1_line_tab(argsEv->regle, argsEv->n_regle, argsEv->y);
-    regle_copie[argsEv->y][argsEv->x] = argsEv->val;
+    int **regle_copie = copie_line_tab(argsEv->regle, argsEv->n_regle, argsEv->y, argsEv->n_val);
+    for (int i = 0; i < argsEv->n_val; i++){
+        regle_copie[argsEv->y[i]][argsEv->x[i]] = argsEv->val[i];
+    }
 
     sum_score = 0;
 
@@ -34,72 +36,105 @@ void *eval(argsEval *argsEv)
 
     res = sum_score / NB_TEST;
     (*argsEv->res) = res;
-    free(regle_copie[argsEv->y]);
-    free(regle_copie);
+    free_line(regle_copie, argsEv->y, argsEv->n_val);
     return NULL;
 }
 
-int **copie_1_line_tab(int **tab, int n, int i)
-{
+void free_line(int ** tab, int *i, int n_val){
+    for (int j = 0; j < n_val; j++){
+        if(tab[i[j]]){
+            free(tab[i[j]]);
+            tab[i[j]] = NULL;
+        }
+    }
+    
+    free(tab);
+}
+
+int **copie_line_tab(int **tab, int n, int * i, int n_val){
     int **tabCopie = (int **)malloc(sizeof(int *) * n);
+    int find = 0;
     for (int j = 0; j < n; j++)
     {
-        if (j != i)
-        {
-            tabCopie[j] = tab[j];
-        }
-        else
-        {
-            tabCopie[j] = (int *)malloc(sizeof(int) * (N_RULE + 3));
-            for (int k = 0; k < (N_RULE + 3); k++)
-            {
-                tabCopie[j][k] = tab[i][k];
+        tabCopie[j] = tab[j];
+        find = 0;
+        for(int l = 0 ; l < n_val && !find; l++){
+            if (i[l] == j){
+                tabCopie[j] = (int *)malloc(sizeof(int) * (N_RULE + 3));
+                for (int k = 0; k < (N_RULE + 3); k++){
+                    tabCopie[j][k] = tab[i[l]][k];
+                }
+                find = 1;
             }
         }
     }
     return tabCopie;
 }
 
-int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int *score)
+int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int *score, int n_val)
 {
     int regle_taille[N_RULE + 3] = {5, 6, 3, 5, 4, 3, 3, 5};
     pthread_t pthreads[6];
     argsEval argsE[6];
-    int x, y;
+    int x[3], y[3], val[3];
     int min;
     int best_res = 0;
-    int val_best_res = 0;
+    int val_best_res[3];
     int res[6];
 
-    for (int i = 0; i < (n_regles - 1) * (N_RULE + 3); i++)
+    for (int i = 0; i < ((n_regles - 1) * (N_RULE + 3) - n_val + 1); i++)
     {
-        x = ordre[i] % (N_RULE + 3);
-        y = ordre[i] / (N_RULE + 3);
-        min = (x == N_RULE + 2) ? 1 : -1;
-        best_res = 0;
-        printf("%d/160\n", i);
-
-        for (int j = 0; j < regle_taille[x]; j++)
-        {
-            argsE[j].n_regle = n_regles;
-            argsE[j].regle = regles;
-            argsE[j].y = y;
-            argsE[j].x = x;
-            argsE[j].val = j + min;
-            argsE[j].res = &res[j];
-            pthread_create(&pthreads[j], NULL, (void *(*)(void *))eval, &(argsE[j]));
+        for (int j = 0; j < n_val; j++){
+            x[j] = ordre[i+j] % (N_RULE + 3);
+            y[j] = ordre[i+j] / (N_RULE + 3);
         }
 
-        for (int j = 0; j < regle_taille[x]; j++)
-        {
-            pthread_join(pthreads[j], NULL);
-            if (res[j] > best_res)
-            {
-                val_best_res = j + min;
-                best_res = res[j];
+        best_res = 0;
+        printf("%d/151\n", i);
+        for (int k = 0; k < ((n_val < 3) ? 1 : regle_taille[x[2]]) ; k++){
+            if (n_val == 3){
+                min = (x[2] == N_RULE + 2) ? 1 : -1;
+                val[2] =  k+min;
+            }
+            
+            for (int l = 0; l < ((n_val < 2) ? 1 : regle_taille[x[1]]) ; l++){
+                if (n_val == 2){
+                    min = (x[1] == N_RULE + 2) ? 1 : -1;
+                    val[1] =  k+min;
+                }
+                
+                for (int j = 0; j < regle_taille[x[0]]; j++){
+                    min = (x[0] == N_RULE + 2) ? 1 : -1;
+                    val[0] = j+min;
+                    argsE[j].n_regle = n_regles;
+                    argsE[j].regle = regles;
+                    argsE[j].y = y;
+                    argsE[j].x = x;
+                    argsE[j].n_val = n_val;
+                    argsE[j].val = val;
+                    argsE[j].res = &res[j];
+                    pthread_create(&pthreads[j], NULL, (void *(*)(void *))eval, &(argsE[j]));
+
+                }
+
+                for (int j = 0; j < regle_taille[x[0]]; j++)
+                {
+                    pthread_join(pthreads[j], NULL);
+                    if (res[j] > best_res)
+                    {
+                        for (int m = 0; m < n_val ; m++){
+                            val_best_res[m] = argsE[j].val[m];
+                        }
+                        
+                        best_res = res[j];
+                    }
+                }
             }
         }
-        regles[y][x] = val_best_res;
+
+        for (int m = 0; m < n_val ; m++){
+            regles[y[m]][x[m]] = val_best_res[m];
+        }
     }
     *score = best_res;
     return regles;
