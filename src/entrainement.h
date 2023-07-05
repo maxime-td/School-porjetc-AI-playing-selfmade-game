@@ -11,6 +11,11 @@
 #include "bouclesJeu.h"
 #include "bot.h"
 
+#define NB_TEST 100
+
+int eval(int ** regle, int n_regle);
+int ** recherche_local_bot_iteration(int ** regles, int n_regles, int * ordre, int * score);
+
 
 
 #endif

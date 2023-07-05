@@ -557,14 +557,14 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                 poid = 0;
 
                 for (int i = 0; i < k; i++)
-                    poid += tabIA[validRule[i]][N_RULE+2];
+                    poid += (tabIA[validRule[i]][N_RULE+2]*tabIA[validRule[i]][N_RULE+2]);
 
                 selectPoid = rand()%poid;
                 selectRule = -1;
 
                 poid = 0;
                 for (int i = 0; i < k && selectRule == -1; i++){
-                    poid += tabIA[validRule[i]][N_RULE+2];
+                    poid += (tabIA[validRule[i]][N_RULE+2]*tabIA[validRule[i]][N_RULE+2]);
                     if (poid > selectPoid)
                         selectRule = validRule[i];
                 }
@@ -741,10 +741,10 @@ void boucle_jeu_sans_graph() {
     int res;
     int count = 0;
 
-    while (!fin) {
-        tab = gen_tab_sommets_rand(&n);
+    rules = get_rule_from_file("testRule.txt", &n_rules);
 
-        rules = get_rule_from_file("testRule.txt", &n_rules);    
+    while (!fin) {
+        tab = gen_tab_sommets_rand(&n);    
 
         tab_to_graph(tab, 0, n - 1);
 
@@ -757,10 +757,10 @@ void boucle_jeu_sans_graph() {
         }
 
         free2DTab((void **)tab, n);
-        free2DTab((void **)rules, n_rules);
         count++;
     }
     
+    free2DTab((void **)rules, n_rules);
     if(affiche)
         closeSDL(); // free de tout les elements de SDL
 }

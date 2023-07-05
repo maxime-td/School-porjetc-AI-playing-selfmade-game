@@ -143,7 +143,7 @@ int min(int a, int b) {
     return a;
 }
 
-int isInPath_Line(int pX, int pY, sommet_t ** tabSom, int n ,segmment_t *tabSeg, int n_seg, int largeur) {
+int isInPath_Line(int pX, int pY, sommet_t ** tabSom, int n, segmment_t *tabSeg, int n_seg, int largeur) {
     int res = 0;
     int dist = 0;
 
