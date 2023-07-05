@@ -231,8 +231,11 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin) {
  * @param n_ia taille du tableau de regle
  * @param result permet de recuperer le score de l'ia
  * @param affiche booleen permetant d'activer ou non l'interface graphique
+ * @param use_rand booleen indiquant si l'on utilise rand ou un tableau pregenere
+ * @param rand_tab tableau de valeur aleatoire pregenere
+ * @param n_rand la taille de ce tableau 
  */
-void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche, int fast) {
+void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche, int fast, int use_rand, int * rand_tab, int n_rand) {
     float speedX = 0; //vitesse x du joueur
     float speedY = 0; //vitesse y du joueur 
     float speedXTN = 0; //vitesse x trou noir
@@ -261,6 +264,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
     int selectPoid; //variable prise au hasard denant le poid selectionner aleatoirement 
     int distTrouNoir = 0; //la ditance du trou noir au joueur
     int rayonTN = 50; //Le rayon du trou noir
+    int rand_iter = 0;
 
     double acceleration = (fast) ? ACCELERATION_IA : ACCELERATION;
     double accelerationTN = (fast) ? ACCELERATION_TROU_IA : ACCELERATION_TROU;
@@ -408,8 +412,15 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
 
     //Choix aleatoire des texture des planetes
     for (int i = 0; i < n; i++) {
-        co[i].y = rand() % planeteLigne;
-        co[i].x = rand() % planeteColones[co[i].y];
+        if(use_rand){
+            co[i].y = rand() % planeteLigne;
+            co[i].x = rand() % planeteColones[co[i].y];
+        } else {
+            co[i].y = rand_tab[rand_iter] % planeteLigne;
+            rand_iter = (rand_iter+1)%n_rand; 
+            co[i].x = rand_tab[rand_iter] % planeteColones[co[i].y];
+            rand_iter = (rand_iter+1)%n_rand; 
+        }
         co[i].y++;
     }
 
@@ -560,7 +571,13 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                 for (int i = 0; i < k; i++)
                     poid += (tabIA[validRule[i]][N_RULE+2]*tabIA[validRule[i]][N_RULE+2]);
 
-                selectPoid = rand()%poid;
+                if(use_rand)
+                    selectPoid = rand()%poid;
+                else{
+                    selectPoid = rand_tab[rand_iter]%poid;
+                    rand_iter = (rand_iter+1)%n_rand; 
+                }
+                
                 selectRule = -1;
 
                 poid = 0;
@@ -637,7 +654,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                 trouNoir2.x = (int)xTN2;
                 trouNoir2.y = (int)yTN2;
                 if(tour_boucle%10000 == 0)
-                    directionTN(&directionXTN2, &directionYTN2, xTN2, yTN2);
+                    directionTN(&directionXTN2, &directionYTN2, xTN2, yTN2, use_rand, rand_tab, rand_iter, n_rand);
+
                 calcul_speed(directionXTN2, directionYTN2, &speedXTN2, &speedYTN2, &xTN2, &yTN2, &trouNoir2, accelerationTN, max_speed);
                 attractionTN(&directionX, &directionY, xTN2, yTN2, x, y, &speedX, &speedY, attraction);
                 affArgs.affTrouNoir2 = trouNoir2;
@@ -649,7 +667,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                 seconde = argsT.time/1000;
 
             if(tour_boucle%10000 == 0)
-                directionTN(&directionXTN, &directionYTN, xTN, yTN);
+                directionTN(&directionXTN, &directionYTN, xTN, yTN, use_rand, rand_tab, rand_iter, n_rand);
+
             calcul_speed(directionXTN, directionYTN, &speedXTN, &speedYTN, &xTN, &yTN, &trouNoir, accelerationTN, max_speed);
 
             affArgs.affTrouNoir = trouNoir;
@@ -752,7 +771,7 @@ void boucle_jeu_sans_graph() {
 
         make_new_links(7*5/n, tab, &n);
 
-        boucle_jeu_espace(tab, n, &fin, ia, rules, n_rules, &res, affiche, 0);
+        boucle_jeu_espace(tab, n, &fin, ia, rules, n_rules, &res, affiche, 0, 1, NULL, 0);
 
         if (count%100 == 0){
             printf("%d : %d\n",count , res);
