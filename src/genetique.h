@@ -11,6 +11,9 @@
 #include "bouclesJeu.h"
 #include "bot.h"
 
+#define NB_SURV 10
+#define NB_HERITIER 1000
+
 /**
  * @brief fait fusionner 2 cerveaux et produit des mutations eventuellement
  * @param cerveau1 1er cerveau

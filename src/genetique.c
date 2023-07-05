@@ -22,10 +22,8 @@ int ** mutation_gen(int ** cerveau1, int ** cerveau2, int n_regle)
     int regle_taille[N_RULE + 3] = {5, 6, 3, 5, 4, 3, 3, 5};
     int tirage = rand()%20;
     int mutationRate = rand()%3;
-    int mutation = rand()%(N_RULE*(n_regle-1)+3);
 
-    int ligne;
-    int col;
+    int mutationLi, mutationCol;
     int mutagene; 
 
     int i;
@@ -39,18 +37,18 @@ int ** mutation_gen(int ** cerveau1, int ** cerveau2, int n_regle)
     {
         fils[i] = cerveau2[i];
     }
+
     for(i=0; i<mutationRate; i++)
     {
-        if(mutation>N_RULE*(n_regle-1))
-            mutation += 5;
-        ligne = (N_RULE*n_regle)%mutation;
-        col = (N_RULE*n_regle)/mutation;
+        mutationCol = rand()%(N_RULE+3);
+        mutationLi = rand()%(n_regle);
+        if(mutationLi==n_regle && mutationCol<5)
+            mutationCol = (rand()%3)+N_RULE;
 
-        mutagene = rand()%(regle_taille[col]);
+        mutagene = rand()%(regle_taille[mutationCol]);
+        fils[mutationLi][mutationCol] = mutagene;
 
-        fils[ligne][col] = mutagene;
     }
-
     return fils;
 }
 
@@ -69,12 +67,15 @@ int *** nouv_generation(int *** survivants, int n_surv, int n_heritiers, int n_r
     for(i=0; i<n_surv; i++)
     {
         heritiers[i] = survivants[i];
+
     }
     for(i=n_surv; i<n_heritiers-n_surv; i++)
-    {
+    {                   
+
         rand_cerv1 = rand()%n_surv;
         rand_cerv2 = rand()%n_surv;
         heritiers[i] = mutation_gen(survivants[rand_cerv1], survivants[rand_cerv2], n_regle);
+
     }
 
     for(i=0; i<n_surv; i++)
