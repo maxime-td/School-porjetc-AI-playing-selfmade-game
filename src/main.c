@@ -10,14 +10,14 @@
 
 int main()
 {
-    srand(time(NULL));
+    srand(0*time(NULL));
 
     int result;
     int n_regle = 20;
     int * alea   = gen_tableau_alea((n_regle-1)*(N_RULE+3));
     int ** regles = generate_tab_rules(n_regle);
 
-    regles = recherche_local_bot_iteration(regles, n_regle, alea, &result, 3);
+    regles = recherche_local_bot_iteration(regles, n_regle, alea, &result, 1);
     printf("%d\n", result);
 
     free2DTab((void**)regles, n_regle);
