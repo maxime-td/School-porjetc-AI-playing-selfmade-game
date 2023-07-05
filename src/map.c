@@ -99,6 +99,12 @@ void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double *x_pr
     *y_proj = y1 + (dot_product * dy) / (dx * dx + dy * dy);
 }
 
+/**
+ * @brief calcul le max entre 2 entiers
+ * @param a entier 1
+ * @param b entier 2
+ * @return le plus grand entre a et b
+*/
 int max(int a, int b)
 {
     if (a < b)
