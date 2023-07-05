@@ -46,15 +46,15 @@ int ** copie_1_line_tab(int ** tab, int n, int i){
 }
 
 int ** recherche_local_bot_iteration(int ** regles, int n_regles, int * ordre, int * score){
-    int regle_taille[N_RULE+3] = {5, 6, 3, 5, 4, 3, 3, 10};
-    pthread_t pthreads[10];
+    int regle_taille[N_RULE+3] = {5, 6, 3, 5, 4, 3, 3, 5};
+    pthread_t pthreads[6];
     argsEval argsE;
     int x, y;
     int min;
     int best_res = 0;
     int val_best_res = 0;
-    int res[10];
-    int ** regles_copies[10];
+    int res[6];
+    int ** regles_copies[6];
 
     for (int i = 0; i < (n_regles-1)*(N_RULE+3); i++){
         x = ordre[i]%(N_RULE+3);
