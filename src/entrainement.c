@@ -27,8 +27,7 @@ void *eval(argsEval *argsEv)
 
     for (int k = 0; k < NB_TEST; k++)
     {
-        srand(k);
-        tab = gen_tab_sommets_rand(&n);
+        tab = gen_tab_sommets_rand(&n, 1, argsEv->tab_rand, argsEv->n_rand, k);
         tab_to_graph(tab, 0, n - 1);
         make_new_links(7 * 5 / n, tab, &n);
         boucle_jeu_espace(tab, n, NULL, 1, regle_copie, argsEv->n_regle, &res, 0, 1, 0, argsEv->tab_rand, argsEv->n_rand);

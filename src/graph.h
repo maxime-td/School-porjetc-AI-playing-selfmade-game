@@ -62,7 +62,7 @@ sommet_t ** gen_tab_sommets_cercle(int * n);
  * @param n le pointeur sur le nombre de points à générer
  * @return un pointeur sur un tableau de sommets
  */
-sommet_t ** gen_tab_sommets_rand(int * n);
+sommet_t ** gen_tab_sommets_rand(int * n, int use_rand, int * tab_rand, int n_rand, int i_rand);
 
 /**
  * @brief Créée des liasons aléatoires entre les sommets

@@ -763,7 +763,7 @@ void boucle_jeu_sans_graph() {
     set_rules_into_file("test_writeRules.txt", rules, n_rules);    
 
     while (!fin) {
-        tab = gen_tab_sommets_rand(&n);
+        tab = gen_tab_sommets_rand(&n, 0, NULL, 0, 0);
 
 
 

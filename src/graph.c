@@ -96,8 +96,9 @@ sommet_t ** gen_tab_sommets_cercle(int * n) {
     return tab;
 }
 
-sommet_t ** gen_tab_sommets_rand(int * n) {
-    *n = rand()%(N-(N_MIN-1)) + N_MIN;
+sommet_t ** gen_tab_sommets_rand(int * n, int use_rand, int * tab_rand, int n_rand, int i_rand) {
+    *n = use_rand ? rand()%(N-(N_MIN-1)) + N_MIN : tab_rand[i_rand]%(N-(N_MIN-1)) + N_MIN;
+    i_rand = (i_rand+1)%n_rand;
     int first = 1;
     int x,y;
     sommet_t ** tab = malloc((*n)*sizeof(sommet_t *));
@@ -107,8 +108,10 @@ sommet_t ** gen_tab_sommets_rand(int * n) {
         tab[i] = malloc(sizeof(sommet_t));
         while (first || is_close_to_value_in_tab(tab, i, tab[i], 50)) {
             first = 0;
-            x = rand()%(W-200)+90;
-            y = rand()%(H-200)+90;
+            x = use_rand ? rand()%(W-200)+90 : tab_rand[i_rand]%(W-200)+90;
+            i_rand = (i_rand+1)%n_rand;
+            y = use_rand ? rand()%(H-200)+90 : tab_rand[i_rand]%(W-200)+90;
+            i_rand = (i_rand+1)%n_rand;
         
             tab[i]->x = x;
             tab[i]->y = y;        //On génère les nombre aléatoirement entre des bornes représentants la taille de la fenêtre
