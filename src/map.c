@@ -140,8 +140,7 @@ int min(int a, int b)
  * @param largeur la largeur d'un chemin
  * @return - 0 si l'objet n'est sur aucun chemin, - 1 s'il est sur un chemin
 */
-int isInPath_Line(int pX, int pY, sommet_t ** tabSom, int n, segmment_t *tabSeg, int n_seg, int largeur)
-{
+int isInPath_Line(int pX, int pY, sommet_t ** tabSom, int n, segmment_t *tabSeg, int n_seg, int largeur){
     int res = 0;
     int dist = 0;
 
