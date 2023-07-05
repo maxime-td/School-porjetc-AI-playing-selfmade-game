@@ -19,9 +19,9 @@
  * @param cerveau1 1er cerveau
  * @param cerveau2 2eme cerveau
  * @param n_regle le nombre de regles par cerveau
- * @return le cerveau fils
+ * @param cerveauFils cerveau resultant de la fusion des deux autres
 */
-int ** mutation_gen(int ** cerveau1, int ** cerveau2, int n_regle);
+void mutation_gen(int ** cerveau1, int ** cerveau2, int n_regle, int ** cerveauFils);
 
 /**
  * @brief Génère la génération suivante pour le tournoi à partir des meilleurs cerveaux de la génération précédante

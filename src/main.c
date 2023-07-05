@@ -20,7 +20,7 @@ int main()
     //    set_rules_into_file("RULES.txt", regles, n_regle);
 
 
-    int *** tournoi = malloc(10*sizeof(int **));
+    int *** tournoi = malloc(NB_SURV*sizeof(int **));
     for(int i=0; i<NB_SURV; i++)
         tournoi[i] = generate_tab_rules(n_regle);
     
@@ -33,6 +33,12 @@ int main()
     //set_rules_into_file("RULES.txt", regles, n_regle);
     free2DTab((void**)regles, n_regle);
     free(alea);
+
+    for(int i=0; i<NB_SURV; i++)
+    {
+        free2DTab((void**)tournoi[i], n_regle);
+    }
+    free(tournoi);
 
     //boucle_jeu_sans_graph();
     return 0;
