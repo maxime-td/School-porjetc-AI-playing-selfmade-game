@@ -12,6 +12,17 @@ int main()
 {
     srand(time(NULL));
 
-    boucle_jeu_sans_graph();
+    int result;
+    int n_regle = 20;
+    int * alea   = gen_tableau_alea((n_regle-1)*(N_RULE+3));
+    int ** regles = generate_tab_rules(n_regle);
+
+    regles = recherche_local_bot_iteration(regles, n_regle, alea, &result);
+    printf("%d\n", result);
+
+    free2DTab((void**)regles, n_regle);
+    free(alea);
+
+    //boucle_jeu_sans_graph();
     return 0;
 }
