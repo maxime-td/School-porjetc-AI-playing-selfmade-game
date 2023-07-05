@@ -13,8 +13,9 @@
  * @param n   Le nombre de lignes du tableau.
  */
 void free2DTab(void ** tab, int n) {
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++){
         free(tab[i]);
+    }
     free(tab);
 }
 

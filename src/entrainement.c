@@ -32,12 +32,10 @@ void *eval(argsEval *argsEv)
         tab_to_graph(tab, 0, n - 1, 0, argsEv->tab_rand, k, argsEv->n_rand);
         make_new_links(7 * 5 / n, tab, &n, 0, argsEv->tab_rand, argsEv->n_rand, k);
         boucle_jeu_espace(tab, n, NULL, 1, regle_copie, argsEv->n_regle, &res, 0, 1, 0, argsEv->tab_rand, argsEv->n_rand);
-        //printf("%d : %d\n", k, res);
         sum_score += res;
     }
 
     res = sum_score / NB_TEST;
-    //printf("%d\n",res);
     (*argsEv->res) = res;
     free_line(regle_copie, argsEv->y, argsEv->n_val);
     return NULL;
