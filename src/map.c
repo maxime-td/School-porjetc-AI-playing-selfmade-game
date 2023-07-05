@@ -16,8 +16,8 @@
  * @param n_seg le nombre de segments (planètes voisines)
  * @param nAst le pointeur sur le nombre d astéroïdes a actualiser
  * @return le tableau des astéroïdes
-*/
-asteroid_t *ast_Partout(sommet_t **tab, int n, segmment_t * segs, int n_seg, int *nAst) 
+ */
+asteroid_t *ast_Partout(sommet_t **tab, int n, segmment_t *segs, int n_seg, int *nAst)
 {
     int frame_size = 48;
     int alea = 0;
@@ -29,17 +29,20 @@ asteroid_t *ast_Partout(sommet_t **tab, int n, segmment_t * segs, int n_seg, int
     SDL_Rect srcrect = {0, 0, frame_size, frame_size}; // position and size of the part of the image to draw
     SDL_Rect dstrect = {100, 100, 42, 42};             // position and size of the destination on the screen
 
-    for (int i = 0; i < W; i += 21 + ecart) {
+    for (int i = 0; i < W; i += 21 + ecart)
+    {
         ecart = (rand() % 50) - 25;
         dstrect.x = i;
-        for (int j = 0; j < H; j += 21 + ecart) {
+        for (int j = 0; j < H; j += 21 + ecart)
+        {
             ecart = (rand() % 50) - 25;
             dstrect.y = j;
             alea = (rand() % 16);
             srcrect.x = alea;
             angle = rand() % 360;
 
-            if (isInPath_Line(dstrect.x, dstrect.y, tab, n, segs, n_seg, PATH_SIZE) == 0) {
+            if (isInPath_Line(dstrect.x, dstrect.y, tab, n, segs, n_seg, PATH_SIZE) == 0)
+            {
                 tabAst[a].x = dstrect.x;
                 tabAst[a].y = dstrect.y;
                 tabAst[a].frame = srcrect.x;
@@ -53,14 +56,16 @@ asteroid_t *ast_Partout(sommet_t **tab, int n, segmment_t * segs, int n_seg, int
     return tabAst;
 }
 
-float distance(Point p1, Point p2) {
+float distance(Point p1, Point p2)
+{
     float dx = p2.x - p1.x;
     float dy = p2.y - p1.y;
     return sqrt(dx * dx + dy * dy);
 }
 
+void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double *x_proj, double *y_proj)
+{
 
-void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double* x_proj, double* y_proj) {
     // Calcul des coordonnées du vecteur de la droite
     double dx = x2 - x1;
     double dy = y2 - y1;
@@ -77,17 +82,26 @@ void projetOrthogonal(int x, int y, int x1, int y1, int x2, int y2, double* x_pr
     *y_proj = y1 + (dot_product * dy) / (dx * dx + dy * dy);
 }
 
-int max(int a, int b) {
-    if(a<b){return b;}
+int max(int a, int b)
+{
+    if (a < b)
+    {
+        return b;
+    }
     return a;
 }
 
-int min(int a, int b) {
-    if(a>b){return b;}
+int min(int a, int b)
+{
+    if (a > b)
+    {
+        return b;
+    }
     return a;
 }
 
-int isInPath_Line(int pX, int pY, sommet_t ** tabSom, int n ,segmment_t *tabSeg, int n_seg, int largeur) {
+int isInPath_Line(int pX, int pY, sommet_t **tabSom, int n, segmment_t *tabSeg, int n_seg, int largeur)
+{
     int res = 0;
     int dist = 0;
 
@@ -97,16 +111,21 @@ int isInPath_Line(int pX, int pY, sommet_t ** tabSom, int n ,segmment_t *tabSeg,
 
     double x_proj, y_proj;
 
-    for (int i = 0; i < n_seg && res == 0; i++) {
+    for (int i = 0; i < n_seg && res == 0; i++)
+    {
         projetOrthogonal(pX, pY, tabSeg[i].p1.x, tabSeg[i].p1.y, tabSeg[i].p2.x, tabSeg[i].p2.y, &x_proj, &y_proj);
         projete.x = x_proj;
         projete.y = y_proj;
 
         dist = distance(projete, P);
-        if(dist<largeur && x_proj>min(tabSeg[i].p1.x, tabSeg[i].p2.x) && x_proj<max(tabSeg[i].p1.x, tabSeg[i].p2.x)){res++;}
+        if (dist < largeur && x_proj > min(tabSeg[i].p1.x, tabSeg[i].p2.x) && x_proj < max(tabSeg[i].p1.x, tabSeg[i].p2.x))
+        {
+            res++;
+        }
     }
 
-    for (int i = 0; i < n && res == 0; i++) {
+    for (int i = 0; i < n && res == 0; i++)
+    {
         tmp.x = tabSom[i]->x;
         tmp.y = tabSom[i]->y;
         if (distance(tmp, P) < largeur)
