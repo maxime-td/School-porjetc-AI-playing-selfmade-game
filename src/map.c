@@ -8,7 +8,17 @@
 #include "affiche.h"
 #include "map.h"
 
-asteroid_t *ast_Partout(sommet_t **tab, int n, segmment_t * segs, int n_seg, int *nAst) {
+/**
+ * @brief génère des astéroïdes et verifie s'ils sont sur un chemin entre 2 planètes
+ * @param tab tableau des sommets (planètes)
+ * @param n nombre de sommets (planètes)
+ * @param segs le tableau des segments (liens entre planètes)
+ * @param n_seg le nombre de segments (planètes voisines)
+ * @param nAst le pointeur sur le nombre d astéroïdes a actualiser
+ * @return le tableau des astéroïdes
+*/
+asteroid_t *ast_Partout(sommet_t **tab, int n, segmment_t * segs, int n_seg, int *nAst) 
+{
     int frame_size = 48;
     int alea = 0;
     int angle = 0;
@@ -41,7 +51,7 @@ asteroid_t *ast_Partout(sommet_t **tab, int n, segmment_t * segs, int n_seg, int
     *nAst = a;
 
     return tabAst;
-
+}
 
 float distance(Point p1, Point p2) {
     float dx = p2.x - p1.x;
