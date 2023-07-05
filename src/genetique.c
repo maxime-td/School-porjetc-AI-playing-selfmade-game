@@ -78,7 +78,7 @@ int *** nouv_generation(int *** survivants, int n_surv, int n_heritiers, int n_r
     }
 
     for(i=0; i<n_surv; i++)
-        free2DTab((void**)survivants[i]);
+        free2DTab((void**)survivants[i], n_regle);
     free(survivants);
 
     return heritiers;
