@@ -27,6 +27,7 @@ void *eval(argsEval *argsEv)
 
     for (int k = 0; k < NB_TEST; k++)
     {
+        srand(k);
         tab = gen_tab_sommets_rand(&n);
         tab_to_graph(tab, 0, n - 1);
         make_new_links(7 * 5 / n, tab, &n);
@@ -107,9 +108,8 @@ int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int 
                     min = (x[1] == N_RULE + 2) ? 1 : -1;
                     val[1] =  k+min;
                 }
-                
+
                 for (int j = 0; j < regle_taille[x[0]]; j++){
-                    srand(0);
                     min = (x[0] == N_RULE + 2) ? 1 : -1;
                     val[0] = j+min;
                     argsE[j].n_regle = n_regles;
@@ -119,8 +119,6 @@ int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int 
                     argsE[j].val = val;
                     argsE[j].n_val = n_val;
                     argsE[j].res = &res[j];
-
-                    //eval(&(argsE[j]));
                     pthread_create(&pthreads[j], NULL, (void *(*)(void *))eval, &(argsE[j]));
                 }
 

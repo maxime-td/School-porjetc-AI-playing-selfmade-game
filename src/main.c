@@ -10,7 +10,7 @@
 
 int main()
 {
-    srand(0*time(NULL));
+    srand(time(NULL));
 
     int result;
     int n_regle = 20;
