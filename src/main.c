@@ -6,11 +6,12 @@
 #include "OptiFloyd_Warshall.h"
 #include "fourmi.h"
 #include "bouclesJeu.h"
+#include "entrainement.h"
 
 int main()
 {
     srand(time(NULL));
-    
+
     boucle_jeu_sans_graph();
     return 0;
 }
