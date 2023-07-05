@@ -91,4 +91,12 @@ int ** generate_tab_rules(int n);
 */
 int ** get_rule_from_file(char * name, int * n);
 
+/**
+ * @brief enregistre un cerveau dans un fichier
+ * @param name une chaine de caractères contenant le nom du ficher où enregistrer le cerveau
+ * @param tab_rules le cerveau (tableau de regles)
+ * @param n le nombre de regles du cerveau
+*/
+void set_rules_into_file(char * name, int ** tab_rules, int n);
+
 #endif

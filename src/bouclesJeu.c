@@ -741,10 +741,14 @@ void boucle_jeu_sans_graph() {
     int res;
     int count = 0;
 
+    rules = get_rule_from_file("testRule.txt", &n_rules);
+
+    set_rules_into_file("test_writeRules.txt", rules, n_rules);    
+
     while (!fin) {
         tab = gen_tab_sommets_rand(&n);
 
-        rules = get_rule_from_file("testRule.txt", &n_rules);    
+
 
         tab_to_graph(tab, 0, n - 1);
 
@@ -757,10 +761,10 @@ void boucle_jeu_sans_graph() {
         }
 
         free2DTab((void **)tab, n);
-        free2DTab((void **)rules, n_rules);
         count++;
     }
-    
+            free2DTab((void **)rules, n_rules);
+
     if(affiche)
         closeSDL(); // free de tout les elements de SDL
 }
