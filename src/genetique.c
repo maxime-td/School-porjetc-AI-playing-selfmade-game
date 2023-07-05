@@ -54,4 +54,7 @@ int ** mutation_gen(int ** cerveau1, int ** cerveau2, int n_regle)
 }
 
 
-
+void tournoi(int *** cerveaux)
+{
+    
+}
