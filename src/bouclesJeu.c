@@ -40,7 +40,7 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin) {
     FourmiArgs argsF;
     FloydWarshallArgs argsFl;
 
-    int scoreFourmi, scoreFloyd, scoreBest, score;
+    int scoreFourmi = 0, scoreFloyd = 0, scoreBest = 0, score = 0;
 
     int **distMat = dist_tab(tab, &n);
     warshallDist = copie_tab(distMat, n);
