@@ -34,4 +34,8 @@ void free_line(int ** tab, int *i, int n_val);
 */
 int* gen_tableau_alea(int n);
 
+
+int ** practice_cycle(int **regles, int n_regles, int *ordre, int *score, int eps);
+
+
 #endif

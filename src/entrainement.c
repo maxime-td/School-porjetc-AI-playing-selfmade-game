@@ -176,3 +176,22 @@ int *gen_tableau_alea(int n)
     free(tab_temp); // On libère le tableau temporaire
     return tab_final;
 }
+
+int ** practice_cycle(int **regles, int n_regles, int *ordre, int *score, int eps)
+{
+    int newScore = 0;
+    int tmp;
+    for(int i=1; i<4; i++)
+    {
+        do
+        {
+            *score = newScore;
+            recherche_local_bot_iteration(regles, n_regles, ordre, &newScore, i);
+            tmp = newScore-*score;
+            if(i>1 && tmp>eps)
+                i=1;
+            printf("Score : %d\n", newScore);
+        } while (tmp>eps);
+    }
+    return regles;
+}
