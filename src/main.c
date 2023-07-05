@@ -29,11 +29,12 @@ int main()
     free2DTab((void**)regles, n_regle);
     free(alea);
 
+    /*
     for(int i=0; i<NB_SURV; i++)
     {
         free2DTab((void**)tournoi[i], n_regle);
     }
-    free(tournoi);
+    free(tournoi);*/
 
     //boucle_jeu_sans_graph();
     return 0;
