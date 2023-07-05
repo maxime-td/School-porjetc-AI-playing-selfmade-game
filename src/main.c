@@ -11,7 +11,7 @@
 
 int main()
 {
-    srand(time(NULL));
+    srand(0*time(NULL));
 
     int n_rand = 1000;
     int * rand_tab = gen_rand_tab(n_rand);
@@ -20,6 +20,7 @@ int main()
     int n_regle = 20;
     int * alea   = gen_tableau_alea((n_regle-1)*(N_RULE+3)+3);
     int ** regles = generate_tab_rules(n_regle);
+
     //    set_rules_into_file("RULES.txt", regles, n_regle);
 
 

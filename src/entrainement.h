@@ -45,7 +45,7 @@ void free_line(int ** tab, int *i, int n_val);
  * @brief Genère un tableau de taille n avec des entiers disposés aléatoirement
  * @param n Le nombre d'entiers
 */
-int* gen_tableau_alea(int n);
+int *gen_tableau_alea(int n);
 
 
 int ** practice_cycle(int **regles, int n_regles, int *ordre, int *score, int eps, int * tab_rand, int n_rand);

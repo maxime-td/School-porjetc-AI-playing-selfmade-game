@@ -19,6 +19,8 @@
  * @param n_rand taille du tableau
 */
 void directionTN(float * directionX, float * directionY, int xTN, int yTN, int use_rand, int * tab_rand, int i_rand, int n_rand) {
+    if(use_rand) n_rand = 1;
+    
     int tirage;
     tirage = (use_rand) ? (rand()%20)-10 : (tab_rand[i_rand]%20)-10;
     i_rand = (i_rand+1)%n_rand;

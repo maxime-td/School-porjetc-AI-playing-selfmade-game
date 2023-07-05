@@ -27,14 +27,17 @@ void *eval(argsEval *argsEv)
 
     for (int k = 0; k < NB_TEST; k++)
     {
-        tab = gen_tab_sommets_rand(&n, 1, argsEv->tab_rand, argsEv->n_rand, k);
-        tab_to_graph(tab, 0, n - 1);
-        make_new_links(7 * 5 / n, tab, &n);
+        
+        tab = gen_tab_sommets_rand(&n, 0, argsEv->tab_rand, argsEv->n_rand, k);
+        tab_to_graph(tab, 0, n - 1, 0, argsEv->tab_rand, k, argsEv->n_rand);
+        make_new_links(7 * 5 / n, tab, &n, 0, argsEv->tab_rand, argsEv->n_rand, k);
         boucle_jeu_espace(tab, n, NULL, 1, regle_copie, argsEv->n_regle, &res, 0, 1, 0, argsEv->tab_rand, argsEv->n_rand);
+        //printf("%d : %d\n", k, res);
         sum_score += res;
     }
 
     res = sum_score / NB_TEST;
+    //printf("%d\n",res);
     (*argsEv->res) = res;
     free_line(regle_copie, argsEv->y, argsEv->n_val);
     return NULL;
@@ -136,6 +139,7 @@ int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int 
                 for (int j = 0; j < regle_taille[x[0]]; j++)
                 {
                     pthread_join(pthreads[j], NULL);
+                    //printf("res : %d\n", res[j]);
                     if (res[j] > best_res)
                     {
                         for (int m = 0; m < n_val ; m++){

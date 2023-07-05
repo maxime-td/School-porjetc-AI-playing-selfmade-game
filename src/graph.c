@@ -24,9 +24,11 @@ void free2DTab(void ** tab, int n) {
  * @param n Le nombre de sommets dans le tableau.
  * @return Un pointeur vers un sommet du graph
  */
-void tab_to_graph(sommet_t ** tab, int start, int end) {
+void tab_to_graph(sommet_t ** tab, int start, int end, int use_rand, int * tab_rand, int i_rand, int n_rand) {
+    if(use_rand) n_rand = 1;
+
     if(start < end) {
-        int k = rand()%(end-start)+(start+1);
+        int k = use_rand ? rand()%(end-start)+(start+1) : tab_rand[i_rand]%(end-start)+(start+1);
         tab[start]->voisins[start+1] = 1;
         tab[start + 1]->voisins[start] = 1;
         tab[start]->n_voisin++;
@@ -39,8 +41,8 @@ void tab_to_graph(sommet_t ** tab, int start, int end) {
             tab[k+1]->n_voisin++;   
         }
 
-        tab_to_graph(tab, start+1, k);
-        tab_to_graph(tab, k+1, end);
+        tab_to_graph(tab, start+1, k, use_rand, tab_rand, (i_rand+1)%n_rand, n_rand);
+        tab_to_graph(tab, k+1, end, use_rand, tab_rand,(k+i_rand)%n_rand, n_rand);
     }
 }
 
@@ -97,6 +99,8 @@ sommet_t ** gen_tab_sommets_cercle(int * n) {
 }
 
 sommet_t ** gen_tab_sommets_rand(int * n, int use_rand, int * tab_rand, int n_rand, int i_rand) {
+    if(use_rand) n_rand = 1;
+
     *n = use_rand ? rand()%(N-(N_MIN-1)) + N_MIN : tab_rand[i_rand]%(N-(N_MIN-1)) + N_MIN;
     i_rand = (i_rand+1)%n_rand;
     int first = 1;
@@ -148,10 +152,17 @@ void print_tab_coord(sommet_t ** tab, int * n) {
  * @param tab le pointeur sur le tableau des sommets
  * @param n le pointeur sur le ombre de sommets
  */
-void make_new_links(int p, sommet_t ** tab, int * n) {
+void make_new_links(int p, sommet_t ** tab, int * n, int use_rand, int * tab_rand, int n_rand, int i_rand) {
+    if(use_rand) n_rand = 1; 
+
+    int random = 0;
     for(int i=0; i<*n; i++) {
         for(int j=0; j<*n; j++) {
-            if(i!=j && tab[i]->voisins[j]==0 && rand()%(100)<p) { // On regarde pour chaque point son tableau "binaire" de voisins et on tire un random entre 0 et 100
+
+            random = use_rand ? rand()%100 : tab_rand[i_rand]%100;
+            i_rand = (i_rand + 1)%n_rand;
+
+            if(i!=j && tab[i]->voisins[j]==0 && random<p) { // On regarde pour chaque point son tableau "binaire" de voisins et on tire un random entre 0 et 100
                 tab[i]->voisins[j]=1;          // Si 2 points ne sont pas voisins et qu'on tire un random respectant notre porba souhaitée, on lie les points.
                 tab[j]->voisins[i]=1;
             }   

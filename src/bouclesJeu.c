@@ -236,6 +236,8 @@ int *boucle_jeu_graphe(sommet_t **tab, int n, int *n_chemin, int *fin) {
  * @param n_rand la taille de ce tableau 
  */
 void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, int n_ia, int * result, int affiche, int fast, int use_rand, int * rand_tab, int n_rand) {
+    if(use_rand) n_rand = 1;
+    
     float speedX = 0; //vitesse x du joueur
     float speedY = 0; //vitesse y du joueur 
     float speedXTN = 0; //vitesse x trou noir
@@ -305,7 +307,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
     int keyPressD = 0; //booleen disant si la touche d est presse
 
     Point co[n]; //tableau de coordonne servant à stoquer les coordonné des images des planetes genere
-    asteroid_t * asteroid = NULL;//ast_Partout(tab, n, segs, n_seg, &n_ast); //tableau des asteroid
+    asteroid_t * asteroid = NULL;
+    if(affiche)
+        asteroid = ast_Partout(tab, n, segs, n_seg, &n_ast); //tableau des asteroid
 
     int planeteLigne   = 10; //nombre de ligne sur l'image des planete
     int planeteColones[10] = {8, 14, 16, 4, 12, 8, 12, 12, 16, 8}; //nombre de planete par ligne
@@ -408,22 +412,15 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
         affArgs.y = &y;
         affArgs.type_fin = 0;
         pthread_create(&thread2, NULL, (void *(*)(void *))afficheJeu, &affArgs);
-    }
+    
 
-    //Choix aleatoire des texture des planetes
-    for (int i = 0; i < n; i++) {
-        if(use_rand){
+        //Choix aleatoire des texture des planetes
+        for (int i = 0; i < n; i++) {
             co[i].y = rand() % planeteLigne;
             co[i].x = rand() % planeteColones[co[i].y];
-        } else {
-            co[i].y = rand_tab[rand_iter] % planeteLigne;
-            rand_iter = (rand_iter+1)%n_rand; 
-            co[i].x = rand_tab[rand_iter] % planeteColones[co[i].y];
-            rand_iter = (rand_iter+1)%n_rand; 
+            co[i].y++;
         }
-        co[i].y++;
     }
-
     //Initialisation des planetes
     for (int i = 0; i < n; i++) {
         planeteVisite[i] = 0;
@@ -746,8 +743,8 @@ void boucle_jeu() {
 void boucle_jeu_sans_graph() {
     int n = 0;
     sommet_t **tab = NULL;
-    int ia = 1; 
-    int affiche = 0;
+    int ia = 0; 
+    int affiche = 1;
 
     if(affiche)
         init(); // Affichage du graphe
@@ -767,9 +764,9 @@ void boucle_jeu_sans_graph() {
 
 
 
-        tab_to_graph(tab, 0, n - 1);
+        tab_to_graph(tab, 0, n - 1, 1, NULL, 0, 0);
 
-        make_new_links(7*5/n, tab, &n);
+        make_new_links(7*5/n, tab, &n, 1, NULL, 0, 0);
 
         boucle_jeu_espace(tab, n, &fin, ia, rules, n_rules, &res, affiche, 0, 1, NULL, 0);
 
