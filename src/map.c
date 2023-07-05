@@ -56,6 +56,12 @@ asteroid_t *ast_Partout(sommet_t **tab, int n, segmment_t *segs, int n_seg, int 
     return tabAst;
 }
 
+/**
+ * @brief cacul la distance entre 2 points
+ * @param p1 1er point
+ * @param p2 2ème point
+ * @return la distance entre les deux
+*/
 float distance(Point p1, Point p2)
 {
     float dx = p2.x - p1.x;
