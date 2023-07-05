@@ -133,12 +133,14 @@ int min(int a, int b)
  * @brief Permet de savoir si un point est sur un chemin ou non
  * @param pX la coord X de l'objet à tester
  * @param pY la coord Y de l'objet à tester
+ * @param tabSom le tableau des sommets (planètes)
+ * @param n le nombre de sommets (planètes)
  * @param tabSeg le tableau des segments (des chemins) 
  * @param n_seg le nombre de segments (chemins)
  * @param largeur la largeur d'un chemin
  * @return - 0 si l'objet n'est sur aucun chemin, - 1 s'il est sur un chemin
 */
-int isInPath_Line(int pX, int pY, int n, segmment_t *tabSeg, int n_seg, int largeur)
+int isInPath_Line(int pX, int pY, sommet_t ** tabSom, int n, segmment_t *tabSeg, int n_seg, int largeur)
 {
     int res = 0;
     int dist = 0;
