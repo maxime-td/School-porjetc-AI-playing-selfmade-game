@@ -88,7 +88,7 @@ int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int 
     {   
         for (int j = 0; j < n_val; j++){
             ordre_val = ordre[i+j];
-            if (ordre_val >= (n_regles-1) * (N_RULE + 3) - n_val + 1){
+            if (ordre_val >= (n_regles-1) * (N_RULE + 3)){
                 ordre_val += N_RULE;
             }
             x[j] = ordre_val % (N_RULE + 3);
