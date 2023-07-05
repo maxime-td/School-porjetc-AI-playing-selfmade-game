@@ -7,7 +7,6 @@
 #include "graph.h"
 #include "bouclesJeu.h"
 #include "bot.h"
-<<<<<<< HEAD
 #include "entrainement.h"
 
 int eval(int ** regle, int n_regle){
@@ -56,8 +55,7 @@ int ** recherche_local_bot_iteration(int ** regles, int n_regles, int * ordre, i
 
     *score = best_res;
     return regles;
-=======
-
+}
 /**
  * @brief Genère un tableau de taille n avec des entiers disposés aléatoirement
  * @param n Le nombre d'entiers
@@ -84,5 +82,4 @@ int* gen_tableau_alea(int n) {
     
     free(tab_temp); //On libère le tableau temporaire
     return tab_final;
->>>>>>> 7e272159c6564a4b44b1da91bc8426e5d4d93d4c
 }
