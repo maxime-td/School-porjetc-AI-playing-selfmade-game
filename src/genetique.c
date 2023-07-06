@@ -43,11 +43,7 @@ void mutation_gen(int ** cerveau1, int ** cerveau2, int n_regle, int ** cerveauF
     {
         mutationCol = rand()%(N_RULE+3);
         mutationLi = rand()%(n_regle);
-<<<<<<< HEAD
-        if(mutationLi==n_regle-1 && mutationCol<5)
-=======
         if(mutationLi==(n_regle-1) && mutationCol<5)
->>>>>>> 17677d0b3312ea1bf55dd9c6a67338a5562d5071
             mutationCol = (rand()%3)+N_RULE;
 
         mutagene = rand()%(regle_taille[mutationCol]);
