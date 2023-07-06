@@ -701,6 +701,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
 
     if (affiche)
         pthread_join(thread2, NULL);
+
     
     free(validRule);
     free(asteroid);
