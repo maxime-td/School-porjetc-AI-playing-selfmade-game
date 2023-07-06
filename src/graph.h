@@ -48,7 +48,7 @@ void free2DTab(void ** tab, int n);
  * @param n Le nombre de sommets dans le tableau.
  * @return Un pointeur vers un sommet du graph
  */
-void tab_to_graph(sommet_t ** tab, int n, int start);
+void tab_to_graph(sommet_t ** tab, int start, int end, int use_rand, int * tab_rand, int i_rand, int n_rand);
 
 /**
  * @brief Créée un tableau de points avec des coordonnées aléatoires
@@ -62,7 +62,7 @@ sommet_t ** gen_tab_sommets_cercle(int * n);
  * @param n le pointeur sur le nombre de points à générer
  * @return un pointeur sur un tableau de sommets
  */
-sommet_t ** gen_tab_sommets_rand(int * n);
+sommet_t ** gen_tab_sommets_rand(int * n, int use_rand, int * tab_rand, int n_rand, int i_rand);
 
 /**
  * @brief Créée des liasons aléatoires entre les sommets
@@ -70,7 +70,7 @@ sommet_t ** gen_tab_sommets_rand(int * n);
  * @param tab le pointeur sur le tableau des sommets
  * @param n le pointeur sur le ombre de sommets
  */
-void make_new_links(int p, sommet_t ** tab, int * n);
+void make_new_links(int p, sommet_t ** tab, int * n, int use_rand, int * tab_rand, int n_rand, int i_rand);
 
 /**
  * @brief Affiche le tableau des coordonnées des points

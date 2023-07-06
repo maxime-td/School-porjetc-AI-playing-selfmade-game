@@ -9,6 +9,7 @@
 #include "bouclesJeu.h"
 #include "bot.h"
 #include "entrainement.h"
+#include "genetique.h"
 
 /**
  * @brief fait fusionner 2 cerveaux et produit des mutations eventuellement
@@ -76,10 +77,92 @@ int *** nouv_generation(int *** survivants, int n_surv, int n_heritiers, int n_r
     return heritiers;
 }
 
-/**
- * @brief fait tourner les 1000 cerveaux sur différents threads par groupes de 100, 
-*/
-void tournoi(int *** cerveaux)
+int eval_gen(int ** cerveau, int n_cerv)
 {
+    int n = 0;
+    sommet_t **tab = NULL;
+    int res;
+    int sum_score;
+    sum_score = 0;
+
+    for (int k = 0; k < NB_TEST_GEN; k++)
+    {
+        
+        tab = gen_tab_sommets_rand(&n, 1, NULL, 0, 0);
+        tab_to_graph(tab, 0, n - 1, 1, NULL, 0, 0);
+        make_new_links(7 * 5 / n, tab, &n, 1, NULL, 0, 0);
+        boucle_jeu_espace(tab, n, NULL, 1, cerveau, n_cerv, &res, 0, 1, 1, NULL, 0);
+        sum_score += res;
+    }
+
+    res = sum_score / NB_TEST_GEN;
+    return res;
+}
+
+void * match(argsMatch * argsM){
+    int best = 0;
+    int best_score = 0, score = 0;
+    for (int i = argsM->i; i < MATCH+argsM->i; i++){
+        score = eval_gen(argsM->cerveaux[i], argsM->n_regle);
+        if (score > best_score){
+            best = i;
+            best_score = score;
+        }
+    }
+    argsM->res = best;
+    return NULL;
+}
+
+
+void free2DTabInt(int ** tab, int n) {
+    for (int i = 0; i < n; i++){
+        free(tab[i]);
+    }
+    free(tab);
+}
+
+/**
+ * @brief Lance un tournoi composé de NB_SURV matchs
+ * @param cerveaux Les NB_HERITIER cerveaux de depart
+ * @param n_regle nombre de regle par cerveau
+ * @return un tableau de 10 meilleurs cerveaux
+ */
+int *** tournoi(int *** cerveaux, int n_regle){
+    pthread_t matchs[10];
+    argsMatch argsMs[10];
+    int is_best = 0;
+    int *** best = NULL;
+    int k = 0;
+    for (int i = 0; i < NB_SURV; i++){
+        printf("Start : %d\n", i);
+        argsMs[i].cerveaux = cerveaux;
+        argsMs[i].i = i*MATCH;
+        argsMs[i].n_regle = n_regle;
+        pthread_create(&matchs[i], NULL, (void *(*)(void *))match, &argsMs[i]);       
+    }
     
+    for (int i = 0; i < NB_SURV; i++){
+        pthread_join(matchs[i], NULL);
+        printf("Stop : %d\n", i);
+    }
+
+    best = (int ***) malloc(sizeof(int**)*NB_SURV);
+    for (int i = 0; i < NB_HERITIER; i++){
+        is_best = 0;
+        for (int j = 0; j < NB_SURV; j++){
+            if(i == argsMs[j].res){
+                is_best = 1;
+            }
+        }
+        
+        if(is_best){
+            best[k] = cerveaux[i];
+            k++;
+        }else{
+            free2DTabInt(cerveaux[i], n_regle);
+        }
+
+        free(cerveaux);
+    }
+    return best;
 }

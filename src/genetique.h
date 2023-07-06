@@ -12,7 +12,17 @@
 #include "bot.h"
 
 #define NB_SURV 10
-#define NB_HERITIER 1000
+#define NB_HERITIER 100
+#define MATCH 100
+#define NB_TEST_GEN 100
+
+
+typedef struct{
+    int i;
+    int *** cerveaux;
+    int n_regle;
+    int res;
+}argsMatch;
 
 /**
  * @brief fait fusionner 2 cerveaux et produit des mutations eventuellement
@@ -32,6 +42,16 @@ void mutation_gen(int ** cerveau1, int ** cerveau2, int n_regle, int ** cerveauF
  * @return tableau de la nouvelle génération
 */
 int *** nouv_generation(int *** survivants, int n_surv, int n_heritiers, int n_regle);
+
+void * match(argsMatch * argsM);
+
+/**
+ * @brief Lance un tournoi composé de NB_SURV matchs
+ * @param cerveaux Les NB_HERITIER cerveaux de depart
+ * @param n_regle nombre de regle par cerveau
+ * @return un tableau de 10 meilleurs cerveaux
+ */
+int *** tournoi(int *** cerveaux, int n_regle);
 
 
 #endif

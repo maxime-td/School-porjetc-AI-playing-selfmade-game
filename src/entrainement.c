@@ -27,11 +27,11 @@ void *eval(argsEval *argsEv)
 
     for (int k = 0; k < NB_TEST; k++)
     {
-        srand(k);
-        tab = gen_tab_sommets_rand(&n);
-        tab_to_graph(tab, 0, n - 1);
-        make_new_links(7 * 5 / n, tab, &n);
-        boucle_jeu_espace(tab, n, NULL, 1, regle_copie, argsEv->n_regle, &res, 0, 1);
+        
+        tab = gen_tab_sommets_rand(&n, 0, argsEv->tab_rand, argsEv->n_rand, k);
+        tab_to_graph(tab, 0, n - 1, 0, argsEv->tab_rand, k, argsEv->n_rand);
+        make_new_links(7 * 5 / n, tab, &n, 0, argsEv->tab_rand, argsEv->n_rand, k);
+        boucle_jeu_espace(tab, n, NULL, 1, regle_copie, argsEv->n_regle, &res, 0, 1, 0, argsEv->tab_rand, argsEv->n_rand);
         sum_score += res;
     }
 
@@ -72,7 +72,17 @@ int **copie_line_tab(int **tab, int n, int * i, int n_val){
     return tabCopie;
 }
 
-int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int *score, int n_val)
+/**
+ * @brief effectue une itteration de la recherche local soit un parcour de tableau complet
+ * @param regles le tableau de regles (le cerveau)
+ * @param n_regles le nombre de regles
+ * @param ordre un tableau donnant l'ordre de parcour des regles
+ * @param score permet de recupérer le score trouvé par le meilleur bot
+ * @param n_val le nombre de valeur à modifier en même temps
+ * @param tab_rand tableau de nombre aleatoire pregenere
+ * @param n_rand taille du tableau
+*/
+int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int *score, int n_val, int * tab_rand, int n_rand)
 {
     int regle_taille[N_RULE + 3] = {5, 6, 3, 5, 4, 3, 3, 5};
     pthread_t pthreads[6];
@@ -119,12 +129,15 @@ int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int 
                     argsE[j].val = val;
                     argsE[j].n_val = n_val;
                     argsE[j].res = &res[j];
+                    argsE[j].tab_rand = tab_rand;
+                    argsE[j].n_rand = n_rand;
                     pthread_create(&pthreads[j], NULL, (void *(*)(void *))eval, &(argsE[j]));
                 }
 
                 for (int j = 0; j < regle_taille[x[0]]; j++)
                 {
                     pthread_join(pthreads[j], NULL);
+                    //printf("res : %d\n", res[j]);
                     if (res[j] > best_res)
                     {
                         for (int m = 0; m < n_val ; m++){
@@ -177,7 +190,7 @@ int *gen_tableau_alea(int n)
     return tab_final;
 }
 
-int ** practice_cycle(int **regles, int n_regles, int *ordre, int *score, int eps)
+int ** practice_cycle(int **regles, int n_regles, int *ordre, int *score, int eps, int * tab_rand, int n_rand)
 {
     int newScore = 0;
     int tmp;
@@ -186,7 +199,7 @@ int ** practice_cycle(int **regles, int n_regles, int *ordre, int *score, int ep
         do
         {
             *score = newScore;
-            regles = recherche_local_bot_iteration(regles, n_regles, ordre, &newScore, i);
+            regles = recherche_local_bot_iteration(regles, n_regles, ordre, &newScore, i, tab_rand, n_rand);
             tmp = newScore-*score;
             if(i>1 && tmp>eps)
                 i=1;
@@ -194,4 +207,19 @@ int ** practice_cycle(int **regles, int n_regles, int *ordre, int *score, int ep
         } while (tmp>eps);
     }
     return regles;
+}
+
+
+
+/**
+ * @brief genere un tableau de taille n de nombre aleatoire venant de rand()
+ * @param n taille du tableau à générer
+ * @return le tableau
+*/
+int * gen_rand_tab(int n){
+    int * rand_tab = (int *) malloc(sizeof(int)*n);
+    for (int i = 0; i < n; i++){
+        rand_tab[i] = rand();
+    }
+    return rand_tab;
 }
