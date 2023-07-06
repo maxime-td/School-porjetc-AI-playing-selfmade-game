@@ -14,7 +14,11 @@
 #define NB_SURV 16
 #define NB_HERITIER 1008
 #define MATCH 63
+<<<<<<< HEAD
 #define NB_TEST_GEN 100
+=======
+#define NB_TEST_GEN 10
+>>>>>>> 17677d0b3312ea1bf55dd9c6a67338a5562d5071
 
 
 typedef struct{

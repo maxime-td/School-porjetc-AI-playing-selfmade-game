@@ -575,6 +575,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                     rand_iter = (rand_iter+1)%n_rand; 
                 }
                 
+
                 selectRule = -1;
 
                 poid = 0;
@@ -583,6 +584,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                     if (poid > selectPoid)
                         selectRule = validRule[i];
                 }
+                
                 
                 //Prise en conte des input en fonction de la regles choisi
                 keyPressZ = (tabIA[selectRule][3] == 1);
