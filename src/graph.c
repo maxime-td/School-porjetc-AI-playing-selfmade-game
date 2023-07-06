@@ -113,7 +113,7 @@ sommet_t ** gen_tab_sommets_rand(int * n, int use_rand, int * tab_rand, int n_ra
     for(int i=0; i<*n; i++) {
         first = 1;
         tab[i] = malloc(sizeof(sommet_t));
-        while (first || is_close_to_value_in_tab(tab, i, tab[i], 50)) {
+        while (first || is_close_to_value_in_tab(tab, i, tab[i], 100)) {
             first = 0;
             x = use_rand ? rand()%(W-200)+90 : tab_rand[i_rand]%(W-200)+90;
             i_rand = (i_rand+1)%n_rand;

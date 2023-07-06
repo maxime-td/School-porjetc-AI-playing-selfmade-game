@@ -31,7 +31,7 @@ int main()
         free2DTab((void**)regles, n_regle);
         free(alea);
 
-    */
+    
 
     int ***cerveaux = malloc(NB_HERITIER * sizeof(int **));
     int *** res = (int ***) malloc(NB_SURV*sizeof(int**));
@@ -52,7 +52,7 @@ int main()
         cerveaux[i] = (int **)malloc(N_TAB_REGLE * sizeof(int *));
         generate_tab_rules(N_TAB_REGLE, cerveaux[i]);
     }
-    /*
+    
     for (int i = 0; i < NB_HERITIER; i++){
         cerveaux[i] = (int **) malloc(sizeof(int *)*N_TAB_REGLE);
         for (int j = 0; j < N_TAB_REGLE; j++){
@@ -65,7 +65,7 @@ int main()
     char file_name[25];
     int n;
     charge_anc_cerv(res, &n);
-*/
+
     // printf("%d\n", res[14][0][0]);
     // nouv_generation(res, cerveaux, NB_SURV, NB_HERITIER, N_TAB_REGLE);
 
@@ -81,8 +81,8 @@ int main()
         printf("GEN SUIVANTE: \n");
         nouv_generation(res, cerveaux, NB_SURV, NB_HERITIER, N_TAB_REGLE);
         nb_tournoi++;
-    }
+    }*/
 
-    //boucle_jeu_sans_graph();
+    boucle_jeu_sans_graph();
     return 0;
 }

@@ -750,7 +750,7 @@ void boucle_jeu() {
 void boucle_jeu_sans_graph() {
     int n = 0;
     sommet_t **tab = NULL;
-    int ia = 0; 
+    int ia      = 1;
     int affiche = 1;
 
     if(affiche)
@@ -762,9 +762,7 @@ void boucle_jeu_sans_graph() {
     int res;
     int count = 0;
 
-    get_rule_from_file("testRule.txt", &n_rules, rules);
-
-    set_rules_into_file("test_writeRules.txt", rules, n_rules);    
+    get_rule_from_file("RULES_GEN6.txt", &n_rules, rules);   
 
     while (!fin) {
         tab = gen_tab_sommets_rand(&n, 1, NULL, 0, 0);
@@ -773,7 +771,7 @@ void boucle_jeu_sans_graph() {
 
         make_new_links(7*5/n, tab, &n, 1, NULL, 0, 0);
 
-        boucle_jeu_espace(tab, n, &fin, ia, rules, n_rules, &res, affiche, 0, 1, NULL, 0);
+        boucle_jeu_espace(tab, n, &fin, ia, rules, n_rules, &res, affiche, 0, 1, NULL, 1);
 
         if (count%100 == 0){
             printf("%d : %d\n",count , res);
