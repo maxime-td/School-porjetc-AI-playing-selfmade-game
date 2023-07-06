@@ -57,4 +57,7 @@ int eval_gen(int ** cerveau, int n_cerv);
 void tournoi(int *** cerveaux, int *** best ,int n_regle);
 
 
+void charge_anc_cerv(int *** cerveaux, int * n);
+
+
 #endif

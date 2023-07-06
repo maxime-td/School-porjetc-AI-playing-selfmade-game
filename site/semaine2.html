@@ -145,19 +145,19 @@
                         <div class="row">
                             <div class="col-md-12">
 
-                                <h4>- Reprise base jeu semaine 1</h4>
+                                <h4>- Reprise de la base du jeu de la semaine 1</h4>
 
                                 <img src="images/semaine2/ancien-jeu.gif"/>
 
-                                <h4>- Modification génération map</h4>
+                                <h4>- Modification de la génération du terrain.</h4>
 
-                                <h4>- Modification gestion collisions avec astéroïdes</h4>
-                                <p>Utilisation projeté orthogonal</p>
+                                <h4>- Modification de la gestion des collisions avec les astéroïdes.</h4>
+                                <p>Utilisation du projeté orthogonal.</p>
                                 <img src="images/semaine2/projete-orthogonal.png"/>
 
-                                <h4>- Ajout trous noirs et attraction</h4>
-                                <p>Déplacements aléatoires</p>
-                                <p>Distance diminue attraction augmente</p>
+                                <h4>- Ajout de deux trous noirs et de leur attraction.</h4>
+                                <p>Déplacements aléatoires.</p>
+                                <p>Quand la distance joueur-trou noir diminue, l'attraction augmente.</p>
 
                                 <img src="images/semaine2/Jeu-joueur.gif"/>
 
@@ -181,7 +181,7 @@
                         <!-- end row -->
 
                         <h4>- Début IA</h4>
-                        <p>Mise en place système règles :</p>
+                        <p>Mise en place du système de règles :</p>
                         <p>o Entrées :</p>
                         <p>[ Direction de la planète la plus proche, -> NO, NE, SE, SO, -1</p>
                         <p>Direction du mur le plus proche, -> NO, NE, SE, SO, 0, -1</p>
@@ -201,12 +201,23 @@
 
                         <p></p>
 
-                        <p>Algorithme recherche locale :</p>
+                        <p>Algorithme de recherche locale :</p>
                         <img src="images/semaine2/algo-recherche-locale.png "/>
 
-                        <h4>- Optimisation moteur jeu</h4>
+                        <h4>- Optimisation du moteur de jeu</h4>
+                        <p>o Problème :</p>
+                        <p>Exécution plutôt lente qui ralentit l'entraînement de l'IA.</p>
 
-                        <h4>- Switch partie graphique</h4>
+                        <p></p>
+
+                        <p>o Solution :</p>
+                        <p>Optimisation de la fonction de gestion des collisions.</p>
+                        <p>Réduction du nombre d'appels de la fonction de gestion des collisions.</p>
+                        
+                        <p></p>
+
+                        <h4>- Switch pour la partie graphique</h4>
+                        <p>Pour exécuter le programme plus rapidement et entraîner l'IA plus efficacement<;/p>
 
                     </section>
                     <!-- end section -->
@@ -221,17 +232,17 @@
                         </div>
                         <!-- end row -->
 
-                        <h4>- Résolution bug multi-threading</h4>
-                        <p>Problème :</p>
-                        <p>Beaucoup d'appels fonction rand().</p>
-                        <p>rand() fait appel à une variable globale et l'incrémente.</p>
-                        <p>Threads devaient attendre que les autres aient utilisé la variable globale.</p>
+                        <h4>- Résolution du bug du multi-threading</h4>
+                        <p>o Problème :</p>
+                        <p>Beaucoup d'appels de la fonction rand().</p>
+                        <p>Or, rand() fait appel à une variable globale et la modifie.</p>
+                        <p>Donc les threads devaient attendre que les autres aient terminé d'utiliser la variable globale.</p>
 
                         <p></p>
 
-                        <p>Solution :</p>
+                        <p>o Solution :</p>
                         <p>Création d'un tableau d'entiers choisis aléatoirement.</p>
-                        <p>Threads ont juste à lire dans tableau, pas d'incrémentation de variable.</p>
+                        <p>Les threads ont juste à lire dans le tableau, pas d'incrémentation de la variable.</p>
 
                         <p></p>
 
@@ -255,7 +266,6 @@
                     </section>
                     <!-- end section -->
 
-        
                 </div>
                 <!-- // end .col -->
 
