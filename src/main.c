@@ -30,7 +30,6 @@ int main()
     free2DTab((void**)regles, n_regle);
     free(alea);
     */
-
     char file_name[20];
     int nb_tournoi = 0;
     int n_regle = 20;

@@ -12,9 +12,9 @@
 #include "bot.h"
 
 #define NB_SURV 10
-#define NB_HERITIER 1000
+#define NB_HERITIER 100
 #define MATCH 100
-#define NB_TEST_GEN 10
+#define NB_TEST_GEN 100
 
 
 typedef struct{

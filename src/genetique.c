@@ -114,6 +114,13 @@ void * match(argsMatch * argsM){
 }
 
 
+void free2DTabInt(int ** tab, int n) {
+    for (int i = 0; i < n; i++){
+        free(tab[i]);
+    }
+    free(tab);
+}
+
 /**
  * @brief Lance un tournoi composé de NB_SURV matchs
  * @param cerveaux Les NB_HERITIER cerveaux de depart
@@ -152,10 +159,7 @@ int *** tournoi(int *** cerveaux, int n_regle){
             best[k] = cerveaux[i];
             k++;
         }else{
-            if (i != 1)
-            {
-                free2DTab((void **)cerveaux[i], n_regle);
-            }
+            free2DTabInt(cerveaux[i], n_regle);
         }
 
         free(cerveaux);

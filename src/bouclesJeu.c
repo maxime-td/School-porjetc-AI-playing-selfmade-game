@@ -568,9 +568,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                 for (int i = 0; i < k; i++)
                     poid += (tabIA[validRule[i]][N_RULE+2]*tabIA[validRule[i]][N_RULE+2]);
 
-                if(use_rand)
+                if(use_rand){
                     selectPoid = rand()%poid;
-                else{
+                }else{
                     selectPoid = rand_tab[rand_iter]%poid;
                     rand_iter = (rand_iter+1)%n_rand; 
                 }
