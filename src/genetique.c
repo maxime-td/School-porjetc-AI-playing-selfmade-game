@@ -76,6 +76,9 @@ int *** nouv_generation(int *** survivants, int n_surv, int n_heritiers, int n_r
     return heritiers;
 }
 
+/**
+ * @brief fait tourner les 1000 cerveaux sur différents threads par groupes de 100, 
+*/
 void tournoi(int *** cerveaux)
 {
     
