@@ -103,6 +103,7 @@ void * match(argsMatch * argsM){
     int best = 0;
     int best_score = 0, score = 0;
     for (int i = argsM->i; i < MATCH+argsM->i; i++){
+        
         score = eval_gen(argsM->cerveaux[i], argsM->n_regle);
         if (score > best_score){
             best = i;
@@ -113,13 +114,6 @@ void * match(argsMatch * argsM){
     return NULL;
 }
 
-
-void free2DTabInt(int ** tab, int n) {
-    for (int i = 0; i < n; i++){
-        free(tab[i]);
-    }
-    free(tab);
-}
 
 /**
  * @brief Lance un tournoi composé de NB_SURV matchs
@@ -159,10 +153,10 @@ int *** tournoi(int *** cerveaux, int n_regle){
             best[k] = cerveaux[i];
             k++;
         }else{
-            free2DTabInt(cerveaux[i], n_regle);
+            free2DTab((void**) cerveaux[i], n_regle);
+            
         }
-
-        free(cerveaux);
     }
+    free(cerveaux);
     return best;
 }
