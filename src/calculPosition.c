@@ -212,16 +212,25 @@ void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, fl
  * @param yTN pointeur sur la coord Y du Trou Noir
 
 */
-void initPosTN(float * xTN, float * yTN)
+void initPosTN(float * xTN, float * yTN, int use_rand, int * tab_rand, int n_rand, int i_rand)
 {
-    *xTN = 0;//rand()%W;
-    *yTN = 0;//rand()%H;
+    if (use_rand) n_rand = 1;
+    
+    *xTN = use_rand ? rand()%W : tab_rand[i_rand]%W;
+    i_rand = (i_rand + 1)%n_rand;
+
+    *yTN = use_rand ? rand()%H : tab_rand[i_rand]%H;
+    i_rand = (i_rand + 1)%n_rand;
+
     Point TN = {*xTN, *yTN};
     /*
     while(distance(navette, TN)<250)
     {
-        TN.x = rand()%W;
-        TN.y = rand()%H;
+        TN.x = use_rand ? rand()%W : tab_rand[i_rand]%W;
+        i_rand = (i_rand + 1)%n_rand;
+
+        TN.y = use_rand ? rand()%H : tab_rand[i_rand]%W;
+        i_rand = (i_rand + 1)%n_rand;
     }
     */
     *xTN = TN.x;

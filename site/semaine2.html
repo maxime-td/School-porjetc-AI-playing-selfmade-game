@@ -145,19 +145,19 @@
                         <div class="row">
                             <div class="col-md-12">
 
-                                <h4>- Reprise base jeu semaine 1</h4>
+                                <h4>- Reprise de la base du jeu de la semaine 1</h4>
 
                                 <img src="images/semaine2/ancien-jeu.gif"/>
 
-                                <h4>- Modification génération map</h4>
+                                <h4>- Modification de la génération du terrain.</h4>
 
-                                <h4>- Modification gestion collisions avec astéroïdes</h4>
-                                <p>Utilisation projeté orthogonal</p>
+                                <h4>- Modification de la gestion des collisions avec les astéroïdes.</h4>
+                                <p>Utilisation du projeté orthogonal.</p>
                                 <img src="images/semaine2/projete-orthogonal.png"/>
 
-                                <h4>- Ajout trous noirs et attraction</h4>
-                                <p>Déplacements aléatoires</p>
-                                <p>Distance diminue attraction augmente</p>
+                                <h4>- Ajout de deux trous noirs et de leur attraction.</h4>
+                                <p>Déplacements aléatoires.</p>
+                                <p>Quand la distance joueur-trou noir diminue, l'attraction augmente.</p>
 
                                 <img src="images/semaine2/Jeu-joueur.gif"/>
 
@@ -180,10 +180,44 @@
                         </div>
                         <!-- end row -->
 
-                        <h4>Début IA</h4>
+                        <h4>- Début IA</h4>
+                        <p>Mise en place du système de règles :</p>
+                        <p>o Entrées :</p>
+                        <p>[ Direction de la planète la plus proche, -> NO, NE, SE, SO, -1</p>
+                        <p>Direction du mur le plus proche, -> NO, NE, SE, SO, 0, -1</p>
+                        <p>Est-ce qu’il y a un mur entre le joueur et la planète ?, -> Oui, Non, -1</p>
+                        <p>Direction du trou noir le plus proche, -> NO, NE, SE, SO, -1</p>
+                        <p>Distance du trou noir le plus proche ] -> Proche, Moyen, Loin, -1</p>
+                        <img src="images/semaine2/4-directions.png "/>
 
-                        <h4>Optimisation moteur jeu et désactivation partie graphique pour entrainement IA</h4>
+                        <p>o Sorties :</p>
+                        <p>[ Direction verticale, -> N, 0, S, -1</p>
+                        <p>Direction horizontale ]-> O, 0, E, -1</p>
 
+                        <p></p>
+
+                        <p>o Priorité :</p>
+                        <p>De 1 à 6</p>
+
+                        <p></p>
+
+                        <p>Algorithme de recherche locale :</p>
+                        <img src="images/semaine2/algo-recherche-locale.png "/>
+
+                        <h4>- Optimisation du moteur de jeu</h4>
+                        <p>o Problème :</p>
+                        <p>Exécution plutôt lente qui ralentit l'entraînement de l'IA.</p>
+
+                        <p></p>
+
+                        <p>o Solution :</p>
+                        <p>Optimisation de la fonction de gestion des collisions.</p>
+                        <p>Réduction du nombre d'appels de la fonction de gestion des collisions.</p>
+                        
+                        <p></p>
+
+                        <h4>- Switch pour la partie graphique</h4>
+                        <p>Pour exécuter le programme plus rapidement et entraîner l'IA plus efficacement<;/p>
 
                     </section>
                     <!-- end section -->
@@ -198,7 +232,21 @@
                         </div>
                         <!-- end row -->
 
-                        <h4>Avancement IA</h4>
+                        <h4>- Résolution du bug du multi-threading</h4>
+                        <p>o Problème :</p>
+                        <p>Beaucoup d'appels de la fonction rand().</p>
+                        <p>Or, rand() fait appel à une variable globale et la modifie.</p>
+                        <p>Donc les threads devaient attendre que les autres aient terminé d'utiliser la variable globale.</p>
+
+                        <p></p>
+
+                        <p>o Solution :</p>
+                        <p>Création d'un tableau d'entiers choisis aléatoirement.</p>
+                        <p>Les threads ont juste à lire dans le tableau, pas d'incrémentation de la variable.</p>
+
+                        <p></p>
+
+                        <h4>- Algorithme génétique</h4>
 
                     </section>
                     <!-- end section -->
@@ -213,12 +261,11 @@
                         </div>
                         <!-- end row -->
 
-                        <h4>J'peux pas prédire le futur</h4>
+                        <h4>- Problème IA</h4>
 
                     </section>
                     <!-- end section -->
 
-        
                 </div>
                 <!-- // end .col -->
 

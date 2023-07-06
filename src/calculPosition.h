@@ -67,6 +67,6 @@ void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, fl
  * @param xTN pointeur sur la coord X du Trou Noir
  * @param yTN pointeur sur la coord Y du Trou Noir
 */
-void initPosTN(float * xTN, float * yTN);
+void initPosTN(float * xTN, float * yTN, int use_rand, int * tab_rand, int n_rand, int i_rand);
 
 #endif

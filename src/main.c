@@ -83,6 +83,6 @@ int main()
         nb_tournoi++;
     }
 
-    boucle_jeu_sans_graph();
+    //boucle_jeu_sans_graph();
     return 0;
 }
