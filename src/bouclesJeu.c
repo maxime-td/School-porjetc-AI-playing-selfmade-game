@@ -701,6 +701,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
 
     if (affiche)
         pthread_join(thread2, NULL);
+
     
     free(validRule);
     free(asteroid);
@@ -762,9 +763,7 @@ void boucle_jeu_sans_graph() {
     set_rules_into_file("test_writeRules.txt", rules, n_rules);    
 
     while (!fin) {
-        tab = gen_tab_sommets_rand(&n, 0, NULL, 0, 0);
-
-
+        tab = gen_tab_sommets_rand(&n, 1, NULL, 0, 0);
 
         tab_to_graph(tab, 0, n - 1, 1, NULL, 0, 0);
 

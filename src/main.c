@@ -29,35 +29,38 @@ int main()
     set_rules_into_file("RULES.txt", regles, n_regle);
     free2DTab((void**)regles, n_regle);
     free(alea);
-
-    /*
-    char file_name[20];
+    */
+    char file_name[25];
     int nb_tournoi = 0;
-    int n_regle = 20;
-    int *** res;
-    int *** cerveaux = (int ***) malloc(sizeof(int **)*NB_HERITIER);
+    int *** res = (int ***) malloc(NB_SURV*sizeof(int**));
+    for (int i = 0; i < NB_SURV; i++){
+        res[i] = (int **) malloc(sizeof(int *)*N_TAB_REGLE);
+        for (int j = 0; j < N_TAB_REGLE; j++){
+            res[i][j] = (int*) malloc(sizeof(int)*(N_RULE+3));
+        }
+        
+    }
+    
+    int *** cerveaux = malloc(NB_HERITIER*sizeof(int**));
     for (int i = 0; i < NB_HERITIER; i++){
-        cerveaux[i] = generate_tab_rules(n_regle);
+        cerveaux[i] = (int **) malloc(N_TAB_REGLE*sizeof(int*));
+        generate_tab_rules(N_TAB_REGLE, cerveaux[i]);
     }
 
     while (1){
-        printf("nb tournoi : %d\n", nb_tournoi);
-        res = tournoi(cerveaux, n_regle);
+        tournoi(cerveaux, res, N_TAB_REGLE);
 
         for (int i = 0; i < NB_SURV; i++)
         {
             sprintf(file_name, "RULES_GEN%d.txt", i);
-            set_rules_into_file(file_name, res[i], n_regle);
+            set_rules_into_file(file_name, res[i], N_TAB_REGLE);
         }
 
-
-        cerveaux = nouv_generation(res, NB_SURV, NB_HERITIER, n_regle);
-        free(res);
+        nouv_generation(res, cerveaux, NB_SURV, NB_HERITIER, N_TAB_REGLE);
         nb_tournoi++;
     }
     
-        */
 
-    //boucle_jeu_sans_graph();
+    boucle_jeu_sans_graph();
     return 0;
 }

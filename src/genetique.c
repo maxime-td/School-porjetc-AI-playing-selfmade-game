@@ -43,7 +43,7 @@ void mutation_gen(int ** cerveau1, int ** cerveau2, int n_regle, int ** cerveauF
     {
         mutationCol = rand()%(N_RULE+3);
         mutationLi = rand()%(n_regle);
-        if(mutationLi==(n_regle-1) && mutationCol<5)
+        if(mutationLi==(n_regle-1) && mutationCol<N_RULE)
             mutationCol = (rand()%3)+N_RULE;
 
         mutagene = rand()%(regle_taille[mutationCol]);
@@ -59,10 +59,10 @@ void mutation_gen(int ** cerveau1, int ** cerveau2, int n_regle, int ** cerveauF
  * @param n_regle le nombre de regles par cerveau
  * @return tableau de la nouvelle génération
 */
-int *** nouv_generation(int *** survivants, int n_surv, int n_heritiers, int n_regle)
+void nouv_generation(int *** survivants, int *** heritiers, int n_surv, int n_heritiers, int n_regle)
 {
     int rand_cerv1, rand_cerv2, i;
-    int *** heritiers = malloc(n_heritiers*sizeof(int **));
+    //int *** heritiers = malloc(n_heritiers*sizeof(int **));
     for(i=0; i<n_surv; i++)
     {
         heritiers[i] = survivants[i];
@@ -71,10 +71,10 @@ int *** nouv_generation(int *** survivants, int n_surv, int n_heritiers, int n_r
     {                   
         rand_cerv1 = rand()%n_surv;
         rand_cerv2 = rand()%n_surv;
-        heritiers[i] = malloc(n_regle*sizeof(int*));
+        //heritiers[i] = malloc(n_regle*sizeof(int*));
         mutation_gen(survivants[rand_cerv1], survivants[rand_cerv2], n_regle, heritiers[i]);
     }
-    return heritiers;
+    //return heritiers;
 }
 
 int eval_gen(int ** cerveau, int n_cerv)
@@ -94,16 +94,15 @@ int eval_gen(int ** cerveau, int n_cerv)
         boucle_jeu_espace(tab, n, NULL, 1, cerveau, n_cerv, &res, 0, 1, 1, NULL, 0);
         sum_score += res;
     }
-
     res = sum_score / NB_TEST_GEN;
+    
     return res;
 }
 
 void * match(argsMatch * argsM){
-    int best = 0;
+    int best = argsM->i;
     int best_score = 0, score = 0;
     for (int i = argsM->i; i < MATCH+argsM->i; i++){
-        
         score = eval_gen(argsM->cerveaux[i], argsM->n_regle);
         if (score > best_score){
             best = i;
@@ -121,18 +120,17 @@ void * match(argsMatch * argsM){
  * @param n_regle nombre de regle par cerveau
  * @return un tableau de 10 meilleurs cerveaux
  */
-int *** tournoi(int *** cerveaux, int n_regle){
-    pthread_t matchs[10];
-    argsMatch argsMs[10];
+void tournoi(int *** cerveaux, int *** best ,int n_regle){
+    pthread_t matchs[NB_SURV];
+    argsMatch argsMs[NB_SURV];
     int is_best = 0;
-    int *** best = NULL;
     int k = 0;
     for (int i = 0; i < NB_SURV; i++){
         printf("Start : %d\n", i);
         argsMs[i].cerveaux = cerveaux;
         argsMs[i].i = i*MATCH;
         argsMs[i].n_regle = n_regle;
-        pthread_create(&matchs[i], NULL, (void *(*)(void *))match, &argsMs[i]);       
+        pthread_create(&matchs[i], NULL, (void *(*)(void *))match, &argsMs[i]);     
     }
     
     for (int i = 0; i < NB_SURV; i++){
@@ -140,7 +138,6 @@ int *** tournoi(int *** cerveaux, int n_regle){
         printf("Stop : %d\n", i);
     }
 
-    best = (int ***) malloc(sizeof(int**)*NB_SURV);
     for (int i = 0; i < NB_HERITIER; i++){
         is_best = 0;
         for (int j = 0; j < NB_SURV; j++){
@@ -152,11 +149,6 @@ int *** tournoi(int *** cerveaux, int n_regle){
         if(is_best){
             best[k] = cerveaux[i];
             k++;
-        }else{
-            free2DTab((void**) cerveaux[i], n_regle);
-            
         }
     }
-    free(cerveaux);
-    return best;
 }
