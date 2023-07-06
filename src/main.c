@@ -33,8 +33,7 @@ int main()
     */
     
 
-    int ***cerveaux = malloc(NB_HERITIER * sizeof(int **));
-    int *** res = (int ***) malloc(NB_SURV*sizeof(int**));
+    /*int *** res = (int ***) malloc(NB_SURV*sizeof(int**));
     int nb_tournoi = 0;
     char file_name[25];
 
@@ -51,27 +50,35 @@ int main()
     {
         cerveaux[i] = (int **)malloc(N_TAB_REGLE * sizeof(int *));
         generate_tab_rules(N_TAB_REGLE, cerveaux[i]);
-    }
+    }*/
     
+    int ***cerveaux = malloc(NB_HERITIER * sizeof(int **));
+
+    for (int i = 0; i < NB_HERITIER; i++)
+    {
+        cerveaux[i] = (int **)malloc(N_TAB_REGLE * sizeof(int *));
+        generate_tab_rules(N_TAB_REGLE, cerveaux[i]);
+    }
+
     /*
     for (int i = 0; i < NB_HERITIER; i++){
         cerveaux[i] = (int **) malloc(sizeof(int *)*N_TAB_REGLE);
         for (int j = 0; j < N_TAB_REGLE; j++){
             cerveaux[i][j] = (int*) malloc(sizeof(int)*(N_RULE+3));
         }
-    }
+    }*/
 
     int *** res = (int ***) malloc(NB_SURV*sizeof(int**));
     int nb_tournoi = 0;
     char file_name[25];
     int n;
-    charge_anc_cerv(res, &n);*/
+    charge_anc_cerv(res, &n);
 
-    // printf("%d\n", res[14][0][0]);
-    // nouv_generation(res, cerveaux, NB_SURV, NB_HERITIER, N_TAB_REGLE);
+    nouv_generation(res, cerveaux, NB_SURV, NB_HERITIER, N_TAB_REGLE);
 
     while (1)
     {
+        printf("GEN %d : \n", nb_tournoi);
         tournoi(cerveaux, res, N_TAB_REGLE);
 
         for (int i = 0; i < NB_SURV; i++)
@@ -79,7 +86,6 @@ int main()
             sprintf(file_name, "RULES_GEN%d.txt", i);
             set_rules_into_file(file_name, res[i], N_TAB_REGLE);
         }
-        printf("GEN SUIVANTE: \n");
         nouv_generation(res, cerveaux, NB_SURV, NB_HERITIER, N_TAB_REGLE);
         nb_tournoi++;
     }
