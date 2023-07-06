@@ -18,7 +18,7 @@
 int calcul_score(int seconde, int nbPlanete, int distG) {
     int score = 0;
 
-    score += ((TIME_MAX_IA+1) - seconde)*5;
+    score += ((TIME_MAX_IA+1) - seconde);
     score += (TIME_MAX_IA - seconde > 0)*1000;
     score += (nbPlanete-1)*100;
     score += 100/((distG/10)+1);

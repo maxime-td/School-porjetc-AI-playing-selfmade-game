@@ -31,12 +31,16 @@ void mutation_gen(int ** cerveau1, int ** cerveau2, int n_regle, int ** cerveauF
 
     for(i=0; i<tirage; i++)
     {
-        cerveauFils[i] = cerveau1[i];
-
+        for (int j = 0; j < N_RULE+3; j++)
+        {
+            cerveauFils[i][j] = cerveau1[i][j];
+        }
     }
     for(i=tirage; i<n_regle; i++)
     {
-        cerveauFils[i] = cerveau2[i];
+        for (int j = 0; j < N_RULE+3; j++){
+            cerveauFils[i][j] = cerveau2[i][j];
+        }
     }
 
     for(i=0; i<mutationRate; i++)

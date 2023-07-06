@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -O2 #-g #-fsanitize=address,undefined
+CFLAGS = -Wall -Wextra -O3 #-g -fsanitize=address,undefined
 
 DIRCOMM = src/
 
