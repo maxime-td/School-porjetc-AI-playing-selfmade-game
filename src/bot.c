@@ -214,13 +214,10 @@ void generate_tab_rules(int n, int ** tab_rules) {
  * @param n permet de recuperer la taille du tableau de regle
  * @return le tableau de regle
 */
-int ** get_rule_from_file(char * name, int * n) {
+void get_rule_from_file(char * name, int * n, int ** tab) {
     int code;
-
     FILE * file = fopen(name, "r");
     code = fscanf(file, "%d\n", n);
-
-    int ** tab = (int**) malloc(sizeof(int*)*(*n));
 
     for (int i = 0; i < *n; i++) {
         tab[i] = (int*) malloc(sizeof(int)*(N_RULE+3));
@@ -233,8 +230,6 @@ int ** get_rule_from_file(char * name, int * n) {
 
     code = fclose(file);
     code += 1;
-
-    return tab;
 }
 
 /**

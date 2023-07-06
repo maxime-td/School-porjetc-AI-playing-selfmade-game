@@ -43,10 +43,12 @@ void mutation_gen(int ** cerveau1, int ** cerveau2, int n_regle, int ** cerveauF
     {
         mutationCol = rand()%(N_RULE+3);
         mutationLi = rand()%(n_regle);
-        if(mutationLi==(n_regle-1) && mutationCol<N_RULE)
+        while(mutationLi==(n_regle-1) && mutationCol<N_RULE)
             mutationCol = (rand()%3)+N_RULE;
 
-        mutagene = rand()%(regle_taille[mutationCol]);
+        mutagene = rand()%(regle_taille[mutationCol])-1;
+        if(mutationCol == 7)
+            mutagene+=2;
         cerveauFils[mutationLi][mutationCol] = mutagene;
     }
 }
@@ -87,12 +89,14 @@ int eval_gen(int ** cerveau, int n_cerv)
 
     for (int k = 0; k < NB_TEST_GEN; k++)
     {
-        
         tab = gen_tab_sommets_rand(&n, 1, NULL, 0, 0);
         tab_to_graph(tab, 0, n - 1, 1, NULL, 0, 0);
         make_new_links(7 * 5 / n, tab, &n, 1, NULL, 0, 0);
+
         boucle_jeu_espace(tab, n, NULL, 1, cerveau, n_cerv, &res, 0, 1, 1, NULL, 0);
+
         sum_score += res;
+
     }
     res = sum_score / NB_TEST_GEN;
     
@@ -103,6 +107,8 @@ void * match(argsMatch * argsM){
     int best = argsM->i;
     int best_score = 0, score = 0;
     for (int i = argsM->i; i < MATCH+argsM->i; i++){
+       // printf("NUM MATCH : %d\n", i);
+
         score = eval_gen(argsM->cerveaux[i], argsM->n_regle);
         if (score > best_score){
             best = i;
@@ -110,6 +116,7 @@ void * match(argsMatch * argsM){
         }
     }
     argsM->res = best;
+    printf("-   resultat : %d\n", best_score);
     return NULL;
 }
 
@@ -125,12 +132,12 @@ void tournoi(int *** cerveaux, int *** best ,int n_regle){
     argsMatch argsMs[NB_SURV];
     int is_best = 0;
     int k = 0;
-    for (int i = 0; i < NB_SURV; i++){
-        printf("Start : %d\n", i);
-        argsMs[i].cerveaux = cerveaux;
-        argsMs[i].i = i*MATCH;
-        argsMs[i].n_regle = n_regle;
-        pthread_create(&matchs[i], NULL, (void *(*)(void *))match, &argsMs[i]);     
+    for (int t = 0; t < NB_SURV; t++){
+        printf("Start : %d\n", t);
+        argsMs[t].cerveaux = cerveaux;
+        argsMs[t].i = t*MATCH;
+        argsMs[t].n_regle = n_regle;
+        pthread_create(&matchs[t], NULL, (void *(*)(void *))match, &argsMs[t]);     
     }
     
     for (int i = 0; i < NB_SURV; i++){
@@ -151,4 +158,16 @@ void tournoi(int *** cerveaux, int *** best ,int n_regle){
             k++;
         }
     }
+}
+
+void charge_anc_cerv(int *** cerveaux, int * n)
+{
+    char name[25];
+    for(int i=0; i<NB_SURV; i++)
+    {
+        cerveaux[i] = (int**) malloc(sizeof(int*)*(N_TAB_REGLE));
+        sprintf(name, "RULES_GEN%d.txt", i);
+        get_rule_from_file(name, n, cerveaux[i]);
+    }
+
 }

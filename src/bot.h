@@ -89,7 +89,7 @@ void generate_tab_rules(int n, int ** tab_rule);
  * @param n permet de recuperer la taille du tableau de regle
  * @return le tableau de regle
 */
-int ** get_rule_from_file(char * name, int * n);
+void get_rule_from_file(char * name, int * n, int ** tab);
 
 /**
  * @brief enregistre un cerveau dans un fichier
