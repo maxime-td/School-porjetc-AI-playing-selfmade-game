@@ -188,6 +188,8 @@ void generate_rule(int * rule) {
  * @return le tableau de regle
 */
 void generate_tab_rules(int n, int ** tab_rules) {
+
+    
     for (int i = 0; i < n-1; i++){
         tab_rules[i] = (int *) malloc(sizeof(int)*(N_RULE+3));
         generate_rule(tab_rules[i]);

@@ -69,6 +69,6 @@ void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, fl
  * @param x la coord X de la navette
  * @param y la coord Y de la navette
 */
-void initPosTN(float * xTN, float * yTN, float x, float y);
+void initPosTN(float * xTN, float * yTN, float x, float y, int use_rand, int * tab_rand, int n_rand, int i_rand);
 
 #endif

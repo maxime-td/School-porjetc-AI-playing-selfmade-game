@@ -287,9 +287,11 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
     Point p2;
     Point p3;
 
-    initPosTN(&xTN, &yTN, x, y); //Initialisation 1er trou noir
+    initPosTN(&xTN, &yTN, x, y, use_rand, rand_tab, n_rand, rand_iter); //Initialisation 1er trou noir
+    rand_iter = (rand_iter + 2)%n_rand;
     if(W > 800){
-        initPosTN(&xTN2, &yTN2, x, y); //Initialisation 2ème trou noir si écran assez grand
+        initPosTN(&xTN2, &yTN2, x, y, use_rand, rand_tab, n_rand, rand_iter); //Initialisation 2ème trou noir si écran assez grand
+        rand_iter = (rand_iter + 2)%n_rand;
     }
     // variable pour les regles à choisir
     int tour_boucle = 0; //variable servant à compter le nombre de tour de boucle

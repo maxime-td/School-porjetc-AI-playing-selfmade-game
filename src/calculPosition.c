@@ -210,16 +210,25 @@ void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, fl
  * @param x la coord X de la navette
  * @param y la coord Y de la navette
 */
-void initPosTN(float * xTN, float * yTN, float x, float y)
+void initPosTN(float * xTN, float * yTN, float x, float y, int use_rand, int * tab_rand, int n_rand, int i_rand)
 {
-    *xTN = rand()%W;
-    *yTN = rand()%H;
+    if (use_rand) n_rand = 1;
+    
+    *xTN = use_rand ? rand()%W : tab_rand[i_rand]%W;
+    i_rand = (i_rand + 1)%n_rand;
+
+    *yTN = use_rand ? rand()%H : tab_rand[i_rand]%H;
+    i_rand = (i_rand + 1)%n_rand;
+
     Point navette = {x,y};
     Point TN = {*xTN, *yTN};
     while(distance(navette, TN)<250)
     {
-        TN.x = rand()%W;
-        TN.y = rand()%H;
+        TN.x = use_rand ? rand()%W : tab_rand[i_rand]%W;
+        i_rand = (i_rand + 1)%n_rand;
+
+        TN.y = use_rand ? rand()%H : tab_rand[i_rand]%W;
+        i_rand = (i_rand + 1)%n_rand;
     }
     *xTN = TN.x;
     *yTN = TN.y;
