@@ -11,9 +11,9 @@
 #include "bouclesJeu.h"
 #include "bot.h"
 
-#define NB_SURV 10
-#define NB_HERITIER 1000
-#define MATCH 100
+#define NB_SURV 16
+#define NB_HERITIER 1008
+#define MATCH 63
 #define NB_TEST_GEN 10
 
 
