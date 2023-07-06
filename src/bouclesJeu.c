@@ -287,12 +287,12 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
     Point p2;
     Point p3;
 
-    initPosTN(&xTN, &yTN, x, y);
+    initPosTN(&xTN, &yTN, x, y); //Initialisation 1er trou noir
     if(W > 800){
-        initPosTN(&xTN2, &yTN2, x, y);
+        initPosTN(&xTN2, &yTN2, x, y); //Initialisation 2ème trou noir si écran assez grand
     }
     // variable pour les regles à choisir
-    int tour_boucle = 0; //variable servant à conter le nombre de tour de boucle
+    int tour_boucle = 0; //variable servant à compter le nombre de tour de boucle
     int closestP = 0; // variable servant à stoquer la sortie de closest_point (l'index de la planete la plus proche)
     int posClosestP = 0; //variable servant à stoquer la sortie de position_relative (la position de la planete la plus proche)
     int posClosestW = 0; // variable servant à stoquer la sortie de mur_proche (la position du mur le plus proche)
@@ -575,7 +575,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                     rand_iter = (rand_iter+1)%n_rand; 
                 }
                 
-
                 selectRule = -1;
 
                 poid = 0;
@@ -659,8 +658,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                 attractionTN(&directionX, &directionY, xTN2, yTN2, x, y, &speedX, &speedY, attraction);
                 affArgs.affTrouNoir2 = trouNoir2;
             }
-            
-                
 
             if (fin && seconde == 0)
                 seconde = argsT.time/1000;
@@ -697,7 +694,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
 
         *result = calcul_score(tour_boucle, nb_planet, distance(p1, p2));
     }
-
 
     if (affiche)
         pthread_join(thread2, NULL);
