@@ -195,7 +195,7 @@
                         <p>Direction horizontale ]-> O, 0, E, -1</p>
 
                         <p></p>
-                        
+
                         <p>o Priorité :</p>
                         <p>De 1 à 6</p>
 
@@ -222,6 +222,18 @@
                         <!-- end row -->
 
                         <h4>- Résolution bug multi-threading</h4>
+                        <p>Problème :</p>
+                        <p>Beaucoup d'appels fonction rand().</p>
+                        <p>rand() fait appel à une variable globale et l'incrémente.</p>
+                        <p>Threads devaient attendre que les autres aient utilisé la variable globale.</p>
+
+                        <p></p>
+
+                        <p>Solution :</p>
+                        <p>Création d'un tableau d'entiers choisis aléatoirement.</p>
+                        <p>Threads ont juste à lire dans tableau, pas d'incrémentation de variable.</p>
+
+                        <p></p>
 
                         <h4>- Algorithme génétique</h4>
 
