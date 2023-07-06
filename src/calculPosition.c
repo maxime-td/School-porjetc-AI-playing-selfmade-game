@@ -13,33 +13,45 @@
  * @param directionY permet de recuperer la direction y du trou noir
  * @param x position x du trou noir
  * @param y position y du trou noir
+ * @param use_rand booleen indiquant si l'on utilise la fonction rand ou un tableau pregenere
+ * @param tab_rand le tableau pregenere
+ * @param i_rand l'index de depart sur le tableau
+ * @param n_rand taille du tableau
 */
-void directionTN(float * directionX, float * directionY, int xTN, int yTN) {
+void directionTN(float * directionX, float * directionY, int xTN, int yTN, int use_rand, int * tab_rand, int i_rand, int n_rand) {
+    if(use_rand) n_rand = 1;
+    
     int tirage;
-    tirage = (rand()%20)-10;
+    tirage = (use_rand) ? (rand()%20)-10 : (tab_rand[i_rand]%20)-10;
+    i_rand = (i_rand+1)%n_rand;
 
     if(*directionY<0) {
-        tirage = (rand()%20-4);
+        tirage = (use_rand) ? (rand()%20-4) : (tab_rand[i_rand]%20) - 4;
         if(yTN<H/4){tirage *= 2;}
+        i_rand = (i_rand+1)%n_rand;
     }
     else if(*directionY>0) {
-            tirage = (rand()%20)-16;
+            tirage = (use_rand) ? (rand()%20)-16 : (tab_rand[i_rand]%20) - 16;
             if(yTN>3*H/4)
                 tirage *= 2;
+            i_rand = (i_rand+1)%n_rand;
     }
 
     *directionY += ((float)tirage)/200;
-    tirage = (rand()%20)-10;
+    tirage = (use_rand) ? (rand()%20)-10 : (tab_rand[i_rand]%20) - 10;
+    i_rand = (i_rand+1)%n_rand;
 
     if(*directionX<0) {
-            tirage = (rand()%20-4);
+            tirage = (use_rand) ? (rand()%20-4) : (tab_rand[i_rand]%20) - 4;
             if(xTN<W/4)
                 tirage *= 2;
+            i_rand = (i_rand+1)%n_rand;
     }    
     else if(*directionX>0) {
-            tirage = (rand()%20)-16;
+            tirage = (use_rand) ? (rand()%20)-16 : (tab_rand[i_rand]%20) - 16;
             if(xTN>3*W/4)
                 tirage *= 2;
+            i_rand = (i_rand+1)%n_rand;
     }
 
     *directionX += ((float)tirage)/200;

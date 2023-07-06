@@ -11,7 +11,7 @@
 #include "bouclesJeu.h"
 
 #define N_RULE 5
-#define TIME_MAX_IA 10000
+#define TIME_MAX_IA 100000
 
 /**
  * @brief Trouve l'index du sommet qui a la plus courte distance avec le point p
@@ -90,5 +90,13 @@ int ** generate_tab_rules(int n);
  * @return le tableau de regle
 */
 int ** get_rule_from_file(char * name, int * n);
+
+/**
+ * @brief enregistre un cerveau dans un fichier
+ * @param name une chaine de caractères contenant le nom du ficher où enregistrer le cerveau
+ * @param tab_rules le cerveau (tableau de regles)
+ * @param n le nombre de regles du cerveau
+*/
+void set_rules_into_file(char * name, int ** tab_rules, int n);
 
 #endif

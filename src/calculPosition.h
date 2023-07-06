@@ -19,8 +19,12 @@
  * @param directionY permet de recuperer la direction y du trou noir
  * @param x position x du trou noir
  * @param y position y du trou noir
-*/ 
-void directionTN(float * directionX, float * directionY, int xTN, int yTN);
+ * @param use_rand booleen indiquant si l'on utilise la fonction rand ou un tableau pregenere
+ * @param tab_rand le tableau pregenere
+ * @param i_rand l'index de depart sur le tableau
+ * @param n_rand taille du tableau
+*/
+void directionTN(float * directionX, float * directionY, int xTN, int yTN, int use_rand, int * tab_rand, int i_rand, int n_rand) ;
 
 /**
  * @brief calcul la direction de la navette en fonction des touches pressee
