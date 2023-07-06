@@ -38,7 +38,7 @@
         window.onscroll = function() {scrollFunction()};
         function scrollFunction() {
             if (document.body.scrollTop > 1000 || document.documentElement.scrollTop > 1000) {
-                mybutton.style.display = "none";
+                mybutton.style.display = "block";
             } else {
                 mybutton.style.display = "none";
             }
@@ -103,10 +103,10 @@
                             <li><a href="index.html"><b>Introduction</b></a></li>
                             <li><a href="semaine1.html"><b>Semaine 1</b></a></li>
                             <li><a href="semaine2.html"><b>Semaine 2</b></a></li>      
-                            <li><a href="#line1">Jour 1</a></li>
-                            <li><a href="#line2">Jour 2</a></li>
-                            <li><a href="#line3">Jour 3</a></li>
-                            <li><a href="#line4">Jour 4</a></li>
+                            <li><a href="#line1">Lundi</a></li>
+                            <li><a href="#line2">Mardi</a></li>
+                            <li><a href="#line3">Mercredi</a></li>
+                            <li><a href="#line4">Jeudi</a></li>
                         </ul>
                     </nav >
                 </div>
@@ -145,11 +145,22 @@
                         <div class="row">
                             <div class="col-md-12">
 
-                                <h4>Reprise base jeu semaine 1</h4>
+                                <h4>- Reprise base jeu semaine 1</h4>
 
-                                <h4>Modification génération map</h4>
+                                <img src="images/semaine2/ancien-jeu.gif"/>
 
-                                <h4>Ajout trou noir</h4>
+                                <h4>- Modification génération map</h4>
+
+                                <h4>- Modification gestion collisions avec astéroïdes</h4>
+                                <p>Utilisation projeté orthogonal</p>
+                                <img src="images/semaine2/projete-orthogonal.png"/>
+
+                                <h4>- Ajout trous noirs et attraction</h4>
+                                <p>Déplacements aléatoires</p>
+                                <p>Distance diminue attraction augmente</p>
+
+                                <img src="images/semaine2/Jeu-joueur.gif"/>
+
 
                             </div>
                             <!-- end col -->
@@ -168,10 +179,6 @@
                             <!-- end col -->
                         </div>
                         <!-- end row -->
-
-                        <h4>Agrandissement fenètre de jeu</h4>
-
-                        <h4>Ajout deuxième trou noir et attraction</h4>
 
                         <h4>Début IA</h4>
 

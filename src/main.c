@@ -59,9 +59,9 @@ int main()
         nouv_generation(res, cerveaux, NB_SURV, NB_HERITIER, N_TAB_REGLE);
         nb_tournoi++;
     }
-    
+    */
     
 
-    //boucle_jeu_sans_graph();
+    boucle_jeu_sans_graph();
     return 0;
 }
