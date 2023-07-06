@@ -164,9 +164,7 @@ int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, segmment_t * s
  * @brief Génere une regle au hasard
  * @return La règle générée (avec les 2 dernier paramètre representant l'input)
  */
-int * generate_rule() {
-    int * rule = (int *) malloc(sizeof(int)*(N_RULE+3));
-
+void generate_rule(int * rule) {
     //Etat du jeu
     rule[0] = (rand()%2 == 0) ? -1 : (rand()%4); //Position planete
     rule[1] = (rand()%2 == 0) ? -1 : (rand()%5); //Position mur
@@ -181,7 +179,7 @@ int * generate_rule() {
     //Priorite
     rule[N_RULE+2] = (rand()%6)+1;
 
-    return rule;
+    //return rule;
 }
 
 /**
@@ -189,11 +187,11 @@ int * generate_rule() {
  * @param n nombre de regle a generer
  * @return le tableau de regle
 */
-int ** generate_tab_rules(int n) {
-    int ** tab_rules = (int **) malloc(sizeof(int*)*n);
-
-    for (int i = 0; i < n-1; i++)
-        tab_rules[i] = generate_rule();
+void generate_tab_rules(int n, int ** tab_rules) {
+    for (int i = 0; i < n-1; i++){
+        tab_rules[i] = (int *) malloc(sizeof(int)*(N_RULE+3));
+        generate_rule(tab_rules[i]);
+    }
 
     tab_rules[n-1] = (int *) malloc(sizeof(int)*(N_RULE+3));
 
@@ -205,7 +203,7 @@ int ** generate_tab_rules(int n) {
     tab_rules[n-1][N_RULE+1] = (rand()%3)-1;
     tab_rules[n-1][N_RULE+2] = 1;
     
-    return tab_rules;
+    //return tab_rules;
 }
 
 /**

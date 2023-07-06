@@ -14,6 +14,7 @@
 #define NB_SURV 16
 #define NB_HERITIER 1008
 #define MATCH 63
+#define N_TAB_REGLE 20
 #define NB_TEST_GEN 10
 
 
@@ -41,9 +42,11 @@ void mutation_gen(int ** cerveau1, int ** cerveau2, int n_regle, int ** cerveauF
  * @param n_regle le nombre de regles par cerveau
  * @return tableau de la nouvelle génération
 */
-int *** nouv_generation(int *** survivants, int n_surv, int n_heritiers, int n_regle);
+void nouv_generation(int *** survivants, int *** heritiers, int n_surv, int n_heritiers, int n_regle);
 
 void * match(argsMatch * argsM);
+
+int eval_gen(int ** cerveau, int n_cerv);
 
 /**
  * @brief Lance un tournoi composé de NB_SURV matchs
@@ -51,7 +54,7 @@ void * match(argsMatch * argsM);
  * @param n_regle nombre de regle par cerveau
  * @return un tableau de 10 meilleurs cerveaux
  */
-int *** tournoi(int *** cerveaux, int n_regle);
+void tournoi(int *** cerveaux, int *** best ,int n_regle);
 
 
 #endif

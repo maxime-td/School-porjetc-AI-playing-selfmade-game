@@ -74,14 +74,14 @@ int distance_objet(Point p1, Point p2);
  * @brief Génere une regle au hasard
  * @return La règle générée (avec les 2 dernier paramètre representant l'input)
  */
-int * generate_rule();
+void generate_rule(int * tab_rule);
 
 /**
  * @brief genere un tableau de n regles aleatoire
  * @param n nombre de regle a generer
  * @return le tableau de regle
 */
-int ** generate_tab_rules(int n);
+void generate_tab_rules(int n, int ** tab_rule);
 
 /**
  * @brief recupere un tableau de regle à partir d'un fichier
