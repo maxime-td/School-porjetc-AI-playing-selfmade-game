@@ -93,6 +93,7 @@ int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int 
     int val_best_res[3];
     int res[6];
     int ordre_val;
+    int new_best = 0;
 
     for (int i = 0; i < ((n_regles-1) * (N_RULE + 3) - n_val + 4); i++)
     {   
@@ -105,7 +106,7 @@ int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int 
             y[j] = ordre_val / (N_RULE + 3);
         }
 
-        best_res = 0;
+        new_best = 0;
         printf("%d/154\n", i);
         for (int k = 0; k < ((n_val < 3) ? 1 : regle_taille[x[2]]) ; k++){
             if (n_val == 3){
@@ -140,18 +141,20 @@ int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int 
                     //printf("res : %d\n", res[j]);
                     if (res[j] > best_res)
                     {
+                        new_best = 1;
                         for (int m = 0; m < n_val ; m++){
                             val_best_res[m] = argsE[j].val[m];
                         }
                         
                         best_res = res[j];
+                        printf("best res : %d\n", res[j]);
                     }
                 }
             }
         }
 
 
-        for (int m = 0; m < n_val ; m++){
+        for (int m = 0; m < n_val && new_best; m++){
             regles[y[m]][x[m]] = val_best_res[m];
         }
     }
@@ -163,11 +166,10 @@ int **recherche_local_bot_iteration(int **regles, int n_regles, int *ordre, int 
  * @brief Genère un tableau de taille n avec des entiers disposés aléatoirement
  * @param n Le nombre d'entiers
  */
-int *gen_tableau_alea(int n)
+void gen_tableau_alea(int n, int* tab_final)
 {
     int i, j;                                          // Incréments
-    int *tab_final = (int *)malloc(sizeof(int) * (n)); // Initialisation du tableau qu'on renvoie
-    int *tab_temp = (int *)malloc(sizeof(int) * (n));  // Initialisation du tableau temporaire
+    int tab_temp[n];  // Initialisation du tableau temporaire
 
     // Initialisation du tableau temporaire
     for (i = 0; i < n; i++)
@@ -185,19 +187,18 @@ int *gen_tableau_alea(int n)
         tab_final[i] = tab_temp[j]; // On met la valeur aléatoire dans tab_final
         tab_temp[j] = -1;           // Pour ne pas reprendre cette valeur
     }
-
-    free(tab_temp); // On libère le tableau temporaire
-    return tab_final;
 }
 
-int ** practice_cycle(int **regles, int n_regles, int *ordre, int *score, int eps, int * tab_rand, int n_rand)
+int ** practice_cycle(int **regles, int n_regles, int *score, int eps, int * tab_rand, int n_rand)
 {
     int newScore = 0;
     int tmp;
+    int * ordre = (int *) malloc(sizeof(int)*((n_regles-1)*(N_RULE+3)+3));
     for(int i=1; i<4; i++)
     {
         do
         {
+            gen_tableau_alea((n_regles-1)*(N_RULE+3)+3, ordre);
             *score = newScore;
             regles = recherche_local_bot_iteration(regles, n_regles, ordre, &newScore, i, tab_rand, n_rand);
             tmp = newScore-*score;
@@ -206,6 +207,7 @@ int ** practice_cycle(int **regles, int n_regles, int *ordre, int *score, int ep
             printf("Score : %d\n", newScore);
         } while (tmp>eps);
     }
+    free(ordre);
     return regles;
 }
 
