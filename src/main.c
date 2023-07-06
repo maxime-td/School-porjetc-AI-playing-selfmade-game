@@ -11,8 +11,8 @@
 
 int main()
 {
-    srand(time(NULL));
-    /*
+    srand(0*time(NULL));
+
     int n_rand = 1000;
     int * rand_tab = gen_rand_tab(n_rand);
 
@@ -29,7 +29,8 @@ int main()
     set_rules_into_file("RULES.txt", regles, n_regle);
     free2DTab((void**)regles, n_regle);
     free(alea);
-    */
+
+    /*
     char file_name[20];
     int nb_tournoi = 0;
     int n_regle = 20;
@@ -55,7 +56,7 @@ int main()
         nb_tournoi++;
     }
     
-    
+        */
 
     //boucle_jeu_sans_graph();
     return 0;
