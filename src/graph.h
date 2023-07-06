@@ -4,8 +4,8 @@
 #define N  5// NOMBRE_MAX_SOMMET 
 #define N_MIN  3// NOMBRE_MIN_SOMMET 
 #define R 300 //Rayon cercle repartition
-#define W get_w_window() //800
-#define H get_h_window() //800
+#define W 800//get_w_window() //
+#define H 800//get_h_window() //
  
 typedef struct {
     int x;

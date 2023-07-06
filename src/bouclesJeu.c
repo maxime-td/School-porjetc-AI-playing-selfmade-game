@@ -18,6 +18,7 @@
 #include "threads.h"
 #include "calculPosition.h"
 #include "bot.h"
+#include "genetique.h"
 
 /**
  * @brief Exécute la boucle de jeu  de graphe
@@ -287,9 +288,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
     Point p2;
     Point p3;
 
-    initPosTN(&xTN, &yTN, x, y);
+    initPosTN(&xTN, &yTN);
     if(W > 800){
-        initPosTN(&xTN2, &yTN2, x, y);
+        initPosTN(&xTN2, &yTN2);
     }
     // variable pour les regles à choisir
     int tour_boucle = 0; //variable servant à conter le nombre de tour de boucle
@@ -425,7 +426,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
     for (int i = 0; i < n; i++) {
         planeteVisite[i] = 0;
     }
-
+    
     //Boucle principale
     while (program_on && (!ia || tour_boucle <= TIME_MAX_IA))
     {
@@ -502,7 +503,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                 break;
             }
         }
-
+        
         if(ia) {
             if(tour_boucle%10 == 0) { //On ne change pas le mouvement de l'ia à chaque tour de boucle (~1/500)
                 //Intialisation des variables pour donner l'etat du jeu
@@ -593,6 +594,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                 keyPressQ = (tabIA[selectRule][4] == 1);
             }
         }
+
+            
+
         if (!fin && (argsT.time%3 == 0 || fast)){
             //Prise en conte de la direction du joueur en fonction des input
             directionX = 0;
@@ -600,12 +604,12 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
 
             calcul_direction_navette(keyPressZ, keyPressS, keyPressQ, keyPressD, &directionX, &directionY);
             calcul_speed(directionX, directionY, &speedX, &speedY, &x, &y, &navette, acceleration, max_speed);
-
+            
+            p2.x = x+16;
+            p2.y = y+16;
             for (int i = 0; i < n; i++) {
                 p1.x = tab[i]->x;
                 p1.y = tab[i]->y;
-                p2.x = x+16;
-                p2.y = y+16;
                 if (distance(p1, p2) < 16+24) {
                     planeteVisite[i] = 1;
                     if (tout_noeud(planeteVisite, n) && i == 0)
@@ -675,6 +679,8 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
             attractionTN(&directionX, &directionY, xTN, yTN, x, y, &speedX, &speedY, attraction);
         }
 
+        
+
         if (ia && fin){
             program_on = SDL_FALSE;
             if (affArgs.type_fin)
@@ -689,9 +695,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
         pthread_join(thread,  NULL);
 
     if (ia) { 
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < n; i++){
             nb_planet += planeteVisite[i];
-
+        }
         p2.x = tab[closestP]->x;
         p2.y = tab[closestP]->y;
 
@@ -704,7 +710,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
 
     
     free(validRule);
-    free(asteroid);
+    if (affiche) free(asteroid);
 }
 
 /**
@@ -753,12 +759,12 @@ void boucle_jeu_sans_graph() {
         init(); // Affichage du graphe
 
     int fin=0;
-    int ** rules;
+    int ** rules = malloc(sizeof(int *)* N_TAB_REGLE);
     int n_rules = 10;
     int res;
     int count = 0;
 
-    rules = get_rule_from_file("testRule.txt", &n_rules);
+    get_rule_from_file("testRule.txt", &n_rules, rules);
 
     set_rules_into_file("test_writeRules.txt", rules, n_rules);    
 

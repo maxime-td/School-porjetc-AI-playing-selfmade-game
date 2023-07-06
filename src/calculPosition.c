@@ -102,6 +102,7 @@ void calcul_direction_navette(int keyPressZ, int keyPressS, int keyPressQ, int k
  * @param rect le rectangle representant le trou noir 
 */
 void calcul_speed(float directionX, float directionY, float * speedX, float * speedY, float * x, float * y, SDL_Rect * rect, double acceleration, double max_speed){
+
     *speedX += directionX * acceleration;
     *speedY += directionY * acceleration;
 
@@ -168,6 +169,7 @@ void calcul_speed(float directionX, float directionY, float * speedX, float * sp
         *speedX = 0;
         *speedY = 0;
     }
+
     if (*y < 0){
         *y = 0;
         *speedX = 0;
@@ -177,6 +179,7 @@ void calcul_speed(float directionX, float directionY, float * speedX, float * sp
         *speedX = 0;
         *speedY = 0;
     }
+    
 }
 
 /**
@@ -207,20 +210,20 @@ void attractionTN(float * directionXN, float * directionYN, int xTN, int yTN, fl
  * @brief Initialise la position du Trou noir assez loin de la navette
  * @param xTN pointeur sur la coord X du Trou Noir
  * @param yTN pointeur sur la coord Y du Trou Noir
- * @param x la coord X de la navette
- * @param y la coord Y de la navette
+
 */
-void initPosTN(float * xTN, float * yTN, float x, float y)
+void initPosTN(float * xTN, float * yTN)
 {
-    *xTN = rand()%W;
-    *yTN = rand()%H;
-    Point navette = {x,y};
+    *xTN = 0;//rand()%W;
+    *yTN = 0;//rand()%H;
     Point TN = {*xTN, *yTN};
+    /*
     while(distance(navette, TN)<250)
     {
         TN.x = rand()%W;
         TN.y = rand()%H;
     }
+    */
     *xTN = TN.x;
     *yTN = TN.y;
 }
