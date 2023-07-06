@@ -29,7 +29,7 @@ int main()
     set_rules_into_file("RULES.txt", regles, n_regle);
     free2DTab((void**)regles, n_regle);
     free(alea);
-    */
+    
     char file_name[20];
     int nb_tournoi = 0;
     int n_regle = 20;
@@ -54,9 +54,9 @@ int main()
         free(res);
         nb_tournoi++;
     }
-    
+    */
     
 
-    //boucle_jeu_sans_graph();
+    boucle_jeu_sans_graph();
     return 0;
 }
