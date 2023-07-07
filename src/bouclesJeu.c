@@ -589,7 +589,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                         selectRule = validRule[i];
                 }
                 
-                affich_tab(tabIA[selectRule], N_RULE+3);
+                //affich_tab(tabIA[selectRule], N_RULE+3);
                 //Prise en conte des input en fonction de la regles choisi
                 keyPressZ = (tabIA[selectRule][N_RULE] == 1);
                 keyPressS = (tabIA[selectRule][N_RULE] == -1);

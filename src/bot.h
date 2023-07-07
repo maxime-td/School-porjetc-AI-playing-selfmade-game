@@ -11,7 +11,7 @@
 #include "bouclesJeu.h"
 
 #define N_RULE 5
-#define TIME_MAX_IA 100000000
+#define TIME_MAX_IA 10000000
 
 /**
  * @brief Trouve l'index du sommet qui a la plus courte distance avec le point p

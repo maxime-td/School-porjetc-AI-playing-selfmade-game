@@ -493,6 +493,7 @@ void * afficheJeu(afficheArgs * argsAff) {
     while (*(argsAff->program_on))
     {   
         //verification de fin de jeu pour stoquer le temps de fin
+        //printf("A\n");
         if (*(argsAff->fin) && first) {
             first = 0;
             seconde = *(argsAff->count)/1000;
