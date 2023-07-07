@@ -1,7 +1,7 @@
 #ifndef GRAPH_H_
 #define GRAPH_H_
 
-#define N  8// NOMBRE_MAX_SOMMET 
+#define N  5// NOMBRE_MAX_SOMMET 
 #define N_MIN  4// NOMBRE_MIN_SOMMET 
 #define R 300 //Rayon cercle repartition
 #define W 900 //get_w_window()

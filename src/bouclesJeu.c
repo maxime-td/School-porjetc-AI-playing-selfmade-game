@@ -507,9 +507,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
         }
         
         if(ia) {
-            if(tour_boucle%10 == 0) { //On ne change pas le mouvement de l'ia à chaque tour de boucle (~1/500)
+            if(tour_boucle%(fast ? 1000 : 100000)  == 0) { //On ne change pas le mouvement de l'ia à chaque tour de boucle (~1/500)
                 //Intialisation des variables pour donner l'etat du jeu
-                if(tour_boucle%100 == 0){
+                if(tour_boucle%(fast ? 10000 : 100000) == 0){
                     p1.x = x+navette.w/2;
                     p1.y = y+navette.h/2;
                     p2.x = xTN+rayonTN;
@@ -537,9 +537,10 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                     p2.y = tab[closestP]->y;
                     posClosestP = position_relative(p1, p2);
 
-                    posClosestW = mur_proche(p1, tab, n, segs, n_seg, 100, 20);
+                    posClosestW = mur_proche(p1, tab, n, segs, n_seg, 100, 2);
 
-                    isWall = is_mur_in_between(p1, p2, tab, n, segs, n_seg, 10);
+                    isWall = is_mur_in_between(p1, p2, tab, n, segs, n_seg, 3);
+                    //printf("%d\n", isWall);
                 }
 
                 selectRule = -1;
@@ -557,6 +558,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                                 if (tabIA[i][3] == -1 || tabIA[i][3] == posClosestTN){
                                     if (tabIA[i][4] == -1 || tabIA[i][4] == distTrouNoir){
                                         validRule[k] = i;
+                                        //affich_tab(tabIA[i], N_RULE);
                                         k++;
                                     }   
                                 }
@@ -571,13 +573,13 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                 for (int i = 0; i < k; i++)
                     poid += (tabIA[validRule[i]][N_RULE+2]*tabIA[validRule[i]][N_RULE+2]);
 
+                
                 if(use_rand){
                     selectPoid = rand()%poid;
                 }else{
                     selectPoid = rand_tab[rand_iter]%poid;
                     rand_iter = (rand_iter+1)%n_rand; 
                 }
-                
                 selectRule = -1;
 
                 poid = 0;
@@ -587,18 +589,22 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                         selectRule = validRule[i];
                 }
                 
-                
+                //affich_tab(tabIA[selectRule], N_RULE+3);
                 //Prise en conte des input en fonction de la regles choisi
-                keyPressZ = (tabIA[selectRule][3] == 1);
-                keyPressS = (tabIA[selectRule][3] == -1);
-                keyPressD = (tabIA[selectRule][4] == -1);
-                keyPressQ = (tabIA[selectRule][4] == 1);
+                keyPressZ = (tabIA[selectRule][N_RULE] == 1);
+                keyPressS = (tabIA[selectRule][N_RULE] == -1);
+                keyPressD = (tabIA[selectRule][N_RULE+1] == -1);
+                keyPressQ = (tabIA[selectRule][N_RULE+1] == 1);
+
             }
         }
 
             
 
         if (!fin && (argsT.time%3 == 0 || fast)){
+            p1.x = x+navette.w/2;
+            p1.y = y+navette.h/2;
+            //printf("%d\n", mur_proche(p1, tab, n, segs, n_seg, 100, 2));
             //Prise en conte de la direction du joueur en fonction des input
             directionX = 0;
             directionY = 0;
@@ -762,7 +768,7 @@ void boucle_jeu_sans_graph() {
     int res;
     int count = 0;
 
-    get_rule_from_file("RULES_GEN6.txt", &n_rules, rules);   
+    get_rule_from_file("GOOD_RULES.txt", &n_rules, rules);   
 
     while (!fin) {
         tab = gen_tab_sommets_rand(&n, 1, NULL, 0, 0);

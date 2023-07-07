@@ -23,6 +23,7 @@ typedef struct{
     int *** cerveaux;
     int n_regle;
     int res;
+    int score;
 }argsMatch;
 
 /**

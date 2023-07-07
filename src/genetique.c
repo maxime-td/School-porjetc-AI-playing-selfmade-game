@@ -120,7 +120,7 @@ void * match(argsMatch * argsM){
         }
     }
     argsM->res = best;
-    printf("-   resultat : %d\n", best_score);
+    argsM->score = best_score;
     return NULL;
 }
 
@@ -148,6 +148,19 @@ void tournoi(int *** cerveaux, int *** best ,int n_regle){
         pthread_join(matchs[i], NULL);
         printf("Stop : %d\n", i);
     }
+
+    int sum = 0;
+    for (int i = 0; i < NB_SURV; i++)
+    {
+        sum += argsMs[i].score;
+        printf("score %d : %d\n", i, argsMs[i].score);
+        if (argsMs[i].score > 1000){
+            set_rules_into_file("GOOD_RULES.txt", cerveaux[argsMs->res], N_TAB_REGLE);
+        }
+        
+    }
+    
+    printf("Moyenne : %d\n", sum/NB_SURV);
 
     for (int i = 0; i < NB_HERITIER; i++){
         is_best = 0;
