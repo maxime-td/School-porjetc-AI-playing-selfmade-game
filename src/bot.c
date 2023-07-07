@@ -93,6 +93,35 @@ int distance_objet(Point p1, Point p2){
     return 2;
 }
 
+int where_to_go(Point p1, Point p2, sommet_t ** tab, int n, segmment_t * segs, int n_seg, int depth, int precision){
+    Point direction[4];
+    Point cour;
+    direction[0].x = -precision;
+    direction[0].y =          0;
+    direction[1].x =          0;
+    direction[1].y =  precision;
+    direction[2].x = -precision;
+    direction[2].y =          0;
+    direction[3].x =  precision;
+    direction[3].y =          0;
+
+    int where = 4;
+
+    for (int i = 0; i < 4 && where == 4; i++) {
+        for (int j = 16; j <= depth  && where == 4; j++) {
+            cour.x = p1.x + direction[i].x*j;
+            cour.y = p1.y + direction[i].y*j;
+            if (!isInPath_Line(cour.x, cour.y, tab, n, segs, n_seg,  PATH_SIZE)) {
+                break;
+            }else if(!is_mur_in_between(cour, p2, tab, n, segs, n_seg, precision)){
+                where = i;
+            }
+        }
+    }
+
+    return where;
+}
+
 /**
  * @brief Donne la position du mur le plus proche par rapport au point donné
  * @param p Point donné

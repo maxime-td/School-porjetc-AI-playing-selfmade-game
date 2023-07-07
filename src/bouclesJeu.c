@@ -303,6 +303,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
     int isWall = 0; // booleen servant à stoquer la sortie de is_wall_in_between (si il y a un mur entre le joueur et la planete la plus proche)
     int selectRule = 0; //variable servant à stoquer l'index de la regle selectionne
     int * validRule = (int *) malloc(sizeof(int)*n_ia); //tableau servant a stoquer les regle valide dans l'etat du jeu actuel
+    int goal = 0;
 
     int keyPressZ = 0; //booleen disant si la touche z est presse
     int keyPressS = 0; //booleen disant si la touche s est presse
@@ -540,6 +541,14 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                     posClosestW = mur_proche(p1, tab, n, segs, n_seg, 100, 2);
 
                     isWall = is_mur_in_between(p1, p2, tab, n, segs, n_seg, 3);
+
+                    if(isWall){
+                        goal = where_to_go(p1, p2, tab, n, segs, n_seg, 1000, 2);
+                        if(goal != 4){
+                            isWall = 0;
+                            closestP = goal;
+                        }
+                    }
                 }
 
                 selectRule = -1;

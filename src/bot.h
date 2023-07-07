@@ -99,4 +99,6 @@ void get_rule_from_file(char * name, int * n, int ** tab);
 */
 void set_rules_into_file(char * name, int ** tab_rules, int n);
 
+int where_to_go(Point p1, Point p2, sommet_t ** tab, int n, segmment_t * segs, int n_seg, int depth, int precision);
+
 #endif
