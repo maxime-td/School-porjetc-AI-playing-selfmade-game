@@ -541,7 +541,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                     posClosestW = mur_proche(p1, tab, n, segs, n_seg, 100, 2);
 
                     isWall = is_mur_in_between(p1, p2, tab, n, segs, n_seg, 3);
-
                     if(isWall){
                         goal = where_to_go(p1, p2, tab, n, segs, n_seg, 1000, 2);
                         if(goal != 4){
@@ -632,7 +631,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                 }
             }
 
-            if (!isInPath_Line(x, y, tab, n, segs, n_seg, PATH_SIZE-10)) {
+            if (!isInPath_Line(x, y, tab, n, segs, n_seg, PATH_SIZE)) {
                 x -= speedX;
                 y -= speedY;
                 speedX = -speedX/2;

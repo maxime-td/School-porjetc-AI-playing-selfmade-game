@@ -94,27 +94,54 @@ int distance_objet(Point p1, Point p2){
 }
 
 int where_to_go(Point p1, Point p2, sommet_t ** tab, int n, segmment_t * segs, int n_seg, int depth, int precision){
-    Point direction[4];
+    Point direction[8];
     Point cour;
     direction[0].x = -precision;
-    direction[0].y =          0;
-    direction[1].x =          0;
-    direction[1].y =  precision;
+    direction[0].y = -precision;
+    direction[1].x =  precision;
+    direction[1].y = -precision;
     direction[2].x = -precision;
-    direction[2].y =          0;
+    direction[2].y =  precision;
     direction[3].x =  precision;
-    direction[3].y =          0;
+    direction[3].y =  precision;
+    direction[4].x = -precision;
+    direction[4].y =          0;
+    direction[5].x =          0;
+    direction[5].y =  precision;
+    direction[6].x =  precision;
+    direction[6].y =          0;
+    direction[7].x =          0;
+    direction[7].y = -precision;
 
     int where = 4;
+    int random = 0;
 
-    for (int i = 0; i < 4 && where == 4; i++) {
+    for (int i = 0; i < 8 && where == 4; i++) {
         for (int j = 16; j <= depth  && where == 4; j++) {
             cour.x = p1.x + direction[i].x*j;
             cour.y = p1.y + direction[i].y*j;
             if (!isInPath_Line(cour.x, cour.y, tab, n, segs, n_seg,  PATH_SIZE)) {
                 break;
             }else if(!is_mur_in_between(cour, p2, tab, n, segs, n_seg, precision)){
-                where = i;
+                if(i < 4) where = i;
+                else {
+                    random = rand()%2;
+                    switch(i){
+                        case 4:
+                            where = (random ? 0 : 2);
+                            break;
+                        case 5:
+                            where = random + 2;
+                            break;
+                        case 6:
+                            where = (random ? 1 : 3);
+                            break;
+                        case 7:
+                            where = random;
+                            break;
+                    }
+                }
+                
             }
         }
     }
@@ -137,10 +164,10 @@ int mur_proche(Point p, sommet_t ** tab, int n, segmment_t * segs, int n_seg, in
     direction[0].y =          0;
     direction[1].x =          0;
     direction[1].y =  precision;
-    direction[2].x = -precision;
+    direction[2].x =  precision;
     direction[2].y =          0;
-    direction[3].x =  precision;
-    direction[3].y =          0;
+    direction[3].x =          0;
+    direction[3].y = -precision;
 
     int closest = 4;
     int bestDist = depth;
