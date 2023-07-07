@@ -65,15 +65,15 @@ int closest_point(Point p, sommet_t ** tab, int n, int * planeteVisit) {
 int position_relative(Point p1, Point p2) {
     if (p1.x > p2.x) {
         if (p1.y > p2.y)
-            return 0;
+            return 3;
         else
-            return 1;   
+            return 2;   
     }
     else {
         if (p1.y > p2.y)
-            return 2;
+            return 1;
         else
-            return 3;
+            return 0;
     } 
 }
 
@@ -105,20 +105,20 @@ int distance_objet(Point p1, Point p2){
 int mur_proche(Point p, sommet_t ** tab, int n, segmment_t * segs, int n_seg, int depth, int precision) {
     Point direction[4];
     direction[0].x = -precision;
-    direction[0].y = -precision;
-    direction[1].x =  precision;
-    direction[1].y = -precision;
+    direction[0].y =          0;
+    direction[1].x =          0;
+    direction[1].y =  precision;
     direction[2].x = -precision;
-    direction[2].y =  precision;
+    direction[2].y =          0;
     direction[3].x =  precision;
-    direction[3].y =  precision;
+    direction[3].y =          0;
 
     int closest = 4;
     int bestDist = depth;
 
     for (int i = 0; i < 4; i++) {
-        for (int j = precision; j < bestDist; j++) {
-            if (!isInPath_Line(p.x + direction[i].x*j, p.y + direction[i].y*j, tab, n, segs, n_seg,  PATH_SIZE)) {
+        for (int j = 16; j <= bestDist; j++) {
+            if (!isInPath_Line(p.x + direction[i].x*j, p.y + direction[i].y*j, tab, n, segs, n_seg,  PATH_SIZE) && (closest == 4 || rand()%4 == 0)) {
                 bestDist = j;
                 closest = i;
             }
@@ -138,22 +138,19 @@ int mur_proche(Point p, sommet_t ** tab, int n, segmment_t * segs, int n_seg, in
  * @return 0 si pas de mur 1 sinon
  */
 int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, segmment_t * segs, int n_seg, int precision) {
-    Point direction[4];
-    direction[0].x = -1;
-    direction[0].y = -1;
-    direction[1].x =  1;
-    direction[1].y = -1;
-    direction[2].x = -1;
-    direction[2].y =  1;
-    direction[3].x =  1;
-    direction[3].y =  1;
+    int directionX = p2.x - p1.x;
+    int directionY = p2.y - p1.y;
 
-    int dir_noeud = position_relative(p1, p2);
+    float norm = sqrt(directionX*directionX + directionY*directionY);
+
+    directionX /= norm;
+    directionY /= norm;
+
     int dist = distance(p1, p2);
 
-    for (int i = 0; i < dist; i+=precision)
+    for (int i = 16; i < dist; i+=precision)
     {
-        if (!isInPath_Line(p1.x + direction[dir_noeud].x*i, p1.y + direction[dir_noeud].y*i, tab, n, segs, n_seg, PATH_SIZE))
+        if (!isInPath_Line(p1.x + directionX*i, p1.y + directionY*i, tab, n, segs, n_seg, PATH_SIZE))
             return 1;
     }
 

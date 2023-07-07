@@ -154,6 +154,10 @@ void tournoi(int *** cerveaux, int *** best ,int n_regle){
     {
         sum += argsMs[i].score;
         printf("score %d : %d\n", i, argsMs[i].score);
+        if (argsMs[i].score > 1000){
+            set_rules_into_file("GOOD_RULES.txt", cerveaux[argsMs->res], N_TAB_REGLE);
+        }
+        
     }
     
     printf("Moyenne : %d\n", sum/NB_SURV);

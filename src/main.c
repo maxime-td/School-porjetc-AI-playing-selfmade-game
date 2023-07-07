@@ -51,14 +51,15 @@ int main()
         cerveaux[i] = (int **)malloc(N_TAB_REGLE * sizeof(int *));
         generate_tab_rules(N_TAB_REGLE, cerveaux[i]);
     }*/
-    
+
+    /*
     int ***cerveaux = malloc(NB_HERITIER * sizeof(int **));
 
     for (int i = 0; i < NB_HERITIER; i++)
     {
         cerveaux[i] = (int **)malloc(N_TAB_REGLE * sizeof(int *));
         generate_tab_rules(N_TAB_REGLE, cerveaux[i]);
-    }
+    }*/
 
     /*
     for (int i = 0; i < NB_HERITIER; i++){
@@ -67,7 +68,8 @@ int main()
             cerveaux[i][j] = (int*) malloc(sizeof(int)*(N_RULE+3));
         }
     }*/
-
+    
+    /*
     int *** res = (int ***) malloc(NB_SURV*sizeof(int**));
     int nb_tournoi = 0;
     char file_name[25];
@@ -88,8 +90,8 @@ int main()
         }
         nouv_generation(res, cerveaux, NB_SURV, NB_HERITIER, N_TAB_REGLE);
         nb_tournoi++;
-    }
+    }*/
 
-    //boucle_jeu_sans_graph();
+    boucle_jeu_sans_graph();
     return 0;
 }
