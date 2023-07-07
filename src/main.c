@@ -37,7 +37,7 @@ int main()
     int *** res = (int ***) malloc(NB_SURV*sizeof(int**));
     int nb_tournoi = 0;
     char file_name[25];
-
+    /*
     for (int i = 0; i < NB_SURV; i++)
     {
         res[i] = (int **)malloc(sizeof(int *) * N_TAB_REGLE);
@@ -46,12 +46,13 @@ int main()
             res[i][j] = (int *)malloc(sizeof(int) * (N_RULE + 3));
         }
     }
-    
+    */
     for (int i = 0; i < NB_HERITIER; i++)
     {
         cerveaux[i] = (int **)malloc(N_TAB_REGLE * sizeof(int *));
         generate_tab_rules(N_TAB_REGLE, cerveaux[i]);
     }
+
     
     /*
     for (int i = 0; i < NB_HERITIER; i++){
@@ -60,15 +61,12 @@ int main()
             cerveaux[i][j] = (int*) malloc(sizeof(int)*(N_RULE+3));
         }
     }
-
-    int *** res = (int ***) malloc(NB_SURV*sizeof(int**));
-    int nb_tournoi = 0;
-    char file_name[25];
+    */
     int n;
-    charge_anc_cerv(res, &n);*/
+    charge_anc_cerv(res, &n);
 
     // printf("%d\n", res[14][0][0]);
-    // nouv_generation(res, cerveaux, NB_SURV, NB_HERITIER, N_TAB_REGLE);
+     nouv_generation(res, cerveaux, NB_SURV, NB_HERITIER, N_TAB_REGLE);
 
     while (1)
     {

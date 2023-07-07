@@ -22,7 +22,7 @@ void mutation_gen(int ** cerveau1, int ** cerveau2, int n_regle, int ** cerveauF
 {
     int regle_taille[N_RULE + 3] = {5, 6, 3, 5, 4, 3, 3, 5};
     int tirage = rand()%20;
-    int mutationRate = rand()%3;
+    int mutationRate = (rand()%3)+2;
 
     int mutationLi, mutationCol;
     int mutagene; 
