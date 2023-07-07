@@ -9,7 +9,7 @@
 
 #include "graph.h"
 
-#define ATTRACTION_TROU 0.00000
+#define ATTRACTION_TROU 0.0000007
 #define ATTRACTION_TROU_IA 0.007
 
 

@@ -489,19 +489,22 @@ void * afficheJeu(afficheArgs * argsAff) {
     int etatAlpha = 1; //booleen disant si l'on doit augmenter ou baisser l'alpha des etoiles
     int first = 1; //booleen permetant de savoir si c le premier tour de boucle depuis la fin du jeu
     int seconde = 0; //variable permetant de stoquer le temps de fin de jeu
+
+    int firstTour = 1;
     
     while (*(argsAff->program_on))
     {   
         //verification de fin de jeu pour stoquer le temps de fin
-        //printf("A\n");
+        
         if (*(argsAff->fin) && first) {
             first = 0;
             seconde = *(argsAff->count)/1000;
         }
-        
+        if(firstTour) printf("\n");
+
+        firstTour = 0;
         //une refresh toute les 2 ms
         if (*(argsAff->count)%20 == 0) {
-
             //changement de frame pour les etoile filantes
             if (*(argsAff->count)%100 == 0) {
                 argsAff->frameEF = (argsAff->frameEF + 1)%8;

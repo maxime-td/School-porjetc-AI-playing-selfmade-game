@@ -430,7 +430,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
     }
     
     //Boucle principale
-    while (program_on && (!ia || tour_boucle <= TIME_MAX_IA))
+    while (program_on && (!ia || (fast ? tour_boucle <= TIME_MAX_IA : argsT.time <= 100*1000)))
     {
         // Gestion des événements
         if (affiche){
@@ -507,9 +507,9 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
         }
         
         if(ia) {
-            if(tour_boucle%(fast ? 1000 : 100000)  == 0) { //On ne change pas le mouvement de l'ia à chaque tour de boucle (~1/500)
+            if(tour_boucle%(fast ? 1000 : 50000)  == 0) { //On ne change pas le mouvement de l'ia à chaque tour de boucle (~1/500)
                 //Intialisation des variables pour donner l'etat du jeu
-                if(tour_boucle%(fast ? 10000 : 100000) == 0){
+                if(tour_boucle%(fast ? 10000 : 50000) == 0){
                     p1.x = x+navette.w/2;
                     p1.y = y+navette.h/2;
                     p2.x = xTN+rayonTN;
@@ -540,7 +540,6 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                     posClosestW = mur_proche(p1, tab, n, segs, n_seg, 100, 2);
 
                     isWall = is_mur_in_between(p1, p2, tab, n, segs, n_seg, 3);
-                    //printf("%d\n", isWall);
                 }
 
                 selectRule = -1;
@@ -558,7 +557,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                                 if (tabIA[i][3] == -1 || tabIA[i][3] == posClosestTN){
                                     if (tabIA[i][4] == -1 || tabIA[i][4] == distTrouNoir){
                                         validRule[k] = i;
-                                        //affich_tab(tabIA[i], N_RULE);
+                                        //affich_tab(tabIA[i], N_RULE+3);
                                         k++;
                                     }   
                                 }
@@ -566,7 +565,7 @@ void boucle_jeu_espace(sommet_t **tab, int n, int* close, int ia, int ** tabIA, 
                         }
                     } 
                 }
-
+                //printf("\n\n");
                 //choix d'une regles valide au hasard
                 poid = 0;
 

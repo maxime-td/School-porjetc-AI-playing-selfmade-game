@@ -65,7 +65,7 @@ int closest_point(Point p, sommet_t ** tab, int n, int * planeteVisit) {
 int position_relative(Point p1, Point p2) {
     if (p1.x > p2.x) {
         if (p1.y > p2.y)
-            return 3;
+            return 0;
         else
             return 2;   
     }
@@ -73,7 +73,7 @@ int position_relative(Point p1, Point p2) {
         if (p1.y > p2.y)
             return 1;
         else
-            return 0;
+            return 3;
     } 
 }
 
@@ -138,8 +138,8 @@ int mur_proche(Point p, sommet_t ** tab, int n, segmment_t * segs, int n_seg, in
  * @return 0 si pas de mur 1 sinon
  */
 int is_mur_in_between(Point p1, Point p2, sommet_t ** tab, int n, segmment_t * segs, int n_seg, int precision) {
-    int directionX = p2.x - p1.x;
-    int directionY = p2.y - p1.y;
+    float directionX = p2.x - p1.x;
+    float directionY = p2.y - p1.y;
 
     float norm = sqrt(directionX*directionX + directionY*directionY);
 
