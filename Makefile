@@ -1,23 +1,28 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -O3 #-g -fsanitize=address,undefined
+CFLAGS =-Wall -Wextra -MMD -O3 $(sdl2-config --cflags) #-g -fsanitize=address,undefined
+LDFLAGS =-lm -lSDL2 -lSDL2_ttf -lSDL2_image -pthread#-fsanitize=address,undefined
 
 DIRCOMM = src/
 
 #liste des fichiers source
 SRC = $(wildcard $(DIRCOMM)*.c)
-
-HEADERS = $(wildcard $(DIRCOMM)*.h) 
+HEADERS = $(wildcard $(DIRCOMM)*.h)
 
 #liste des fichiers objets
-OBJ = $(SRC:%.c=%.o)
+OBJ=$(addprefix build/,$(SRC:.c=.o))
+DEP=$(addprefix build/,$(SRC:.c=.d))
 
-main: $(SRC) $(HEADERS)
-	$(CC) $(SRC) -o $@ -lm -lSDL2_ttf -lSDL2_image -pthread $(CFLAGS) $(shell sdl2-config --cflags --libs)
+main: $(OBJ)
+	$(CC) $(OBJ) -o $@ $(LDFLAGS)
+
+build/%.o: %.c $(HEADERS)
+	@mkdir -p build
+	$(CC) -o $@ -c $< $(CFLAGS)
 
 .PHONY: clean reclean
 
 clean:
-	rm -f main
+	rm -f $(OBJ) main
 
 reclean:
-	rm -f main
+	rm -f $(SRC)

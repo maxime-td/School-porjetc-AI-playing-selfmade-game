@@ -201,8 +201,7 @@ void generate_tab_rules(int n, int ** tab_rules) {
     tab_rules[n-1][N_RULE]   = (rand()%3)-1;
     tab_rules[n-1][N_RULE+1] = (rand()%3)-1;
     tab_rules[n-1][N_RULE+2] = 1;
-    
-    //return tab_rules;
+
 }
 
 /**
