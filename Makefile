@@ -16,7 +16,7 @@ main: $(OBJ)
 	$(CC) $(OBJ) -o $@ $(LDFLAGS)
 
 build/%.o: %.c $(HEADERS)
-	@mkdir -p build
+	@mkdir -p $(dir $@)
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 .PHONY: clean reclean
